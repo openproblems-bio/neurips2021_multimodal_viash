@@ -41,4 +41,16 @@ assert_that(
   all(c("counts_spliced", "counts_unspliced", "counts_protein") %in% names(adata$layers))
 )
 
+
+cat("> Checking contents of dataset_censored.h5ad\n")
+adata2 <- anndata::read_h5ad("dataset_censored.h5ad")
+
+assert_that(
+  adata2$uns[["dataset_id"]] == "mytest",
+  adata2$n_obs == 100,
+  adata2$n_vars == 50,
+  all(c("modality1", "modality2") %in% names(adata2$layers)),
+  all(names(adata2$layers) %in% c("modality1", "modality2"))
+)
+
 cat("> Test succeeded!\n")

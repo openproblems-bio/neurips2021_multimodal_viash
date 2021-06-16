@@ -83,12 +83,16 @@ if (!is.null(par$output_censored)) {
 
   # create new dataset object
   dataset_censored <- anndata::AnnData(
-    X = counts,
+    X = NULL,
+    shape = dim(counts),
     layers = list(
-      protein = counts_protein
+      modality1 = counts,
+      modality2 = counts_protein
     ),
     uns = list(
-      dataset_id = par$dataset_id
+      dataset_id = par$dataset_id,
+      modality1 = "mRNA",
+      modality2 = "protein"
     )
   )
 
