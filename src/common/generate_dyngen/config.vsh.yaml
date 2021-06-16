@@ -1,0 +1,94 @@
+functionality:
+  name: generate_dyngen
+  namespace: common
+  version: dev
+  description: | 
+    Generate a synthetic dataset using the standard dyngen simulation workflow.
+    For more advanced usage to get more control over the outputted dataset, use the 
+    R package. More documentation can be found at https://dyngen.dynverse.org.
+  info:
+    doi: "10.1038/s41467-021-24152-2"
+    url: "https://dyngen.dynverse.org"
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--id"
+      type: "string"
+      example: "dyngen_dataset"
+      description: "The id of the output dataset id"
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      default: "dataset.h5ad"
+      description: "Where to save the dataset."
+      required: true
+    - name: "--plot"
+      alternatives: ["-p"]
+      type: "file"
+      direction: "output"
+      example: "plot.pdf"
+      description: "A visualisation of the simulation."
+    - name: "--output_censored"
+      alternatives: ["-c"]
+      type: "file"
+      direction: "output"
+      example: "dataset_censored.h5ad"
+      description: "A censored version of the dataset."
+    - name: "--model"
+      alternatives: ["-m"]
+      type: "file"
+      direction: "output"
+      example: "model.rds"
+      description: "Save the dyngen model as an RDS file."
+    - name: "--backbone"
+      alternatives: [ "-b" ]
+      type: "string"
+      default: "bifurcating"
+      description: Which dyngen backbone to use for the simulation.
+    - name: "--num_cells"
+      type: integer
+      default: 100
+      description: "The number of cells to generate."
+    - name: "--num_genes"
+      type: integer
+      default: 100
+      description: The number of genes to generate.
+    - name: "--num_simulations"
+      type: integer
+      default: 32
+      description: The number of dyngen simulations to run.
+    - name: "--census_interval"
+      type: double
+      default: 4
+      description: A granularity parameter for the outputted simulation.
+    - name: "--ssa_tau"
+      type: double
+      default: 0.008333
+      description: Step size of the GillespieSSA2 simulation. Default is 30/3600.
+    - name: "--compute_rna_velocity"
+      type: boolean_true
+      description: Whether or not to compute the RNA velocity gold standard.
+    - name: "--compute_cellwise_grn"
+      type: boolean_true
+      description: Whether or not to compute the cellwise GRN gold standard.
+    - name: "--num_threads"
+      type: integer
+      default: 1
+      description: Parallellisation level.
+  resources: 
+    - type: r_script
+      path: script.R
+  tests:
+    - type: r_script
+      path: test.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        cran: [ dyngen ]
