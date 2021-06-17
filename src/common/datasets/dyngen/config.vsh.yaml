@@ -1,6 +1,6 @@
 functionality:
-  name: generate_dyngen
-  namespace: common
+  name: dyngen
+  namespace: common_datasets
   version: dev
   description: |
     Generate a synthetic dataset using the standard dyngen simulation workflow.
