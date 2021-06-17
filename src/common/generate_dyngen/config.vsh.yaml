@@ -2,9 +2,9 @@ functionality:
   name: generate_dyngen
   namespace: common
   version: dev
-  description: | 
+  description: |
     Generate a synthetic dataset using the standard dyngen simulation workflow.
-    For more advanced usage to get more control over the outputted dataset, use the 
+    For more advanced usage to get more control over the outputted dataset, use the
     R package. More documentation can be found at https://dyngen.dynverse.org.
   info:
     doi: "10.1038/s41467-021-24152-2"
@@ -33,18 +33,6 @@ functionality:
       direction: "output"
       example: "plot.pdf"
       description: "A visualisation of the simulation."
-    - name: "--output_censored"
-      alternatives: ["-c"]
-      type: "file"
-      direction: "output"
-      example: "dataset_censored.h5ad"
-      description: "A censored version of the dataset."
-    - name: "--model"
-      alternatives: ["-m"]
-      type: "file"
-      direction: "output"
-      example: "model.rds"
-      description: "Save the dyngen model as an RDS file."
     - name: "--backbone"
       alternatives: [ "-b" ]
       type: "string"
@@ -70,17 +58,23 @@ functionality:
       type: double
       default: 0.008333
       description: Step size of the GillespieSSA2 simulation. Default is 30/3600.
+    - name: "--compute_atac"
+      alternatives: [ "-atac" ]
+      type: boolean_true
+      description: Whether or not to compute ATAC-like data.
     - name: "--compute_rna_velocity"
+      alternatives: [ "-velocity" ]
       type: boolean_true
       description: Whether or not to compute the RNA velocity gold standard.
-    - name: "--compute_cellwise_grn"
+    - name: "--store_protein"
+      alternatives: [ "-protein" ]
       type: boolean_true
-      description: Whether or not to compute the cellwise GRN gold standard.
+      description: Whether or not to store protein count information.
     - name: "--num_threads"
       type: integer
       default: 1
       description: Parallellisation level.
-  resources: 
+  resources:
     - type: r_script
       path: script.R
   tests:

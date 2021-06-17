@@ -4,15 +4,14 @@ par <- list(
   num_cells = 100,
   num_genes = 120,
   num_simulations = 3,
-  num_threads = 1,
-  model = NULL,
-  output = "output_dyngen.h5ad",
-  output_censored = "output_dyngen_censored.h5ad",
-  plot = "output_dyngen_plot.pdf",
+  num_threads = 3,
+  output = "output.h5ad",
+  plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
-  compute_cellwise_grn = FALSE,
-  compute_rna_velocity = FALSE
+  compute_atac = TRUE,
+  compute_rna_velocity = FALSE,
+  store_protein = TRUE
 )
 ## VIASH END
 
@@ -43,7 +42,7 @@ init_model <- initialise_model(
     experiment_params = simulation_type_wild_type(
       num_simulations = par$num_simulations
     ),
-    compute_cellwise_grn = par$compute_cellwise_grn,
+    compute_cellwise_grn = par$compute_atac,
     compute_rna_velocity = par$compute_rna_velocity
   ),
   num_cores = par$num_threads,
@@ -57,55 +56,82 @@ out <- generate_dataset(
   make_plots = TRUE
 )
 
-if (!is.null(par$model)) {
-  write_rds(out$model, par$model, compress = "gz")
-}
+# get mrna counts
+counts <- out$dataset$X
 
-dataset <- out$dataset
+# construct Ab-like data from protein counts
+# TODO: use real Ab data to map distributions
+counts_ab <- out$dataset$layers[["counts_protein"]]
 
-dataset$uns[["dataset_id"]] <- par$id
+# sample 50 genes
+sample_genes <-
+  if (ncol(counts_ab) > 50) {
+    sample.int(ncol(counts_ab), 50)
+  } else {
+    seq_len(ncol(counts_ab))
+  }
 
-# if a censored version of the dataset needs to be generated
-if (!is.null(par$output_censored)) {
-  counts <- dataset$X
-  counts_protein <- dataset$layers["counts_protein"]
+counts_ab[,-sample_genes] <- 0
 
-  # shuffle
-  shuffle_cells <- sample.int(nrow(counts_protein))
-  shuffle_genes <- sample.int(ncol(counts_protein))
+counts_ab <- Matrix::drop0(counts_ab)
 
-  counts <- counts[, shuffle_genes, drop = FALSE]
-  counts_protein <- counts_protein[shuffle_cells, shuffle_genes, drop = FALSE]
+# constuct atac-like data from single cell regulatory network
+# TODO: use real atac data to map distributions
+regulatory_network <- out$dataset$uns[["regulatory_network"]]
+regulatory_network_sc <- out$dataset$obsm[["regulatory_network_sc"]]
 
-  # rename genes, remove cell names
-  rownames(counts) <- rownames(counts_protein) <- NULL
-  colnames(counts) <- colnames(counts_protein) <- paste0("gene_", seq_len(ncol(counts)))
-
-  # create new dataset object
-  dataset_censored <- anndata::AnnData(
-    X = NULL,
-    shape = dim(counts),
-    layers = list(
-      modality1 = counts,
-      modality2 = counts_protein
-    ),
-    uns = list(
-      dataset_id = par$dataset_id,
-      modality1 = "mRNA",
-      modality2 = "protein"
-    )
+library(Matrix, quietly = TRUE)
+summ <- summary(regulatory_network_sc)
+regnet_ix <- tibble(
+  cell_i = summ$i,
+  reg_i = summ$j,
+  reg_value = summ$x
+) %>%
+  left_join(
+    regulatory_network %>%
+      transmute(
+        reg_i = row_number(),
+        gene_i = match(target, colnames(counts))
+      ),
+    by = "reg_i"
   )
 
-  dataset$uns$shuffle_cells <- shuffle_cells-1
-  dataset$uns$shuffle_genes <- shuffle_genes-1
+atac_ix <-
+  regnet_ix %>%
+  group_by(cell_i, gene_i) %>%
+  summarise(
+    atac = sum(reg_value),
+    .groups = "drop"
+  )
+atac <- Matrix::sparseMatrix(
+  i = atac_ix$cell_i,
+  j = atac_ix$gene_i,
+  x = pmax(atac_ix$atac, 0),
+  dims = dim(counts),
+  dimnames = dimnames(counts)
+)
 
-  dataset_censored$write_h5ad(par$output_censored, compression = "gzip")
-}
+adata <- anndata::AnnData(
+  X = NULL,
+  obs = out$dataset$obs,
+  var = out$dataset$var,
+  shape = dim(counts),
+  layers = list(
+    mrna = counts,
+    antibody = counts_ab,
+    atac = atac
+  ),
+  uns = list(
+    dataset_id = par$dataset_id
+  )
+)
 
-
-dataset$write_h5ad(par$output, compression = "gzip")
+adata$write_h5ad(par$output, compression = "gzip")
 
 # save plot (if need be)
 if (!is.null(par$plot)) {
   ggsave(par$plot, out$plot, width = 20, height = 16)
 }
+
+
+
