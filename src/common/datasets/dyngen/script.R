@@ -27,6 +27,10 @@ requireNamespace("anndata", quietly = TRUE)
 # determine backbone
 backbones <- list_backbones()
 
+if (is.null(par$backbone)) {
+  par$backbone <- sample(names(backbones), 1)
+}
+
 backbone <- backbones[[par$backbone]]()
 
 # generate initial config
@@ -66,7 +70,7 @@ adata <- anndata::AnnData(
   X = counts,
   obs = out$dataset$obs,
   var = out$dataset$var,
-  shape = dim(counts),
+  # shape = dim(counts),
   uns = list(
     dataset_id = par$id
   )
