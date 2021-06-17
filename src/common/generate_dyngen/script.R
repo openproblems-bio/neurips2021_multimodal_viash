@@ -16,7 +16,7 @@ par <- list(
 ## VIASH END
 
 if (par$store_antibody == par$store_atac) {
-  cat("Warning: Strictly pass one of --store_antibody and --store_atac, not neither or both.")
+  cat("Warning: Strictly pass one of --store_antibody and --store_atac, not neither or both.\n")
 }
 
 options(tidyverse.quiet = TRUE)
@@ -63,13 +63,10 @@ out <- generate_dataset(
 # create initial dataset
 counts <- out$dataset$X
 adata <- anndata::AnnData(
-  X = NULL,
+  X = counts,
   obs = out$dataset$obs,
   var = out$dataset$var,
   shape = dim(counts),
-  layers = list(
-    mrna = counts
-  ),
   uns = list(
     dataset_id = par$id
   )
