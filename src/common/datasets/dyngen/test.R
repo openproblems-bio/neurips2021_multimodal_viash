@@ -4,7 +4,7 @@ requireNamespace("anndata", quietly = TRUE)
 cat("> Running dyngen\n")
 out <- processx::run(
   # command = "viash",
-  command = "./generate_dyngen",
+  command = "./dyngen",
   args = c(
     # "run", "src/common/generate_dyngen/config.vsh.yaml", "--",
     "--id", "mytest",
@@ -36,7 +36,7 @@ assert_that(
   adata$uns[["dataset_id"]] == "mytest",
   adata$n_obs == 100,
   adata$n_vars == 50,
-  all(c("mrna", "antibody", "atac") %in% names(adata$layers))
+  all(c("antibody", "atac") %in% names(adata$layers))
 )
 
 cat("> Test succeeded!\n")
