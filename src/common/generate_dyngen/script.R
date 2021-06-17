@@ -61,13 +61,14 @@ out <- generate_dataset(
 )
 
 # create initial dataset
+counts <- out$dataset$X
 adata <- anndata::AnnData(
   X = NULL,
   obs = out$dataset$obs,
   var = out$dataset$var,
   shape = dim(counts),
   layers = list(
-    mrna = out$dataset$X
+    mrna = counts
   ),
   uns = list(
     dataset_id = par$id
