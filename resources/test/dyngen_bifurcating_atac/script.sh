@@ -15,9 +15,8 @@ bin/viash run src/common/datasets/dyngen/config.vsh.yaml -- \
   --num_genes 150 \
   --num_simulations 30 \
   --num_threads 10 \
-  --store_atac
-  
+  --store_chromatin
 
-bin/viash run src/predict_modality/datasets/censor/config.vsh.yaml -- \
+bin/viash run src/predict_modality/datasets/censor_task1/config.vsh.yaml -- \
   --input resources/test/dyngen_bifurcating_atac/dataset.h5ad \
   --output resources/test/dyngen_bifurcating_atac/dataset_task1_censor.h5ad

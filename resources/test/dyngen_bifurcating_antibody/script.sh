@@ -15,12 +15,12 @@ bin/viash run src/common/datasets/dyngen/config.vsh.yaml -- \
   --num_genes 150 \
   --num_simulations 30 \
   --num_threads 10 \
-  --store_antibody
+  --store_protein
 
 bin/viash run src/predict_modality/datasets/censor_task1/config.vsh.yaml -- \
   --input resources/test/dyngen_bifurcating_antibody/dataset.h5ad \
   --output resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad
-  
+
 bin/viash run src/predict_modality/methods/baseline_randomforest/config.vsh.yaml -- \
   --input resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad \
   --output resources/test/dyngen_bifurcating_antibody/dataset_task1_baseline.h5ad
