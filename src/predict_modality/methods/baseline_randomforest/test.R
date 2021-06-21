@@ -25,7 +25,7 @@ assert_that(
   adata$uns[["method_id"]] == "baseline_randomforest",
   adata$n_obs == adata_orig$n_obs,
   adata$n_vars == adata_orig$n_vars,
-  all(c("modality1", "modality2", "prediction") %in% names(adata$layers))
+  all(c("prediction") %in% names(adata$layers))
 )
 
 # TODO: check content of layers["prediction"]

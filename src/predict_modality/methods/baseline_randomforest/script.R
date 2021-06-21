@@ -10,43 +10,58 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE)
-
-library(randomForest, warn.conflicts = FALSE, quietly = TRUE)
+requireNamespace("randomForest", quietly = TRUE)
 
 # load h5ad file
 adata <- anndata::read_h5ad(par$input)
 
 # gather data
-var_data <- adata$var
+obs_data <- adata$obs
 modality1 <- adata$layers[["modality1"]]
 modality2 <- adata$layers[["modality2"]]
 
 # perform DR on the features
-dr <- prcomp(t(modality1), rank. = 10)$x
+dr <- prcomp(modality1, rank. = 4)$x
 
-predictors1 <- t(modality1[,var_data$is_predictor])
-responses1 <- t(modality1[,var_data$is_response])
-predictors2 <- t(modality2[,var_data$is_predictor])
+dr_train <- dr[obs_data$experiment == "train",]
+predictors_train <- modality1[obs_data$experiment == "train",]
+responses_train <- modality2[obs_data$experiment == "train",]
+
+dr_test <- dr[obs_data$experiment == "test",]
+predictors_test <- modality1[obs_data$experiment == "test",]
 
 # predict for each gene
-preds <- lapply(seq_len(ncol(predictors1)), function(i) {
-  x <- cbind(dr[var_data$is_predictor,], expr = predictors1[,i])
-  y <- predictors2[,1]
+preds <- lapply(seq_len(ncol(predictors_train)), function(i) {
+  x <- cbind(dr_train, expr = predictors_train[,i])
+  y <- responses_train[,i]
 
-  rf <- randomForest::randomForest(x = x, y = y)
+  if (length(unique(y)) > 1) {
+    rf <- randomForest::randomForest(x = x, y = y)
 
-  newx <- cbind(dr[var_data$is_response,], expr = responses1[,i])
-  predy <- stats::predict(rf, newx)
-
-  predy
+    newx <- cbind(dr_test, expr = predictors_test[,i])
+    stats::predict(rf, newx)
+  } else {
+    setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
+  }
 })
 
 # create output
-# TODO: create from scratch?
-prediction <- Matrix::drop0(modality2 * 0)
-prediction[, var_data$is_response] <- do.call(rbind, preds)
 
-adata$layers[["prediction"]] <- prediction
-adata$uns[["method_id"]] <- "baseline_randomforest"
+prediction <- modality2 * 0
+prediction[obs_data$experiment == "test"] <- do.call(cbind, preds)
+prediction <- Matrix::drop0(prediction)
 
-adata$write_h5ad(par$output, compression = "gzip")
+out <- anndata::AnnData(
+  X = NULL,
+  shape = dim(prediction),
+  layers = list(
+    prediction = prediction
+  ),
+  obs = adata$obs,
+  uns = list(
+    dataset_id = adata$uns[["dataset_id"]],
+    method_id = "baseline_randomforest"
+  )
+)
+
+out$write_h5ad(par$output, compression = "gzip")
