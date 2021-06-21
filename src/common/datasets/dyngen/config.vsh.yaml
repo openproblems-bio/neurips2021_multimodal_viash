@@ -58,18 +58,22 @@ functionality:
       type: double
       default: 0.008333
       description: Step size of the GillespieSSA2 simulation. Default is 30/3600.
-    - name: "--store_atac"
-      alternatives: [ "-atac" ]
+    - name: "--store_chromatin"
+      alternatives: [ "-chromatin" ]
       type: boolean_true
-      description: Whether or not to compute ATAC-like data.
+      description: Whether or not to compute chromatin accessibility data.
     - name: "--store_rna_velocity"
       alternatives: [ "-velocity" ]
       type: boolean_true
       description: Whether or not to compute the RNA velocity gold standard.
-    - name: "--store_antibody"
-      alternatives: [ "-antibody" ]
+    - name: "--store_protein"
+      alternatives: [ "-protein" ]
       type: boolean_true
       description: Whether or not to store protein count information.
+    - name: "--num_proteins"
+      type: integer
+      description: The number of proteins to sample.
+      default: 50
     - name: "--num_threads"
       type: integer
       default: 1

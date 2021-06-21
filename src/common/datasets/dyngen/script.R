@@ -9,14 +9,14 @@ par <- list(
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
-  store_atac = TRUE,
+  store_chromatin = TRUE,
   store_rna_velocity = FALSE,
-  store_antibody = TRUE
+  store_protein = TRUE
 )
 ## VIASH END
 
-if (par$store_antibody == par$store_atac) {
-  cat("Warning: Strictly pass one of --store_antibody and --store_atac, not neither or both.\n")
+if (par$store_protein == par$store_chromatin) {
+  cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
 }
 
 options(tidyverse.quiet = TRUE)
@@ -37,10 +37,12 @@ backbone <- backbones[[par$backbone]]()
 num_tfs <- nrow(backbone$module_info)
 num_targets <- ceiling(0.8 * (par$num_genes - num_tfs))
 num_hks <- par$num_genes - num_tfs - num_targets
+num_cells_train <- round(par$num_cells * .66)
+num_cells_test <- par$num_cells - num_cells_train
 
-init_model <- initialise_model(
+model_init <- initialise_model(
   backbone = backbone,
-  num_cells = par$num_cells,
+  num_cells = num_cells_train,
   num_tfs = num_tfs,
   num_targets = num_targets,
   num_hks = num_hks,
@@ -50,52 +52,73 @@ init_model <- initialise_model(
     experiment_params = simulation_type_wild_type(
       num_simulations = par$num_simulations
     ),
-    compute_cellwise_grn = par$store_atac,
+    compute_cellwise_grn = par$store_chromatin,
     compute_rna_velocity = par$store_rna_velocity
   ),
   num_cores = par$num_threads,
   verbose = TRUE
-)
+) %>%
+  generate_tf_network() %>%
+  generate_feature_network() %>%
+  generate_kinetics()
 
-# run simulations
-out <- generate_dataset(
-  model = init_model,
-  format = "anndata",
-  make_plots = TRUE
-)
+# run train simulations
+model_train <-
+  model_init %>%
+  generate_gold_standard() %>%
+  generate_cells() %>%
+  generate_experiment()
 
-# create initial dataset
-counts <- out$dataset$X
+# run test simulations
+model_init$num_cells <-
+  model_init$numbers$num_cells <-
+  num_cells_test
+model_test <-
+  model_init %>%
+  generate_gold_standard() %>%
+  generate_cells() %>%
+  generate_experiment()
+
+# combine into one dataset
+model <- combine_models(
+  list(train = model_train, test = model_test),
+  duplicate_gold_standard = FALSE
+)
+dataset <- as_anndata(model)
+
+
+# create adata dataset
+counts <- dataset$X
+
 adata <- anndata::AnnData(
   X = counts,
-  obs = out$dataset$obs,
-  var = out$dataset$var,
-  # shape = dim(counts),
+  obs = dataset$obs %>% rename(experiment = model),
+  var = dataset$var %>% select(module_id, basal, burn, independence, color, is_tf, is_hk),
   uns = list(
     dataset_id = par$id
   )
 )
 
-if (par$store_antibody) {
-  # construct Ab-like data from protein counts
-  # TODO: use real Ab data to map distributions
-  counts_ab <- out$dataset$layers[["counts_protein"]]
+if (par$store_protein) {
+  # construct AbSeq-like data from protein counts
+  # TODO: use real AbSeq data to map distributions
+  counts_protein <- dataset$layers[["counts_protein"]]
 
   # sample 50 genes
-  if (ncol(counts_ab) > 50) {
-    sample_genes <- sample.int(ncol(counts_ab), 50)
-    counts_ab[,-sample_genes] <- 0
-    counts_ab <- Matrix::drop0(counts_ab)
+  if (ncol(counts_protein) > par$num_proteins) {
+    sample_genes <- sample.int(ncol(counts_protein), par$num_proteins)
+    counts_protein[,-sample_genes] <- 0
+    counts_protein <- Matrix::drop0(counts_protein)
   }
 
-  adata$layers[["antibody"]] <- counts_ab
+  adata$layers[["protein"]] <- counts_protein
 }
 
-if (par$store_atac) {
+if (par$store_chromatin) {
   # constuct atac-like data from single cell regulatory network
   # TODO: use real atac data to map distributions
-  regulatory_network <- out$dataset$uns[["regulatory_network"]]
-  regulatory_network_sc <- out$dataset$obsm[["regulatory_network_sc"]]
+  regulatory_network <- dataset$uns[["regulatory_network"]]
+  regulatory_network_sc <- dataset$obsm[["regulatory_network_sc"]]
 
   library(Matrix, quietly = TRUE)
   summ <- summary(regulatory_network_sc)
@@ -128,14 +151,15 @@ if (par$store_atac) {
     dimnames = dimnames(counts)
   )
 
-  adata$layers[["atac"]] <- atac
+  adata$layers[["chromatin"]] <- atac
 }
 
 adata$write_h5ad(par$output, compression = "gzip")
 
 # save plot (if need be)
 if (!is.null(par$plot)) {
-  ggsave(par$plot, out$plot, width = 20, height = 16)
+  g <- plot_summary(model)
+  ggsave(par$plot, g, width = 20, height = 16)
 }
 
 
