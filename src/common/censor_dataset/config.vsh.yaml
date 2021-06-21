@@ -1,0 +1,37 @@
+functionality:
+  name: censor_dataset
+  namespace: common
+  version: dev
+  description: | 
+    Censor an existing dataset: obfuscate gene names, remove cell identities and
+    shuffle cells of modalities, for distribution to competitors.
+  authors:
+    - name: Louise Deconinck
+      email: louise.deconinck@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: LouiseDck, orcid: "" }
+  arguments:
+    - name: "--input"
+      type: "file"
+      example: "dataset"
+      description: "The input dataset to be censored"
+      required: true
+    - name: "--output
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "dataset_censored.h5ad"
+      description: "A censored version of the dataset."
+
+  resources: 
+    - type: python_script
+      path: script.py
+  tests:
+    - type: r_script
+      path: test.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        cran: [ dyngen ]
