@@ -16,22 +16,19 @@ functionality:
       example: "dataset"
       description: "The input dataset to be censored"
       required: true
-    - name: "--output
-      alternatives: ["-o"]
+    - name: "--output"
       type: "file"
       direction: "output"
       example: "dataset_censored.h5ad"
       description: "A censored version of the dataset."
-
+    - name: "--shuffle_cells_output"
+      type: "file"
+      example: "shuffle_cells.csv"
+      description: "Where the information about the cell shuffling needs to be stored"
   resources: 
     - type: python_script
       path: script.py
-  tests:
-    - type: r_script
-      path: test.R
 platforms:
+  - type: native
   - type: docker
-    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
-    setup:
-      - type: r
-        cran: [ dyngen ]
+    image: "python:3.8"

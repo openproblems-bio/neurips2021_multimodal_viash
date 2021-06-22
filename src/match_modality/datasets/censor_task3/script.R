@@ -36,6 +36,8 @@ mod2 <- if (has_antibody) adata$layers[["antibody"]] else adata$layers[["atac"]]
 shuffle_cells <- sample.int(nrow(rna))
 shuffle_genes <- sample.int(ncol(rna))
 
+# TODO shuffle genen niet
+
 rna <- rna[, shuffle_genes, drop = F]
 mod2 <- mod2[shuffle_cells, shuffle_genes, drop = F]
 
