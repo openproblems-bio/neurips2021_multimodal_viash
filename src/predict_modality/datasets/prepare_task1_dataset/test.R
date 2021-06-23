@@ -14,7 +14,8 @@ out <- processx::run(
 
 cat("> Checking whether output files were created\n")
 assert_that(
-  file.exists("output_censored.h5ad")
+  file.exists("output_censored.h5ad"),
+  file.exists("output_solution.h5ad")
 )
 
 cat("> Checking contents of output_censored.h5ad\n")
