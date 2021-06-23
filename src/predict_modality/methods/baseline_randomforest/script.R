@@ -1,7 +1,7 @@
 ## VIASH START
 par <- list(
   input = "resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad",
-  output = "output.h5ad"
+  output = "resources/test/dyngen_bifurcating_antibody/dataset_task1_censor_randomforest.h5ad"
 )
 ## VIASH END
 

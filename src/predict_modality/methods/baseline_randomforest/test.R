@@ -5,7 +5,7 @@ cat("> Running baseline component\n")
 out <- processx::run(
   command = "./baseline_randomforest",
   args = c(
-    "--input", "dataset_task1_censor.h5ad",
+    "--input", "dataset_task1_censored.h5ad",
     "--output", "output.h5ad"
   ),
   stderr_to_stdout = TRUE
@@ -17,7 +17,7 @@ assert_that(
 )
 
 cat("> Checking contents of output.h5ad\n")
-adata_orig <- anndata::read_h5ad("dataset_task1_censor.h5ad")
+adata_orig <- anndata::read_h5ad("dataset_task1_censored.h5ad")
 adata <- anndata::read_h5ad("output.h5ad")
 
 assert_that(

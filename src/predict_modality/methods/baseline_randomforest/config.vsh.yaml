@@ -28,10 +28,10 @@ functionality:
   tests:
     - type: r_script
       path: test.R
-    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_censor.h5ad
+    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_censored.h5ad
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
-    setup: 
+    setup:
       - type: r
         packages: [ randomForest ]
