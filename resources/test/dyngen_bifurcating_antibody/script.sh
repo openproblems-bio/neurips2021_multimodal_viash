@@ -6,21 +6,26 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-bin/viash run src/common/datasets/dyngen/config.vsh.yaml -- \
-  --id dyngen_bifurcating \
-  --output resources/test/dyngen_bifurcating_antibody/dataset.h5ad \
-  --plot resources/test/dyngen_bifurcating_antibody/plot.pdf \
-  --backbone bifurcating_cycle \
-  --num_cells 200 \
-  --num_genes 150 \
-  --num_simulations 30 \
-  --num_threads 10 \
-  --store_protein
+OUTPUT_DIR=resources/test/dyngen_bifurcating_antibody
 
-bin/viash run src/predict_modality/datasets/censor_task1/config.vsh.yaml -- \
-  --input resources/test/dyngen_bifurcating_antibody/dataset.h5ad \
-  --output resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad
+if [ ! -f $OUTPUT_DIR/dataset.h5ad ]; then
+  bin/viash run src/common/datasets/dyngen/config.vsh.yaml -- \
+    --id dyngen_bifurcating \
+    --output $OUTPUT_DIR/dataset.h5ad \
+    --plot $OUTPUT_DIR/plot.pdf \
+    --backbone bifurcating_cycle \
+    --num_cells 200 \
+    --num_genes 150 \
+    --num_simulations 30 \
+    --num_threads 10 \
+    --store_protein
+fi
+
+bin/viash run src/predict_modality/datasets/prepare_task1_dataset/config.vsh.yaml -- \
+  --input $OUTPUT_DIR/dataset.h5ad \
+  --output_censored $OUTPUT_DIR/dataset_task1_censored.h5ad \
+  --output_solution $OUTPUT_DIR/dataset_task1_solution.h5ad
 
 bin/viash run src/predict_modality/methods/baseline_randomforest/config.vsh.yaml -- \
-  --input resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad \
-  --output resources/test/dyngen_bifurcating_antibody/dataset_task1_baseline.h5ad
+  --input $OUTPUT_DIR/dataset_task1_censored.h5ad \
+  --output $OUTPUT_DIR/dataset_task1_prediction_randomforest.h5ad
