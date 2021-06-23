@@ -33,6 +33,7 @@ functionality:
           * ad.layers['modality1']: Predictor modality, either the chromatin accessibility or the mRNA data.
           * ad.layers['modality2']: Response modality, either the mRNA or the protein data. Contains no values for cells with obs['experiment'] == 'test'.
           * ad.obs['experiment']: Denotes whether a cell belongs to the 'train' or the 'test' set.
+          * ad.var['modality2_has_values']: Whether or not a gene has values in modality2 or not.
           * ad.uns['dataset_id']: The identifier of the dataset.
           * ad.uns['modality_types']: The data types of modality1 and modality2.
       required: true
@@ -45,6 +46,7 @@ functionality:
         Where to store the solution h5ad dataset, containing the following objects:
           * ad.layers['modality2']: Response modality, either the mRNA or the protein data. Contains no values for cells with obs['experiment'] == 'train'.
           * ad.obs['experiment']: Denotes whether a cell belongs to the 'train' or the 'test' set.
+          * ad.var['modality2_has_values']: Whether or not a gene has values in modality2 or not.
           * ad.uns['dataset_id']: The identifier of the dataset.
           * ad.uns['modality_types']: The data types of modality1 and modality2.
       required: true

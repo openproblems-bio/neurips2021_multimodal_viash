@@ -42,6 +42,7 @@ if (has_protein) {
   modality_types <- c(modality1 = "chromatin", modality2 = "mrna")
 }
 
+modality2_has_values <- colMeans(modality2 > 0) > 0
 
 ###############################################################################
 ###                          CREATE CENSOR OBJECT                           ###
@@ -63,6 +64,7 @@ out_censor <- anndata::AnnData(
     modality2 = modality2_notest
   ),
   obs = adata$obs %>% select(experiment),
+  var = data.frame(modality2_has_values),
   uns = list(
     dataset_id = paste0(adata$uns[["dataset_id"]], "_task1"),
     modality_types = modality_types
@@ -83,8 +85,8 @@ zzz <- out_censor$write_h5ad(par$output_censored, compression = "gzip")
 
 # throw away 'test' features
 modality2_onlytest <- modality2
-modality2_onlytest[adata$obs$experiment != "test", ] <- 0
-modality2_onlytest <- Matrix::drop0(modality2_notest)
+modality2_onlytest[adata$obs$experiment == "train", ] <- 0
+modality2_onlytest <- Matrix::drop0(modality2_onlytest)
 
 # create censored dataset
 out_solution <- anndata::AnnData(
@@ -94,13 +96,14 @@ out_solution <- anndata::AnnData(
     modality2 = modality2_onlytest
   ),
   obs = adata$obs %>% select(experiment),
+  var = data.frame(modality2_has_values),
   uns = list(
     dataset_id = paste0(adata$uns[["dataset_id"]], "_task1"),
     modality_types = modality_types
   )
 )
 assert_that(
-  sum(abs(out_solution$layers["modality2"][adata$obs$experiment == "test", ])) == 0,
+  sum(abs(out_solution$layers["modality2"][adata$obs$experiment == "train", ])) == 0,
   msg = "modality2 values for test cells should sum to 0."
 )
 
