@@ -17,8 +17,8 @@ out <- processx::run(
     "--num_genes", "50",
     "--census_interval", "2",
     "--store_rna_velocity",
-    "--store_atac",
-    "--store_antibody"
+    "--store_chromatin",
+    "--store_protein"
   ),
   stderr_to_stdout = TRUE
 )
@@ -36,7 +36,7 @@ assert_that(
   adata$uns[["dataset_id"]] == "mytest",
   adata$n_obs == 100,
   adata$n_vars == 50,
-  all(c("antibody", "atac") %in% names(adata$layers))
+  all(c("chromatin", "protein") %in% names(adata$layers))
 )
 
 cat("> Test succeeded!\n")
