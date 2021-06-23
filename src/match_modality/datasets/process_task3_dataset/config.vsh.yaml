@@ -1,8 +1,8 @@
 functionality:
-  name: censor_dataset
-  namespace: common
+  name: process_task3_dataset
+  namespace: match_modality_datasets
   version: dev
-  description: | 
+  description: |
     Censor an existing dataset: obfuscate gene names, remove cell identities and
     shuffle cells of modalities, for distribution to competitors.
   authors:
@@ -13,22 +13,31 @@ functionality:
   arguments:
     - name: "--input"
       type: "file"
-      example: "dataset"
+      example: "dataset.h5ad"
       description: "The input dataset to be censored"
       required: true
-    - name: "--output"
+    - name: "--output_censored"
       type: "file"
       direction: "output"
       example: "dataset_censored.h5ad"
       description: "A censored version of the dataset."
-    - name: "--shuffle_cells_output"
+      required: true
+    - name: "--output_solution"
       type: "file"
-      example: "shuffle_cells.csv"
-      description: "Where the information about the cell shuffling needs to be stored"
-  resources: 
+      direction: "output"
+      example: "dataset_solution.h5ad"
+      description: "A solution version of the dataset."
+      required: true
+  resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset.h5ad
 platforms:
-  - type: native
   - type: docker
     image: "python:3.8"
+    setup: 
+      - type: python
+        packages: [ anndata, pandas, numpy ]
