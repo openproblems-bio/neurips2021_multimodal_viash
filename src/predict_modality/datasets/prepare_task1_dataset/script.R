@@ -17,6 +17,7 @@ requireNamespace("anndata", quietly = TRUE)
 library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, warn.conflicts = FALSE)
 
+
 ###############################################################################
 ###                             READ INPUT DATA                             ###
 ###############################################################################
@@ -42,10 +43,9 @@ if (has_protein) {
 }
 
 
-
-######################################################
-###              CREATE CENSOR OBJECT              ###
-######################################################
+###############################################################################
+###                          CREATE CENSOR OBJECT                           ###
+###############################################################################
 
 ## TODO: should I also bother censoring the cell names and the gene names?
 
@@ -77,10 +77,9 @@ assert_that(
 zzz <- out_censor$write_h5ad(par$output_censored, compression = "gzip")
 
 
-
-######################################################
-###             CREATE SOLUTION OBJECT             ###
-######################################################
+###############################################################################
+###                          CREATE SOLUTION OBJECT                         ###
+###############################################################################
 
 # throw away 'test' features
 modality2_onlytest <- modality2
