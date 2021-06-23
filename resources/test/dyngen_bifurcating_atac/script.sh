@@ -29,3 +29,8 @@ bin/viash run src/predict_modality/datasets/prepare_task1_dataset/config.vsh.yam
 bin/viash run src/predict_modality/methods/baseline_randomforest/config.vsh.yaml -- \
   --input $OUTPUT_DIR/dataset_task1_censored.h5ad \
   --output $OUTPUT_DIR/dataset_task1_prediction_randomforest.h5ad
+  
+bin/viash run src/predict_modality/metrics/calculate_task1_metrics/config.vsh.yaml -- \
+  --input_solution $OUTPUT_DIR/dataset_task1_solution.h5ad \
+  --input_prediction $OUTPUT_DIR/dataset_task1_prediction_randomforest.h5ad \
+  --output $OUTPUT_DIR/dataset_task1_prediction_randomforest_scores.h5ad

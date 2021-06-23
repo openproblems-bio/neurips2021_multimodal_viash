@@ -1,0 +1,40 @@
+functionality:
+  name: calculate_task1_metrics
+  namespace: predict_modality_metrics
+  version: dev
+  description: Calculating basic metrics for task1.
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_prediction"
+      alternatives: ["-ip"]
+      type: "file"
+      example: "prediction.h5ad"
+      description: Prediction by a method.
+    - name: "--input_solution"
+      alternatives: ["-io"]
+      type: "file"
+      example: "solution.h5ad"
+      description: Gold standard solution.
+      required: true
+    - name: "--output"
+      alternatives: ["-o"]
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: Metric scores by comparing the prediction to the gold standard solution.
+      required: true
+  resources:
+    - type: r_script
+      path: script.R
+  tests:
+    - type: r_script
+      path: test.R
+    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_solution.h5ad
+    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_prediction_randomforest.h5ad
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
