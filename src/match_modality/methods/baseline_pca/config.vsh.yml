@@ -37,4 +37,4 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata ]
+        pip: [ anndata, scipy, sklearn ]

@@ -1,6 +1,6 @@
 # VIASH START
 par = {
-    "input": "resources/test/dyngen_bifurcating_antibody/dataset.h5ad",
+    "input": "../../../../resources/test/dyngen_bifurcating_antibody/dataset.h5ad",
     "output_censored": "output_censored.h5ad",
     "output_solution": "output_solution.h5ad"
 }
@@ -30,7 +30,7 @@ has_atac = "chromatin" in adata.layers.keys()
 assert has_antibody != has_atac, "Strictly one of adata.layers[\"chromatin\"] and adata.layers[\"protein\"] must be " \
                                  "defined."
 
-modality_types = { "modality1": "rna", "modality2": "chromatin" if has_atac else "protein"}
+modality_types = {"modality1": "rna", "modality2": "chromatin" if has_atac else "protein"}
 
 ###############################################################################
 ###                          CREATE CENSOR OBJECT                           ###
@@ -39,43 +39,48 @@ modality_types = { "modality1": "rna", "modality2": "chromatin" if has_atac else
 mod1 = adata.X
 mod2 = adata.layers["protein"] if has_antibody else adata.layers["chromatin"]
 
+pairings = np.diag(np.full(mod1.shape[0], 1))
+
 # Generate the indices partition -> so that the shuffling can be saved
 shuffle_cells = list(range(mod1.shape[0]))
 random.shuffle(shuffle_cells)
 
 # shuffle according to these indices
 mod2 = mod2[shuffle_cells, :]
+pairings = pairings[:, shuffle_cells]
 
 # create new anndata object
 out_censor = anndata.AnnData(
-    shape = adata.shape,
-    layers = {
+    shape=adata.shape,
+    layers={
         "modality1": mod1,
         "modality2": mod2
     },
-    uns = {
+    uns={
         "dataset_id": adata.uns["dataset_id"] + "_task3",
         "modality_types": modality_types
     },
-    dtype = "float32"
+    dtype="float32"
 )
 
-out_censor.write_h5ad(filename = par["output_censored"], compression = "gzip")
+out_censor.write_h5ad(filename=par["output_censored"], compression="gzip")
 
 ###############################################################################
 ###                          CREATE SOLUTION OBJECT                         ###
 ###############################################################################
 
+# TODO: adapt so that solution is known -> sparse matrix, 1 is match, 0 is no match
+
 # create new anndata object
 out_solution = anndata.AnnData(
-    shape = adata.shape,
-    obs = pd.DataFrame(
-        index = adata.obs_names,
-        data = { "shuffle_index": np.argsort(shuffle_cells) }
+    shape=adata.shape,
+    obs=pd.DataFrame(
+        index=adata.obs_names,
     ),
-    uns = {
-        "dataset_id": adata.uns["dataset_id"] + "_task3"
+    uns={
+        "dataset_id": adata.uns["dataset_id"] + "_task3",
+        "pairings": pairings,
     }
 )
 
-out_solution.write_h5ad(filename = par["output_solution"], compression = "gzip")
+out_solution.write_h5ad(filename=par["output_solution"], compression="gzip")
