@@ -35,8 +35,18 @@ nn = NearestNeighbors(n_neighbors=1).fit(rna_pca)
 distances, indices = nn.kneighbors(X=mod2_pca)
 
 indices_mod1 = [i for i in range(rna.shape[0])]
-indices_paired = [(x, y[0]) for x, y in zip(indices_mod1, indices)]
+indices_paired = [(x, np.array([y[0], z[0]])) for x, y, z in zip(indices_mod1, indices, distances)]
+indices_paired2 = [[x, y[0]] for x, y in zip(indices_mod1, indices)]
+
+# adata.obsp = indices_paired
+
 pairing_matrix = np.zeros((rna.shape[0], mod2.shape[0]))
+# pairing_matrix[indices_paired2] = 1
+
+# TODO coo matrix?
+pairing_matrix[indices_mod1, [x[0] for x in indices]] = 1
+
+adata.obsp["result"] = pairing_matrix
 
 with open(par["output_rna"], 'w') as rna_file, open(par["output_mod2"], 'w') as mod2_file:
     rna_writer, mod2_writer = csv.writer(rna_file, delimiter=","), csv.writer(mod2_file, delimiter=",")
