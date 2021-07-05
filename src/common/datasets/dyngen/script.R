@@ -11,7 +11,8 @@ par <- list(
   census_interval = 1,
   store_chromatin = TRUE,
   store_rna_velocity = FALSE,
-  store_protein = TRUE
+  store_protein = TRUE,
+  num_proteins = 50
 )
 ## VIASH END
 
@@ -21,7 +22,8 @@ if (par$store_protein == par$store_chromatin) {
 
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
-library(dyngen, quietly = TRUE)
+library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
+library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
 # determine backbone
@@ -107,11 +109,11 @@ if (par$store_protein) {
   # sample 50 genes
   if (ncol(counts_protein) > par$num_proteins) {
     sample_genes <- sample.int(ncol(counts_protein), par$num_proteins)
-    counts_protein[,-sample_genes] <- 0
-    counts_protein <- Matrix::drop0(counts_protein)
+    counts_protein <- counts_protein[,sample_genes]
   }
 
-  adata$layers[["protein"]] <- counts_protein
+  adata$obsm[["protein"]] <- counts_protein
+  adata$uns[["protein_varnames"]] <- colnames(counts_protein)
 }
 
 if (par$store_chromatin) {
@@ -120,38 +122,8 @@ if (par$store_chromatin) {
   regulatory_network <- dataset$uns[["regulatory_network"]]
   regulatory_network_sc <- dataset$obsm[["regulatory_network_sc"]]
 
-  library(Matrix, quietly = TRUE)
-  summ <- summary(regulatory_network_sc)
-  regnet_ix <- tibble(
-    cell_i = summ$i,
-    reg_i = summ$j,
-    reg_value = summ$x
-  ) %>%
-    left_join(
-      regulatory_network %>%
-        transmute(
-          reg_i = row_number(),
-          gene_i = match(target, colnames(counts))
-        ),
-      by = "reg_i"
-    )
-
-  atac_ix <-
-    regnet_ix %>%
-    group_by(cell_i, gene_i) %>%
-    summarise(
-      atac = sum(reg_value),
-      .groups = "drop"
-    )
-  atac <- Matrix::sparseMatrix(
-    i = atac_ix$cell_i,
-    j = atac_ix$gene_i,
-    x = pmax(atac_ix$atac, 0),
-    dims = dim(counts),
-    dimnames = dimnames(counts)
-  )
-
-  adata$layers[["chromatin"]] <- atac
+  adata$obsm[["chromatin"]] <- regulatory_network_sc
+  adata$uns[["chromatin_colnames"]] <- paste0("region_", seq_len(ncol(regulatory_network_sc)))
 }
 
 adata$write_h5ad(par$output, compression = "gzip")
