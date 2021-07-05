@@ -60,3 +60,4 @@ functionality:
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+  - type: nextflow

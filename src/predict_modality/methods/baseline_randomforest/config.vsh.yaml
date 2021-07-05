@@ -35,3 +35,4 @@ platforms:
     setup:
       - type: r
         packages: [ randomForest ]
+  - type: nextflow
