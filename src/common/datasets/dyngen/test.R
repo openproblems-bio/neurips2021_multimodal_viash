@@ -36,7 +36,7 @@ assert_that(
   adata$uns[["dataset_id"]] == "mytest",
   adata$n_obs == 100,
   adata$n_vars == 50,
-  all(c("chromatin", "protein") %in% names(adata$layers))
+  all(c("chromatin", "protein") %in% names(adata$obsm))
 )
 
 cat("> Test succeeded!\n")

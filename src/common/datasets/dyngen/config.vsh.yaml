@@ -33,6 +33,7 @@ functionality:
       direction: "output"
       example: "plot.pdf"
       description: "A visualisation of the simulation."
+      required: true
     - name: "--backbone"
       alternatives: [ "-b" ]
       type: "string"
@@ -89,4 +90,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        cran: [ dyngen ]
+        github:
+          - dynverse/dyngen@devel
+  - type: nextflow

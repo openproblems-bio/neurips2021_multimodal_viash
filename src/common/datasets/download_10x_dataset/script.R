@@ -20,7 +20,11 @@ download.file(par$input, destfile = h5_tmp, quiet = TRUE)
 cat("Reading 10x h5 file\n")
 ad <- sc$read_10x_h5(h5_tmp, gex_only = FALSE)
 
-zzz <- ad$var_names_make_unique()
+cat("Setting dataset id\n")
+ad$uns[["dataset_id"]] <- par$id
+
+cat("Making var names unique\n")
+ad$var_names_make_unique()
 
 is_abseq <- ad$var$feature_types == "Antibody Capture"
 if (any(is_abseq)) {
@@ -40,6 +44,7 @@ if (any(is_atacseq)) {
   ad$obsm[["chromatin"]] <- as(atac_counts, "RsparseMatrix")
   ad$uns[["chromatin_varnames"]] <- colnames(atac_counts)
 }
+
 
 cat("Storing output to '", par$output, "'\n", sep = "")
 ad$write_h5ad(par$output, compression = "gzip")
