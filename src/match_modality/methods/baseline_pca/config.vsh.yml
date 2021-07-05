@@ -15,18 +15,11 @@ functionality:
       example: "dataset.h5ad"
       description: Censored dataset.
       required: true
-    - name: "--output_rna"
+    - name: "--prediction"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
       example: "output_rna.csv"
-      description: Dataset with prodicted values for modality2.
-      required: true
-    - name: "--output_mod2"
-      alternatives: ["-o"]
-      type: "file"
-      direction: "output"
-      example: "output_mod2.csv"
       description: Dataset with prodicted values for modality2.
       required: true
   resources:
