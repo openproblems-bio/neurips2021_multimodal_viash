@@ -93,3 +93,4 @@ platforms:
         github:
           - dynverse/dyngen@devel
   - type: nextflow
+    publish: true

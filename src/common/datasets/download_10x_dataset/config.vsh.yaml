@@ -49,3 +49,4 @@ platforms:
         cran: 
           - anndata
   - type: nextflow
+    publish: true
