@@ -7,7 +7,7 @@ functionality:
   usage: |
     download_10x_dataset \
       --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \
-      --min_library_size 1000 --min_cells_per_gene 300
+      --output output.h5ad
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
