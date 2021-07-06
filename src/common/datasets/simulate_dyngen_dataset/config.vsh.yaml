@@ -1,5 +1,5 @@
 functionality:
-  name: dyngen
+  name: simulate_dyngen_dataset
   namespace: common_datasets
   version: dev
   description: |
