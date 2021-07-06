@@ -6,6 +6,7 @@ functionality:
     Download a dataset from the 10x genomics website.
   usage: |
     download_10x_dataset \
+      --id pbmc_1k_protein_v3 \
       --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \
       --output output.h5ad
   authors:
@@ -49,4 +50,3 @@ platforms:
         cran: 
           - anndata
   - type: nextflow
-    publish: true

@@ -4,7 +4,8 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 
 include  { download_10x_dataset }   from "$targetDir/common_datasets/download_10x_dataset/main.nf"                params(params)
-include  { dyngen }                 from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"                              params(params)
+include  { dyngen }                 from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"             params(params)
+include  { normalize }              from "$targetDir/common_datasets/normalize/main.nf"                           params(params)
 include  { overrideOptionValue }    from  "$srcDir/common/workflows/utils.nf"
 
 
@@ -22,9 +23,7 @@ workflow generate_dyngen_datasets {
         | map { overrideOptionValue(it, "dyngen", "store_protein", it[1].store_protein) } \
         | map { [ it[0], [], it[2] ] } \
         | filter{ it[0] ==~ /.*_small/ } \
-        | view{ [ "DEBUG2", it[0], it[1] ] } \
-        | dyngen \
-        | view{ [ "DEBUG3", it[0], it[1] ] }
+        | dyngen
 
     emit: output_
 }
@@ -37,9 +36,7 @@ workflow generate_public_10x_datasets {
         | map { overrideOptionValue(it, "download_10x_dataset", "id", it[1].id) } \
         | map { overrideOptionValue(it, "download_10x_dataset", "input", it[1].input) } \
         | map { [ it[0], [], it[2] ] } \
-        | view{ [ "DEBUG2", it[0], it[1] ] } \
-        | download_10x_dataset \
-        | view{ [ "DEBUG3", it[0], it[1] ] }
+        | download_10x_dataset
 
     emit: output_
 }
@@ -59,7 +56,8 @@ workflow generate_public_10x_datasets {
 workflow generate_datasets {
     main:
     output_ = (generate_dyngen_datasets & generate_public_10x_datasets) \
-      | mix
+      | mix \
+      | normalize
       
     emit: output_
 }
