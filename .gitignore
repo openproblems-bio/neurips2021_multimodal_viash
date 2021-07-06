@@ -9,7 +9,11 @@ output_bash
 # viash specific ignores
 target/
 check_results/
+log.tsv
 log.txt
+
+# ide specific ignores
+.idea
 
 # nextflow specific ignores
 .nextflow*
