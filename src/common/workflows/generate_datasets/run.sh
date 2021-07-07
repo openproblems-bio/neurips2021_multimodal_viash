@@ -13,5 +13,5 @@ bin/nextflow \
   run . \
   -main-script src/common/workflows/generate_datasets/main.nf \
   -entry generate_datasets \
-  --publishDir output/ \
+  --publishDir output/common_datasets/ \
   -resume
