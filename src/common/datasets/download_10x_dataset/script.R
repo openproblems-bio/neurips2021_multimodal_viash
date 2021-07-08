@@ -55,7 +55,7 @@ if (any(is_atacseq)) {
 
 
 cat("Saving RNA data to '", par$output_rna, "'\n", sep = "")
-ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
+zzz <- ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
 
 cat("Storing ", ad_mod2$uns[["modality"]], " data as '", par$output_mod2, "'\n", sep = "")
-ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")
+zzz <- ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")
