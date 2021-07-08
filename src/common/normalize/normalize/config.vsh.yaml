@@ -1,6 +1,6 @@
 functionality:
   name: "normalize"
-  namespace: "common_datasets"
+  namespace: "common_normalize"
   version: "dev"
   description: |
     Normalize a dataseet.
@@ -10,13 +10,24 @@ functionality:
       roles: [ maintainer ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-    - name: "--input"
-      alternatives: [ -i ]
+    - name: "--input_rna"
       type: file
       description: "Raw dataset in a h5ad file."
       required: true
       example: "input.h5ad"
-    - name: "--output"
+    - name: "--input_mod2"
+      type: file
+      description: "Raw dataset in a h5ad file."
+      required: true
+      example: "input.h5ad"
+    - name: "--output_rna"
+      alternatives: [ -o ]
+      type: file
+      example: "output.h5ad"
+      required: true
+      direction: output
+      description: Normalized h5ad file.
+    - name: "--output_h5ad"
       alternatives: [ -o ]
       type: file
       example: "output.h5ad"
@@ -28,7 +39,7 @@ functionality:
       path: script.R
   tests:
     - type: r_script
-      path: run_test.R
+      path: test.R
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
