@@ -27,7 +27,7 @@ functionality:
       required: true
       direction: output
       description: Normalized h5ad file.
-    - name: "--output_h5ad"
+    - name: "--output_mod2"
       alternatives: [ -o ]
       type: file
       example: "output.h5ad"
