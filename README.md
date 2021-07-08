@@ -4,7 +4,7 @@ Data Integration methods.
 
 ![](dataflow.svg)
 
-## Running the whole pipeline
+## Building the pipeline components
 
 Download NextFlow, viash and helper components by executing:
 
@@ -17,22 +17,20 @@ time around):
 
 ``` sh
 bin/viash_build
+
+## Generating test datasets
+
+The following scripts can be used to generate the test datasets.
+
+```sh
+resources_test/run_common.sh
+resources_test/run_task1.sh
 ```
 
-Use NextFlow and viash components to generate all synthetic and public
-datasets:
+Please don’t commit anything in `resources_test` unless something new
+has been added!
 
-``` sh
-src/common/workflows/generate_datasets/run.sh
-```
-
-Run benchmarking pipeline for task 1:
-
-``` sh
-src/predict_modality/workflows/run_benchmark/run.sh
-```
-
-## Run an individual component
+## Running an individual component
 
 You can run an individual viash component using the `viash run` command:
 
@@ -57,6 +55,18 @@ Also check out the component’s help page:
 ``` sh
 target/docker/common_datasets/download_10x_dataset/download_10x_dataset
 ```
+
+## Running the whole pipeline
+
+You can run the full nextflow pipeline by running the following scripts:
+
+``` sh
+src/common/workflows/generate_datasets/run.sh
+src/predict_modality/workflows/run_task1_benchmark/run.sh
+```
+
+Update: This will not work! The Nextflow files are out of date, I need
+to update them.
 
 ## More information
 
