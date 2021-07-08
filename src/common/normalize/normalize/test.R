@@ -1,50 +1,39 @@
-library(testthat)
-library(anndata)
-#   # input = "https://cf.10xgenomics.com/samples/cell-arc/2.0.0/lymph_node_lymphoma_14k/lymph_node_lymphoma_14k_raw_feature_bc_matrix.h5",
-# input = "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5",
+library(testthat, quietly = TRUE, warn.conflicts = FALSE)
+library(anndata, quietly = TRUE, warn.conflicts = FALSE)
 
-
-cat(">> Testing with citeseq dataset\n")
+cat(">> Run normalize component\n")
 system(paste0(
   "./normalize ",
-  "--input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 ",
-  "--output output1.h5ad ",
-  "--id dataset1"
+  "--input_rna resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad ",
+  "--input_mod2 resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad ",
+  "--output_rna output_rna.h5ad ",
+  "--output_mod2 output_mod2.h5ad ",
+  "--min_counts_per_gene 1200 ",
+  "--min_counts_per_cell 1200"
 ))
 
-expect_true(file.exists("output1.h5ad"), info = "Output output1.h5ad was not created")
+cat(">> Checking whether output files were created\n")
+expect_true(file.exists("output_rna.h5ad"), info = "Output output_rna.h5ad was not created")
+expect_true(file.exists("output_mod2.h5ad"), info = "Output output_mod2.h5ad was not created")
 
-ad <- anndata::read_h5ad("output1.h5ad")
+cat(">> Reading in h5ad files\n")
+ad_in1 <- anndata::read_h5ad("resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad")
+ad_in2 <- anndata::read_h5ad("resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad")
+ad_out1 <- anndata::read_h5ad("output_rna.h5ad")
+ad_out2 <- anndata::read_h5ad("output_mod2.h5ad")
 
-expect_is(ad$X, "sparseMatrix")
-expect_gte(nrow(ad), 100)
-expect_gte(ncol(ad), 100)
+cat(">> Checking rna output\n")
+expect_is(ad_out1$X, "sparseMatrix")
+expect_lte(nrow(ad_out1), nrow(ad_in1))
+expect_lte(ncol(ad_out1), ncol(ad_in1))
+expect_equal(ad_out1$uns[["dataset_id"]], ad_in1$uns[["dataset_id"]])
+expect_equal(ad_out1$uns[["modality"]], ad_in1$uns[["modality"]])
 
-expect_is(ad$obsm[["protein"]], "sparseMatrix")
-expect_gte(nrow(ad$obsm[["protein"]]), 100)
-expect_gte(ncol(ad$obsm[["protein"]]), 10)
-expect_equal(length(ad$uns[["protein_varnames"]]), ncol(ad$obsm[["protein"]]))
-
-cat(">> Testing with atacseq dataset\n")
-system(paste0(
-  "./download_10x_dataset ",
-  "--input https://cf.10xgenomics.com/samples/cell-arc/2.0.0/lymph_node_lymphoma_14k/lymph_node_lymphoma_14k_raw_feature_bc_matrix.h5 ",
-  "--output output2.h5ad ",
-  "--id dataset2"
-))
-
-expect_true(file.exists("output2.h5ad"), info = "Output output2.h5ad was not created")
-
-ad <- anndata::read_h5ad("output2.h5ad")
-expect_is(ad$X, "sparseMatrix")
-expect_gte(nrow(ad), 100)
-expect_gte(ncol(ad), 100)
-
-expect_is(ad$obsm[["chromatin"]], "sparseMatrix")
-expect_gte(nrow(ad$obsm[["chromatin"]]), 100)
-expect_gte(ncol(ad$obsm[["chromatin"]]), 10)
-expect_equal(length(ad$uns[["chromatin_varnames"]]), ncol(ad$obsm[["chromatin"]]))
-
-
+cat(">> Checking mod2 output\n")
+expect_is(ad_out2$X, "sparseMatrix")
+expect_lte(nrow(ad_out2), nrow(ad_in2))
+expect_lte(ncol(ad_out2), ncol(ad_in2))
+expect_equal(ad_out2$uns[["dataset_id"]], ad_in2$uns[["dataset_id"]])
+expect_equal(ad_out2$uns[["modality"]], ad_in2$uns[["modality"]])
 
 cat(">> All tests passed successfully!\n")
