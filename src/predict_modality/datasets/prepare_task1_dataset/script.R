@@ -1,112 +1,84 @@
-## VIASH START
-par <- list(
-  input = "resources/test/dyngen_bifurcating_antibody/dataset.h5ad",
-  output_censored = "resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad",
-  output_solution = "resources/test/dyngen_bifurcating_antibody/dataset_task1_solution.h5ad"
-  # input = "resources/test/dyngen_bifurcating_atac/dataset.h5ad",
-)
-## VIASH END
-
-###############################################################################
-###                            LOAD DEPENDENCIES                            ###
-###############################################################################
-# load libraries
+cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
-library(Matrix, warn.conflicts = FALSE)
+library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
-
-###############################################################################
-###                             READ INPUT DATA                             ###
-###############################################################################
-# load h5ad file
-adata <- anndata::read_h5ad(par$input)
-
-# check for modalities
-has_protein <- "protein" %in% names(adata$layers)
-has_chromatin <- "chromatin" %in% names(adata$layers)
-assert_that(
-  has_protein != has_chromatin,
-  msg = "Strictly one of adata.layers[\"chromatin\"] and adata.layers[\"protein\"] must be defined."
+## VIASH START
+par <- list(
+  input_rna = "output/common_datasets/pbmc_1k_protein_v3/pbmc_1k_protein_v3.normalized.output_rna.h5ad",
+  input_mod2 = "output/common_datasets/pbmc_1k_protein_v3/pbmc_1k_protein_v3.normalized.output_mod2.h5ad",
+  output_mod1 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.output_mod1.h5ad",
+  output_mod2 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.output_mod2.h5ad",
+  output_solution = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.solution.h5ad",
+  rna_as_mod1 = TRUE,
+  seed = 1L
 )
+## VIASH END
 
-if (has_protein) {
-  modality1 <- adata$X
-  modality2 <- adata$layers[["protein"]]
-  modality_types <- c(modality1 = "mrna", modality2 = "protein")
-} else if (has_chromatin) {
-  modality1 <- adata$layers[["chromatin"]]
-  modality2 <- adata$X
-  modality_types <- c(modality1 = "chromatin", modality2 = "mrna")
-}
+cat("Reading input data\n")
+ad1_path <- if (par$rna_as_mod1) { par$input_rna } else { par$input_mod2 }
+ad2_path <- if (par$rna_as_mod1) { par$input_mod2 } else { par$input_rna }
 
-modality2_has_values <- colMeans(modality2 > 0) > 0
+ad1_raw <- anndata::read_h5ad(ad1_path)
+ad2_raw <- anndata::read_h5ad(ad2_path)
 
-###############################################################################
-###                          CREATE CENSOR OBJECT                           ###
-###############################################################################
+cat("Determining train/test split\n")
+split <- 
+  if (!is.null(ad1_raw$obs[["experiment"]]) && all(ad1_raw$obs[["experiment"]] %in% c("train", "test"))) {
+    ad1_raw$obs[["experiment"]]
+  } else {
+    set.seed(par$seed)
+    ix <- sample.int(
+      nrow(ad1_raw), 
+      size = nrow(ad1_raw) * 0.66,
+      replace = FALSE
+    )
+    ifelse(seq_len(nrow(ad1_raw)) %in% ix, "train", "test")
+  }
+splor <- order(split)
+ad1_raw <- ad1_raw[splor, ]
+ad2_raw <- ad2_raw[splor, ]
+split <- split[splor]
 
-## TODO: should I also bother censoring the cell names and the gene names?
-
-# throw away 'test' features
-modality2_notest <- modality2
-modality2_notest[adata$obs$experiment == "test", ] <- 0
-modality2_notest <- Matrix::drop0(modality2_notest)
-
-# create censored dataset
-out_censor <- anndata::AnnData(
-  X = NULL,
-  shape = dim(modality1),
-  layers = list(
-    modality1 = modality1,
-    modality2 = modality2_notest
+cat("Creating mod1 object\n")
+out_mod1 <- anndata::AnnData(
+  X = ad1_raw$X,
+  obs = data.frame(
+    split = split
   ),
-  obs = adata$obs %>% select(experiment),
-  var = data.frame(modality2_has_values),
   uns = list(
-    dataset_id = paste0(adata$uns[["dataset_id"]], "_task1"),
-    modality_types = modality_types
+    dataset_id = paste0(ad1_raw$uns[["dataset_id"]], "_task1"),
+    modality = ad1_raw$uns[["modality"]]
   )
 )
-assert_that(
-  sum(abs(out_censor$layers["modality2"][adata$obs$experiment == "test", ])) == 0,
-  msg = "modality2 values for test cells should sum to 0."
+
+cat("Creating mod2 object\n")
+out_mod2 <- anndata::AnnData(
+  X = ad1_raw$X[split == "train", ],
+  obs = data.frame(
+    split = split[split == "train"]
+  ),
+  uns = list(
+    dataset_id = paste0(ad2_raw$uns[["dataset_id"]], "_task1"),
+    modality = ad2_raw$uns[["modality"]]
+  )
 )
 
-# save as h5ad
-zzz <- out_censor$write_h5ad(par$output_censored, compression = "gzip")
-
-
-###############################################################################
-###                          CREATE SOLUTION OBJECT                         ###
-###############################################################################
-
-# throw away 'test' features
-modality2_onlytest <- modality2
-modality2_onlytest[adata$obs$experiment == "train", ] <- 0
-modality2_onlytest <- Matrix::drop0(modality2_onlytest)
-
-# create censored dataset
+cat("Create solution object\n")
 out_solution <- anndata::AnnData(
-  X = NULL,
-  shape = dim(modality1),
-  layers = list(
-    modality2 = modality2_onlytest
+  X = ad1_raw$X[split == "test", ],
+  obs = data.frame(
+    split = split[split == "test"]
   ),
-  obs = adata$obs %>% select(experiment),
-  var = data.frame(modality2_has_values),
   uns = list(
-    dataset_id = paste0(adata$uns[["dataset_id"]], "_task1"),
-    modality_types = modality_types
+    dataset_id = paste0(ad2_raw$uns[["dataset_id"]], "_task1"),
+    modality = ad2_raw$uns[["modality"]]
   )
 )
-assert_that(
-  sum(abs(out_solution$layers["modality2"][adata$obs$experiment == "train", ])) == 0,
-  msg = "modality2 values for test cells should sum to 0."
-)
 
-# save as h5ad
+cat("Saving output files as h5ad\n")
+zzz <- out_mod1$write_h5ad(par$output_mod1, compression = "gzip")
+zzz <- out_mod2$write_h5ad(par$output_mod2, compression = "gzip")
 zzz <- out_solution$write_h5ad(par$output_solution, compression = "gzip")
-
