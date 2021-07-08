@@ -18,5 +18,7 @@ target/docker/common_datasets/download_10x_dataset/download_10x_dataset \
 target/docker/common_normalize/normalize/normalize \
   --input_rna $out_dir/pbmc_1k_protein_v3.output_rna.h5ad \
   --input_mod2 $out_dir/pbmc_1k_protein_v3.output_mod2.h5ad \
-  --output_rna $out_dir/pbmc_1k_protein_v3.normalise.output_rna.h5ad \
-  --output_mod2 $out_dir/pbmc_1k_protein_v3.normalise.output_mod2.h5ad
+  --output_rna $out_dir/pbmc_1k_protein_v3.normalize.output_rna.h5ad \
+  --output_mod2 $out_dir/pbmc_1k_protein_v3.normalize.output_mod2.h5ad
+
+rm $out_dir/pbmc_1k_protein_v3.output_rna.h5ad $out_dir/pbmc_1k_protein_v3.output_mod2.h5ad
