@@ -24,8 +24,9 @@ ad_mod2 <- anndata::read_h5ad(par$input_mod2)
 # cat("Filtering cells\n")
 # sc$pp$filter_cells(ad, min_counts = 100)
 # 
-# cat("Filtering genes\n")
-# sc$pp$filter_genes(ad, min_counts = 100)
+cat("Filtering genes\n")
+ad_rna$pp$filter_genes(ad_rna, min_counts = 100)
+ad_mod2$pp$filter_genes(ad_mod2, min_counts = 100)
 # 
 # if ("chromatin" %in% ad$obsm_keys()) {
 #   cat("Filtering chromatin values\n")

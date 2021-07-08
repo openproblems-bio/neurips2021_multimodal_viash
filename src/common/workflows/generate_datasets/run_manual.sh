@@ -12,5 +12,11 @@ mkdir -p $out_dir
 target/docker/common_datasets/download_10x_dataset/download_10x_dataset \
   --id pbmc_1k_protein_v3 \
   --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \
+  --output_rna $out_dir/pbmc_1k_protein_v3.output_rna.h5ad \
+  --output_mod2 $out_dir/pbmc_1k_protein_v3.output_mod2.h5ad
+
+target/docker/common_normalize/normalize/normalize \
+  --input_rna $out_dir/pbmc_1k_protein_v3.output_rna.h5ad \
+  --input_mod2 $out_dir/pbmc_1k_protein_v3.output_mod2.h5ad
   --output_rna $out_dir/pbmc_1k_protein_v3.normalise.output_rna.h5ad \
   --output_mod2 $out_dir/pbmc_1k_protein_v3.normalise.output_mod2.h5ad
