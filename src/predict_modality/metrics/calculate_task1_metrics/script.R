@@ -6,9 +6,9 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.solution.h5ad",
-  input_prediction = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.prediction.h5ad",
-  output = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.scores.h5ad"
+  input_solution = "resources_test/task1/pbmc_1k_protein_v3.solution.h5ad",
+  input_prediction = "resources_test/task1/pbmc_1k_protein_v3.prediction.h5ad",
+  output = "resources_test/task1/pbmc_1k_protein_v3.scores.h5ad"
 )
 ## VIASH END
 
@@ -53,8 +53,8 @@ out <- anndata::AnnData(
   uns = list(
     dataset_id = adata_prediction$uns$dataset_id,
     method_id = adata_prediction$uns$method_id,
-    metric_id = c("rmse", "cor_pearson", "cor_spearman"),
-    metric_value = c(rmse, cor_pearson, cor_spearman)
+    metric_ids = c("rmse", "cor_pearson", "cor_spearman"),
+    metric_values = c(rmse, cor_pearson, cor_spearman)
   )
 )
 
