@@ -7,16 +7,18 @@ from sklearn.neighbors import NearestNeighbors
 
 # VIASH START
 par = {
-    "input": "../../../../dataset_censored.h5ad",
-    "prediction": "prediction.h5ad"
+    "input_rna": "pbmc_1k_protein_v3.output_mod2.h5ad",
+    "input_mod2": "pbmc_1k_protein_v3.output_rna.h5ad",
+    "prediction": "prediction.h5ad",
 }
 # VIASH END
 
 # load dataset to be censored
-adata = anndata.read_h5ad(par["input"])
+ad_rna = anndata.read_h5ad(par["input_rna"])
+ad_mod2 = anndata.read_h5ad(par["input_mod2"])
 
-rna = adata.X
-mod2 = adata.layers["modality2"]
+rna = ad_rna.X
+mod2 = ad_mod2.X
 
 comb = scipy.sparse.vstack([rna, mod2]).transpose().todense()
 
@@ -42,6 +44,12 @@ pairing_matrix = np.zeros((rna.shape[0], mod2.shape[0]))
 # TODO coo matrix?
 pairing_matrix[indices_mod1, [x[0] for x in indices]] = 1
 
-adata.obsp["result"] = pairing_matrix
-adata.write_h5ad(par["prediction"])
+prediction = anndata.AnnData(
+    shape=ad_rna.shape,
+    uns={
+        "prediction": pairing_matrix,
+        "dataset_id": ad_rna.uns["dataset_id"],
+    }
+)
+prediction.write_h5ad(par["prediction"])
 
