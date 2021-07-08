@@ -25,7 +25,7 @@ functionality:
       example: "output.h5ad"
       description: Dataset with prodicted values for modality2.
       required: true
-    - name: "--output"
+    - name: "--n_pcs"
       type: "integer"
       default: 4
       description: Number of principal components to use.
@@ -35,7 +35,7 @@ functionality:
   tests:
     - type: r_script
       path: test.R
-    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_censored.h5ad
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12

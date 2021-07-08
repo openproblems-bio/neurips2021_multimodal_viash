@@ -7,9 +7,9 @@ requireNamespace("randomForest", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.mod1.h5ad",
-  input_mod2 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.mod2.h5ad",
-  output = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.prediction.h5ad",
+  input_mod1 = "resources_test/task1/pbmc_1k_protein_v3.mod1.h5ad",
+  input_mod2 = "resources_test/task1/pbmc_1k_protein_v3.mod2.h5ad",
+  output = "resources_test/task1/pbmc_1k_protein_v3.prediction.h5ad",
   n_pcs = 4L
 )
 ## VIASH END
