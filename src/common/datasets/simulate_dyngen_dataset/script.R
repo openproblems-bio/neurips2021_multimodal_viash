@@ -1,17 +1,18 @@
 ## VIASH START
 par <- list(
+  id = "dyngen_bifurcating",
+  output_rna = "output_rna.h5ad",
+  output_mod2 = "output_mod2.h5ad",
   backbone = "bifurcating",
-  num_cells = 100,
+  num_cells = 300,
   num_genes = 120,
-  num_simulations = 3,
-  num_threads = 3,
-  output = "output.h5ad",
+  num_simulations = 10,
+  num_threads = 10,
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
   store_chromatin = TRUE,
-  store_rna_velocity = FALSE,
-  store_protein = TRUE,
+  store_protein = FALSE,
   num_proteins = 50
 )
 ## VIASH END
@@ -20,13 +21,14 @@ if (par$store_protein == par$store_chromatin) {
   cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
 }
 
+cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
-# determine backbone
+cat("Creating dyngen backbone\n")
 backbones <- list_backbones()
 
 if (is.null(par$backbone)) {
@@ -35,7 +37,7 @@ if (is.null(par$backbone)) {
 
 backbone <- backbones[[par$backbone]]()
 
-# generate initial config
+cat("Generating regulatory network\n")
 num_tfs <- nrow(backbone$module_info)
 num_targets <- ceiling(0.8 * (par$num_genes - num_tfs))
 num_hks <- par$num_genes - num_tfs - num_targets
@@ -54,24 +56,23 @@ model_init <- initialise_model(
     experiment_params = simulation_type_wild_type(
       num_simulations = par$num_simulations
     ),
-    compute_cellwise_grn = par$store_chromatin,
-    compute_rna_velocity = par$store_rna_velocity
+    compute_cellwise_grn = par$store_chromatin
   ),
   num_cores = par$num_threads,
-  verbose = TRUE
+  verbose = FALSE
 ) %>%
   generate_tf_network() %>%
   generate_feature_network() %>%
   generate_kinetics()
 
-# run train simulations
+cat("Running simulations for training cells\n")
 model_train <-
   model_init %>%
   generate_gold_standard() %>%
   generate_cells() %>%
   generate_experiment()
 
-# run test simulations
+cat("Running simulations for test cells\n")
 model_init$num_cells <-
   model_init$numbers$num_cells <-
   num_cells_test
@@ -81,27 +82,26 @@ model_test <-
   generate_cells() %>%
   generate_experiment()
 
-# combine into one dataset
+cat("Combine simulations into one dataset\n")
 model <- combine_models(
   list(train = model_train, test = model_test),
   duplicate_gold_standard = FALSE
 )
 dataset <- as_anndata(model)
 
-
-# create adata dataset
-counts <- dataset$X
-
-adata <- anndata::AnnData(
-  X = counts,
+cat("Create RNA dataset\n")
+ad_mod1 <- anndata::AnnData(
+  X = dataset$X,
   obs = dataset$obs %>% rename(experiment = model),
   var = dataset$var %>% select(module_id, basal, burn, independence, color, is_tf, is_hk),
   uns = list(
-    dataset_id = par$id
+    dataset_id = par$id,
+    modality = "RNA"
   )
 )
 
 if (par$store_protein) {
+  cat("Processing Antibody data\n")
   # construct AbSeq-like data from protein counts
   # TODO: use real AbSeq data to map distributions
   counts_protein <- dataset$layers[["counts_protein"]]
@@ -112,24 +112,40 @@ if (par$store_protein) {
     counts_protein <- counts_protein[,sample_genes]
   }
 
-  adata$obsm[["protein"]] <- counts_protein
-  adata$uns[["protein_varnames"]] <- colnames(counts_protein)
+  ad_mod2 <- anndata::AnnData(
+    X = counts_protein,
+    obs = dataset$obs %>% rename(experiment = model),
+    var = dataset$var %>% select(module_id, basal, burn, independence, color, is_tf, is_hk) %>% slice(sample_genes),
+    uns = list(
+      dataset_id = par$id,
+      modality = "Antibody"
+    )
+  )
 }
 
 if (par$store_chromatin) {
+  cat("Processing ATAC data\n")
   # constuct atac-like data from single cell regulatory network
   # TODO: use real atac data to map distributions
-  regulatory_network <- dataset$uns[["regulatory_network"]]
   regulatory_network_sc <- dataset$obsm[["regulatory_network_sc"]]
 
-  adata$obsm[["chromatin"]] <- regulatory_network_sc
-  adata$uns[["chromatin_colnames"]] <- paste0("region_", seq_len(ncol(regulatory_network_sc)))
+  colnames(regulatory_network_sc) <- paste0("region_", seq_len(ncol(regulatory_network_sc)))
+
+  ad_mod2 <- anndata::AnnData(
+    X = regulatory_network_sc,
+    obs = dataset$obs %>% rename(experiment = model),
+    uns = list(
+      dataset_id = par$id,
+      modality = "ATAC"
+    )
+  )
 }
 
-adata$write_h5ad(par$output, compression = "gzip")
+ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
+ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")
 
-# save plot (if need be)
 if (!is.null(par$plot)) {
+  cat("Storing summary plot\n")
   g <- plot_summary(model)
   ggsave(par$plot, g, width = 20, height = 16)
 }

@@ -36,7 +36,7 @@ expect_true(
 )
 
 if (any(is_abseq)) {
-  cat("Storing antibody data as '", par$output_mod2, "'\n", sep = "")
+  cat("Processing Antibody data\n")
   ad_mod2 <- ad[, is_abseq]$copy()
   ad_mod2$uns[["modality"]] <- "Antibody"
 
@@ -45,6 +45,7 @@ if (any(is_abseq)) {
 }
 
 if (any(is_atacseq)) {
+  cat("Processing ATAC data\n")
   ad_mod2 <- ad[, is_atacseq]$copy()
   ad_mod2$uns[["modality"]] <- "ATAC"
 

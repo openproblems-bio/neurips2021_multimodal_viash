@@ -20,13 +20,18 @@ functionality:
       example: "dyngen_dataset"
       description: "The id of the output dataset id"
       required: true
-    - name: "--output"
-      alternatives: ["-o"]
-      type: "file"
-      direction: "output"
-      default: "dataset.h5ad"
-      description: "Where to save the dataset."
+    - name: "--output_rna"
+      type: file
+      example: output_rna.h5ad
       required: true
+      direction: output
+      description: Output h5ad RNA file.
+    - name: "--output_mod2"
+      type: file
+      example: output_mod2.h5ad
+      required: true
+      direction: output
+      description: Output h5ad modality2 file (ATAC or Antibody capture).
     - name: "--plot"
       alternatives: ["-p"]
       type: "file"
@@ -63,10 +68,6 @@ functionality:
       alternatives: [ "-chromatin" ]
       type: boolean_true
       description: Whether or not to compute chromatin accessibility data.
-    - name: "--store_rna_velocity"
-      alternatives: [ "-velocity" ]
-      type: boolean_true
-      description: Whether or not to compute the RNA velocity gold standard.
     - name: "--store_protein"
       alternatives: [ "-protein" ]
       type: boolean_true

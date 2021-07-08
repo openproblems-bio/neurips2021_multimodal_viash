@@ -37,13 +37,13 @@ functionality:
       example: output_mod2.h5ad
       required: true
       direction: output
-      description: Output h5ad RNA file.
+      description: Output h5ad modality2 file (ATAC or Antibody capture).
   resources:
     - type: r_script
       path: script.R
   tests:
     - type: r_script
-      path: run_test.R
+      path: test.R
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
