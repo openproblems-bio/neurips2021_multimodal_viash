@@ -7,19 +7,20 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_rna = "output/common_datasets/pbmc_1k_protein_v3/pbmc_1k_protein_v3.normalized.output_rna.h5ad",
-  input_mod2 = "output/common_datasets/pbmc_1k_protein_v3/pbmc_1k_protein_v3.normalized.output_mod2.h5ad",
-  output_mod1 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.output_mod1.h5ad",
-  output_mod2 = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.output_mod2.h5ad",
-  output_solution = "output/task1/pbmc_1k_protein_v3/pbmc_1k_protein_v3.solution.h5ad",
-  rna_as_mod1 = TRUE,
+  input_rna = "resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
+  input_mod2 = "resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
+  output_mod1 = "resources_test/task1/pbmc_1k_protein_v3.output_mod1.h5ad",
+  output_mod2 = "resources_test/task1/pbmc_1k_protein_v3.output_mod2.h5ad",
+  output_solution = "resources_test/task1/pbmc_1k_protein_v3.solution.h5ad",
+  mod1 = "RNA",
   seed = 1L
 )
 ## VIASH END
 
 cat("Reading input data\n")
-ad1_path <- if (par$rna_as_mod1) { par$input_rna } else { par$input_mod2 }
-ad2_path <- if (par$rna_as_mod1) { par$input_mod2 } else { par$input_rna }
+rna_mod1 <- tolower(par$mod1) == "rna"
+ad1_path <- if (rna_mod1) { par$input_rna } else { par$input_mod2 }
+ad2_path <- if (rna_mod1) { par$input_mod2 } else { par$input_rna }
 
 ad1_raw <- anndata::read_h5ad(ad1_path)
 ad2_raw <- anndata::read_h5ad(ad2_path)
@@ -46,6 +47,7 @@ cat("Creating mod1 object\n")
 out_mod1 <- anndata::AnnData(
   X = ad1_raw$X,
   obs = data.frame(
+    row.names = rownames(ad1_raw),
     split = split
   ),
   uns = list(
@@ -56,8 +58,9 @@ out_mod1 <- anndata::AnnData(
 
 cat("Creating mod2 object\n")
 out_mod2 <- anndata::AnnData(
-  X = ad1_raw$X[split == "train", ],
+  X = ad2_raw$X[split == "train", ],
   obs = data.frame(
+    row.names = rownames(ad2_raw)[split == "train"],
     split = split[split == "train"]
   ),
   uns = list(
@@ -68,8 +71,9 @@ out_mod2 <- anndata::AnnData(
 
 cat("Create solution object\n")
 out_solution <- anndata::AnnData(
-  X = ad1_raw$X[split == "test", ],
+  X = ad2_raw$X[split == "test", ],
   obs = data.frame(
+    row.names = rownames(ad2_raw)[split == "test"],
     split = split[split == "test"]
   ),
   uns = list(
