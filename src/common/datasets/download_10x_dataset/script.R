@@ -38,21 +38,20 @@ expect_true(
 if (any(is_abseq)) {
   cat("Processing Antibody data\n")
   ad_mod2 <- ad[, is_abseq]$copy()
-  ad_mod2$uns[["modality"]] <- "Antibody"
+  ad_mod2$var[["feature_types"]] <- "ADT"
 
   ad_mod1 <- ad[, !is_abseq]$copy()
-  ad_mod1$uns[["modality"]] <- "RNA"
+  ad_mod1$var[["feature_types"]] <- "GEX"
 }
 
 if (any(is_atacseq)) {
   cat("Processing ATAC data\n")
   ad_mod2 <- ad[, is_atacseq]$copy()
-  ad_mod2$uns[["modality"]] <- "ATAC"
+  ad_mod2$var[["feature_types"]] <- "ATAC"
 
   ad_mod1 <- ad[, !is_atacseq]$copy()
-  ad_mod1$uns[["modality"]] <- "RNA"
+  ad_mod1$var[["feature_types"]] <- "GEX"
 }
-
 
 cat("Saving RNA data to '", par$output_rna, "'\n", sep = "")
 zzz <- ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
