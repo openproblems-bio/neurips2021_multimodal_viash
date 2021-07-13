@@ -1,42 +1,43 @@
-library(assertthat, quietly = TRUE)
+library(testthat, quietly = TRUE)
 requireNamespace("anndata", quietly = TRUE)
 
 cat("> Running dyngen\n")
 out <- processx::run(
-  # command = "viash",
-  command = "./dyngen",
+  command = "./simulate_dyngen_dataset",
   args = c(
-    # "run", "src/common/generate_dyngen/config.vsh.yaml", "--",
     "--id", "mytest",
     "--backbone", "bifurcating",
-    "--output", "dataset.h5ad",
+    "--output_rna", "dataset_rna.h5ad",
+    "--output_mod2", "dataset_mod2.h5ad",
     "--plot", "plot.pdf",
     "--num_threads", "1",
     "--num_simulations", "3",
     "--num_cells", "100",
     "--num_genes", "50",
     "--census_interval", "2",
-    "--store_rna_velocity",
-    "--store_chromatin",
-    "--store_protein"
+    "--store_protein",
+    "--num_proteins", "20"
   ),
   stderr_to_stdout = TRUE
 )
 
 cat("> Checking whether output files were created\n")
-assert_that(
-  file.exists("dataset.h5ad"),
-  file.exists("plot.pdf")
-)
+expect_true(file.exists("dataset_rna.h5ad"))
+expect_true(file.exists("dataset_mod2.h5ad"))
+expect_true(file.exists("plot.pdf"))
 
-cat("> Checking contents of dataset.h5ad\n")
-adata <- anndata::read_h5ad("dataset.h5ad")
+cat("> Reading output files\n")
+ad1 <- anndata::read_h5ad("dataset_rna.h5ad")
+ad2 <- anndata::read_h5ad("dataset_mod2.h5ad")
 
-assert_that(
-  adata$uns[["dataset_id"]] == "mytest",
-  adata$n_obs == 100,
-  adata$n_vars == 50,
-  all(c("chromatin", "protein") %in% names(adata$obsm))
-)
+cat("> Checking contents of dataset_rna.h5ad\n")
+expect_equal(ad1$uns[["dataset_id"]], "mytest")
+expect_equal(ad1$n_obs, 100)
+expect_equal(ad1$n_vars, 50)
+
+cat("> Checking contents of dataset_mod2.h5ad\n")
+expect_equal(ad2$uns[["dataset_id"]], "mytest")
+expect_equal(ad2$n_obs, 100)
+expect_equal(ad2$n_vars, 20)
 
 cat("> Test succeeded!\n")

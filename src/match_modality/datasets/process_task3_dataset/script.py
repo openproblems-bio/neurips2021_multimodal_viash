@@ -8,7 +8,7 @@ import scipy.sparse
 
 # VIASH START
 par = {
-    "input_rna": "pbmc_1k_protein_v3.output_rna.h5ad",
+    "input_mod1": "pbmc_1k_protein_v3.output_rna.h5ad",
     "input_mod2": "pbmc_1k_protein_v3.output_mod2.h5ad",
     "output_mod1": "pbmc_1k_protein_v3.censored_rna.h5ad",
     "output_mod2": "pbmc_1k_protein_v3.censored_mod2.h5ad",
@@ -16,11 +16,8 @@ par = {
 }
 # VIASH END
 
-import os
-thing = os.getcwd()
-
 # READ INPUT DATA
-rna = anndata.read_h5ad(par["input_rna"])
+rna = anndata.read_h5ad(par["input_mod1"])
 mod2 = anndata.read_h5ad(par["input_mod2"])
 
 # TODO: change on how to know which modality is there
@@ -57,7 +54,7 @@ censor_mod2 = anndata.AnnData(
     dtype="float32",
 )
 
-censor_rna.write_h5ad(filename=par["output_rna"], compression="gzip")
+censor_rna.write_h5ad(filename=par["output_mod1"], compression="gzip")
 censor_mod2.write_h5ad(filename=par["output_mod2"], compression="gzip")
 
 # CREATE SOLUTION PAIRING

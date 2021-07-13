@@ -29,8 +29,6 @@ workflow generate_dyngen_datasets {
         | map { [ it[0], [], it[2] ] }
         | filter { it[0] ==~ /.*_small/ }
         | simulate_dyngen_dataset
-        | groupTuple()
-        | map { [ it[0], flattenMap(it[1]), params ] }
 
     emit: output_
 }
@@ -44,8 +42,6 @@ workflow generate_public_10x_datasets {
         | map { overrideOptionValue(it, "download_10x_dataset", "input", it[1].input) }
         | map { [ it[0], [], it[2] ] }
         | download_10x_dataset
-        | groupTuple()
-        | map { [ it[0], flattenMap(it[1]), params ] }
 
     emit: output_
 }
@@ -66,18 +62,9 @@ workflow generate_datasets {
     main:
     output_ = (generate_dyngen_datasets & generate_public_10x_datasets)
       | mix
-      | normalize
-      | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
-      
-    emit: output_
-}
-
-workflow test {
-    main:
-    output_ = generate_public_10x_datasets
-      | map { [ it[0], [ input_rna: it[1].output_rna, input_mod2: it[1].output_mod2], it[2] ] }
-      | view { "Input for normalize ${it[0]} from ${it[1]}" }
-      | view { "Params ${it[2]}" }
+      | groupTuple()
+      | map { id, data, old_params -> [ id, flattenMap(data) ] }
+      | map { id, data -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], params ]}
       | normalize
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
       

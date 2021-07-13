@@ -11,52 +11,48 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-    - name: "--input"
-      alternatives: ["-i"]
+    - name: "--input_rna"
       type: "file"
       example: "dataset.h5ad"
-      description: |
-        An input h5ad dataset, containing the following objects:
-          * ad.X: mRNA counts.
-          * ad.layers['chromatin']: Chromatin accessibility data (optional).
-          * ad.layers['protein']: Antibody data (optional).
-          * ad.uns['dataset_id']: The identifier of the dataset.
-        Either the chromatin layer or the protein layer must be defined, but not neither or both.
+      description: An input h5ad dataset.
       required: true
-    - name: "--output_censored"
-      alternatives: ["-oc"]
+    - name: "--input_mod2"
+      type: "file"
+      example: "dataset.h5ad"
+      description: An input h5ad dataset.
+      required: true
+    - name: "--output_mod1"
       type: "file"
       direction: "output"
-      example: "dataset_censored.h5ad"
-      description: |
-        Where to store the censored h5ad dataset, containing the following objects:
-          * ad.layers['modality1']: Predictor modality, either the chromatin accessibility or the mRNA data.
-          * ad.layers['modality2']: Response modality, either the mRNA or the protein data. Contains no values for cells with obs['experiment'] == 'test'.
-          * ad.obs['experiment']: Denotes whether a cell belongs to the 'train' or the 'test' set.
-          * ad.var['modality2_has_values']: Whether or not a gene has values in modality2 or not.
-          * ad.uns['dataset_id']: The identifier of the dataset.
-          * ad.uns['modality_types']: The data types of modality1 and modality2.
+      example: "dataset_mod1.h5ad"
+      description: Mod1 h5ad file for both train and test cells.
+      required: true
+    - name: "--output_mod2"
+      type: "file"
+      direction: "output"
+      example: "dataset_mod2.h5ad"
+      description: Mod2 h5ad file for only the train cells.
       required: true
     - name: "--output_solution"
-      alternatives: ["-os"]
       type: "file"
       direction: "output"
       example: "dataset_solution.h5ad"
-      description: |
-        Where to store the solution h5ad dataset, containing the following objects:
-          * ad.layers['modality2']: Response modality, either the mRNA or the protein data. Contains no values for cells with obs['experiment'] == 'train'.
-          * ad.obs['experiment']: Denotes whether a cell belongs to the 'train' or the 'test' set.
-          * ad.var['modality2_has_values']: Whether or not a gene has values in modality2 or not.
-          * ad.uns['dataset_id']: The identifier of the dataset.
-          * ad.uns['modality_types']: The data types of modality1 and modality2.
+      description: Mod2 h5ad file for only the test cells.
       required: true
+    - name: "--mod1"
+      type: string
+      description: "Which modality to use as mod1"
+      default: RNA
+    - name: "--seed"
+      type: integer
+      description: "The seed for determining the train/test split."
   resources:
     - type: r_script
       path: script.R
   tests:
     - type: r_script
       path: test.R
-    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset.h5ad
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12

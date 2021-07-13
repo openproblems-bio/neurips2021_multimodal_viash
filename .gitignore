@@ -1,21 +1,20 @@
-# repo specific ignores
+# repo ignores
 output_bash
 
-# R specific ignores
+# IDE ignores
 .Rhistory
 .Rproj.user
 *.Rproj
+.idea
+*.iml
 
-# viash specific ignores
+# viash ignores
 target/
 check_results/
 log.tsv
 log.txt
 
-# ide specific ignores
-.idea
-
-# nextflow specific ignores
+# nextflow ignores
 .nextflow*
 work
 output

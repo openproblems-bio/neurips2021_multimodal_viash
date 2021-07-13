@@ -1,67 +1,53 @@
-## VIASH START
-par <- list(
-  input = "resources/test/dyngen_bifurcating_antibody/dataset_task1_censor.h5ad",
-  output = "resources/test/dyngen_bifurcating_antibody/dataset_task1_censor_randomforest.h5ad"
-)
-## VIASH END
-
-# load libraries
+cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
-library(Matrix, warn.conflicts = FALSE)
+library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 requireNamespace("randomForest", quietly = TRUE)
 
-# load h5ad file
-adata <- anndata::read_h5ad(par$input)
+## VIASH START
+par <- list(
+  input_mod1 = "resources_test/task1/pbmc_1k_protein_v3.mod1.h5ad",
+  input_mod2 = "resources_test/task1/pbmc_1k_protein_v3.mod2.h5ad",
+  output = "resources_test/task1/pbmc_1k_protein_v3.prediction.h5ad",
+  n_pcs = 4L
+)
+## VIASH END
 
-# gather data
-obs_data <- adata$obs
-modality1 <- adata$layers[["modality1"]]
-modality2 <- adata$layers[["modality2"]]
+cat("Reading h5ad files\n")
+ad1 <- anndata::read_h5ad(par$input_mod1)
+ad2 <- anndata::read_h5ad(par$input_mod2)
 
-# perform DR on the features
-dr <- prcomp(modality1, rank. = 4)$x
+cat("Performing DR on the mod1 values\n")
+dr <- prcomp(ad1$X, rank. = 4)$x
 
-dr_train <- dr[obs_data$experiment == "train",]
-predictors_train <- modality1[obs_data$experiment == "train",]
-responses_train <- modality2[obs_data$experiment == "train",]
+dr_train <- dr[ad1$obs$split == "train",]
+responses_train <- ad2$X
+dr_test <- dr[ad1$obs$split == "test",]
 
-dr_test <- dr[obs_data$experiment == "test",]
-predictors_test <- modality1[obs_data$experiment == "test",]
-
-# predict for each gene
-preds <- lapply(seq_len(ncol(predictors_train)), function(i) {
-  x <- cbind(dr_train, expr = predictors_train[,i])
+cat("Predicting for each column in modality 2\n")
+preds <- lapply(seq_len(ncol(responses_train)), function(i) {
   y <- responses_train[,i]
-
   if (length(unique(y)) > 1) {
-    rf <- randomForest::randomForest(x = x, y = y)
-
-    newx <- cbind(dr_test, expr = predictors_test[,i])
-    stats::predict(rf, newx)
+    rf <- randomForest::randomForest(x = dr_train, y = y)
+    stats::predict(rf, dr_test)
   } else {
     setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
   }
 })
 
-# create output
-
-prediction <- modality2 * 0
-prediction[obs_data$experiment == "test"] <- do.call(cbind, preds)
-prediction <- Matrix::drop0(prediction)
+cat("Creating outputs object\n")
+prediction <- Matrix::Matrix(do.call(cbind, preds), sparse = TRUE)
+rownames(prediction) <- rownames(dr_test)
+colnames(prediction) <- colnames(ad2)
 
 out <- anndata::AnnData(
-  X = NULL,
-  shape = dim(prediction),
-  layers = list(
-    prediction = prediction
-  ),
-  obs = adata$obs,
+  X = prediction,
   uns = list(
-    dataset_id = adata$uns[["dataset_id"]],
+    dataset_id = ad1$uns[["dataset_id"]],
     method_id = "baseline_randomforest"
   )
 )
 
-out$write_h5ad(par$output, compression = "gzip")
+cat("Writing predictions to file\n")
+zzz <- out$write_h5ad(par$output, compression = "gzip")

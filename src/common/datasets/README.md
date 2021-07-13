@@ -8,19 +8,21 @@ A DataGen component does not have any required inputs.
 
 ## Required outputs
 
-Each DataGen component should output two h5ad files, `--output_rna` and `output_mod2`. 
+Each DataGen component should output two h5ad files, `--output_rna` and `--output_mod2`. 
 
 `output_rna` is an AnnData file containing the following objects:
 
   * `ad.X`: A sparse matrix of RNA expression counts.
   * `ad.uns['dataset_id']`: The name of the dataset.
   * `ad.uns['modality']`: The modality of this file, should always be equal to `"RNA"`.
+  * `ad.obs_names`: Ids for the cells.
 
 `output_mod2` is an AnnData file containing the following objects:
 
   * `ad.X`: A sparse matrix of Antibody or ATACseq counts.
   * `ad.uns['dataset_id']`: The name of the dataset.
   * `ad.uns['modality']`: The modality of this file, should be equal to `"ATAC"` or `"Antibody"`.
+  * `ad.obs_names`: Ids for the cells.
 
 ## Required resource
 

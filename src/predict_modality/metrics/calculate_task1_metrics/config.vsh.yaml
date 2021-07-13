@@ -33,8 +33,7 @@ functionality:
   tests:
     - type: r_script
       path: test.R
-    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_solution.h5ad
-    - path: ../../../../resources/test/dyngen_bifurcating_atac/dataset_task1_prediction_randomforest.h5ad
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12

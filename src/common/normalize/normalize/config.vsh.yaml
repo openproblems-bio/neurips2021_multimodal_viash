@@ -21,25 +21,32 @@ functionality:
       required: true
       example: "input.h5ad"
     - name: "--output_rna"
-      alternatives: [ -o ]
       type: file
       example: "output.h5ad"
       required: true
       direction: output
       description: Normalized h5ad file.
     - name: "--output_mod2"
-      alternatives: [ -o ]
       type: file
       example: "output.h5ad"
       required: true
       direction: output
       description: Normalized h5ad file.
+    - name: "--min_counts_per_gene"
+      type: integer
+      default: 100
+      description: "Minimum counts per gene."
+    - name: "--min_counts_per_cell"
+      type: integer
+      default: 100
+      description: "Minimum counts per cell."
   resources:
     - type: r_script
       path: script.R
   tests:
     - type: r_script
       path: test.R
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
