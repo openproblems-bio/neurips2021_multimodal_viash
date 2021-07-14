@@ -3,12 +3,12 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-requireNamespace("randomForest", quietly = TRUE)
+requireNamespace("ranger", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "work/be/0917576e71da6ca4b067bae1e93ad2/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod1.h5ad",
-  input_mod2 = "work/be/0917576e71da6ca4b067bae1e93ad2/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod2.h5ad",
+  input_mod1 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod1.h5ad",
+  input_mod2 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L
 )
@@ -33,8 +33,12 @@ cat("Predicting for each column in modality 2\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {
   y <- responses_train[,i]
   if (length(unique(y)) > 1) {
-    rf <- randomForest::randomForest(x = dr_train, y = y)
-    stats::predict(rf, dr_test)
+    rf <- ranger::ranger(
+      data = data.frame(YTRAIN = y, dr_train),
+      dependent.variable.name = "YTRAIN",
+      num.threads = 1
+    )
+    setNames(stats::predict(rf, dr_test)$predictions, rownames(dr_test))
   } else {
     setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
   }

@@ -41,5 +41,5 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ randomForest, lmds ]
+        packages: [ ranger, lmds ]
   - type: nextflow
