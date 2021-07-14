@@ -21,7 +21,7 @@ cat("Performing DR on the mod1 values\n")
 dr <- lmds::lmds(
   ad1$X, 
   ndim = par$n_pcs,
-  distance_method = "spearman"
+  distance_method = par$distance_method
 )
 
 dr_train <- dr[ad1$obs$split == "train",]
