@@ -1,18 +1,18 @@
 ## VIASH START
 par <- list(
-  id = "dyngen_bifurcating",
+  id = "test",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
-  backbone = "bifurcating",
-  num_cells = 300,
+  backbone = "linear",
+  num_cells = 100,
   num_genes = 120,
   num_simulations = 10,
   num_threads = 10,
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
-  store_chromatin = TRUE,
-  store_protein = FALSE,
+  store_chromatin = FALSE,
+  store_protein = TRUE,
   num_proteins = 50
 )
 ## VIASH END
@@ -54,7 +54,7 @@ model_init <- initialise_model(
     census_interval = par$census_interval,
     ssa_algorithm = ssa_etl(tau = par$ssa_tau),
     experiment_params = simulation_type_wild_type(
-      num_simulations = par$num_simulations
+      num_simulations = round(0.66*par$num_simulations)
     ),
     compute_cellwise_grn = par$store_chromatin
   ),
@@ -76,6 +76,8 @@ cat("Running simulations for test cells\n")
 model_init$num_cells <-
   model_init$numbers$num_cells <-
   num_cells_test
+model_init$simulation_params$experiment_params <-
+  simulation_type_wild_type(round(0.37*par$num_simulations))
 model_test <-
   model_init %>%
   generate_gold_standard() %>%
@@ -87,16 +89,21 @@ model <- combine_models(
   list(train = model_train, test = model_test),
   duplicate_gold_standard = FALSE
 )
-dataset <- as_anndata(model)
+dataset <- as_list(model)
 
 cat("Create RNA dataset\n")
+obs <- dataset$cell_info %>% 
+  rename(experiment = model) %>%
+  column_to_rownames("cell_id")
+var <- dataset$feature_info %>% 
+  select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>% 
+  column_to_rownames("feature_id")
 ad_mod1 <- anndata::AnnData(
-  X = dataset$X,
-  obs = dataset$obs %>% rename(experiment = model),
-  var = dataset$var %>% select(module_id, basal, burn, independence, color, is_tf, is_hk),
+  X = dataset$counts,
+  obs = obs,
+  var = var %>% mutate(feature_types = "GEX"),
   uns = list(
-    dataset_id = par$id,
-    modality = "RNA"
+    dataset_id = par$id
   )
 )
 
@@ -104,21 +111,22 @@ if (par$store_protein) {
   cat("Processing Antibody data\n")
   # construct AbSeq-like data from protein counts
   # TODO: use real AbSeq data to map distributions
-  counts_protein <- dataset$layers[["counts_protein"]]
+  counts_protein <- dataset$counts_protein
+  var_protein <- var %>% mutate(feature_types = "ADT")
 
   # sample 50 genes
   if (ncol(counts_protein) > par$num_proteins) {
     sample_genes <- sample.int(ncol(counts_protein), par$num_proteins)
-    counts_protein <- counts_protein[,sample_genes]
+    counts_protein <- counts_protein[,sample_genes, , drop = FALSE]
+    var_protein <- var_protein[sample_genes, , drop = FALSE]
   }
 
   ad_mod2 <- anndata::AnnData(
     X = counts_protein,
-    obs = dataset$obs %>% rename(experiment = model),
-    var = dataset$var %>% select(module_id, basal, burn, independence, color, is_tf, is_hk) %>% slice(sample_genes),
+    obs = obs,
+    var = var_protein,
     uns = list(
-      dataset_id = par$id,
-      modality = "Antibody"
+      dataset_id = par$id
     )
   )
 }
@@ -127,20 +135,33 @@ if (par$store_chromatin) {
   cat("Processing ATAC data\n")
   # constuct atac-like data from single cell regulatory network
   # TODO: use real atac data to map distributions
-  regulatory_network_sc <- dataset$obsm[["regulatory_network_sc"]]
-
-  colnames(regulatory_network_sc) <- paste0("region_", seq_len(ncol(regulatory_network_sc)))
+  mat <- dataset$regulatory_network_sc %>%
+    mutate(
+      edge = factor(paste0(as.character(regulator), "->", as.character(target)))
+    )
+  regsc <- Matrix::sparseMatrix(
+    i = as.integer(mat$cell_id),
+    j = as.integer(mat$edge),
+    x = pmax(mat$strength, 0)*100
+  )
+  rownames(regsc) <- dataset$cell_ids
+  colnames(regsc) <- paste0("region_", seq_len(ncol(regsc)))
+  var_atac <- data.frame(
+    row.names = colnames(regsc),
+    feature_types = rep("ATAC", ncol(regsc))
+  )
 
   ad_mod2 <- anndata::AnnData(
-    X = regulatory_network_sc,
-    obs = dataset$obs %>% rename(experiment = model),
+    X = regsc,
+    obs = obs,
+    var = var_atac,
     uns = list(
-      dataset_id = par$id,
-      modality = "ATAC"
+      dataset_id = par$id
     )
   )
 }
 
+cat("Write h5ad files\n")
 ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
 ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")
 
