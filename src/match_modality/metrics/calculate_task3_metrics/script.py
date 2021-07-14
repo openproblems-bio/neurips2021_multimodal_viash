@@ -20,6 +20,7 @@ solution = anndata.read_h5ad(par["solution"])
 prediction_matrix = prediction.obs["prediction"]
 
 # Get actual pairings
+true_pairing = solution.uns["solution"]
 
 
 

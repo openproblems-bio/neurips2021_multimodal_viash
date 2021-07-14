@@ -21,7 +21,7 @@ functionality:
       example: "dataset.h5ad"
       description: Second modality of censored dataset.
       required: true
-    - name: "--prediction"
+    - name: "--output"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
