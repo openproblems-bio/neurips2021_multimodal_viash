@@ -1,86 +1,70 @@
-# VIASH START
-par = {
-    "input": "../../../../resources/test/dyngen_bifurcating_antibody/dataset.h5ad",
-    "output_censored": "output_censored.h5ad",
-    "output_solution": "output_solution.h5ad"
-}
-# VIASH END
-
-###############################################################################
-###                            LOAD DEPENDENCIES                            ###
-###############################################################################
+# LOAD DEPENDENCIES
 
 import anndata
 import random
 import pandas as pd
 import numpy as np
+import scipy.sparse
 
-###############################################################################
-###                             READ INPUT DATA                             ###
-###############################################################################
-# load dataset
-adata = anndata.read_h5ad(par["input"])
+# VIASH START
+par = {
+    "input_mod1": "pbmc_1k_protein_v3.output_rna.h5ad",
+    "input_mod2": "pbmc_1k_protein_v3.output_mod2.h5ad",
+    "output_mod1": "pbmc_1k_protein_v3.censored_rna.h5ad",
+    "output_mod2": "pbmc_1k_protein_v3.censored_mod2.h5ad",
+    "output_solution": "pbmc_1k_protein_v3.solution.h5ad",
+}
+# VIASH END
 
-# check which modalities are included
-has_antibody = "protein" in adata.layers.keys()
-has_atac = "chromatin" in adata.layers.keys()
+# READ INPUT DATA
+rna = anndata.read_h5ad(par["input_mod1"])
+mod2 = anndata.read_h5ad(par["input_mod2"])
 
-# check if exactly 1 modality is included
-# TODO: is this necessary? Can integration of all 3 modalities be required?
-assert has_antibody != has_atac, "Strictly one of adata.layers[\"chromatin\"] and adata.layers[\"protein\"] must be " \
-                                 "defined."
+# TODO: change on how to know which modality is there
+# modality_types = {"modality1": "rna", "modality2": "chromatin" if has_atac else "protein"}
 
-modality_types = {"modality1": "rna", "modality2": "chromatin" if has_atac else "protein"}
+#  CREATE CENSOR OBJECT
+pairings = scipy.sparse.spdiags(np.full(rna.shape[0], 1), diags=0, m=rna.shape[0], n=mod2.shape[0], format="csr")
 
-###############################################################################
-###                          CREATE CENSOR OBJECT                           ###
-###############################################################################
-
-mod1 = adata.X
-mod2 = adata.layers["protein"] if has_antibody else adata.layers["chromatin"]
-
-pairings = np.diag(np.full(mod1.shape[0], 1))
-
-# Generate the indices partition -> so that the shuffling can be saved
-shuffle_cells = list(range(mod1.shape[0]))
+# Generate the indices partition
+shuffle_cells = list(range(rna.shape[0]))
 random.shuffle(shuffle_cells)
 
 # shuffle according to these indices
 mod2 = mod2[shuffle_cells, :]
 pairings = pairings[:, shuffle_cells]
 
-# create new anndata object
-out_censor = anndata.AnnData(
-    shape=adata.shape,
-    layers={
-        "modality1": mod1,
-        "modality2": mod2
-    },
+censor_rna = anndata.AnnData(
+    X=rna.X,
     uns={
-        "dataset_id": adata.uns["dataset_id"] + "_task3",
-        "modality_types": modality_types
+        "dataset_id": rna.uns["dataset_id"] + "_task3",
+        "modality": "rna",
+        "paired": True,
     },
-    dtype="float32"
+    dtype="float32",
 )
 
-out_censor.write_h5ad(filename=par["output_censored"], compression="gzip")
-
-###############################################################################
-###                          CREATE SOLUTION OBJECT                         ###
-###############################################################################
-
-# TODO: adapt so that solution is known -> sparse matrix, 1 is match, 0 is no match
-
-# create new anndata object
-out_solution = anndata.AnnData(
-    shape=adata.shape,
-    obs=pd.DataFrame(
-        index=adata.obs_names,
-    ),
+censor_mod2 = anndata.AnnData(
+    X=mod2.X,
     uns={
-        "dataset_id": adata.uns["dataset_id"] + "_task3",
+        "dataset_id": mod2.uns["dataset_id"] + "_task3",
+        "modality": mod2.uns["modality"],
+        "paired": True,
+    },
+    dtype="float32",
+)
+
+censor_rna.write_h5ad(filename=par["output_mod1"], compression="gzip")
+censor_mod2.write_h5ad(filename=par["output_mod2"], compression="gzip")
+
+# CREATE SOLUTION PAIRING
+out_solution = anndata.AnnData(
+    shape=rna.shape,
+    uns={
+        "dataset_id": rna.uns["dataset_id"] + "_task3",
         "pairings": pairings,
-    }
+    },
+    dtype="float32"
 )
 
 out_solution.write_h5ad(filename=par["output_solution"], compression="gzip")
