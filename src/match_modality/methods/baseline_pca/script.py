@@ -2,48 +2,53 @@ import anndata
 import scipy.sparse
 import numpy as np
 
-from sklearn.decomposition import PCA
+from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import NearestNeighbors
 
 # VIASH START
 par = {
-    "input_mod1": "pbmc_1k_protein_v3.output_mod2.h5ad",
-    "input_mod2": "pbmc_1k_protein_v3.output_rna.h5ad",
+    "input_mod1": "../../../../resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
+    "input_mod2": "../../../../resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
     "output": "prediction.h5ad",
 }
 # VIASH END
 
 # load dataset to be censored
-ad_rna = anndata.read_h5ad(par["input_rna"])
+ad_rna = anndata.read_h5ad(par["input_mod1"])
 ad_mod2 = anndata.read_h5ad(par["input_mod2"])
 
-rna = ad_rna.X
-mod2 = ad_mod2.X
+rna, mod2 = ad_rna.X, ad_mod2.X
 
-comb = scipy.sparse.vstack([rna, mod2]).transpose().todense()
+rna_y = rna.shape[1]
+mod2_y = mod2.shape[1]
+max_y = max(rna_y, mod2_y)
 
-pca = PCA(n_components=10)
-pca.fit(comb)
+# pad datasets with zeroes, so that they contain the same amount of features
+# Necessary for performing the truncated SVD
+rna.resize(rna.shape[0], max_y)
+mod2.resize(mod2.shape[0], max_y)
 
-# find kNN in the PCA
+# Shape of comb should be: (n_cells, n_features)
+comb = scipy.sparse.vstack([rna, mod2])
+tsvd = TruncatedSVD(n_components=10)
+dimred = tsvd.fit_transform(comb)
 
-rna_pca = pca.components_[:, :rna.shape[0]].transpose()
-mod2_pca = pca.components_[:, rna.shape[0]:].transpose()
+# find the nearest neighbors accross modalities in the PCA
+# 1. split the dimred into rna & mod2 cells
+rna_pca = dimred[:rna.shape[0], :]
+mod2_pca = dimred[rna.shape[0]:, :]
 
+# 2. Perform nearest neighbors: find nearest neighbors for mod2 based on the rna
 nn = NearestNeighbors(n_neighbors=1).fit(rna_pca)
 distances, indices = nn.kneighbors(X=mod2_pca)
-indices_mod1 = [i for i in range(rna.shape[0])]
 
-# indices_paired = [(x, np.array([y[0], z[0]])) for x, y, z in zip(indices_mod1, indices, distances)]
-# indices_paired2 = [[x, y[0]] for x, y in zip(indices_mod1, indices)]
-# adata.obsp = indices_paired
+# 3. Helper: just a range -> so that each neighbor found with NN matches the right cell
+indices_rna = [i for i in range(rna.shape[0])]
 
 pairing_matrix = np.zeros((rna.shape[0], mod2.shape[0]))
-# pairing_matrix[indices_paired2] = 1
+pairing_matrix[indices_rna, [x[0] for x in indices]] = 1
 
-# TODO coo matrix?
-pairing_matrix[indices_mod1, [x[0] for x in indices]] = 1
-
+# Write out prediction
 prediction = anndata.AnnData(
     shape=ad_rna.shape,
     uns={
@@ -51,5 +56,4 @@ prediction = anndata.AnnData(
         "dataset_id": ad_rna.uns["dataset_id"],
     }
 )
-prediction.write_h5ad(par["prediction"])
-
+prediction.write_h5ad(par["output"])
