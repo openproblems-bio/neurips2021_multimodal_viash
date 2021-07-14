@@ -10,16 +10,16 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_rna = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_rna.h5ad",
-  input_mod2 = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_mod2.h5ad",
+  # input_rna = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_rna.h5ad",
+  # input_mod2 = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_mod2.h5ad",
+  # output_rna = "output_rna.h5ad",
+  # output_mod2 = "output_mod2.h5ad",
+  input_rna = "resources_test/common/pbmc_1k_protein_v3.output_rna.h5ad",
+  input_mod2 = "resources_test/common/pbmc_1k_protein_v3.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
-  # input_rna = "resources_test/common/pbmc_1k_protein_v3.output_rna.h5ad",
-  # input_mod2 = "resources_test/common/pbmc_1k_protein_v3.output_mod2.h5ad",
-  # output_rna = "resources_test/commons/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
-  # output_mod2 = "resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
-  min_counts_per_cell = 100,
-  min_counts_per_gene = 100
+  min_counts_per_cell = 1000,
+  min_counts_per_gene = 1000
 )
 ## VIASH END
 
@@ -29,7 +29,7 @@ ad_mod2 <- anndata::read_h5ad(par$input_mod2)
 
 obs <- ad_rna$obs
 var_rna <- ad_rna$var
-var_mod2 <- ad_rna$mod2
+var_mod2 <- ad_mod2$var
 mat_rna <- as(ad_rna$X, "CsparseMatrix")
 mat_mod2 <- as(ad_mod2$X, "CsparseMatrix")
 
@@ -55,6 +55,7 @@ ad_rna_new <- anndata::AnnData(
   var = var_rna,
   uns = ad_rna$uns
 )
+print(ad_rna_new)
 zzz <- ad_rna_new$write_h5ad(par$output_rna, compression = "gzip")
 
 cat("Writing mod2 data\n")
@@ -64,4 +65,5 @@ ad_mod2_new <- anndata::AnnData(
   var = var_mod2,
   uns = ad_mod2$uns
 )
+print(ad_mod2_new)
 zzz <- ad_mod2_new$write_h5ad(par$output_mod2, compression = "gzip")
