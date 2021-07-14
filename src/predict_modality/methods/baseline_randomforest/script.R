@@ -7,9 +7,9 @@ requireNamespace("randomForest", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/task1/pbmc_1k_protein_v3.mod1.h5ad",
-  input_mod2 = "resources_test/task1/pbmc_1k_protein_v3.mod2.h5ad",
-  output = "resources_test/task1/pbmc_1k_protein_v3.prediction.h5ad",
+  input_mod1 = "work/be/0917576e71da6ca4b067bae1e93ad2/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod1.h5ad",
+  input_mod2 = "work/be/0917576e71da6ca4b067bae1e93ad2/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod2.h5ad",
+  output = "output.h5ad",
   n_pcs = 4L
 )
 ## VIASH END
@@ -19,7 +19,11 @@ ad1 <- anndata::read_h5ad(par$input_mod1)
 ad2 <- anndata::read_h5ad(par$input_mod2)
 
 cat("Performing DR on the mod1 values\n")
-dr <- prcomp(ad1$X, rank. = 4)$x
+dr <- lmds::lmds(
+  ad1$X, 
+  ndim = par$n_pcs,
+  distance_method = "spearman"
+)
 
 dr_train <- dr[ad1$obs$split == "train",]
 responses_train <- ad2$X
