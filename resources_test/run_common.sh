@@ -16,7 +16,7 @@ $target_dir/common_datasets/download_10x_dataset/download_10x_dataset \
   --output_rna ${out_file}.output_rna.h5ad \
   --output_mod2 ${out_file}.output_mod2.h5ad
 
-$target_dir/common_normalize/normalize/normalize \
+$target_dir/common/normalize/normalize \
   --input_rna ${out_file}.output_rna.h5ad \
   --input_mod2 ${out_file}.output_mod2.h5ad \
   --output_rna ${out_file}.normalize.output_rna.h5ad \
