@@ -5,7 +5,7 @@ targetDir = "${params.rootDir}/target/nextflow"
 
 include  { download_10x_dataset }    from "$targetDir/common_datasets/download_10x_dataset/main.nf"                params(params)
 include  { simulate_dyngen_dataset } from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"             params(params)
-include  { normalize }               from "$targetDir/common_normalize/normalize/main.nf"                          params(params)
+include  { normalize }               from "$targetDir/common/normalize/main.nf"                                    params(params)
 include  { overrideOptionValue }     from "$srcDir/common/workflows/utils.nf"
 
 def flattenMap(entry) {
