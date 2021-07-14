@@ -14,4 +14,5 @@ bin/nextflow \
   -entry run_task1_benchmark \
   --publishDir output/ \
   -resume \
+  --prepare_task1_dataset__max_mod1_columns 1000 \
   --prepare_task1_dataset__max_mod2_columns 1000
