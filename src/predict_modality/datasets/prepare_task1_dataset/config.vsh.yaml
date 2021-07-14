@@ -42,6 +42,9 @@ functionality:
     - name: "--seed"
       type: integer
       description: "The seed for determining the train/test split."
+    - name: "--max_mod1_columns"
+      type: integer
+      description: "The maximum number of columns in mod1."
     - name: "--max_mod2_columns"
       type: integer
       description: "The maximum number of columns in mod2."

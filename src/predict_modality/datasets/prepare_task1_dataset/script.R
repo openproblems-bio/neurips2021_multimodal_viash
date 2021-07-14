@@ -43,6 +43,11 @@ ad1_X <- ad1_raw$X[splor,, drop = FALSE]
 ad2_X <- ad2_raw$X[splor,, drop = FALSE]
 split <- split[splor]
 
+if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_X)) {
+  cat("Sampling mod1 columns\n")
+  ad1_ix <- sample.int(ncol(ad1_X), par$max_mod1_columns)
+  ad1_X <- ad1_X[, ad1_ix, drop = FALSE]
+}
 if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_X)) {
   cat("Sampling mod2 columns\n")
   ad2_ix <- sample.int(ncol(ad2_X), par$max_mod2_columns)
@@ -89,6 +94,14 @@ out_solution <- anndata::AnnData(
 )
 
 cat("Saving output files as h5ad\n")
+cat("output_mod1:")
+print(out_mod1)
 zzz <- out_mod1$write_h5ad(par$output_mod1, compression = "gzip")
+
+cat("output_mod2:")
+print(out_mod2)
 zzz <- out_mod2$write_h5ad(par$output_mod2, compression = "gzip")
+
+cat("output_solution:")
+print(out_solution)
 zzz <- out_solution$write_h5ad(par$output_solution, compression = "gzip")
