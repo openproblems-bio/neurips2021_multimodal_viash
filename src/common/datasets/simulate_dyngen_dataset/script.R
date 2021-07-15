@@ -102,7 +102,13 @@ dataset <- as_list(model)
 # grouping <- dat$cell_info %>% select(cell_id, model) %>% deframe()
 # dynplot::plot_dimred(dat, grouping = grouping)
 cat("Create RNA dataset\n")
+celltypes <- dataset$milestone_percentages %>%
+  group_by(cell_id) %>%
+  slice(which.max(percentage)) %>%
+  ungroup() %>% 
+  select(cell_id, cell_type = milestone_id)
 obs <- dataset$cell_info %>% 
+  left_join(celltypes, by = "cell_id") %>%
   rename(batch = model) %>%
   column_to_rownames("cell_id")
 var <- dataset$feature_info %>% 
