@@ -26,9 +26,9 @@ workflow generate_dyngen_datasets {
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_simulations", it[1].num_simulations) }
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "store_chromatin", it[1].store_chromatin) }
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "store_protein", it[1].store_protein) }
-        | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_threads", it[1].num_threads) }
+        | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_threads", "4") }
         | map { [ it[0], [], it[2] ] }
-        | filter { it[0] ==~ /.*_small/ }
+        //| filter { it[0] ==~ /.*_small/ }
         | simulate_dyngen_dataset
 
     emit: output_

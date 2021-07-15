@@ -68,15 +68,12 @@ model_init <- initialise_model(
 cat("Running simulations for training cells\n")
 model_train <-
   model_init %>%
+  generate_kinetics() %>%
   generate_gold_standard() %>%
   generate_cells() %>%
-  generate_experiment() %>%
-  generate_kinetics()
+  generate_experiment()
 
 cat("Running simulations for test cells\n")
-model_init$feature_info
-model_init$feature_network
-model_init$simulation_system
 model_init$num_cells <-
   model_init$numbers$num_cells <-
   num_cells_test
@@ -99,6 +96,10 @@ model <- combine_models(
 )
 dataset <- as_list(model)
 
+# verify batch effects
+# dat <- as_dyno(model)
+# grouping <- dat$cell_info %>% select(cell_id, model) %>% deframe()
+# dynplot::plot_dimred(dat, grouping = grouping)
 cat("Create RNA dataset\n")
 obs <- dataset$cell_info %>% 
   rename(batch = model) %>%
