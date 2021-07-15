@@ -1,3 +1,11 @@
+cat("Loading dependencies\n")
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
+library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
+requireNamespace("anndata", quietly = TRUE)
+
+
 ## VIASH START
 par <- list(
   id = "test",
@@ -20,13 +28,6 @@ par <- list(
 if (par$store_protein == par$store_chromatin) {
   cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
 }
-
-cat("Loading dependencies\n")
-options(tidyverse.quiet = TRUE)
-library(tidyverse)
-library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
-library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
-requireNamespace("anndata", quietly = TRUE)
 
 cat("Creating dyngen backbone\n")
 backbones <- list_backbones()
@@ -62,17 +63,20 @@ model_init <- initialise_model(
   verbose = FALSE
 ) %>%
   generate_tf_network() %>%
-  generate_feature_network() %>%
-  generate_kinetics()
+  generate_feature_network()
 
 cat("Running simulations for training cells\n")
 model_train <-
   model_init %>%
   generate_gold_standard() %>%
   generate_cells() %>%
-  generate_experiment()
+  generate_experiment() %>%
+  generate_kinetics()
 
 cat("Running simulations for test cells\n")
+model_init$feature_info
+model_init$feature_network
+model_init$simulation_system
 model_init$num_cells <-
   model_init$numbers$num_cells <-
   num_cells_test
@@ -80,20 +84,24 @@ model_init$simulation_params$experiment_params <-
   simulation_type_wild_type(round(0.37*par$num_simulations))
 model_test <-
   model_init %>%
+  generate_kinetics() %>% # use different kinetics
   generate_gold_standard() %>%
   generate_cells() %>%
   generate_experiment()
 
 cat("Combine simulations into one dataset\n")
 model <- combine_models(
-  list(train = model_train, test = model_test),
+  list(
+    batch1 = model_train, 
+    batch2 = model_test
+  ),
   duplicate_gold_standard = FALSE
 )
 dataset <- as_list(model)
 
 cat("Create RNA dataset\n")
 obs <- dataset$cell_info %>% 
-  rename(experiment = model) %>%
+  rename(batch = model) %>%
   column_to_rownames("cell_id")
 var <- dataset$feature_info %>% 
   select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>% 
