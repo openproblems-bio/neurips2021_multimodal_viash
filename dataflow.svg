@@ -891,9 +891,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="-255.38917"
-     inkscape:cy="469.6643"
+     inkscape:zoom="5.6"
+     inkscape:cx="180.03796"
+     inkscape:cy="534.19993"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -902,11 +902,11 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="3840"
-     inkscape:window-height="2096"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1">
+     inkscape:window-width="1530"
+     inkscape:window-height="1205"
+     inkscape:window-x="576"
+     inkscape:window-y="197"
+     inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
        id="grid1151"
@@ -1507,7 +1507,7 @@
          x="122.95431"
          y="174.79059"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;stroke-width:0.264583"
-         id="tspan1851-6-1-0">Prediction</tspan><tspan
+         id="tspan1851-6-1-0">Evaluated</tspan><tspan
          sodipodi:role="line"
          x="122.95431"
          y="178.34592"
