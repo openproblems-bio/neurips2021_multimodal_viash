@@ -13,4 +13,6 @@ bin/nextflow \
   -main-script src/predict_modality/workflows/run_task1_benchmark/main.nf \
   -entry run_task1_benchmark \
   --publishDir output/ \
-  -resume
+  -resume \
+  --prepare_task1_dataset__max_mod1_columns 1000 \
+  --prepare_task1_dataset__max_mod2_columns 1000

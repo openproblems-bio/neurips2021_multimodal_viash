@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_randomforest
+  name: baseline_knearestneighbors
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against.
@@ -33,6 +33,10 @@ functionality:
       type: "integer"
       default: 4
       description: Number of principal components to use.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 3
+      description: Number of neighbors to use in the knn regression.
   resources:
     - type: r_script
       path: script.R
@@ -45,5 +49,5 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ ranger, lmds ]
+        packages: [ lmds, FNN ]
   - type: nextflow

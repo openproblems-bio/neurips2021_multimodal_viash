@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_randomforest
+  name: baseline_linearmodel
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against.
@@ -45,5 +45,5 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ ranger, lmds ]
+        packages: [ lmds ]
   - type: nextflow

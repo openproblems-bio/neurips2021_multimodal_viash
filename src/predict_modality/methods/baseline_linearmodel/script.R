@@ -3,7 +3,6 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-requireNamespace("ranger", quietly = TRUE)
 
 ## VIASH START
 par <- list(
@@ -33,12 +32,8 @@ cat("Predicting for each column in modality 2\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {
   y <- responses_train[,i]
   if (length(unique(y)) > 1) {
-    rf <- ranger::ranger(
-      data = data.frame(YTRAIN = y, dr_train),
-      dependent.variable.name = "YTRAIN",
-      num.threads = 1
-    )
-    setNames(stats::predict(rf, dr_test)$predictions, rownames(dr_test))
+    lm <- lm(YTRAIN~., data.frame(dr_train, YTRAIN=y))
+    stats::predict(lm, data.frame(dr_test))
   } else {
     setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
   }
@@ -53,7 +48,7 @@ out <- anndata::AnnData(
   X = prediction,
   uns = list(
     dataset_id = ad1$uns[["dataset_id"]],
-    method_id = "baseline_randomforest"
+    method_id = "baseline_linearmodel"
   )
 )
 

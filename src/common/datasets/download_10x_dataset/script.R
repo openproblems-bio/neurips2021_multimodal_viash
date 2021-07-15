@@ -6,8 +6,12 @@ sc <- reticulate::import("scanpy")
 
 ## VIASH START
 par <- list(
-  id = "lymph_node_lymphoma_14k",
-  input = "https://cf.10xgenomics.com/samples/cell-arc/2.0.0/lymph_node_lymphoma_14k/lymph_node_lymphoma_14k_raw_feature_bc_matrix.h5",
+  # id = "lymph_node_lymphoma_14k",
+  # input = "https://cf.10xgenomics.com/samples/cell-arc/2.0.0/lymph_node_lymphoma_14k/lymph_node_lymphoma_14k_raw_feature_bc_matrix.h5",
+  # output_rna = "output_rna.h5ad",
+  # output_mod2 = "output_mod2.h5ad"
+  id = "pbmc_1k_protein_v3",
+  input = "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad"
 )
@@ -25,7 +29,7 @@ cat("Setting dataset id\n")
 ad$uns[["dataset_id"]] <- par$id
 
 cat("Making var names unique\n")
-ad$var_names_make_unique()
+zzz <- ad$var_names_make_unique()
 
 is_abseq <- ad$var$feature_types == "Antibody Capture"
 is_atacseq <- ad$var$feature_types == "Peaks"
@@ -54,7 +58,9 @@ if (any(is_atacseq)) {
 }
 
 cat("Saving RNA data to '", par$output_rna, "'\n", sep = "")
+print(ad_mod1)
 zzz <- ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
 
-cat("Storing ", ad_mod2$uns[["modality"]], " data as '", par$output_mod2, "'\n", sep = "")
+cat("Storing mod2 data as '", par$output_mod2, "'\n", sep = "")
+print(ad_mod2)
 zzz <- ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")

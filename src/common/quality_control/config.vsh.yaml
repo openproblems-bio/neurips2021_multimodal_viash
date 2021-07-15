@@ -1,9 +1,9 @@
 functionality:
-  name: "normalize"
+  name: "quality_control"
   namespace: "common"
   version: "dev"
   description: |
-    Normalize a dataseet.
+    Perform quality control of the cells and features in a dataset.
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
