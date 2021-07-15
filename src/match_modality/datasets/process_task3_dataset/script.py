@@ -17,7 +17,7 @@ par = {
 # VIASH END
 
 # READ INPUT DATA
-rna = anndata.read_h5ad(par["input_mod1"])
+rna = anndata.read_h5ad(par["input_rna"])
 mod2 = anndata.read_h5ad(par["input_mod2"])
 
 # TODO: change on how to know which modality is there
