@@ -47,3 +47,4 @@ platforms:
       - type: r
         packages: [ ranger, lmds ]
   - type: nextflow
+    directiveTime: 5m

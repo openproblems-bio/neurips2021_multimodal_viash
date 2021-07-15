@@ -97,3 +97,4 @@ platforms:
         github:
           - dynverse/dyngen@devel
   - type: nextflow
+    directiveCpus: 8
