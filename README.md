@@ -1,8 +1,10 @@
 This repository contains viash components for running the
 NeurIPS2021-OpenProblems benchmark pipeline for evaluating Multimodal
-Data Integration methods.
+Data Integration methods split up into three different tasks.
 
-![](dataflow.svg)
+This is the overall workflow of the whole pipeline.
+
+![](dataflow.png)
 
 ## Building the pipeline components
 
