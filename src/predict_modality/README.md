@@ -98,7 +98,7 @@ This component expects two h5ad files, `--input_prediction` and `--input_solutio
 
 #### Output data formats
 
-This component outputs only *one* h5ad file, `--output_prediction`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
+This component should output only *one* h5ad file, `--output`, containing metric values which can be used to evaluate the performance of the method. It has the following attributes:
 
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
