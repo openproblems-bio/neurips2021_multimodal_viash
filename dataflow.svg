@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="97.895836mm"
+   width="100.54166mm"
    height="169.33334mm"
-   viewBox="0 0 97.895841 169.33334"
+   viewBox="0 0 100.54166 169.33334"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
@@ -891,9 +891,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
-     inkscape:cx="180.03796"
-     inkscape:cy="534.19993"
+     inkscape:zoom="1.979899"
+     inkscape:cx="-31.028583"
+     inkscape:cy="315.81777"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -902,11 +902,11 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1530"
-     inkscape:window-height="1205"
-     inkscape:window-x="576"
-     inkscape:window-y="197"
-     inkscape:window-maximized="0">
+     inkscape:window-width="3840"
+     inkscape:window-height="2096"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid1151"
@@ -914,7 +914,7 @@
        spacingx="2.6458334"
        spacingy="2.6458334"
        originx="-124.35418"
-       originy="-39.687498" />
+       originy="-39.687496" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -936,14 +936,14 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.50481;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.50481, 1.00962"
        id="rect1016"
-       width="97.895836"
+       width="100.54166"
        height="169.33334"
        x="72.691734"
        y="18.089012" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#b330ce;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1"
        id="rect17333"
-       width="92.604179"
+       width="95.249992"
        height="112.28807"
        x="75.33757"
        y="72.488449" />
