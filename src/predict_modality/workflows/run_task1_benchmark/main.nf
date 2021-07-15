@@ -57,6 +57,6 @@ workflow run_task1_benchmark {
     // | view{ [ "METRIC", it[0], it[1] ] }
     | map { it[1] }
     | toList()
-    // | map { [ "task1", it, params ] }
+    | map { [ "task1", it, params ] }
     | extract_scores
 }
