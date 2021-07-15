@@ -12,12 +12,14 @@ functionality:
     - name: "--input"
       type: "file"
       multiple: true
+      required: true
       example: "input.h5ad"
       description: "Input h5ad files containing metadata and metrics in adata.uns."
     - name: "--output"
       type: "file"
       direction: "output"
       example: "output.tsv"
+      required: true
       description: "Output tsv"
   resources:
     - type: r_script

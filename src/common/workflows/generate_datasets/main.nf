@@ -5,7 +5,7 @@ targetDir = "${params.rootDir}/target/nextflow"
 
 include  { download_10x_dataset }    from "$targetDir/common_datasets/download_10x_dataset/main.nf"                params(params)
 include  { simulate_dyngen_dataset } from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"             params(params)
-include  { normalize }               from "$targetDir/common/normalize/main.nf"                                    params(params)
+include  { quality_control }               from "$targetDir/common/quality_control/main.nf"                                    params(params)
 include  { overrideOptionValue }     from "$srcDir/common/workflows/utils.nf"
 
 def flattenMap(entry) {
@@ -26,9 +26,9 @@ workflow generate_dyngen_datasets {
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_simulations", it[1].num_simulations) }
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "store_chromatin", it[1].store_chromatin) }
         | map { overrideOptionValue(it, "simulate_dyngen_dataset", "store_protein", it[1].store_protein) }
-        | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_threads", it[1].num_threads) }
+        | map { overrideOptionValue(it, "simulate_dyngen_dataset", "num_threads", "4") }
         | map { [ it[0], [], it[2] ] }
-        | filter { it[0] ==~ /.*_small/ }
+        //| filter { it[0] ==~ /.*_small/ }
         | simulate_dyngen_dataset
 
     emit: output_
@@ -66,9 +66,9 @@ workflow generate_datasets {
       | groupTuple()
       | map { id, data, old_params -> [ id, flattenMap(data) ] }
       | map { id, data -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], params ]}
-      | map { overrideOptionValue(it, "normalize", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
-      | map { overrideOptionValue(it, "normalize", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
-      | normalize
+      | map { overrideOptionValue(it, "quality_control", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
+      | map { overrideOptionValue(it, "quality_control", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
+      | quality_control
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
       
     emit: output_

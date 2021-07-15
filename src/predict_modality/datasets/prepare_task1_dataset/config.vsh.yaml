@@ -39,13 +39,15 @@ functionality:
       example: "dataset_solution.h5ad"
       description: Mod2 h5ad file for only the test cells.
       required: true
-    - name: "--mod1"
-      type: string
-      description: "Which modality to use as mod1"
-      default: RNA
     - name: "--seed"
       type: integer
       description: "The seed for determining the train/test split."
+    - name: "--max_mod1_columns"
+      type: integer
+      description: "The maximum number of columns in mod1."
+    - name: "--max_mod2_columns"
+      type: integer
+      description: "The maximum number of columns in mod2."
   resources:
     - type: r_script
       path: script.R

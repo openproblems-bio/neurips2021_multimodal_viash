@@ -3,12 +3,11 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-requireNamespace("ranger", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod1.h5ad",
-  input_mod2 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod2.h5ad",
+  input_mod1 = "resources_test/task1/pbmc_1k_protein_v3.mod1.h5ad",
+  input_mod2 = "resources_test/task1/pbmc_1k_protein_v3.mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L
 )
@@ -32,16 +31,18 @@ dr_test <- dr[ad1$obs$group == "test",]
 cat("Predicting for each column in modality 2\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {
   y <- responses_train[,i]
-  if (length(unique(y)) > 1) {
-    rf <- ranger::ranger(
-      data = data.frame(YTRAIN = y, dr_train),
-      dependent.variable.name = "YTRAIN",
-      num.threads = 1
-    )
-    setNames(stats::predict(rf, dr_test)$predictions, rownames(dr_test))
-  } else {
-    setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
-  }
+  yout <- 
+    if (length(unique(y)) > 1) {
+      FNN::knn.reg(
+        train = dr_train, 
+        test = dr_test,
+        y = y,
+        k = par$n_neighbors
+      )$pred
+    } else {
+      rep(unique(y), nrow(dr_test))
+    }
+  setNames(yout, rownames(dr_test))
 })
 
 cat("Creating outputs object\n")
@@ -53,7 +54,7 @@ out <- anndata::AnnData(
   X = prediction,
   uns = list(
     dataset_id = ad1$uns[["dataset_id"]],
-    method_id = "baseline_randomforest"
+    method_id = "baseline_knearestneighbors"
   )
 )
 

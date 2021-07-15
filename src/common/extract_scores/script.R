@@ -1,30 +1,32 @@
-## VIASH START
-par <- list(
-  input = list.files("work", full.names = TRUE, pattern = "*.h5ad"),
-  output = "out_bash/modality_alignment/scores.tsv"
-)
-inp <- par$input[[2]]
-## VIASH END
-
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE)
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
-library(assertthat)
+library(testthat, warn.conflicts = FALSE, quietly = TRUE)
+
+## VIASH START
+par <- list(
+  input = list.files("work", full.names = TRUE, recursive = TRUE, pattern = "*calculate_task1_metrics.output.h5ad"),
+  output = "output/task1_scores.tsv"
+)
+par$input <- par$input[!duplicated(basename(par$input))]
+inp <- par$input[[1]]
+## VIASH END
+
 
 cat("Reading input h5ad files")
 scores <- map_df(par$input, function(inp) {
   cat("Reading '", inp, "'\n", sep = "")
   ad <- read_h5ad(inp)
 
-  for (uns_name in c("dataset_id", "method_id", "metric_id", "metric_value")) {
-    assert_that(
+  for (uns_name in c("dataset_id", "method_id", "metric_ids", "metric_values")) {
+    expect_true(
       uns_name %in% names(ad$uns),
-      msg = paste0("File ", inp, " must contain `uns['", uns_name, "']`")
+      info = paste0("File ", inp, " must contain `uns['", uns_name, "']`")
     )
   }
 
-  as_tibble(ad$uns[c("dataset_id", "method_id", "metric_id", "metric_value")])
+  as_tibble(ad$uns[c("dataset_id", "method_id",  "metric_ids", "metric_values")])
 })
 
-write_tsv(scores, par$output)
+write_tsv(scores %>% spread(metric_ids, metric_values), par$output)

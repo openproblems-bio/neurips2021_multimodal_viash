@@ -17,12 +17,15 @@ time around):
 
 ``` sh
 bin/viash_build
+```
+
+↑ be sure to not forget the underscore in this command!
 
 ## Generating test datasets
 
 The following scripts can be used to generate the test datasets.
 
-```sh
+``` sh
 resources_test/run_common.sh
 resources_test/run_task1.sh
 ```
