@@ -54,7 +54,8 @@ out <- anndata::AnnData(
     dataset_id = adata_prediction$uns$dataset_id,
     method_id = adata_prediction$uns$method_id,
     metric_ids = c("rmse", "cor_pearson", "cor_spearman"),
-    metric_values = c(rmse, cor_pearson, cor_spearman)
+    metric_values = c(rmse, cor_pearson, cor_spearman),
+    metric_moreisbetter = c(FALSE, TRUE, TRUE)
   )
 )
 

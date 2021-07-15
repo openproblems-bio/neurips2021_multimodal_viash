@@ -25,10 +25,11 @@ ad2_mod <- unique(ad2_raw$var[["feature_types"]])
 new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_task1_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
-cat("Determining train/test split\n")
-split <- 
-  if (!is.null(ad1_raw$obs[["experiment"]]) && all(ad1_raw$obs[["experiment"]] %in% c("train", "test"))) {
-    ad1_raw$obs[["experiment"]]
+cat("Determining train/test group\n")
+# TO DO: use batch to split cells into train and test, if batch is not already named 'train' and 'test'.
+group <- 
+  if (!is.null(ad1_raw$obs[["batch"]]) && all(ad1_raw$obs[["batch"]] %in% c("train", "test"))) {
+    ad1_raw$obs[["batch"]]
   } else {
     set.seed(par$seed)
     ix <- sample.int(
@@ -38,10 +39,10 @@ split <-
     )
     ifelse(seq_len(nrow(ad1_raw)) %in% ix, "train", "test")
   }
-splor <- order(split)
+splor <- order(group)
 ad1_X <- ad1_raw$X[splor,, drop = FALSE]
 ad2_X <- ad2_raw$X[splor,, drop = FALSE]
-split <- split[splor]
+group <- group[splor]
 
 if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_X)) {
   cat("Sampling mod1 columns\n")
@@ -63,7 +64,7 @@ out_mod1 <- anndata::AnnData(
   ),
   obs = data.frame(
     row.names = rownames(ad1_X),
-    split = split
+    group = group
   ),
   uns = common_uns
 )
@@ -75,21 +76,21 @@ ad2_var <- data.frame(
 )
 ad2_obs <- data.frame(
   row.names = rownames(ad2_X),
-  split = split
+  group = group
 )
 
 out_mod2 <- anndata::AnnData(
-  X = ad2_X[split == "train",, drop = FALSE],
+  X = ad2_X[group == "train",, drop = FALSE],
   var = ad2_var,
-  obs = ad2_obs[split == "train",, drop = FALSE],
+  obs = ad2_obs[group == "train",, drop = FALSE],
   uns = common_uns
 )
 
 cat("Create solution object\n")
 out_solution <- anndata::AnnData(
-  X = ad2_X[split == "test",, drop = FALSE],
+  X = ad2_X[group == "test",, drop = FALSE],
   var = ad2_var,
-  obs = ad2_obs[split == "test",, drop = FALSE],
+  obs = ad2_obs[group == "test",, drop = FALSE],
   uns = common_uns
 )
 
