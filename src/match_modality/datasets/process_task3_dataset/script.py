@@ -8,7 +8,7 @@ import scipy.sparse
 
 # VIASH START
 par = {
-    "input_mod1": "pbmc_1k_protein_v3.output_rna.h5ad",
+    "input_rna": "pbmc_1k_protein_v3.output_rna.h5ad",
     "input_mod2": "pbmc_1k_protein_v3.output_mod2.h5ad",
     "output_mod1": "pbmc_1k_protein_v3.censored_rna.h5ad",
     "output_mod2": "pbmc_1k_protein_v3.censored_mod2.h5ad",

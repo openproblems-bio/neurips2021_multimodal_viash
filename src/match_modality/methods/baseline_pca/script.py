@@ -9,7 +9,7 @@ from sklearn.neighbors import NearestNeighbors
 par = {
     "input_mod1": "pbmc_1k_protein_v3.output_mod2.h5ad",
     "input_mod2": "pbmc_1k_protein_v3.output_rna.h5ad",
-    "prediction": "prediction.h5ad",
+    "output": "prediction.h5ad",
 }
 # VIASH END
 
