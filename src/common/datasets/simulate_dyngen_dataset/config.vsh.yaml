@@ -80,6 +80,9 @@ functionality:
       type: integer
       default: 1
       description: Parallellisation level.
+    - name: "--cache_dir"
+      type: file
+      description: "A caching directory for files that dyngen downloads."
   resources:
     - type: r_script
       path: script.R
