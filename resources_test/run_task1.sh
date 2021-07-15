@@ -12,8 +12,8 @@ out_file=resources_test/task1/pbmc_1k_protein_v3
 mkdir -p `dirname $out_file`
 
 $target_dir/predict_modality_datasets/prepare_task1_dataset/prepare_task1_dataset \
-  --input_mod1 ${in_file}.normalize.output_rna.h5ad \
-  --input_mod2 ${in_file}.normalize.output_mod2.h5ad \
+  --input_mod1 ${in_file}.output_rna.h5ad \
+  --input_mod2 ${in_file}.output_mod2.h5ad \
   --output_mod1 ${out_file}.mod1.h5ad \
   --output_mod2 ${out_file}.mod2.h5ad \
   --output_solution ${out_file}.solution.h5ad
