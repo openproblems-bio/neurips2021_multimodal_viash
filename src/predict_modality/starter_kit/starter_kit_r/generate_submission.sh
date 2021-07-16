@@ -12,7 +12,8 @@ viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
 viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.functionality.name := "method"' \
   -c '.platforms[.type == "nextflow"].publish := true' \
-  -c '.platforms[.type == "nextflow"].directiveTime := "5m"'
+  -c '.platforms[.type == "nextflow"].directive_time := "10m"' \
+  -c '.platforms[.type == "nextflow"].directive_memory := "20 GB"'
 
 # to do: set to repository
 # nextflow drop openproblems-bio/neurips2021_multimodal_viash
