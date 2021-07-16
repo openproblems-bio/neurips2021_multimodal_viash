@@ -48,6 +48,46 @@ workflow generate_public_10x_datasets {
     emit: output_
 }
 
+workflow generate_azimuth_datasets {
+    main:
+    output_ = Channel.fromPath(file("$srcDir/common/datasets/download_azimuth_dataset/input.tsv"))
+        | splitCsv(header: true, sep: "\t")
+        | map { tsv -> [ tsv.id, tsv, params ] }
+        | map { overrideOptionValue(it, "download_azimuth_dataset", "id", it[1].id) }
+        | map { overrideOptionValue(it, "download_azimuth_dataset", "input_count", it[1].input_count) }
+        | map { overrideOptionValue(it, "download_azimuth_dataset", "input_meta", it[1].input_meta) }
+        | map { [ it[0], [], it[2] ] }
+        | download_azimuth_dataset
+
+    emit: output_
+}
+
+workflow generate_totalvi_spleen_lymph {
+    main:
+    output_ = Channel.fromPath(file("$srcDir/common/datasets/download_azimuth_dataset/input.tsv"))
+        | splitCsv(header: true, sep: "\t")
+        | map { tsv -> [ tsv.id, tsv, params ] }
+        | map { overrideOptionValue(it, "download_totalvi_spleen_lymph", "id", it[1].id) }
+        | map { overrideOptionValue(it, "download_totalvi_spleen_lymph", "input", it[1].input) }
+        | map { [ it[0], [], it[2] ] }
+        | download_totalvi_spleen_lymph
+
+    emit: output_
+}
+
+workflow generate_totalvi_10x_datasets {
+    main:
+    output_ = Channel.fromPath(file("$srcDir/common/datasets/download_totalvi_10x_datasets/input.tsv"))
+        | splitCsv(header: true, sep: "\t")
+        | map { tsv -> [ tsv.id, tsv, params ] }
+        | map { overrideOptionValue(it, "download_totalvi_10x_datasets", "id", it[1].id) }
+        | map { overrideOptionValue(it, "download_totalvi_10x_datasets", "input", it[1].input) }
+        | map { [ it[0], [], it[2] ] }
+        | download_totalvi_10x_datasets
+
+    emit: output_
+}
+
 
 /* data gen workflow
  * 
@@ -62,7 +102,7 @@ workflow generate_public_10x_datasets {
  */
 workflow generate_datasets {
     main:
-    output_ = (generate_dyngen_datasets & generate_public_10x_datasets)
+    output_ = (generate_dyngen_datasets & generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
       | mix
       | groupTuple()
       | map { id, data, old_params -> [ id, flattenMap(data) ] }

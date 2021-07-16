@@ -1,4 +1,9 @@
-
+print("Load dependencies")
+import urllib.request
+import tempfile
+import anndata
+import scanpy as sc
+import pandas as pd
 
 ## VIASH START
 par = {
@@ -9,72 +14,44 @@ par = {
 }
 ## VIASH END
 
-
-
 ###############################################################################
-###                            LOAD DEPENDENCIES                            ###
+###                     DOWNLOAD AND READ DATA.                             ###
 ###############################################################################
-
-import urllib.request
-import tempfile
-import anndata
-import scanpy as sc
-import pandas as pd
-
-###############################################################################
-###                     DOWNLAOD AND READ DATA.                             ###
-###############################################################################
-
-
 print("Downloading file from", par['input'])
-
 h5ad_temp = tempfile.NamedTemporaryFile()
 url = par['input']
 urllib.request.urlretrieve(url, h5ad_temp.name)
 
-
 print("Reading h5ad file")
-
 adata = sc.read_h5ad(h5ad_temp.name)
-
 h5ad_temp.close()
-
 
 ###############################################################################
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
+new_obs = adata.obs.rename(columns = {'cell_types': 'cell_type', 'batch_indices': 'batch'}, inplace = False)
 
-
-print("Creating h5ad file per modality")
-
-
-# Extract RNA counts
-
-adata_rna = anndata.AnnData(X = adata.X,
-                            obs = adata.obs.loc[:,['batch_indices', 'hash_id',
-                                                   'n_genes', 'percent_mito','cell_types']],
-                            var = adata.var,
-                            uns = {'modality':'GEX'},
-                           )
+print("Extracting RNA counts")
+adata_rna = anndata.AnnData(
+    X = adata.X,
+    obs = new_obs,
+    var = adata.var,
+)
 
 adata_rna.var['feature_types'] = "GEX"
 
-# Extract ADT (antibody derived transcripts) counts
-
-adata_adt = anndata.AnnData(X = adata.obsm['protein_expression'],
-                            obs = adata.obs.loc[:,['batch_indices', 'hash_id',
-                                                'n_proteins','n_protein_counts','cell_types']],
-                            var = pd.DataFrame(index=list(adata.uns['protein_names'])),
-                            uns = {'modality':'ADT'},
-                           )
+print("Extracting ADT counts")
+adata_adt = anndata.AnnData(
+    X = adata.obsm['protein_expression'],
+    obs = new_obs,
+    var = pd.DataFrame(index=list(adata.uns['protein_names']))
+)
 adata_adt.var['feature_types'] = "ADT"
-
 
 ###############################################################################
 ###                             SAVE OUTPUT                                 ###
 ###############################################################################
-
-
+print("Saving output")
 adata_rna.write_h5ad(par['output_rna'], compression = "gzip")
 adata_adt.write_h5ad(par['output_mod2'], compression = "gzip")
 

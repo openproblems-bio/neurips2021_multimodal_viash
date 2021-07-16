@@ -33,18 +33,6 @@ functionality:
       description: Location URL to the GEO meta data file
       required: true
       example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file&file=GSE164378%5Fsc%2Emeta%2Edata%5F3P%2Ecsv%2Egz"
-    - name: "--out_raw_count"
-      type: file
-      example: GSE164378_RAW.tar
-      required: true
-      direction: output
-      description: Downloaded file containing raw counts (not yet temporary file)
-    - name: "--out_raw_meta"
-      type: file
-      example: GSE164378_sc.meta.data_3P.csv.gz
-      required: true
-      direction: output
-      description: Metadata including cell type annotation
     - name: "--output_rna"
       type: file
       example: output_rna.h5ad
