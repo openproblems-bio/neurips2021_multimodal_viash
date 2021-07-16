@@ -32,23 +32,25 @@ dr <- lmds(
 # split up the train vs. test dimensionality reduction
 dr_train <- dr[ad1$obs$group == "train",]
 dr_test <- dr[ad1$obs$group == "test",]
+responses_train <- ad2$X[,i]
 
-cat("For every column in mod2, train a linear model and generate predictions.\n")
-preds <- lapply(seq_len(ncol(ad2)), function(i) {
-  train_data <- data.frame(dr_train, predictorcolumn = ad2$X[,i])
-  test_data <- data.frame(dr_test)
-
-  # train model on train cells
-  lm <- lm(predictorcolumn ~ ., train_data)
-
-  # generate predictions on test cells
-  predict(lm, test_data)
+cat("Run KNN regression.\n")
+# For every column in mod2, predict mod2 for the test cells using the K nearest mod2 neighbors
+preds <- apply(responses_train, 2, function(yi) {
+  FNN::knn.reg(
+    train = dr_train, 
+    test = dr_test,
+    y = yi,
+    k = par$n_neighbors
+  )$pred
 })
 
 cat("Creating output matrix\n")
-prediction <- Matrix(do.call(cbind, preds), sparse = TRUE)
-rownames(prediction) <- rownames(dr_test)
-colnames(prediction) <- colnames(ad2)
+prediction <- Matrix::Matrix(
+  preds, 
+  sparse = TRUE,
+  dimnames = list(rownames(dr_test), colnames(ad2))
+)
 
 cat("Creating output AnnData\n")
 out <- anndata::AnnData(

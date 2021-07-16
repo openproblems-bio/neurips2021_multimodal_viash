@@ -29,26 +29,21 @@ responses_train <- ad2$X
 dr_test <- dr[ad1$obs$group == "test",]
 
 cat("Predicting for each column in modality 2\n")
-preds <- lapply(seq_len(ncol(responses_train)), function(i) {
-  y <- responses_train[,i]
-  yout <- 
-    if (length(unique(y)) > 1) {
-      FNN::knn.reg(
-        train = dr_train, 
-        test = dr_test,
-        y = y,
-        k = par$n_neighbors
-      )$pred
-    } else {
-      rep(unique(y), nrow(dr_test))
-    }
-  setNames(yout, rownames(dr_test))
+preds <- apply(responses_train, 2, function(yi) {
+  FNN::knn.reg(
+    train = dr_train, 
+    test = dr_test,
+    y = yi,
+    k = par$n_neighbors
+  )$pred
 })
 
 cat("Creating outputs object\n")
-prediction <- Matrix::Matrix(do.call(cbind, preds), sparse = TRUE)
-rownames(prediction) <- rownames(dr_test)
-colnames(prediction) <- colnames(ad2)
+prediction <- Matrix::Matrix(
+  preds, 
+  sparse = TRUE,
+  dimnames = list(rownames(dr_test), colnames(ad2))
+)
 
 out <- anndata::AnnData(
   X = prediction,
