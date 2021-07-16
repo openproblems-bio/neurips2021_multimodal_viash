@@ -1,5 +1,5 @@
 functionality:
-  name: download_totalvi_10x
+  name: download_totalvi_10x_datasets
   namespace: common_datasets
   version: dev
   description: Download CITE-seq data from totalVI paper (10x).
@@ -46,3 +46,4 @@ platforms:
     setup:
       - type: python
         pip: [ anndata, scanpy ]
+  - type: nextflow

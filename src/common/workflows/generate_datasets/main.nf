@@ -3,10 +3,13 @@ nextflow.enable.dsl=2
 srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 
-include  { download_10x_dataset }    from "$targetDir/common_datasets/download_10x_dataset/main.nf"                params(params)
-include  { simulate_dyngen_dataset } from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"             params(params)
-include  { quality_control }         from "$targetDir/common/quality_control/main.nf"                              params(params)
-include  { overrideOptionValue }     from "$srcDir/common/workflows/utils.nf"
+include  { download_10x_dataset }               from "$targetDir/common_datasets/download_10x_dataset/main.nf"                params(params)
+include  { simulate_dyngen_dataset }            from "$targetDir/common_datasets/simulate_dyngen_dataset/main.nf"             params(params)
+include  { download_azimuth_dataset }           from "$targetDir/common_datasets/download_azimuth_dataset/main.nf"            params(params)
+include  { download_totalvi_spleen_lymph }      from "$targetDir/common_datasets/download_totalvi_spleen_lymph/main.nf"       params(params)
+include  { download_totalvi_10x_datasets }      from "$targetDir/common_datasets/download_totalvi_10x_datasets/main.nf"       params(params)
+include  { quality_control }                    from "$targetDir/common/quality_control/main.nf"                              params(params)
+include  { overrideOptionValue }                from "$srcDir/common/workflows/utils.nf"
 
 def flattenMap(entry) {
   res = [:]
@@ -64,7 +67,7 @@ workflow generate_azimuth_datasets {
 
 workflow generate_totalvi_spleen_lymph {
     main:
-    output_ = Channel.fromPath(file("$srcDir/common/datasets/download_azimuth_dataset/input.tsv"))
+    output_ = Channel.fromPath(file("$srcDir/common/datasets/download_totalvi_spleen_lymph/input.tsv"))
         | splitCsv(header: true, sep: "\t")
         | map { tsv -> [ tsv.id, tsv, params ] }
         | map { overrideOptionValue(it, "download_totalvi_spleen_lymph", "id", it[1].id) }

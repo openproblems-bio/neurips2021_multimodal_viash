@@ -46,3 +46,4 @@ platforms:
     setup:
       - type: python
         pip: [ anndata, scanpy ]
+  - type: nextflow
