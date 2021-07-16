@@ -5,6 +5,8 @@ targetDir = "${params.rootDir}/target/nextflow"
 include  { calculate_task1_metrics }     from "$targetDir/predict_modality_metrics/calculate_task1_metrics/main.nf"    params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                               params(params)
 
+params.datasets = "s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_solution.h5ad"
+
 workflow {
   main:
   // todo: update to path on s3
