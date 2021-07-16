@@ -1,34 +1,36 @@
 #!/bin/bash
 
-set +x 
+set -e
 
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 # todo: add more checks
 # e.g. are nextflow and viash (>=0.5.1) are on the path?
+# todo: use s3 bucket instead of local dir
 
-echo "###########################################"
-echo "## Build docker executable and container ##"
-echo "###########################################"
 echo ""
+echo "######################################################################"
+echo "##              Build docker executable and container               ##"
+echo "######################################################################"
 viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
   -c '.functionality.name := "method"'
 
 
-echo "###########################"
-echo "## Build nextflow module ##"
-echo "###########################"
 echo ""
+echo "######################################################################"
+echo "##                      Build nextflow module                       ##"
+echo "######################################################################"
 viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.functionality.name := "method"' \
   -c '.platforms[.type == "nextflow"].publish := true' \
   -c '.platforms[.type == "nextflow"].directive_time := "10m"' \
-  -c '.platforms[.type == "nextflow"].directive_memory := "20 GB"'
+  -c '.platforms[.type == "nextflow"].directive_memory := "16 GB"' \
+  -c '.platforms[.type == "nextflow"].directive_cpus := "4"'
 
 
-echo "################################################"
-echo "## Generating submission files using nextflow ##"
-echo "################################################"
 echo ""
+echo "######################################################################"
+echo "##            Generating submission files using nextflow            ##"
+echo "######################################################################"
 export NXF_VER=21.04.1
 # export AWS_PROFILE=op
 # nextflow drop openproblems-bio/neurips2021_multimodal_viash
@@ -41,10 +43,10 @@ nextflow \
   -resume
 
 
-echo "#############################"
-echo "## Creating submission zip ##"
-echo "#############################"
 echo ""
+echo "######################################################################"
+echo "##                      Creating submission zip                     ##"
+echo "######################################################################"
 [ -f submission.zip ] && rm submission.zip
 zip -9 -rv submission.zip . \
   --exclude=*.git* \
@@ -54,14 +56,17 @@ zip -9 -rv submission.zip . \
 
 
 # print message
-echo "########################"
-echo "## Submission summary ##"
-echo "########################"
 echo ""
-echo "Done! Please upload your submission at the link below:"
+echo "######################################################################"
+echo "##                        Submission summary                        ##"
+echo "######################################################################"
+echo "Please upload your submission at the link below:"
 echo "  https://eval.ai/web/challenges/challenge-page/1111/submission"
-echo "If you set up the eval.ai CLI tool, use the command below create a private submission:"
-echo "  evalai challenge 1111 phase 2276 submit --file submission.zip --large --private"
+echo ""
+echo "Or use the command below create a private submission:"
+echo "> evalai challenge 1111 phase 2276 submit --file submission.zip --large --private"
+echo ""
 echo "Or this command to create a public one:"
-echo "  evalai challenge 1111 phase 2276 submit --file submission.zip --large --public"
+echo "> evalai challenge 1111 phase 2276 submit --file submission.zip --large --public"
+echo ""
 echo "Good luck!"
