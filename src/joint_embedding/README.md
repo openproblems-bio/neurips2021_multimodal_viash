@@ -63,7 +63,7 @@ This component should output *one* h5ad file, `--output_prediction`, containing 
   * `.uns['method_id']`: The name of the prediction method.
   * `.obs_names`: Ids for the cells.
 
-The embedding should have **at most 10 columns**.
+The embedding should have **at most 100 columns**.
 
 ### Metric component
 
@@ -75,7 +75,7 @@ This component should output two h5ad files, `--input_prediction` and `--input_s
 
 The `input_prediction` file has the following attributes:
 
-  * `.X`: The embedding matrix of the cells (at most 10 columns).
+  * `.X`: The embedding matrix of the cells (at most 100 columns).
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
   * `.obs_names`: Ids for the cells.
