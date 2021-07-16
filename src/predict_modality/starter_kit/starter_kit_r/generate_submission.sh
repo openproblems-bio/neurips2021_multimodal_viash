@@ -34,6 +34,7 @@ echo "######################################################################"
 export NXF_VER=21.04.1
 # export AWS_PROFILE=op
 # nextflow drop openproblems-bio/neurips2021_multimodal_viash
+[ -f output ] && rm -r output/
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r release \
@@ -48,7 +49,7 @@ echo "######################################################################"
 echo "##                      Creating submission zip                     ##"
 echo "######################################################################"
 [ -f submission.zip ] && rm submission.zip
-zip -9 -rv submission.zip . \
+zip -9 -r submission.zip . \
   --exclude=*.git* \
   --exclude=*.nextflow* \
   --exclude=*work* \
