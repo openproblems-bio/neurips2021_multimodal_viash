@@ -9,7 +9,6 @@ output_bash
 *.iml
 
 # viash ignores
-target/
 check_results/
 log.tsv
 log.txt
