@@ -5,7 +5,7 @@ include { method } from "$launchDir/target/nextflow/main.nf" params(params)
 workflow {
   main:
   // todo: update to path on s3
-  Channel.fromPath("/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/output/task1_datasets/**/*.output_mod[12].h5ad")
+  Channel.fromPath("s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad")
     | map { [ it.getParent().baseName, it ] }
     | groupTuple
     | map { id, datas -> 

@@ -10,10 +10,6 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  # input_rna = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_rna.h5ad",
-  # input_mod2 = "/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/dc/2da8dff54f86149faf1a7c48d29e56/pbmc_1k_protein_v3.download_10x_dataset.output_mod2.h5ad",
-  # output_rna = "output_rna.h5ad",
-  # output_mod2 = "output_mod2.h5ad",
   input_rna = "resources_test/common/pbmc_1k_protein_v3.output_rna.h5ad",
   input_mod2 = "resources_test/common/pbmc_1k_protein_v3.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",

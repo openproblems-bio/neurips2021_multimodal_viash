@@ -9,7 +9,7 @@ workflow {
   main:
   // todo: update to path on s3
   def solutions = 
-    Channel.fromPath("/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/output/task1_datasets/**.output_solution.h5ad")
+    Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] } 
     // | view { [ "Solution" ] + it }
   def predictions = 

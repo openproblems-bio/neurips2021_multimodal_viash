@@ -9,7 +9,7 @@ params.prepare_task1_dataset__max_mod2_columns = 1000
 
 workflow {
   main:
-  Channel.fromPath("output/common_datasets/**.h5ad")
+  Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] }
     | groupTuple
     | flatMap { id, datas -> 

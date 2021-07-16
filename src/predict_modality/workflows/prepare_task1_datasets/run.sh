@@ -11,5 +11,6 @@ export NXF_VER=21.04.1
 bin/nextflow \
   run . \
   -main-script src/predict_modality/workflows/prepare_task1_datasets/main.nf \
+  --datasets 'output/common_datasets/**.h5ad'
   --publishDir output/task1_datasets/ \
   -resume

@@ -4,7 +4,7 @@ set +x
 
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 # todo: add more checks
-# e.g. is nextflow and viash on path?
+# e.g. are nextflow and viash (>=0.5.1) are on the path?
 
 echo "###########################################"
 echo "## Build docker executable and container ##"
@@ -12,6 +12,7 @@ echo "###########################################"
 echo ""
 viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
   -c '.functionality.name := "method"'
+
 
 echo "###########################"
 echo "## Build nextflow module ##"
@@ -23,15 +24,17 @@ viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.platforms[.type == "nextflow"].directive_time := "10m"' \
   -c '.platforms[.type == "nextflow"].directive_memory := "20 GB"'
 
+
 echo "################################################"
 echo "## Generating submission files using nextflow ##"
 echo "################################################"
 echo ""
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash:0.1.0 \
-  -main-script src/predict_modality/workflows/evaluate_task1_method/main.nf \
+  -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
   --publishDir output/task1_predictions/ \
   -resume
+
 
 echo "#############################"
 echo "## Creating submission zip ##"
@@ -44,7 +47,12 @@ zip -9 -rv submission.zip . \
   --exclude=*work* \
   --exclude=*.DS_Store*
 
+
 # print message
+echo "########################"
+echo "## Submission summary ##"
+echo "########################"
+echo ""
 echo "Done! Please upload your submission at the link below:"
 echo "  https://eval.ai/web/challenges/challenge-page/1111/submission"
 echo "If you set up the eval.ai CLI tool, use the command below create a private submission:"
