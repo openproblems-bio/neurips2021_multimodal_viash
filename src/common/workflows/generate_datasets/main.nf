@@ -105,7 +105,9 @@ workflow generate_totalvi_10x_datasets {
  */
 workflow generate_datasets {
     main:
-    output_ = (generate_dyngen_datasets & generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
+    // output_ = (generate_dyngen_datasets & generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
+    // regenerating the dyngen datasets take quite a bit of time.
+    output_ = (generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
       | mix
       | groupTuple()
       | map { id, data, old_params -> [ id, flattenMap(data) ] }
