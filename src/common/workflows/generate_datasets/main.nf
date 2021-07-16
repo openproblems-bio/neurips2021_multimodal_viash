@@ -16,7 +16,7 @@ def flattenMap(entry) {
 
 workflow generate_dyngen_datasets {
     main:
-    def cacheDir = file("work/dyngen_cache")
+    def cacheDir = file("${workflow.homeDir}/.local/share/R/dyngen")
     output_ = Channel.fromPath(file("$srcDir/common/datasets/simulate_dyngen_dataset/input.tsv"))
         | splitCsv(header: true, sep: "\t")
         | map { tsv -> [ tsv.id, tsv, params ] }
