@@ -29,10 +29,15 @@ echo "################################################"
 echo "## Generating submission files using nextflow ##"
 echo "################################################"
 echo ""
+export NXF_VER=21.04.1
+# export AWS_PROFILE=op
+# nextflow drop openproblems-bio/neurips2021_multimodal_viash
 nextflow \
-  run openproblems-bio/neurips2021_multimodal_viash:0.1.0 \
+  run openproblems-bio/neurips2021_multimodal_viash \
+  -r release \
   -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
-  --publishDir output/task1_predictions/ \
+  --datasets '/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/output/task1_datasets/**.output_mod[12].h5ad' \
+  --publishDir output/ \
   -resume
 
 

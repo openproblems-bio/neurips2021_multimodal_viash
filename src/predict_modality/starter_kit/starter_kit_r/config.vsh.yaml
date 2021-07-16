@@ -39,6 +39,10 @@ functionality:
       type: "integer"
       default: 4
       description: Number of principal components to use.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 5
+      description: Number of neighbors to use.
       
   # files your script needs
   resources:
@@ -74,4 +78,5 @@ platforms:
   # run your method as part of a nextflow pipeline.
   - type: nextflow
     publish: true
-    directiveTime: 5m
+    directive_time: 5m
+    directive_memory: 10 GB
