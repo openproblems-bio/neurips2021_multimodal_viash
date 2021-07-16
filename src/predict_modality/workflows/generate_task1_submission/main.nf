@@ -2,10 +2,12 @@ nextflow.enable.dsl=2
 
 include { method } from "$launchDir/target/nextflow/main.nf" params(params)
 
+params.datasets = "s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad"
+
 workflow {
   main:
   // todo: update to path on s3
-  Channel.fromPath("s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad")
+  Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] }
     | groupTuple
     | map { id, datas -> 
