@@ -44,7 +44,7 @@ nextflow \
   -r release \
   -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
   --datasets "$dataset_loc" \
-  --publishDir output/ \
+  --publishDir output/task1_predictions/ \
   -resume
 
 echo ""
