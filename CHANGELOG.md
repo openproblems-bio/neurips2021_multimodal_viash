@@ -4,6 +4,10 @@
 
 * Task 2: Dataset censoring component.
 
+## MINOR CHANGES
+
+* Task 1: Use `.obs["batch"]` to split up cells in `"train"` and `"test"`, if batch is available.
+
 ## BUG FIXES
 
 * Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.

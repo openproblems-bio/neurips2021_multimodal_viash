@@ -7,8 +7,8 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
-  input_mod2 = "resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
+  input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
+  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
   output_mod1 = "output_mod1.h5ad",
   output_mod2 = "output_mod2.h5ad",
   output_solution = "solution.h5ad",
@@ -26,11 +26,29 @@ new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_task1_", tolower(ad1_mod
 common_uns <- list(dataset_id = new_dataset_id)
 
 cat("Determining train/test group\n")
-# TO DO: use batch to split cells into train and test, if batch is not already named 'train' and 'test'.
 group <- 
   if (!is.null(ad1_raw$obs[["batch"]]) && all(ad1_raw$obs[["batch"]] %in% c("train", "test"))) {
     ad1_raw$obs[["batch"]]
+  } else if (!is.null(ad1_raw$obs[["batch"]])) {
+    # use batch label to optimise the best train/test split
+    batch <- as.character(ad1_raw$obs[["batch"]])
+    nums <- table(batch)
+    nums <- setNames(as.numeric(nums), names(nums))
+
+    # try to find a split that best matches 0.66
+    ga_out <- GA::ga(
+      type = "binary",
+      nBits = length(nums),
+      fitness = function(x) {
+        -abs(sum(nums[x == 1]) / sum(nums) - 0.66)
+      },
+      maxiter = 500,
+      monitor = FALSE
+    )
+    train_batches <- names(nums)[ga_out@solution[1,] == 1]
+    ifelse(batch %in% train_batches, "train", "test")
   } else {
+    # split randomly
     set.seed(par$seed)
     ix <- sample.int(
       nrow(ad1_raw), 
@@ -58,26 +76,14 @@ if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_X)) {
 cat("Creating mod1 object\n")
 out_mod1 <- anndata::AnnData(
   X = ad1_X,
-  var = data.frame(
-    row.names = colnames(ad1_X),
-    feature_types = rep(ad1_mod, ncol(ad1_X))
-  ),
-  obs = data.frame(
-    row.names = rownames(ad1_X),
-    group = group
-  ),
+  var = ad1_raw$var %>% select(one_of("gene_ids"), feature_types),
+  obs = ad1_raw$obs[splor, ] %>% select(one_of("batch")) %>% mutate(group),
   uns = common_uns
 )
 
 cat("Creating mod2 object\n")
-ad2_var <- data.frame(
-  row.names = colnames(ad2_X),
-  feature_types = rep(ad2_mod, ncol(ad2_X))
-)
-ad2_obs <- data.frame(
-  row.names = rownames(ad2_X),
-  group = group
-)
+ad2_var <- ad2_raw$var %>% select(one_of("gene_ids"), feature_types)
+ad2_obs <- ad2_raw$obs[splor, ] %>% select(one_of("batch")) %>% mutate(group)
 
 out_mod2 <- anndata::AnnData(
   X = ad2_X[group == "train",, drop = FALSE],
