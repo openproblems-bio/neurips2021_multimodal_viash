@@ -8,6 +8,7 @@
 
 ## MINOR CHANGES
 
+* Common: Relevel factors in `.obs` and `.var` after QC filtering.
 * Task 1: Use `.obs["batch"]` to split up cells in `"train"` and `"test"`, if batch is available.
 
 ## BUG FIXES
