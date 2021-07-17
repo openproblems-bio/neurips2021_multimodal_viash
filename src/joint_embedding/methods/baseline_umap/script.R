@@ -44,7 +44,7 @@ out <- anndata::AnnData(
   X = dr,
   uns = list(
     dataset_id = ad1$uns[["dataset_id"]],
-    method_id = "baseline_pca"
+    method_id = "baseline_umap"
   )
 )
 

@@ -9,7 +9,8 @@ par <- list(
   input_mod1 = "resources_test/task2/test_resource.mod1.h5ad",
   input_mod2 = "resources_test/task2/test_resource.mod2.h5ad",
   output = "output.h5ad",
-  n_dims = 10L
+  n_dims = 10L,
+  distance_method = "spearman"
 )
 ## VIASH END
 
@@ -20,7 +21,8 @@ ad2 <- anndata::read_h5ad(par$input_mod2)
 cat("Performing DR\n")
 dr <- lmds::lmds(
   cbind(ad1$X, ad2$X),
-  ndim = par$n_dims
+  ndim = par$n_dims,
+  distance_method = par$distance_method
 )
 
 rownames(dr) <- rownames(ad1)
@@ -30,7 +32,7 @@ out <- anndata::AnnData(
   X = dr,
   uns = list(
     dataset_id = ad1$uns[["dataset_id"]],
-    method_id = "baseline_pca"
+    method_id = "baseline_lmds"
   )
 )
 
