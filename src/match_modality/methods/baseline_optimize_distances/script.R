@@ -73,14 +73,14 @@ final_dr <- lmds::lmds(
   ndim = par$n_dims,
   distance_method = par$distance_method
 )
-knn_out <- FNN::get.knn(final_dr, k = 100)
-knn_index <- knn_out$nn.index
-knn_dist <- knn_out$nn.dist
+knn_out <- FNN::get.knn(final_dr, k = 99)
+knn_index <- cbind(seq_along(ord), knn_out$nn.index)
+knn_dist <- cbind(rep(0, length(ord)), knn_out$nn.dist)
 
 df <- tibble(
   i = as.vector(row(knn_index)),
   j = ord[as.vector(knn_index)],
-  x = as.vector(knn_dist)
+  x = max(knn_dist) * 2 - as.vector(knn_dist)
 )
 knn_mat <- Matrix::sparseMatrix(
   i = df$i,

@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_ga
+  name: baseline_optimize_distances
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing match modality methods against.
