@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +x 
+set -ex
 
 NXF_VER=21.04.1 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \

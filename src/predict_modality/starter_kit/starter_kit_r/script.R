@@ -12,7 +12,8 @@ par <- list(
   input_mod2 = "sample_data/pbmc_1k_protein_v3.mod2.h5ad",
   distance_method = "spearman",
   output = "output.h5ad",
-  n_pcs = 4L
+  n_pcs = 4L,
+  n_neighbors = 5L
 )
 ## VIASH END
 
@@ -32,7 +33,7 @@ dr <- lmds(
 # split up the train vs. test dimensionality reduction
 dr_train <- dr[ad1$obs$group == "train",]
 dr_test <- dr[ad1$obs$group == "test",]
-responses_train <- ad2$X[,i]
+responses_train <- ad2$X
 
 cat("Run KNN regression.\n")
 # For every column in mod2, predict mod2 for the test cells using the K nearest mod2 neighbors
@@ -63,3 +64,4 @@ out <- anndata::AnnData(
 
 cat("Writing predictions to file\n")
 out$write_h5ad(par$output, compression = "gzip")
+
