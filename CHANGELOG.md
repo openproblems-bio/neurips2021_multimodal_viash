@@ -42,3 +42,7 @@ Initial release of the OpenProblems / NeurIPS 2021 Multimodal viash evaluation p
 * API descriptions for task 3 censoring, method and metric components.
 * Dataset censoring component.
 * Dummy PCA method.
+
+## KNOWN ISSUES
+
+Unit tests are not working for now. We stopped updating them in order to implement more functionality quicker.
