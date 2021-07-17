@@ -11,7 +11,7 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: LouiseDck, orcid: "" }
   arguments:
-    - name: "--input_rna"
+    - name: "--input_mod1"
       type: "file"
       example: "dataset.h5ad"
       description: "The first modality of the input dataset to be censored"
