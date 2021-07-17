@@ -32,17 +32,20 @@ echo "######################################################################"
 echo "##            Generating submission files using nextflow            ##"
 echo "######################################################################"
 export NXF_VER=21.04.1
-# export AWS_PROFILE=op
 # nextflow drop openproblems-bio/neurips2021_multimodal_viash
 [ -f output ] && rm -r output/
+
+# use this if you downloaded the datasets to a local folder first
+# dataset_loc='/path/to/downloaddir/task1_datasets/**.output_mod[12].h5ad'
+dataset_loc='s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad'
+
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r release \
   -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
-  --datasets '/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/output/task1_datasets/**.output_mod[12].h5ad' \
+  --datasets "$dataset_loc" \
   --publishDir output/ \
   -resume
-
 
 echo ""
 echo "######################################################################"
