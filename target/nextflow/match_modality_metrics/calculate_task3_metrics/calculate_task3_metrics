@@ -379,6 +379,8 @@ area_under <- tibble(
   F1 = ifelse(auroc + aupr != 0, 2 * auroc * aupr / (auroc + aupr), 0)
 )
 
+# GENIE3bis::plot_curves(list(area_under = area_under, metrics = metrics))
+
 cat("Create output object\\n")
 values <- as.list(area_under)
 
