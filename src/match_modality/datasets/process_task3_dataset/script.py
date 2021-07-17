@@ -8,11 +8,11 @@ import scipy.sparse
 
 # VIASH START
 par = {
-    "input_rna": "pbmc_1k_protein_v3.output_rna.h5ad",
-    "input_mod2": "pbmc_1k_protein_v3.output_mod2.h5ad",
-    "output_mod1": "pbmc_1k_protein_v3.censored_rna.h5ad",
-    "output_mod2": "pbmc_1k_protein_v3.censored_mod2.h5ad",
-    "output_solution": "pbmc_1k_protein_v3.solution.h5ad",
+    "input_rna": "../../../../resources_test/common/pbmc_1k_protein_v3.output_rna.h5ad",
+    "input_mod2": "../../../../resources_test/common/pbmc_1k_protein_v3.output_mod2.h5ad",
+    "output_mod1": "../../../../resources_test/common/pbmc_1k_protein_v3.censored_rna.h5ad",
+    "output_mod2": "../../../../resources_test/common/pbmc_1k_protein_v3.censored_mod2.h5ad",
+    "output_solution": "../../../../resources_test/common/pbmc_1k_protein_v3.solution.h5ad",
 }
 # VIASH END
 
@@ -38,7 +38,6 @@ censor_rna = anndata.AnnData(
     X=rna.X,
     uns={
         "dataset_id": rna.uns["dataset_id"] + "_task3",
-        "modality": "rna",
         "paired": True,
     },
     dtype="float32",
@@ -48,7 +47,6 @@ censor_mod2 = anndata.AnnData(
     X=mod2.X,
     uns={
         "dataset_id": mod2.uns["dataset_id"] + "_task3",
-        "modality": mod2.uns["modality"],
         "paired": True,
     },
     dtype="float32",
@@ -59,10 +57,9 @@ censor_mod2.write_h5ad(filename=par["output_mod2"], compression="gzip")
 
 # CREATE SOLUTION PAIRING
 out_solution = anndata.AnnData(
-    shape=rna.shape,
+    X=pairings,
     uns={
         "dataset_id": rna.uns["dataset_id"] + "_task3",
-        "pairings": pairings,
     },
     dtype="float32"
 )
