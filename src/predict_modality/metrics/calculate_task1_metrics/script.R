@@ -6,33 +6,43 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
+# par <- list(
+#   input_solution = c("resources_test/task1/test_resource.solution.h5ad"),
+#   input_prediction = c("resources_test/task1/test_resource.prediction.h5ad"),
+#   output = "test_resource.scores.h5ad"
+# )
 par <- list(
-  input_solution = c("resources_test/task1/test_resource.solution.h5ad", "resources_test/task2/test_resource.solution.h5ad"),
-  input_prediction = c("resources_test/task1/test_resource.prediction.h5ad"),
+  input_solution = list.files("/tmp/neurips2021_work/d7/56ea677b97f0d7b03286e028749113", full.names = TRUE, recursive = TRUE, pattern = "*.output_solution.h5ad"),
+  input_prediction = list.files("/tmp/neurips2021_work/d7/56ea677b97f0d7b03286e028749113", full.names = TRUE, recursive = TRUE, pattern = "*.output.h5ad"),
   output = "test_resource.scores.h5ad"
 )
 ## VIASH END
 
+cat("Reading solution info\n")
 sol_info <- map_df(par$input_solution, function(path) {
   anndata::read_h5ad(path, backed = TRUE)$uns[c("dataset_id")] %>%
     as_tibble() %>% 
     mutate(sol_path = path)
 })
+cat("Reading prediction info\n")
 pred_info <- map_df(par$input_prediction, function(path) {
   anndata::read_h5ad(path, backed = TRUE)$uns[c("dataset_id", "method_id")] %>%
     as_tibble() %>% 
     mutate(pred_path = path)
 })
-meta_info <- full_join(
+meta_info <- left_join(
   sol_info %>% crossing(method_id = unique(pred_info$method_id)),
   pred_info,
   by = c("dataset_id", "method_id")
 )
 
+
 cat("Evaluating predictions\n")
 # list2env(dynutils::extract_row_to_list(meta_info, 1), .GlobalEnv)
 out <- pmap_df(meta_info, function(dataset_id, method_id, sol_path, pred_path) {
+  
   if (!is.na(pred_path)) {
+    cat("Reading ", basename(sol_path), " and ", basename(pred_path), "\n", sep = "")
     # Read solution h5ad
     adata_solution <- anndata::read_h5ad(sol_path)
 
@@ -79,7 +89,7 @@ out <- pmap_df(meta_info, function(dataset_id, method_id, sol_path, pred_path) {
 cat("Create output object\n")
 out <- anndata::AnnData(
   X = NULL,
-  shape = dim(adata_solution),
+  shape = list(1L, 1L),
   uns = list(
     dataset_id = out$dataset_id,
     method_id = out$method_id,
