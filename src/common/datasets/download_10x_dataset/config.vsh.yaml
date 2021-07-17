@@ -55,3 +55,4 @@ platforms:
         cran: 
           - anndata
   - type: nextflow
+    directive_max_forks: 1

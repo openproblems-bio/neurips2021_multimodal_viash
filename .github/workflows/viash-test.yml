@@ -1,15 +1,12 @@
 name: viash test CI
 
-on:
-  push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ '*' ]
+on: [push, pull_request]
 
 jobs:
   viash-test:
     runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    # if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: false # skip for now
 
     strategy:
       fail-fast: false

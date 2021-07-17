@@ -15,6 +15,7 @@ These AnnData files should both have the following attributes:
   * `ad.uns['dataset_id']`: The name of the dataset.
   * `ad.var['feature_types']`: The modality of this feature. For `output_rna`, this should be equal to `"GEX"`. For `output_mod2`, this should be equal to `"ATAC"` or `"ADT"` depending on the dataset.
   * `ad.obs['batch']`: A batch identifier (optional). If available, this can be used downstream to make train/test splits.
+  * `ad.obs['cell_type']`: A cell type (optional). If available, this dataset can be used for task 2, otherwise not.
   * `ad.obs_names`: Ids for the cells.
   * `ad.var_names`: Ids for the features.
 
