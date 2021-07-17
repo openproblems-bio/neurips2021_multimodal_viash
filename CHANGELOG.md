@@ -1,5 +1,9 @@
 # neurips2021_multimodal_viash 0.2.1
 
+## NEW FEATURES
+
+* Task 2: Dataset censoring component.
+
 ## BUG FIXES
 
 * Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.
