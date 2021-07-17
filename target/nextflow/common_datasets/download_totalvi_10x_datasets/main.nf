@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component prepare_task1_dataset")
+      println("[ERROR] option --${it.name} not specified in component download_totalvi_10x_datasets")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "prepare_task1_dataset." + it.name + "." + extOrName
+          ? "download_totalvi_10x_datasets." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -102,17 +102,17 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output_mod1 from the output Map
-process filterOutput_mod1 {
+// A process that filters out output_rna from the output Map
+process filterOutput_rna {
 
   input:
     tuple val(id), val(input), val(_params)
   output:
     tuple val(id), val(output), val(_params)
   when:
-    input.keySet().contains("output_mod1")
+    input.keySet().contains("output_rna")
   exec:
-    output = input["output_mod1"]
+    output = input["output_rna"]
 
 }
 
@@ -127,20 +127,6 @@ process filterOutput_mod2 {
     input.keySet().contains("output_mod2")
   exec:
     output = input["output_mod2"]
-
-}
-
-// A process that filters out output_solution from the output Map
-process filterOutput_solution {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_solution")
-  exec:
-    output = input["output_solution"]
 
 }
 
@@ -185,7 +171,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process prepare_task1_dataset_process {
+process download_totalvi_10x_datasets_process {
 
 
   tag "${id}"
@@ -193,7 +179,7 @@ process prepare_task1_dataset_process {
   cache 'deep'
   stageInMode "symlink"
   container "${container}"
-  publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
+
   input:
     tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
   output:
@@ -212,7 +198,7 @@ process prepare_task1_dataset_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.prepare_task1_dataset.tests.testScript} | tee $output
+      ./${params.download_totalvi_10x_datasets.tests.testScript} | tee $output
       """
     else
       """
@@ -225,14 +211,14 @@ process prepare_task1_dataset_process {
       """
 }
 
-workflow prepare_task1_dataset {
+workflow download_totalvi_10x_datasets {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "prepare_task1_dataset"
+  def key = "download_totalvi_10x_datasets"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -277,7 +263,7 @@ workflow prepare_task1_dataset {
       )
     }
 
-  result_ = prepare_task1_dataset_process(id_input_output_function_cli_params_) \
+  result_ = download_totalvi_10x_datasets_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -307,7 +293,7 @@ workflow prepare_task1_dataset {
 
 workflow {
   def id = params.id
-  def fname = "prepare_task1_dataset"
+  def fname = "download_totalvi_10x_datasets"
 
   def _params = params
 
@@ -319,28 +305,23 @@ workflow {
     }
   }
 
-  def inputFiles = params.prepare_task1_dataset
+  def inputFiles = params.download_totalvi_10x_datasets
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = prepare_task1_dataset(ch_)
+  result = download_totalvi_10x_datasets(ch_)
 
   result \
-    | filterOutput_mod1 \
-    | view{ "Output for output_mod1: " + it[1] }
+    | filterOutput_rna \
+    | view{ "Output for output_rna: " + it[1] }
 
 
   result \
     | filterOutput_mod2 \
     | view{ "Output for output_mod2: " + it[1] }
-
-
-  result \
-    | filterOutput_solution \
-    | view{ "Output for output_solution: " + it[1] }
 
 }
 
@@ -353,17 +334,17 @@ workflow test {
 
   main:
   params.test = true
-  params.prepare_task1_dataset.output = "prepare_task1_dataset.log"
+  params.download_totalvi_10x_datasets.output = "download_totalvi_10x_datasets.log"
 
   Channel.from(rootDir) \
-    | filter { params.prepare_task1_dataset.tests.isDefined } \
+    | filter { params.download_totalvi_10x_datasets.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.prepare_task1_dataset.tests.testResources.collect{ file( p + it ) },
+        params.download_totalvi_10x_datasets.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | prepare_task1_dataset
+    | download_totalvi_10x_datasets
 
   emit:
-  prepare_task1_dataset.out
+  download_totalvi_10x_datasets.out
 }

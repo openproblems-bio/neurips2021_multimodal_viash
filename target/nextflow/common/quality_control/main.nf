@@ -172,6 +172,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process quality_control_process {
+
+
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
