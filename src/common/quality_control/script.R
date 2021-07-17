@@ -10,12 +10,12 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/pbmc_1k_protein_v3.output_rna.h5ad",
-  input_mod2 = "resources_test/common/pbmc_1k_protein_v3.output_mod2.h5ad",
+  input_rna = "resources_test/common/test_resource.tmp.output_rna.h5ad",
+  input_mod2 = "resources_test/common/test_resource.tmp.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
-  min_counts_per_cell = 1000,
-  min_counts_per_gene = 1000
+  min_counts_per_cell = 10000,
+  min_counts_per_gene = 150000
 )
 ## VIASH END
 
@@ -40,8 +40,28 @@ var_mod2 <- var_mod2[fil_mod2_genes, , drop = FALSE]
 mat_rna <- as(mat_rna[fil_cells, fil_rna_genes, drop = FALSE], "CsparseMatrix")
 mat_mod2 <- as(mat_mod2[fil_cells, fil_mod2_genes, drop = FALSE], "CsparseMatrix")
 
+cat("Releveling factors\n")
 if (ncol(obs) == 0) {
   obs <- NULL
+} else {
+  # relevel factors
+  for (i in seq_len(ncol(obs))) {
+    if (is.factor(obs[[i]])) {
+      obs[[i]] <- forcats::fct_drop(obs[[i]])
+    }
+  }
+  # relevel factors
+  for (i in seq_len(ncol(var_rna))) {
+    if (is.factor(var_rna[[i]])) {
+      var_rna[[i]] <- forcats::fct_drop(var_rna[[i]])
+    }
+  }
+  # relevel factors
+  for (i in seq_len(ncol(var_mod2))) {
+    if (is.factor(var_mod2[[i]])) {
+      var_mod2[[i]] <- forcats::fct_drop(var_mod2[[i]])
+    }
+  }
 }
 
 cat("Writing mod1 data\n")

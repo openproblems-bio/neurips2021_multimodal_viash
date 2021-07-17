@@ -1,14 +1,31 @@
+# neurips2021_multimodal_viash 0.2.1
+
+## NEW FEATURES
+
+* Task 2: Added dataset censoring component.
+* Task 2: Added baseline methods PCA: LMDS and UMAP.
+* Task 2: Added metric: Random Forest OOB Percentage of correct predictions.
+* Task 3: Added baseline method: Distance optimization.
+* Task 3: Added metric: AUROC and AUPR score.
+
+## MINOR CHANGES
+
+* Common: Relevel factors in `.obs` and `.var` after QC filtering.
+* Task 1: Use `.obs["batch"]` to split up cells in `"train"` and `"test"`, if batch is available.
+
+## BUG FIXES
+
+* Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.
+
+
 # neurips2021_multimodal_viash 0.2.0
 
 ## NEW FEATURES
 
-### Common components
-* Dataset generator for 1 Azimuth dataset
-* Dataset generator for 2 TotalVI Spleen Lymph datasets.
-* Dataset generator for 3 TotalVI 10x datasets
-
-### Task 1 components
-* R starter Kit for task 1.
+* Common: Dataset generator for 1 Azimuth dataset
+* Common: Dataset generator for 2 TotalVI Spleen Lymph datasets.
+* Common: Dataset generator for 3 TotalVI 10x datasets
+* Task 1: R starter Kit for task 1.
 
 
 # neurips2021_multimodal_viash 0.1.0

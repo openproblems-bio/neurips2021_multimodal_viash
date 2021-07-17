@@ -74,21 +74,30 @@ with tarfile.open(tar_temp.name) as tar:
 adata = adatas[0]
 protein = adatas[1]
 
-
+###############################################################################
+###                            POST PROCESS                                 ###
+###############################################################################
+print("Reading metadata")
 meta = pd.read_csv(meta_temp.name, index_col = 0, compression = "gzip")
 meta_adt = meta.loc[:,~meta.columns.str.endswith('RNA')]
 meta_rna = meta.loc[:,~meta.columns.str.endswith('ADT')]
 
-adata.obs = protein.obs.join(meta_rna)
-protein.obs = protein.obs.join(meta_adt)
-
-adata.obs.rename(columns = {'Batch': 'batch'}, inplace = True)
+print("Setting additional output fields")
+# set obs
+adata.obs = adata.obs.join(meta_rna).rename(columns = {'Batch': 'batch'})
 adata.obs['cell_type'] = adata.obs['celltype.l2']
-protein.obs.rename(columns = {'Batch': 'batch'}, inplace = True)
+
+protein.obs = protein.obs.join(meta_adt).rename(columns = {'Batch': 'batch'})
 protein.obs['cell_type'] = protein.obs['celltype.l2']
 
+#  set var
 adata.var['feature_types'] = "GEX"
 protein.var['feature_types'] = "ADT"
+
+# set uns 
+uns = { "dataset_id" : par["id"] }
+adata.uns = uns
+protein.uns = uns
 
 
 ###############################################################################

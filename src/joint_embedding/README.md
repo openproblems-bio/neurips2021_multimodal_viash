@@ -18,6 +18,8 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
+  * `.obs['batch']`: Batch id (optional).
+  * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
@@ -30,6 +32,8 @@ The `output_mod1` and `output_mod2` files contain the full profile matrices wher
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
+  * `.obs['batch']`: Batch id (optional).
+  * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.

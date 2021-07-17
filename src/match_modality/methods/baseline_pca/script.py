@@ -7,9 +7,9 @@ from sklearn.neighbors import NearestNeighbors
 
 # VIASH START
 par = {
-    "input_mod1": "../../../../resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
-    "input_mod2": "../../../../resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
-    "output": "prediction.h5ad",
+    "input_mod1": "../../../../resources_test/common/pbmc_1k_protein_v3.censored_rna.h5ad",
+    "input_mod2": "../../../../resources_test/common/pbmc_1k_protein_v3.censored_mod2.h5ad",
+    "output": "../../../../resources_test/common/pbmc_1k_protein_v3.prediction.h5ad",
 }
 # VIASH END
 
@@ -50,9 +50,8 @@ pairing_matrix[indices_rna, [x[0] for x in indices]] = 1
 
 # Write out prediction
 prediction = anndata.AnnData(
-    shape=ad_rna.shape,
+    X=pairing_matrix,
     uns={
-        "prediction": pairing_matrix,
         "dataset_id": ad_rna.uns["dataset_id"],
     }
 )
