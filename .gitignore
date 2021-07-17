@@ -1,0 +1,18 @@
+# repo ignores
+output_bash
+
+# IDE ignores
+.Rhistory
+.Rproj.user
+*.Rproj
+.idea
+*.iml
+
+# viash ignores
+log.tsv
+log.txt
+
+# nextflow ignores
+.nextflow*
+work
+output

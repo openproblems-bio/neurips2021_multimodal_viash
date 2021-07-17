@@ -1,0 +1,49 @@
+functionality:
+  name: download_totalvi_10x_datasets
+  namespace: common_datasets
+  version: dev
+  description: Download CITE-seq data from totalVI paper (10x).
+  usage: |
+    download_totalvi_10x \
+      --id totalVI_10x_malt_10k \
+      --input "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/malt_10k_protein_v3.h5ad" \
+      --output_rna output_rna.h5ad \
+      --output_mod2 output_mod2.h5ad \
+  authors:
+    - name: Christopher Lance
+      email: clance.connect@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: xlancelottx }
+  arguments:
+    - name: --id
+      type: string
+      example: totalVI_10x_malt_10k
+      description: The id of the output dataset id
+      required: true
+    - name: --input
+      type: string
+      description: Location URL to an h5ad file from the totalVI reproducibility github.
+      required: true
+      example: "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad"
+    - name: "--output_rna"
+      type: file
+      example: output_rna.h5ad
+      required: true
+      direction: output
+      description: Output h5ad RNA file.
+    - name: "--output_mod2"
+      type: file
+      example: output_mod2.h5ad
+      required: true
+      direction: output
+      description: Output h5ad modality2 file (ATAC or Antibody capture).
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, scanpy ]
+  - type: nextflow

@@ -1,0 +1,58 @@
+functionality:
+  name: "download_10x_dataset"
+  namespace: "common_datasets"
+  version: "dev"
+  description: |
+    Download a CellRanger h5 file from the 10x genomics website (or someplace else).
+  usage: |
+    download_10x_dataset \
+      --id pbmc_1k_protein_v3 \
+      --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \
+      --output_rna output_rna.h5ad \
+      --output_mod2 output_mod2.h5ad
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--id"
+      type: "string"
+      example: "dyngen_dataset"
+      description: "The id of the output dataset id"
+      required: true
+    - name: "--input"
+      type: string
+      description: "Location URL to an h5 file from the 10x genomics website."
+      required: true
+      example: "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5"
+    - name: "--output_rna"
+      type: file
+      example: output_rna.h5ad
+      required: true
+      direction: output
+      description: Output h5ad RNA file.
+    - name: "--output_mod2"
+      type: file
+      example: output_mod2.h5ad
+      required: true
+      direction: output
+      description: Output h5ad modality2 file (ATAC or Antibody capture).
+  resources:
+    - type: r_script
+      path: script.R
+  tests:
+    - type: r_script
+      path: test.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: python
+        packages:
+          - scanpy
+      - type: r
+        cran: 
+          - anndata
+  - type: nextflow
+    directive_max_forks: 1
