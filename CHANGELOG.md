@@ -5,6 +5,7 @@
 * Task 2: Dataset censoring component.
 * Task 2: Baseline methods PCA, LMDS and UMAP.
 * Task 2: Random Forest OOB Percentage of correct predictions.
+* Task 3: Baseline method Optimize distances.
 
 ## MINOR CHANGES
 
