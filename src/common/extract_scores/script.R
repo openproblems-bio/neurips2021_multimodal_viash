@@ -26,7 +26,7 @@ scores <- map_df(par$input, function(inp) {
     )
   }
 
-  as_tibble(ad$uns[c("dataset_id", "method_id",  "metric_ids", "metric_values")])
+  as_tibble(ad$uns[c("dataset_id", "method_id", "metric_ids", "metric_values")])
 })
 
 write_tsv(scores %>% spread(metric_ids, metric_values), par$output)

@@ -14,12 +14,15 @@ functionality:
       type: "file"
       example: "prediction.h5ad"
       description: Prediction by a method.
+      required: true
+      multiple: true
     - name: "--input_solution"
       alternatives: ["-io"]
       type: "file"
       example: "solution.h5ad"
       description: Gold standard solution.
       required: true
+      multiple: true
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
@@ -37,4 +40,8 @@ functionality:
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup: 
+      - type: r
+        github: 
+          - dynverse/dynutils@devel
   - type: nextflow
