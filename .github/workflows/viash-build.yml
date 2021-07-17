@@ -38,7 +38,8 @@ jobs:
         mkdir check_results
 
         # run tests
-        bin/viash_test -m release -t main_build
+        # bin/viash_test -m release -t main_build
+        # don't run tests
 
     - name: Deploy to target branch
       uses: peaceiris/actions-gh-pages@v3
