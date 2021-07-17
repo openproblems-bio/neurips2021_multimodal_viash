@@ -18,7 +18,7 @@ par <- list(
 cat("Reading input data\n")
 ad1_raw <- anndata::read_h5ad(par$input_mod1)
 ad2_raw <- anndata::read_h5ad(par$input_mod2)
-new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_task1_")
+new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_task2")
 common_uns <- list(dataset_id = new_dataset_id)
 
 cat("Creating mod1 object\n")
