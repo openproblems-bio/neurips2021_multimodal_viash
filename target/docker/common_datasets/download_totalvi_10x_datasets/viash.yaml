@@ -775,5 +775,5 @@ info:
   output: "target/docker/common_datasets/download_totalvi_10x_datasets"
   executable: "target/docker/common_datasets/download_totalvi_10x_datasets/download_totalvi_10x_datasets"
   viash_version: "0.5.1"
-  git_commit: "2dd8ec59cf53237b94e21a9f944b565aafdbe0bb"
+  git_commit: "34b9d10b33e50221f583f6bcc2d7986033eb355c"
   git_remote: "git@github.com:openproblems-bio/neurips2021_multimodal_viash.git"

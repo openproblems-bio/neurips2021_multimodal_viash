@@ -799,5 +799,5 @@ info:
   output: "target/docker/predict_modality_methods/baseline_linearmodel"
   executable: "target/docker/predict_modality_methods/baseline_linearmodel/baseline_linearmodel"
   viash_version: "0.5.1"
-  git_commit: "2dd8ec59cf53237b94e21a9f944b565aafdbe0bb"
+  git_commit: "34b9d10b33e50221f583f6bcc2d7986033eb355c"
   git_remote: "git@github.com:openproblems-bio/neurips2021_multimodal_viash.git"

@@ -1,4 +1,4 @@
-# neurips2021_multimodal_viash 0.2.1
+# neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES
 
@@ -10,12 +10,14 @@
 
 ## MINOR CHANGES
 
+* Common: Extract scores component also outputs a summary tsv.
 * Common: Relevel factors in `.obs` and `.var` after QC filtering.
 * Task 1: Use `.obs["batch"]` to split up cells in `"train"` and `"test"`, if batch is available.
+* Task 1: Make the metric component be able to evaluate many outputs at once.
 
 ## BUG FIXES
 
-* Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.
+* Common: Don't forget to set dataset ids for Azimuth and TotalVI datasets.
 
 
 # neurips2021_multimodal_viash 0.2.0

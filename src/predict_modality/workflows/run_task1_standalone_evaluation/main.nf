@@ -9,24 +9,11 @@ params.datasets = "s3://neurips2021-multimodal-public-datasets/task1_datasets/**
 
 workflow {
   main:
-  // todo: update to path on s3
-  def solutions = 
-    Channel.fromPath(params.datasets)
-    | map { [ it.getParent().baseName, it ] } 
-    // | view { [ "Solution" ] + it }
-  def predictions = 
-    Channel.fromPath(params.predictions)
-    | map { [ it.getParent().baseName, it ] }
-    // | view { [ "Prediction" ] + it }
-
-  predictions.join(solutions)
-    // | view{ [ "Combined" ] + it }
-    | map { [ it[0], [ input_prediction: it[1], input_solution: it[2] ], params ] }
+  Channel.fromList([
+    [ "task1", [ input_prediction: file(params.predictions), input_solution: file(params.datasets) ], params ]
+  ])
+    // | view { [ "DEBUG", it[0], it[1] ] }
     | calculate_task1_metrics
-    // | view{ [ "METRIC", it[0], it[1] ] }
-    | map { it[1] }
-    | toList()
-    | map { [ "task1", it, params ] }
     | extract_scores
 }
 
