@@ -20,7 +20,7 @@ workflow {
     // | view { [ "Prediction" ] + it }
 
   predictions.join(solutions)
-    | view{ [ "Combined" ] + it }
+    // | view{ [ "Combined" ] + it }
     | map { [ it[0], [ input_prediction: it[1], input_solution: it[2] ], params ] }
     | calculate_task1_metrics
     // | view{ [ "METRIC", it[0], it[1] ] }

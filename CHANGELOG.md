@@ -1,14 +1,18 @@
+# neurips2021_multimodal_viash 0.2.1
+
+## BUG FIXES
+
+* Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.
+
+
 # neurips2021_multimodal_viash 0.2.0
 
 ## NEW FEATURES
 
-### Common components
-* Dataset generator for 1 Azimuth dataset
-* Dataset generator for 2 TotalVI Spleen Lymph datasets.
-* Dataset generator for 3 TotalVI 10x datasets
-
-### Task 1 components
-* R starter Kit for task 1.
+* Common: Dataset generator for 1 Azimuth dataset
+* Common: Dataset generator for 2 TotalVI Spleen Lymph datasets.
+* Common: Dataset generator for 3 TotalVI 10x datasets
+* Task 1: R starter Kit for task 1.
 
 
 # neurips2021_multimodal_viash 0.1.0

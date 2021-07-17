@@ -30,21 +30,24 @@ h5ad_temp.close()
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
 new_obs = adata.obs.rename(columns = {'cell_types': 'cell_type', 'batch_indices': 'batch'}, inplace = False)
+uns = { "dataset_id" : par["id"] }
 
 print("Extracting RNA counts")
 adata_rna = anndata.AnnData(
-    X = adata.X,
-    obs = new_obs,
-    var = adata.var,
+    X=adata.X,
+    obs=new_obs,
+    var=adata.var,
+    uns=uns
 )
 
 adata_rna.var['feature_types'] = "GEX"
 
 print("Extracting ADT counts")
 adata_adt = anndata.AnnData(
-    X = adata.obsm['protein_expression'],
-    obs = new_obs,
-    var = pd.DataFrame(index=list(adata.uns['protein_names']))
+    X=adata.obsm['protein_expression'],
+    obs=new_obs,
+    var=pd.DataFrame(index=list(adata.uns['protein_names'])),
+    uns=uns
 )
 adata_adt.var['feature_types'] = "ADT"
 
