@@ -1,4 +1,4 @@
-# neurips2021_multimodal_viash 0.2.1
+# neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES
 
