@@ -186,8 +186,6 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process prepare_task1_dataset_process {
-
-
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

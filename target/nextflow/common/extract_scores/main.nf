@@ -158,8 +158,6 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process extract_scores_process {
-
-
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

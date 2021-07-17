@@ -172,8 +172,6 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_azimuth_dataset_process {
-
-
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

@@ -158,8 +158,6 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process calculate_task1_metrics_process {
-
-
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
