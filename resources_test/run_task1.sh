@@ -7,8 +7,8 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 cd "$REPO_ROOT"
 
 target_dir=target/docker
-in_file=resources_test/common/pbmc_1k_protein_v3
-out_file=resources_test/task1/pbmc_1k_protein_v3
+in_file=resources_test/common/test_resource
+out_file=resources_test/task1/test_resource
 mkdir -p `dirname $out_file`
 
 $target_dir/predict_modality_datasets/prepare_task1_dataset/prepare_task1_dataset \
