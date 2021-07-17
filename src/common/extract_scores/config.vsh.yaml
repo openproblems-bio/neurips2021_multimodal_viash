@@ -21,6 +21,12 @@ functionality:
       example: "output.tsv"
       required: true
       description: "Output tsv"
+    - name: "--summary"
+      type: "file"
+      direction: "output"
+      example: "summary.tsv"
+      required: true
+      description: "Summary tsv"
   resources:
     - type: r_script
       path: script.R

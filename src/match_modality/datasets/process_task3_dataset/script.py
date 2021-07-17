@@ -18,6 +18,7 @@ par = {
 print("Reading input data")
 mod1 = anndata.read_h5ad(par["input_mod1"])
 mod2 = anndata.read_h5ad(par["input_mod2"])
+new_dataset_id = mod1.uns["dataset_id"] + "_task3"
 
 print("Shuffling rows of mod2")
 pairings = scipy.sparse.spdiags(np.full(mod1.shape[0], 1), diags=0, m=mod1.shape[0], n=mod2.shape[0], format="csr")
@@ -31,9 +32,7 @@ desired_var1_cols = [x for x in ["gene_ids", "feature_types"] if x in mod1.var.c
 out_mod1 = anndata.AnnData(
     X=mod1.X,
     var=mod1.var[desired_var1_cols],
-    uns={
-        "dataset_id": mod1.uns["dataset_id"] + "_task3"
-    },
+    uns={ "dataset_id": new_dataset_id },
     dtype="float32",
 )
 out_mod1.X.sort_indices()
@@ -42,18 +41,14 @@ desired_var2_cols = [x for x in ["gene_ids", "feature_types"] if x in mod2.var.c
 out_mod2 = anndata.AnnData(
     X=mod2.X[shuffle_cells, :],
     var=mod2.var[desired_var2_cols],
-    uns={
-        "dataset_id": mod2.uns["dataset_id"] + "_task3"
-    },
+    uns={ "dataset_id": new_dataset_id },
     dtype="float32",
 )
 out_mod2.X.sort_indices()
 
 out_solution = anndata.AnnData(
     X=pairings[:, shuffle_cells],
-    uns={
-        "dataset_id": mod1.uns["dataset_id"] + "_task3"
-    },
+    uns={ "dataset_id": new_dataset_id },
     dtype="float32"
 )
 

@@ -729,7 +729,7 @@ functionality:
       cat("Reading input data\\n")
       ad1_raw <- anndata::read_h5ad(par\$input_mod1)
       ad2_raw <- anndata::read_h5ad(par\$input_mod2)
-      new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_task1_")
+      new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_task2")
       common_uns <- list(dataset_id = new_dataset_id)
       
       cat("Creating mod1 object\\n")
@@ -808,5 +808,5 @@ info:
   output: "target/docker/joint_embedding_datasets/prepare_task2_dataset"
   executable: "target/docker/joint_embedding_datasets/prepare_task2_dataset/prepare_task2_dataset"
   viash_version: "0.5.1"
-  git_commit: "526ba81b7dc8dab5c2bb021bbe9bd353c247472e"
+  git_commit: "67044b48d6db8df340bf2731f6c3757057af2f05"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
