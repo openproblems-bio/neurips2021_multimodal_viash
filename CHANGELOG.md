@@ -15,7 +15,7 @@
 
 ## BUG FIXES
 
-* Common: Don't forget to set dataset id's for Azimuth and TotalVI datasets.
+* Common: Don't forget to set dataset ids for Azimuth and TotalVI datasets.
 
 
 # neurips2021_multimodal_viash 0.2.0
