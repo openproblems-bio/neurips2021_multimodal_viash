@@ -2,10 +2,11 @@
 
 ## NEW FEATURES
 
-* Task 2: Dataset censoring component.
-* Task 2: Baseline methods PCA, LMDS and UMAP.
-* Task 2: Random Forest OOB Percentage of correct predictions.
-* Task 3: Baseline method Optimize distances.
+* Task 2: Added dataset censoring component.
+* Task 2: Added baseline methods PCA: LMDS and UMAP.
+* Task 2: Added metric: Random Forest OOB Percentage of correct predictions.
+* Task 3: Added baseline method: Distance optimization.
+* Task 3: Added metric: AUROC and AUPR score.
 
 ## MINOR CHANGES
 

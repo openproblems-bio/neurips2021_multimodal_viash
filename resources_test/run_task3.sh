@@ -24,6 +24,10 @@ $target_dir/match_modality_methods/baseline_optimize_distances/baseline_optimize
   --input_mod1 ${out_file}.mod1.h5ad \
   --input_mod2 ${out_file}.mod2.h5ad \
   --output ${out_file}.prediction.h5ad \
-  --n_ga_iter 10 \
-  --n_ga_pop 20
+  --n_ga_iter 50 \
+  --n_ga_pop 200
 
+$target_dir/match_modality_metrics/calculate_task3_metrics/calculate_task3_metrics \
+  --input_prediction ${out_file}.prediction.h5ad \
+  --input_solution ${out_file}.solution.h5ad \
+  --output ${out_file}.scores.h5ad
