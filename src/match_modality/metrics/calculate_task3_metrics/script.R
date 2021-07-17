@@ -123,5 +123,8 @@ out <- anndata::AnnData(
   )
 )
 
+# should we also save the metrics object?
+# this would allow for plotting the auroc and aupr curves afterwards.
+
 cat("Write output to h5ad file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")
