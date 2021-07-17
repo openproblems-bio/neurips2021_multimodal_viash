@@ -14,10 +14,11 @@ bin/viash_test -m release -t $TAG
 bin/viash_push -m release -t $TAG
 
 # commit current code to release branch
+git add target
 git commit -m "Release $TAG"
 git push 
 
 # create new tag
-git tag -a "Release $TAG"
+git tag -a "$TAG" -m "Release $TAG"
 git push --tags
 
