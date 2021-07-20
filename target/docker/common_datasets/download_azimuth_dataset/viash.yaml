@@ -785,10 +785,12 @@ functionality:
       
       print("Setting additional output fields")
       # set obs
-      adata.obs = adata.obs.join(meta_rna).rename(columns = {'Batch': 'batch'})
+      adata.obs = adata.obs.join(meta_rna).rename(columns = {'Batch':'seq_batch'})
+      adata.obs = adata.obs.join(meta_rna).rename(columns = {'donor':'batch'})
       adata.obs['cell_type'] = adata.obs['celltype.l2']
       
-      protein.obs = protein.obs.join(meta_adt).rename(columns = {'Batch': 'batch'})
+      protein.obs = protein.obs.join(meta_adt).rename(columns = {'Batch':'seq_batch'})
+      protein.obs = protein.obs.join(meta_adt).rename(columns = {'donor':'batch'})
       protein.obs['cell_type'] = protein.obs['celltype.l2']
       
       #  set var
@@ -860,5 +862,5 @@ info:
   output: "target/docker/common_datasets/download_azimuth_dataset"
   executable: "target/docker/common_datasets/download_azimuth_dataset/download_azimuth_dataset"
   viash_version: "0.5.1"
-  git_commit: "67044b48d6db8df340bf2731f6c3757057af2f05"
+  git_commit: "a0ed7efd24e67623b1dd843a7dd5678985712694"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

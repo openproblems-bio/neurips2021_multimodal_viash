@@ -84,10 +84,12 @@ meta_rna = meta.loc[:,~meta.columns.str.endswith('ADT')]
 
 print("Setting additional output fields")
 # set obs
-adata.obs = adata.obs.join(meta_rna).rename(columns = {'Batch': 'batch'})
+adata.obs = adata.obs.join(meta_rna).rename(columns = {'Batch':'seq_batch'})
+adata.obs = adata.obs.join(meta_rna).rename(columns = {'donor':'batch'})
 adata.obs['cell_type'] = adata.obs['celltype.l2']
 
-protein.obs = protein.obs.join(meta_adt).rename(columns = {'Batch': 'batch'})
+protein.obs = protein.obs.join(meta_adt).rename(columns = {'Batch':'seq_batch'})
+protein.obs = protein.obs.join(meta_adt).rename(columns = {'donor':'batch'})
 protein.obs['cell_type'] = protein.obs['celltype.l2']
 
 #  set var
