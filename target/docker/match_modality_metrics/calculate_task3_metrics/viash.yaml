@@ -838,5 +838,5 @@ info:
   output: "target/docker/match_modality_metrics/calculate_task3_metrics"
   executable: "target/docker/match_modality_metrics/calculate_task3_metrics/calculate_task3_metrics"
   viash_version: "0.5.1"
-  git_commit: "c68e7bb2e69700172a110c873d39262a54bac43a"
+  git_commit: "86fe518d516656ff98dadab61d07a32a2b2eb453"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
