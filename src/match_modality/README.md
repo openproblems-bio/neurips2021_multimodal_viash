@@ -1,4 +1,4 @@
-# Task 3: Match Modality
+# Task 2: Match Modality
 
 Predicting which profiles from one modality resembles a profile from another.
 
