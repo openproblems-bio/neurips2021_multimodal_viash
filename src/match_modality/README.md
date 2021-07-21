@@ -4,7 +4,9 @@ Predicting which profiles from one modality resembles a profile from another.
 
 ## Summary
 
-While joint profiling of two modalities in the same single cell is now possible, most single-cell datasets that exist are of a single modality and indeed separate communities have formed around protein, open chromatin, and gene expression measurement. As explained above, these modalities complement each other in their description of cellular state. Yet, it is challenging to analyse uni-modal datasets together when they do not share observations (cells) or a common feature space (genes, proteins, or open chromatin peaks). If we could map observations to one another across modalities, it would be possible to treat separately profiled datasets in the same manner as new multi-modal sequencing data. Mapping these modalities to one another opens up the vast amount of uni-modal single-cell datasets generated in the past years to multi-modal data analysis methods.
+While joint profiling of two modalities in the same single cell is now possible, most single-cell datasets that exist measure only a single modality. These modalities complement each other in their description of cellular state. Yet, it is challenging to analyse uni-modal datasets together when they do not share observations (cells) or a common feature space (genes, proteins, or open chromatin peaks). If we could map observations to one another across modalities, it would be possible to treat separately profiled datasets in the same manner as new multi-modal sequencing data. Mapping these modalities to one another opens up the vast amount of uni-modal single-cell datasets generated in the past years to multi-modal data analysis methods.
+
+Unlike in task 1, where the goal was to predict _all_ values of RNA or ADT from ATAC or RNA (respectively) in each cell , the goal of this task is to identify the corresponence between single-cell profiles. Because we are only interested in matching observations, the competitors are encouraged to consider feature selection to identify the representation of the input most important for matching observations.
 
 ## Component API
 
