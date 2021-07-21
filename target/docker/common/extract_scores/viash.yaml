@@ -728,5 +728,5 @@ info:
   output: "target/docker/common/extract_scores"
   executable: "target/docker/common/extract_scores/extract_scores"
   viash_version: "0.5.1"
-  git_commit: "a0ed7efd24e67623b1dd843a7dd5678985712694"
+  git_commit: "552a8794ec3c6d5d2a4d99a20822bde41d478d62"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
