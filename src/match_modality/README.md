@@ -1,4 +1,4 @@
-# Task 3: Joint Embedding
+# Task 3: Match Modality
 
 Predicting which profiles from one modality resembles a profile from another.
 
