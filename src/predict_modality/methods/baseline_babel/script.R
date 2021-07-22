@@ -21,6 +21,7 @@ par <- list(
 babel_input_folder = 'export_train/' # location of temporary input files
 babel_location = '../babel/bin/'     # location of babel executables
 babel_model_output = 'babel_model'   # babel trained model location
+babel_pred_output = 'babel_output'
 
 cat("Reading h5ad files\n")
 ad1 <- anndata::read_h5ad(par$input_mod1)
@@ -73,18 +74,19 @@ write10xCounts( paste(babel_input_folder, 'test_input_babel.h5', sep=""), x_test
 use_condaenv("babel")
 
 # train
-babel_output_dir = paste(babel_model_output,"_",data_id, sep="")
+babel_output_dir = paste(babel_model_output,"_",par$data_id, sep="")
 
 babel_train_cmd = paste("python ",babel_location,"train_model.py --data ",babel_input_folder,"train_input_babel.h5 --outdir ",babel_output_dir,sep="")
 system(babel_train_cmd)
 # test
-babel_pred_cmd = paste("python ",babel_location,"predict_model.py --checkpoint ",babel_output_dir," --data ",babel_input_folder,"test_input_babel.h5 --outdir babel_output_",data_id, sep="")
+babel_prediction = paste(babel_pred_output,"_",par$data_id, sep="")
+babel_pred_cmd = paste("python ",babel_location,"predict_model.py --checkpoint ",babel_output_dir," --data ",babel_input_folder,"test_input_babel.h5 --outdir ",babel_prediction, sep="")
 system(babel_pred_cmd)
 
 # Babel generated a model folder with h5 files for the training set
 # After prediction of the test data, the final h5 file is in ./babel_model_output
-
-out = anndata::read_h5ad(paste(babel_output_dir, '/rna_atac_adata.h5ad', sep=""))
+# format [input:RNA, prediction: ATAC]
+out = anndata::read_h5ad(paste(babel_prediction, '/rna_atac_adata.h5ad', sep=""))
 
 # final h5 for prediction of test data
 # add meta.data for the output
