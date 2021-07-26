@@ -43,7 +43,8 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ DropletUtils,nbHelpers]
+        bioc: [ DropletUtils ]
+        github: [ barkasn/nbHelpers ]
   - type: nextflow
     directive_time: 10m
     directive_memory: "20 GB"
