@@ -10,24 +10,22 @@ cd "$REPO_ROOT"
 
 target_dir=target/docker
 in_file=resources_test/common/test_resource
-out_file=resources_test/task3/test_resource
+out_file=resources_test/joint_embedding/test_resource
 mkdir -p `dirname $out_file`
 
-$target_dir/match_modality_datasets/process_task3_dataset/process_task3_dataset \
+$target_dir/joint_embedding_datasets/censor_dataset/censor_dataset \
   --input_mod1 ${in_file}.output_rna.h5ad \
   --input_mod2 ${in_file}.output_mod2.h5ad \
   --output_mod1 ${out_file}.mod1.h5ad \
   --output_mod2 ${out_file}.mod2.h5ad \
   --output_solution ${out_file}.solution.h5ad
   
-$target_dir/match_modality_methods/baseline_optimize_distances/baseline_optimize_distances \
+$target_dir/joint_embedding_methods/baseline_lmds/baseline_lmds \
   --input_mod1 ${out_file}.mod1.h5ad \
   --input_mod2 ${out_file}.mod2.h5ad \
-  --output ${out_file}.prediction.h5ad \
-  --n_ga_iter 50 \
-  --n_ga_pop 200
-
-$target_dir/match_modality_metrics/calculate_task3_metrics/calculate_task3_metrics \
+  --output ${out_file}.prediction.h5ad
+  
+$target_dir/joint_embedding_metrics/calculate_rf_oob/calculate_rf_oob \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.solution.h5ad \
   --output ${out_file}.scores.h5ad

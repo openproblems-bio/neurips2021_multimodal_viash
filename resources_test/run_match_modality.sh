@@ -10,22 +10,24 @@ cd "$REPO_ROOT"
 
 target_dir=target/docker
 in_file=resources_test/common/test_resource
-out_file=resources_test/task1/test_resource
+out_file=resources_test/match_modality/test_resource
 mkdir -p `dirname $out_file`
 
-$target_dir/predict_modality_datasets/prepare_task1_dataset/prepare_task1_dataset \
+$target_dir/match_modality_datasets/censor_dataset/censor_dataset \
   --input_mod1 ${in_file}.output_rna.h5ad \
   --input_mod2 ${in_file}.output_mod2.h5ad \
   --output_mod1 ${out_file}.mod1.h5ad \
   --output_mod2 ${out_file}.mod2.h5ad \
   --output_solution ${out_file}.solution.h5ad
   
-$target_dir/predict_modality_methods/baseline_randomforest/baseline_randomforest \
+$target_dir/match_modality_methods/baseline_optimize_distances/baseline_optimize_distances \
   --input_mod1 ${out_file}.mod1.h5ad \
   --input_mod2 ${out_file}.mod2.h5ad \
-  --output ${out_file}.prediction.h5ad
-  
-$target_dir/predict_modality_metrics/calculate_task1_metrics/calculate_task1_metrics \
+  --output ${out_file}.prediction.h5ad \
+  --n_ga_iter 50 \
+  --n_ga_pop 200
+
+$target_dir/match_modality_metrics/calculate_auroc/calculate_auroc \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.solution.h5ad \
   --output ${out_file}.scores.h5ad
