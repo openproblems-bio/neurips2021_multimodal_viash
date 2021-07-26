@@ -752,5 +752,5 @@ info:
   output: "target/docker/joint_embedding_methods/baseline_pca"
   executable: "target/docker/joint_embedding_methods/baseline_pca/baseline_pca"
   viash_version: "0.5.1"
-  git_commit: "b1f4792fdec5199d1a77f961305758396f81d8a6"
+  git_commit: "c223c2c2dfbdedfc6f5410502c4454be49bd2656"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
