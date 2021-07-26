@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 0.4.0
+
+## NEW FEATURES
+
+* Task 1: Added method: Babel
+
 # neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES
