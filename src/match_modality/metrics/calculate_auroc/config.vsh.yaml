@@ -1,8 +1,8 @@
 functionality:
-  name: calculate_task3_metrics
+  name: calculate_auroc
   namespace: match_modality_metrics
   version: dev
-  description: Calculating basic metrics for task3.
+  description: Calculating basic metrics for task2.
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

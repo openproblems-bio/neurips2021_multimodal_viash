@@ -9,16 +9,16 @@ import scipy.sparse
 par = {
     "input_mod1": "resources_test/common/test_resource.output_rna.h5ad",
     "input_mod2": "resources_test/common/test_resource.output_mod2.h5ad",
-    "output_mod1": "resources_test/task3/test_resource.mod1.h5ad",
-    "output_mod2": "resources_test/task3/test_resource.mod2.h5ad",
-    "output_solution": "resources_test/task3/test_resource.solution.h5ad",
+    "output_mod1": "resources_test/match_modality/test_resource.mod1.h5ad",
+    "output_mod2": "resources_test/match_modality/test_resource.mod2.h5ad",
+    "output_solution": "resources_test/match_modality/test_resource.solution.h5ad",
 }
 # VIASH END
 
 print("Reading input data")
 mod1 = anndata.read_h5ad(par["input_mod1"])
 mod2 = anndata.read_h5ad(par["input_mod2"])
-new_dataset_id = mod1.uns["dataset_id"] + "_task3"
+new_dataset_id = mod1.uns["dataset_id"] + "_matchmod"
 
 print("Shuffling rows of mod2")
 pairings = scipy.sparse.spdiags(np.full(mod1.shape[0], 1), diags=0, m=mod1.shape[0], n=mod2.shape[0], format="csr")

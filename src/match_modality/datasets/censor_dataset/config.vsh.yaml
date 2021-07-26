@@ -1,5 +1,5 @@
 functionality:
-  name: process_task3_dataset
+  name: censor_dataset
   namespace: match_modality_datasets
   version: dev
   description: |

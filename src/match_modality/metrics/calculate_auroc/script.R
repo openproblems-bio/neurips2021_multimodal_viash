@@ -8,9 +8,9 @@ requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "resources_test/task3/test_resource.solution.h5ad",
-  input_prediction = "resources_test/task3/test_resource.prediction.h5ad",
-  output = "resources_test/task3/test_resource.scores.h5ad"
+  input_solution = "resources_test/match_modality/test_resource.solution.h5ad",
+  input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
+  output = "resources_test/match_modality/test_resource.scores.h5ad"
 )
 ## VIASH END
 
