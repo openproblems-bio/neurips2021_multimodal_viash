@@ -10,9 +10,9 @@ export NXF_VER=21.04.1
 
 bin/nextflow \
   run . \
-  -main-script src/predict_modality/workflows/run_task1_benchmark/main.nf \
+  -main-script src/predict_modality/workflows/run_baseline_benchmark/main.nf \
   -entry run_task1_benchmark \
   --publishDir output/ \
   -resume \
-  --prepare_task1_dataset__max_mod1_columns 1000 \
-  --prepare_task1_dataset__max_mod2_columns 1000
+  --censor_dataset__max_mod1_columns 1000 \
+  --censor_dataset__max_mod2_columns 1000

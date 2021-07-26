@@ -1,5 +1,5 @@
 functionality:
-  name: prepare_task1_dataset
+  name: censor_dataset
   namespace: predict_modality_datasets
   version: dev
   description: |

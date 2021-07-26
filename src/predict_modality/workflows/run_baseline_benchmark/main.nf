@@ -6,7 +6,7 @@ targetDir = "${params.rootDir}/target/nextflow"
 include  { baseline_randomforest }       from "$targetDir/predict_modality_methods/baseline_randomforest/main.nf"      params(params)
 include  { baseline_linearmodel }        from "$targetDir/predict_modality_methods/baseline_linearmodel/main.nf"       params(params)
 include  { baseline_knearestneighbors }  from "$targetDir/predict_modality_methods/baseline_knearestneighbors/main.nf" params(params)
-include  { calculate_task1_metrics }     from "$targetDir/predict_modality_metrics/calculate_task1_metrics/main.nf"    params(params)
+include  { calculate_cor }     from "$targetDir/predict_modality_metrics/calculate_cor/main.nf"    params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                               params(params)
 
 workflow run_task1_benchmark {
@@ -41,7 +41,7 @@ workflow run_task1_benchmark {
 
   rfOut.mix(lmOut, knnOut)
     // | view{ [ "BASELINE", it[0], it[1] ] }
-    | calculate_task1_metrics
+    | calculate_cor
     // | view{ [ "METRIC", it[0], it[1] ] }
     | map { it[1] }
     | toList()

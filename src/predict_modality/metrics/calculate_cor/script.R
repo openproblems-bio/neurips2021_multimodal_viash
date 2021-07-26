@@ -7,8 +7,8 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 # par <- list(
-#   input_solution = c("resources_test/task1/test_resource.solution.h5ad"),
-#   input_prediction = c("resources_test/task1/test_resource.prediction.h5ad"),
+#   input_solution = c("resources_test/predict_modality/test_resource.solution.h5ad"),
+#   input_prediction = c("resources_test/predict_modality/test_resource.prediction.h5ad"),
 #   output = "test_resource.scores.h5ad"
 # )
 par <- list(
@@ -67,11 +67,9 @@ out <- pmap_df(meta_info, function(dataset_id, method_id, sol_path, pred_path) {
     pv <- adata_prediction$X
 
     # Compute metrics
-    rmse <- sqrt(mean((tv - pv) ^ 2))
     score_pearson <- .5 - mean(diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))) / 2
     score_spearman <- .5 - mean(diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))) / 2
   } else {
-    rmse <- Inf
     score_pearson <- 0
     score_spearman <- 0
   }
@@ -79,9 +77,9 @@ out <- pmap_df(meta_info, function(dataset_id, method_id, sol_path, pred_path) {
   tibble(
     dataset_id,
     method_id,
-    metric_ids = c("rmse", "score_pearson", "score_spearman"),
-    metric_values = c(rmse, score_pearson, score_spearman),
-    metric_moreisbetter = c(FALSE, TRUE, TRUE)
+    metric_ids = c("score_pearson", "score_spearman"),
+    metric_values = c(score_pearson, score_spearman),
+    metric_moreisbetter = c(TRUE, TRUE)
   )
 })
 

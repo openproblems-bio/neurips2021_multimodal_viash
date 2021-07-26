@@ -3,7 +3,7 @@ requireNamespace("anndata", quietly = TRUE)
 
 cat("> Running censor component\n")
 out <- processx::run(
-  command = "./prepare_task1_dataset",
+  command = "./censor_dataset",
   args = c(
     "--input_rna", "resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
     "--input_mod2", "resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
