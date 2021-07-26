@@ -6,7 +6,7 @@ jobs:
   viash-test:
     runs-on: ${{ matrix.config.os }}
     # if: "!contains(github.event.head_commit.message, 'ci skip')"
-    if: false # skip for now
+    if: true # skip for now
 
     strategy:
       fail-fast: false
