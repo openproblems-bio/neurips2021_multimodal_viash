@@ -6,9 +6,9 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "resources_test/task2/test_resource.solution.h5ad",
-  input_prediction = "resources_test/task2/test_resource.prediction.h5ad",
-  output = "resources_test/task2/test_resource.scores.h5ad"
+  input_solution = "resources_test/joint_embedding/test_resource.solution.h5ad",
+  input_prediction = "resources_test/joint_embedding/test_resource.prediction.h5ad",
+  output = "resources_test/joint_embedding/test_resource.scores.h5ad"
 )
 ## VIASH END
 

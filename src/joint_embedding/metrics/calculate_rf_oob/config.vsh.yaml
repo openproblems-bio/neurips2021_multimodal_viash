@@ -1,8 +1,8 @@
 functionality:
-  name: calculate_task2_metrics
+  name: calculate_rf_oob
   namespace: joint_embedding_metrics
   version: dev
-  description: Calculating basic metrics for task2.
+  description: Calculating basic metrics for the joint embedding task.
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

@@ -6,8 +6,8 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/task2/test_resource.mod1.h5ad",
-  input_mod2 = "resources_test/task2/test_resource.mod2.h5ad",
+  input_mod1 = "resources_test/joint_embedding/test_resource.mod1.h5ad",
+  input_mod2 = "resources_test/joint_embedding/test_resource.mod2.h5ad",
   output = "output.h5ad",
   n_dims = 10L,
   n_neighbors = 15L,

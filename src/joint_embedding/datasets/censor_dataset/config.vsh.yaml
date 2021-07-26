@@ -1,5 +1,5 @@
 functionality:
-  name: prepare_task2_dataset
+  name: censor_dataset
   namespace: joint_embedding_datasets
   version: dev
   description: |
