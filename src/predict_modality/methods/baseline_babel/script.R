@@ -3,32 +3,42 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-library(DropletUtils)
-# #https://rdrr.io/github/barkasn/nbHelpers/man/transpose_dgRMatrix.html
-library(nbHelpers)
+requireNamespace("DropletUtils", quietly = TRUE)
+# for "https://rdrr.io/github/barkasn/nbHelpers/man/transpose_dgRMatrix.html"
+requireNamespace("nbHelpers", quietly = TRUE)
+
+# TODO: Add setup for babel
+# git clone https://github.com/wukevin/babel.git
+# conda env create -f environment.yml
 
 ## VIASH START
 par <- list(
-  input_mod1 = "output_censored_rna.h5ad",
-  input_mod2 = "output_censored_mod2.h5ad",
+  input_mod1 = "resources_test/task1/test_resource.mod1.h5ad",
+  input_mod2 = "resources_test/task1/test_resource.mod2.h5ad",
   output = "output_babel.h5ad",
-  data_id = "granulocyte_multiome10x",
-  mod1 = "RNA"
+  data_id = "granulocyte_multiome10x"
 )
 ## VIASH END
 
-# folder names for Babel
-babel_input_folder <- "export_train/" # location of temporary input files
 babel_location <- "../babel/bin/"     # location of babel executables
-babel_model_output <- "babel_model"   # babel trained model location
-babel_pred_output <- "babel_output"
+
+# folder names for Babel
+tmpdir <- tempfile(pattern = "babel_temp")
+dir.create(tmpdir)
+on.exit(unlink(tmpdir, recursive = TRUE))
+
+dir_data <- paste0(tmpdir, "data")     # location of input files
+dir_model <- paste0(tmpdir, "model")   # location of babel model
+dir_pred <- paste0(tmpdir, "pred") # location of predictions
 
 cat("Reading h5ad files\n")
 ad1 <- anndata::read_h5ad(par$input_mod1)
 ad2 <- anndata::read_h5ad(par$input_mod2)
 
-# specify feature type for each adata
-if (par$mod1 == "RNA") {
+mod1 <- unique(ad1$var$feature_types)
+
+# change feature types for each adata
+if (mod1 == "GEX") {
   ad1$var$feature_types <- "Gene Expression"
   ad2$var$feature_types <- "Peaks"
 } else {
@@ -37,7 +47,7 @@ if (par$mod1 == "RNA") {
 }
 
 # subset train and merge both categories (required by Babel)
-ad1_train <- ad1[ad1$obs$split == "train", , drop = FALSE]
+ad1_train <- ad1[ad1$obs$group == "train", ]
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(ad1_train$X, ad2$X)
@@ -45,14 +55,14 @@ multiome_matrix <- cbind(ad1_train$X, ad2$X)
 # generate multiome anndata object
 ad_babel <- anndata::AnnData(
   X = multiome_matrix,
-  var = rbind(ad1_train$var, ad2$var),
+  var = bind_rows(ad1_train$var, ad2$var),
   obs = ad1_train$obs
 )
 
 # write adata objects as 10x-CellRanger H5 format
 # train object: test + train splits
-write10xCounts(
-  paste0(babel_input_folder, "train_input_babel.h5"),
+DropletUtils::write10xCounts(
+  paste0(dir_data, "/train_input.h5"),
   t(ad_babel$X),
   gene.id = row.names(ad_babel$var),
   gene.symbol = row.names(ad_babel$var),
@@ -64,12 +74,11 @@ write10xCounts(
 )
 
 # test object:
-ad1_test <- ad1[ad1$obs$split == "test", , drop = FALSE]
-x_test <- transpose_dgRMatrix(ad1_test$X)
+ad1_test <- ad1[ad1$obs$split == "test", ]
 
-write10xCounts(
-  paste0(babel_input_folder, "test_input_babel.h5"),
-  x_test,
+DropletUtils::write10xCounts(
+  paste0(dir_data, "/test_input.h5"),
+  t(ad1_test$X),
   gene.id = row.names(ad1_test$var),
   gene.symbol = row.names(ad1_test$var),
   barcodes = row.names(ad1_test$obs),
@@ -85,15 +94,11 @@ write10xCounts(
 use_condaenv("babel")
 
 # train
-babel_output_dir <- paste0(babel_model_output, "_", par$data_id)
-
 babel_train_cmd <- paste0(
-  "python ",
-  babel_location, " ",
-  "train_model.py ",
-  "--data ", babel_input_folder, " ",
-  "train_input_babel.h5 ",
-  "--outdir ", babel_output_dir
+  "python ", babel_location, " train_model.py ",
+  "--data ", dir_data, " ",
+  "train_input.h5 ",
+  "--outdir ", dir_model
 )
 system(babel_train_cmd)
 # TODO: check whether process failed or not
@@ -101,13 +106,11 @@ system(babel_train_cmd)
 # test
 babel_prediction <- paste0(babel_pred_output, "_", par$data_id)
 babel_pred_cmd <- paste(
-  "python ",
-  babel_location, " ",
-  "predict_model.py ",
-  "--checkpoint ", babel_output_dir, " ",
-  "--data ", babel_input_folder, " ",
-  "test_input_babel.h5 ",
-  "--outdir ", babel_prediction
+  "python ", babel_location, " predict_model.py ",
+  "--checkpoint ", dir_model, " ",
+  "--data ", dir_data, " ",
+  "test_input.h5 ",
+  "--outdir ", dir_pred
 )
 system(babel_pred_cmd)
 # TODO: check whether process failed or not
@@ -115,7 +118,7 @@ system(babel_pred_cmd)
 # Babel generated a model folder with h5 files for the training set
 # After prediction of the test data, the final h5 file is in ./babel_model_output
 # format [input:RNA, prediction: ATAC]
-out <- anndata::read_h5ad(paste0(babel_prediction, "/rna_atac_adata.h5ad"))
+out <- anndata::read_h5ad(paste0(dir_pred, "/rna_atac_adata.h5ad"))
 
 # final h5 for prediction of test data
 # add meta.data for the output
