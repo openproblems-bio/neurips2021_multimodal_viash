@@ -1,4 +1,4 @@
-# Task 2: Joint Embedding
+# Task 3: Joint Embedding
 
 Learning of an embedded space that leverages the information of multiple modalities (e.g. for improved cell type annotation).
 
