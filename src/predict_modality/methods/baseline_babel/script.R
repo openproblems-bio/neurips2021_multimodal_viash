@@ -27,9 +27,10 @@ tmpdir <- tempfile(pattern = "babel_temp")
 dir.create(tmpdir)
 on.exit(unlink(tmpdir, recursive = TRUE))
 
-dir_data <- paste0(tmpdir, "data")     # location of input files
-dir_model <- paste0(tmpdir, "model")   # location of babel model
-dir_pred <- paste0(tmpdir, "pred") # location of predictions
+dir_data <- paste0(tmpdir, "/data")     # location of input files
+dir.create(dir_data)
+dir_model <- paste0(tmpdir, "/model")   # location of babel model
+dir_pred <- paste0(tmpdir, "/pred") # location of predictions
 
 cat("Reading h5ad files\n")
 ad1 <- anndata::read_h5ad(par$input_mod1)
@@ -95,8 +96,8 @@ use_condaenv("babel")
 
 # train
 babel_train_cmd <- paste0(
-  "python ", babel_location, " train_model.py ",
-  "--data ", dir_data, " ",
+  "python ", babel_location, "/train_model.py ",
+  "--data ", dir_data, "/",
   "train_input.h5 ",
   "--outdir ", dir_model
 )
@@ -104,11 +105,11 @@ system(babel_train_cmd)
 # TODO: check whether process failed or not
 
 # test
-babel_prediction <- paste0(babel_pred_output, "_", par$data_id)
-babel_pred_cmd <- paste(
-  "python ", babel_location, " predict_model.py ",
+
+babel_pred_cmd <- paste0(
+  "python ", babel_location, "/predict_model.py ",
   "--checkpoint ", dir_model, " ",
-  "--data ", dir_data, " ",
+  "--data ", dir_data, "/",
   "test_input.h5 ",
   "--outdir ", dir_pred
 )
