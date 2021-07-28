@@ -9,15 +9,9 @@ import scanpy as sc
 
 ## VIASH START
 par = {
-<<<<<<< HEAD
     "input_mod1": "resources_test_2/task2/spleen_lymph_111.mod1.h5ad",
     "input_mod2": "resources_test_2/task2/spleen_lymph_111.mod2.h5ad",
     "output_prediction": "resources_test_2/task2/spleen_lymph_111.predict.h5ad",
-=======
-    "input_mod1": "task2/spleen_lymph_111.mod1.h5ad",
-    "input_mod2": "task2/spleen_lymph_111.mod2.h5ad",
-    "output_prediction": "task2/spleen_lymph_111.mod1.h5ad",
->>>>>>> edae9d252a0fc73fb6e206eab486966d5c914e08
     "hvg_number": 4000,
     "max_epochs": 400,
     
@@ -64,11 +58,8 @@ scvi.data.setup_anndata(
 vae = scvi.model.TOTALVI(adata_mod1, latent_distribution="normal")
 
 
-<<<<<<< HEAD
 print('Train totalVI with', par['max_epochs'], 'epochs')
-=======
-print('train totalVI')
->>>>>>> edae9d252a0fc73fb6e206eab486966d5c914e08
+
 
 vae.train(max_epochs = par['max_epochs'])
 
@@ -89,9 +80,6 @@ adata_out.uns = uns
 
 adata_out.obs = adata_mod1.obs[['batch']]
 
-<<<<<<< HEAD
 adata_out.write_h5ad(par['output_prediction'], compression = "gzip")
-=======
-adata.write_h5ad(par['output_prediction'], compression = "gzip")
->>>>>>> edae9d252a0fc73fb6e206eab486966d5c914e08
+
 
