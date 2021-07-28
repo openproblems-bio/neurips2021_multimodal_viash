@@ -1,13 +1,18 @@
 cat("Loading dependencies\n")
-options(tidyverse.quiet = TRUE)
-library(tidyverse)
+
+# use the babel environment from the start,
+# as unloading and loading a previous conda environment
+# is not possible without restarting R.
+reticulate::use_condaenv("babel", required = TRUE)
+
 requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 requireNamespace("DropletUtils", quietly = TRUE)
-# for "https://rdrr.io/github/barkasn/nbHelpers/man/transpose_dgRMatrix.html"
-requireNamespace("nbHelpers", quietly = TRUE)
 
-# TODO: Add setup for babel
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+
+# TODO: Add setup for babel in viash config
 # git clone https://github.com/wukevin/babel.git
 # conda env create -f environment.yml
 
@@ -20,17 +25,7 @@ par <- list(
 )
 ## VIASH END
 
-babel_location <- "../babel/bin/"     # location of babel executables
-
-# folder names for Babel
-tmpdir <- tempfile(pattern = "babel_temp")
-dir.create(tmpdir)
-on.exit(unlink(tmpdir, recursive = TRUE))
-
-dir_data <- paste0(tmpdir, "/data")     # location of input files
-dir.create(dir_data)
-dir_model <- paste0(tmpdir, "/model")   # location of babel model
-dir_pred <- paste0(tmpdir, "/pred") # location of predictions
+babel_location <- "../babel/bin/"      # location of babel executables
 
 cat("Reading h5ad files\n")
 ad1 <- anndata::read_h5ad(par$input_mod1)
@@ -47,23 +42,35 @@ if (mod1 == "GEX") {
   ad2$var$feature_types <- "Gene Expression"
 }
 
-# subset train and merge both categories (required by Babel)
+# subset train and test
 ad1_train <- ad1[ad1$obs$group == "train", ]
+ad1_test <- ad1[ad1$obs$group == "test", ]
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(ad1_train$X, ad2$X)
 
-# generate multiome anndata object
+# generate multiome anndata objects
 ad_babel <- anndata::AnnData(
   X = multiome_matrix,
   var = bind_rows(ad1_train$var, ad2$var),
   obs = ad1_train$obs
 )
 
-# write adata objects as 10x-CellRanger H5 format
-# train object: test + train splits
+# setting up babel dirs
+tmpdir <- tempfile(pattern = "babel_temp", fileext = "/")
+cat("Setting up directories for babel at ", tmpdir, "\n", sep = "")
+dir.create(tmpdir)
+on.exit(unlink(tmpdir, recursive = TRUE))
+
+dir_data <- paste0(tmpdir, "data/")     # location of input files
+dir.create(dir_data)
+dir_model <- paste0(tmpdir, "model/")   # location of babel model
+dir_pred <- paste0(tmpdir, "pred/")     # location of predictions
+
+
+cat("Writing train dataset as 10x-CellRanger H5 format\n")
 DropletUtils::write10xCounts(
-  paste0(dir_data, "/train_input.h5"),
+  paste0(dir_data, "train_input.h5"),
   t(ad_babel$X),
   gene.id = row.names(ad_babel$var),
   gene.symbol = row.names(ad_babel$var),
@@ -74,11 +81,9 @@ DropletUtils::write10xCounts(
   gene.type = ad_babel$var$feature_types
 )
 
-# test object:
-ad1_test <- ad1[ad1$obs$split == "test", ]
-
+cat("Writing test dataset as 10x-CellRanger H5 format\n")
 DropletUtils::write10xCounts(
-  paste0(dir_data, "/test_input.h5"),
+  paste0(dir_data, "test_input.h5"),
   t(ad1_test$X),
   gene.id = row.names(ad1_test$var),
   gene.symbol = row.names(ad1_test$var),
@@ -89,12 +94,7 @@ DropletUtils::write10xCounts(
   gene.type = ad1_test$var$feature_types
 )
 
-# RUN Babel
-# switch conda environment as babel requires anndata v0.6
-# TODO: set up conda environment in viash config.
-use_condaenv("babel")
-
-# train
+cat("Babel: train model\n")
 babel_train_cmd <- paste0(
   "python ", babel_location, "/train_model.py ",
   "--data ", dir_data, "/",
@@ -104,8 +104,7 @@ babel_train_cmd <- paste0(
 system(babel_train_cmd)
 # TODO: check whether process failed or not
 
-# test
-
+cat("Babel: predict from model\n")
 babel_pred_cmd <- paste0(
   "python ", babel_location, "/predict_model.py ",
   "--checkpoint ", dir_model, " ",
@@ -116,6 +115,7 @@ babel_pred_cmd <- paste0(
 system(babel_pred_cmd)
 # TODO: check whether process failed or not
 
+cat("Read predictions\n")
 # Babel generated a model folder with h5 files for the training set
 # After prediction of the test data, the final h5 file is in ./babel_model_output
 # format [input:RNA, prediction: ATAC]
@@ -125,5 +125,5 @@ out <- anndata::read_h5ad(paste0(dir_pred, "/rna_atac_adata.h5ad"))
 # add meta.data for the output
 out$uns <- list(method_id = "babel")
 
-# write output file
+cat("Write predictions to file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")
