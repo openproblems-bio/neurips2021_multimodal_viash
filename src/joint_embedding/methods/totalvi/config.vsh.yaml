@@ -19,7 +19,7 @@ functionality:
       example: "dataset_mod2.h5ad"
       description: Censored dataset.
       required: true
-    - name: "--output"
+    - name: "--output_prediction"
       type: "file"
       direction: "output"
       example: "output.h5ad"
@@ -36,12 +36,15 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: ../../../../resources_test_2
 platforms:
   - type: docker
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, scanpy, scipy, scikit-misc, scvi-tools]
-      #- type: nextflow
+        pip: [ anndata, scanpy, scikit-misc, scipy, scikit-learn, scvi-tools]
 
 
