@@ -7,8 +7,8 @@ requireNamespace("ranger", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod1.h5ad",
-  input_mod2 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.prepare_task1_dataset.output_mod2.h5ad",
+  input_mod1 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.censor_dataset.output_mod1.h5ad",
+  input_mod2 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.censor_dataset.output_mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L
 )
