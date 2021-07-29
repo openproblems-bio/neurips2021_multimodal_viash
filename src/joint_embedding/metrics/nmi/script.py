@@ -34,7 +34,6 @@ print("Read solution anndata")
 adata_solution = sc.read(input_solution)
 
 print('Transfer obs annotations')
-# TODO: proper merge of obs via obs_names
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 
