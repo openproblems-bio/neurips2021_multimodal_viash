@@ -11,13 +11,13 @@ par = dict(
 print('Importing libraries')
 import pprint
 import scanpy as sc
-from scIB.metrics import silhouette
+from scIB.metrics import silhouette_batch
 
 if par['debug']:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'asw_label'
+METRIC = 'asw_batch'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
@@ -39,7 +39,14 @@ adata.obsm['X_emb'] = adata.X
 sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Compute score')
-score = silhouette(adata, group_key='cell_type', embed='X_emb')
+_, sil_clus = silhouette_batch(
+    adata,
+    batch_key='batch',
+    group_key='cell_type',
+    embed='X_emb',
+    verbose=False
+)
+score = sil_clus['silhouette_score'].mean()
 
 with open(output, 'w') as file:
     header = ['dataset', 'output_type', 'metric', 'value']
