@@ -1,7 +1,8 @@
 ## VIASH START
 par = dict(
     input_prediction="resources_test/task2/test_resource.prediction.h5ad",
-    output="resources_test/task2/test_resource.ari.h5ad",
+    input_solution="resources_test/task2/test_resource.solution.h5ad",
+    output="resources_test/task2/test_resource.ari.tsv",
     debug=True
 )
 
@@ -26,16 +27,16 @@ input_solution = par['input_solution']
 output = par['output']
 
 print("Read prediction anndata")
-adata_prediction = sc.read(input_prediction)
+adata = sc.read(input_prediction)
+dataset_id = adata.uns['dataset_id']
 
 print("Read solution anndata")
 adata_solution = sc.read(input_solution)
 
-print('Merge batch')
-adata = adata_prediction
+print('Transfer obs annotations')
 # TODO: proper merge of obs via obs_names
-adata.obs['batch'] = adata_solution.obs['batch']
-adata.obs['celltype'] = adata_solution.obs['celltype']
+adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
+adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
@@ -55,18 +56,24 @@ print('Compute score')
 score = ari(adata, group1='cluster', group2='cell_type')
 
 # store adata with metrics
-print("Create output object")
-out = anndata.AnnData(
-    X=None,
-    shape=adata.shape,
-    uns=OrderedDict(
-        dataset_id=adata.uns['dataset_id'],
-        method_id=adata.uns['method_id'],
-        metric_ids=[METRIC],
-        metric_values=[score],
-        metric_moreisbetter=[True]
-    )
-)
+# print("Create output object")
+# out = anndata.AnnData(
+#     X=None,
+#     shape=adata.shape,
+#     uns=OrderedDict(
+#         dataset_id=adata.uns['dataset_id'],
+#         method_id=adata.uns['method_id'],
+#         metric_ids=[METRIC],
+#         metric_values=[score],
+#         metric_moreisbetter=[True]
+#     )
+# )
+#
+# print("Write output to h5ad file")
+# out.write(output, compression='gzip')
 
-print("Write output to h5ad file")
-out.write(output, compression='gzip')
+with open(output, 'w') as file:
+    header = ['dataset', 'output_type', 'metric', 'value']
+    entry = [dataset_id, OUTPUT_TYPE, METRIC, score]
+    file.write('\t'.join(header) + '\n')
+    file.write('\t'.join([str(x) for x in entry]))
