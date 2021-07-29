@@ -11,8 +11,8 @@ metric_file = metric + '.tsv'
 print(">> Running script")
 out = subprocess.check_output([
     "./" + metric,
-    "--input_prediction", 'resources_test/task2/test_resource.prediction.h5ad',
-    "--input_solution", 'resources_test/task2/test_resource.solution.h5ad',
+    "--input_prediction", 'resources_test/joint_embedding/test_resource.prediction.h5ad',
+    "--input_solution", 'resources_test/joint_embedding/test_resource.solution.h5ad',
     "--output", metric_file
 ]).decode("utf-8")
 
@@ -26,6 +26,6 @@ score = result.loc[0, 'value']
 print(score)
 
 assert 0 < score < 1
-assert score == 0.9341303589103552
+assert score == 0.336331837241985
 
 print(">> All tests passed successfully")
