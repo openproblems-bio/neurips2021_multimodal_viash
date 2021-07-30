@@ -3,36 +3,43 @@ functionality:
   namespace: joint_embedding_methods
   version: dev
   description: totalVI for comparing joint embedding methods against.
+  usage: |
+    totalvi \
+      --input_mod1 spleen_lymph_111.mod1.h5ad \
+      --input_mod2 spleen_lymph_111.mod2.h5ad \
+      --output_prediction spleen_lymph_111.predict.h5ad \
+      --hvg_number 4000 \
+      --max_epochs 400
   authors:
     - name: Christopher Lance
       email: clance.connect@gmail.com
       roles: [ author, maintainer ]
       props: { github: xlancelottx }
   arguments:
-    - name: "--input_mod1"
-      type: "file"
-      example: "dataset_mod1.h5ad"
+    - name: --input_mod1
+      type: file
+      example: dataset_mod1.h5ad
       description: Censored dataset.
       required: true
-    - name: "--input_mod2"
-      type: "file"
-      example: "dataset_mod2.h5ad"
+    - name: --input_mod2
+      type: file
+      example: dataset_mod2.h5ad
       description: Censored dataset.
       required: true
-    - name: "--output_prediction"
-      type: "file"
-      direction: "output"
-      example: "output.h5ad"
+    - name: --output_prediction
+      type: file
+      direction: output
+      example: output.h5ad
       description: Dataset containing integrated embedding
       required: true
-    - name: "--hvg_number"
-      type: "integer"
+    - name: --hvg_number
+      type: integer
       default: 4000
       description: Number of HVG to include in totalVI
-    - name: "--max_epochs"
-      type: "integer"
+    - name: --max_epochs
+      type: integer
       default: 400
-      description: Number of HVG to include in totalVI
+      description: Number of max epochs to run totalVI
   resources:
     - type: python_script
       path: script.py

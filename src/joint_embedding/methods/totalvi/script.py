@@ -13,7 +13,7 @@ par = {
     "input_mod2": "resources_test_2/task2/spleen_lymph_111.mod2.h5ad",
     "output_prediction": "resources_test_2/task2/spleen_lymph_111.predict.h5ad",
     "hvg_number": 4000,
-    "max_epochs": 400,
+    "max_epochs": 20,
     
 }
 ## VIASH END
@@ -28,7 +28,7 @@ adata_mod1 = sc.read_h5ad(par['input_mod1'])
 adata_mod2 = sc.read_h5ad(par['input_mod2'])
 
 
-adata_mod1.obsm['protein_expression'] = adata_mod2.X
+adata_mod1.obsm['protein_expression'] = adata_mod2.X.toarray()
 
 
 print('Select highly variable genes')
