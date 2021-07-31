@@ -17,7 +17,7 @@ from utils import *
 par = {
     "input_prediction": "/resources_test/joint_embedding/test_resource.prediction.h5ad",
     "input_solution": "/resources_test/joint_embedding/test_resource.solution.h5ad",
-    "output_metrics": "/resources_test/joint_embedding/test_resource.scores_totalvi.h5ad",
+    "output": "/resources_test/joint_embedding/test_resource.scores_totalvi.h5ad",
 }
 # VIASH END
 
@@ -49,4 +49,4 @@ uns = {"dataset_id": predict_adata.uns["dataset_id"],
 
 adata_out.uns = uns
 
-adata_out.write_h5ad(par['output_metrics'], compression = "gzip")
+adata_out.write_h5ad(par['output'], compression = "gzip")
