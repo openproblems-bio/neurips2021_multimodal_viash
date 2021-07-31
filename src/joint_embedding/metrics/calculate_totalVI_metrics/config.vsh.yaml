@@ -9,23 +9,26 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: atchen}
   arguments:
-    - name: "--input_mod1"
-      alternatives: ["-i1"]
+    - name: "--input_prediction"
+      alternatives: ["-ip"]
       type: "file"
-      example: "dataset.h5ad"
-      description: First datset
-    - name: "--input_mod2"
-      alternatives: ["-i2"]
-      type: "file"
-      example: "dataset.h5ad"
-      description: Second dataset
+      example: "prediction.h5ad"
+      description: Prediction by a method
       required: true
+      multiple: true
+    - name: "--input_solution"
+      alternatives: ["-io"]
+      type: "file"
+      example: "solution.h5ad"
+      description: Gold standard solution
+      required: true
+      multiple: true
     - name: "--output"
       alternatives: ["-o"]
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: totalvi metrics
+      description: totalvi metrics calculated by comparing prediction to gold standard solution
       required: true
   resources:
     - type: python_script
