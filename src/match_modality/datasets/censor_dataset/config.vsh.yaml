@@ -52,3 +52,5 @@ platforms:
     setup: 
       - type: python
         packages: [ anndata, pandas, numpy ]
+  - type: nextflow
+    publish: true
