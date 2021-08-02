@@ -15,7 +15,9 @@
 
 ## NEW FEATURES
 
+* Task 1: Added dummy method: zeros.
 * Task 2: Added dataset censoring component.
+* Task 2: Added dummy methods: zeros and constant.
 * Task 2: Added baseline methods PCA: LMDS and UMAP.
 * Task 2: Added metric: Random Forest OOB Percentage of correct predictions.
 * Task 3: Added baseline method: Distance optimization.

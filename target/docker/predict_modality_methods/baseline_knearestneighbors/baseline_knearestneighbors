@@ -161,7 +161,7 @@ function ViashHelp {
   echo "   --output"
   echo "        type: file, required parameter, output"
   echo "        example: output.h5ad"
-  echo "        Dataset with prodicted values for modality2."
+  echo "        Dataset with predicted values for modality2."
   echo ""
 
 
