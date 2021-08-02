@@ -4,6 +4,7 @@
 
 * Task 1: Added Babel method.
 * Task 2: Added NextFlow pipeline for censoring common datasets.
+* Task 3: Added TotalVI method.
 * Task 3: Added NextFlow pipeline for censoring common datasets.
 
 ## MINOR CHANGES
