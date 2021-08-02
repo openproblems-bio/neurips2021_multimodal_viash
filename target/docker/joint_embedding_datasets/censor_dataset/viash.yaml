@@ -808,5 +808,5 @@ info:
   output: "target/docker/joint_embedding_datasets/censor_dataset"
   executable: "target/docker/joint_embedding_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.1"
-  git_commit: "6c7d327e15bb84b7f5930ee26189d19a5b58cb44"
+  git_commit: "505e2e46e8b950d5f64e8bbfe91546eb5793719a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
