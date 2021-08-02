@@ -63,8 +63,8 @@ This component expects two inputs, `--input_mod1` and `--input_mod2`. They both 
 
 The dimensions of these two h5ad files are different;
 
-  * `output_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
-  * `output_mod2` contains only modality 2 data of the `'train'` cells.
+  * `input_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
+  * `input_mod2` contains only modality 2 data of the `'train'` cells.
 
 #### Output data formats
 
