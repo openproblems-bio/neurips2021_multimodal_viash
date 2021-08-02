@@ -753,5 +753,5 @@ info:
   output: "target/docker/joint_embedding_metrics/calculate_rf_oob"
   executable: "target/docker/joint_embedding_metrics/calculate_rf_oob/calculate_rf_oob"
   viash_version: "0.5.1"
-  git_commit: "e6a19c315cce7f598d423b6b75bb825d7e1020ba"
+  git_commit: "144698fc523a07fe5fae246e49cad5c5f63e6b68"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
