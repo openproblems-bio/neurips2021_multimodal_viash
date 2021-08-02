@@ -1,8 +1,8 @@
 functionality:
-  name: baseline_random
-  namespace: match_modality_methods
+  name: dummy_zeros
+  namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality matching methods against. Outputs a matrix of constant value (equal pairing probability)
+  description: A baseline method for comparing modality prediction methods against. Predicts mean training value for mod2 for all test points.
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com
@@ -10,22 +10,19 @@ functionality:
       props: { github: atong01 }
   arguments:
     - name: "--input_mod1"
-      alternatives: ["-i1"]
       type: "file"
-      example: "dataset.h5ad"
-      description: First modality of censored dataset.
+      example: "dataset_mod1.h5ad"
+      description: Censored dataset.
       required: true
     - name: "--input_mod2"
-      alternatives: ["-i2"]
       type: "file"
-      example: "dataset.h5ad"
-      description: Second modality of censored dataset.
+      example: "dataset_mod2.h5ad"
+      description: Censored dataset.
       required: true
     - name: "--output"
-      alternatives: ["-o"]
       type: "file"
       direction: "output"
-      example: "output_rna.csv"
+      example: "output.h5ad"
       description: Dataset with predicted values for modality2.
       required: true
   resources:
@@ -36,4 +33,5 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, scipy, sklearn ]
+        pip: [ anndata, scipy ]
+  - type: nextflow
