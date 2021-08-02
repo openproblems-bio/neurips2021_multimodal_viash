@@ -6,7 +6,7 @@ import scanpy as sc
 par = {
     "input_mod1": "output/joint_embedding/totalvi_spleen_lymph_111/totalvi_spleen_lymph_111.censor_dataset.output_mod1.h5ad",
     "input_mod2": "output/joint_embedding/totalvi_spleen_lymph_111/totalvi_spleen_lymph_111.censor_dataset.output_mod2.h5ad",
-    "output_prediction": "tmp/output_prediction.h5ad",
+    "output": "tmp/output_prediction.h5ad",
     "hvg_number": 4000,
     "max_epochs": 20
 }
@@ -46,4 +46,4 @@ adata_out = anndata.AnnData(
         "method_id": "totalvi"
     }
 )
-adata_out.write_h5ad(par['output_prediction'], compression = "gzip")
+adata_out.write_h5ad(par['output'], compression = "gzip")

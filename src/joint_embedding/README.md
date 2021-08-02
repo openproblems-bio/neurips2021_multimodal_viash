@@ -62,7 +62,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, contai
 
 #### Output data formats
 
-This component should output *one* h5ad file, `--output_prediction`, containing an embedding of the cells.
+This component should output *one* h5ad file, `--output`, containing an embedding of the cells.
 
   * `.X`: The embedding matrix of the cells.
   * `.uns['dataset_id']`: The name of the dataset.

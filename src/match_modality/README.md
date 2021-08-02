@@ -55,7 +55,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, for wh
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output_prediction`, containing the predicted pairings of the two input datasets.
+This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
   * `.X`: Sparse pairing matrix.
   * `.uns['dataset_id']`: The name of the dataset.
