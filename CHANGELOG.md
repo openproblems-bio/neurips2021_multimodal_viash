@@ -3,6 +3,12 @@
 ## NEW FEATURES
 
 * Task 1: Added Babel method.
+* Task 2: Added NextFlow pipeline for censoring common datasets.
+* Task 3: Added NextFlow pipeline for censoring common datasets.
+
+## MINOR CHANGES
+
+* Renamed location of datasets produced by NextFlow pipelines.
 
 # neurips2021_multimodal_viash 0.3.0
 

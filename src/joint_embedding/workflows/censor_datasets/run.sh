@@ -10,7 +10,7 @@ export NXF_VER=21.04.1
 
 bin/nextflow \
   run . \
-  -main-script src/predict_modality/workflows/censor_datasets/main.nf \
+  -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
   --datasets 'output/common/**.h5ad' \
-  --publishDir output/predict_modality/ \
+  --publishDir output/joint_embedding/ \
   -resume
