@@ -711,7 +711,7 @@ ad1_raw <- anndata::read_h5ad(par\$input_mod1)
 ad2_raw <- anndata::read_h5ad(par\$input_mod2)
 ad1_mod <- unique(ad1_raw\$var[["feature_types"]])
 ad2_mod <- unique(ad2_raw\$var[["feature_types"]])
-new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_predmod_", tolower(ad1_mod), "2", tolower(ad2_mod))
+new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
 cat("Determining train/test group\\n")

@@ -2,22 +2,40 @@
 
 ## NEW FEATURES
 
-* Task 1: Added Babel method.
-* Task 2: Added NextFlow pipeline for censoring common datasets.
-* Task 3: Added TotalVI method.
-* Task 3: Added NextFlow pipeline for censoring common datasets.
+Common:
+* Prediction gatekeeper: Add a gatekeeper component for method predictions.
+
+Task 1, Predict modality:
+
+* Method: Added Babel. It takes quite long to run and is expected to crash on small datasets or RNA+ADT datasets.
+* Dummy method: Added a method for predicting all zeros.
+
+Task 2, Match Modality:
+
+* Dummy methods: Added methods for predicting all zeros or all ones.
+* NextFlow: Added pipeline for censoring common datasets.
+
+Task 3, Joint Embedding:
+
+* Method: Added TotalVI.
+* NextFlow: Added pipeline for censoring common datasets.
+* Metric: Added scIB metrics: ARI, ASW batch, ASW label, NMI.
 
 ## MINOR CHANGES
 
-* Renamed location of datasets produced by NextFlow pipelines.
+* Renamed location of datasets produced by NextFlow pipelines:
+  - `output/common_datasets` became `output/public_datasets/common`.
+  - `output/task1` became `output/public_datasets/predict_modality`.
+  - `output/task2` became `output/public_datasets/match_modality`.
+  - `output/task3` became `output/public_datasets/joint_embedding`.
+
+* Task 1 correlation metric: Reverted allowing multiple input files at once.
 
 # neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES
 
-* Task 1: Added dummy method: zeros.
 * Task 2: Added dataset censoring component.
-* Task 2: Added dummy methods: zeros and constant.
 * Task 2: Added baseline methods PCA: LMDS and UMAP.
 * Task 2: Added metric: Random Forest OOB Percentage of correct predictions.
 * Task 3: Added baseline method: Distance optimization.

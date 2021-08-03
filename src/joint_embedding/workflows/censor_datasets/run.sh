@@ -11,6 +11,6 @@ export NXF_VER=21.04.1
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-  --datasets 'output/common/**.h5ad' \
-  --publishDir output/joint_embedding/ \
+  --datasets 'output/public_datasets/common/**.h5ad' \
+  --publishDir output/public_datasets/joint_embedding/ \
   -resume

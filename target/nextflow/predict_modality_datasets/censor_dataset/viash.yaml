@@ -457,7 +457,7 @@ functionality:
       ad2_raw <- anndata::read_h5ad(par\$input_mod2)
       ad1_mod <- unique(ad1_raw\$var[["feature_types"]])
       ad2_mod <- unique(ad2_raw\$var[["feature_types"]])
-      new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_predmod_", tolower(ad1_mod), "2", tolower(ad2_mod))
+      new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
       common_uns <- list(dataset_id = new_dataset_id)
       
       cat("Determining train/test group\\n")
@@ -1078,5 +1078,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.1"
-  git_commit: "c8484cde21f408638ff4214037f4b7050b26832e"
+  git_commit: "73902d0a6b6fb34ab5f79d7888a22929c7df202e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

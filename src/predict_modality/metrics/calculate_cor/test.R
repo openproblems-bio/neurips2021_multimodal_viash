@@ -2,32 +2,32 @@ library(testthat, quietly = TRUE)
 requireNamespace("anndata", quietly = TRUE)
 
 par <- list(
-  input_solution = "resources_test/predict_modality/pbmc_1k_protein_v3.solution.h5ad",
-  input_prediction = "resources_test/predict_modality/pbmc_1k_protein_v3.prediction.h5ad",
-  output = "resources_test/predict_modality/pbmc_1k_protein_v3.scores.h5ad"
+  input_solution = c("resources_test/predict_modality/test_resource.solution.h5ad"),
+  input_prediction = c("resources_test/predict_modality/test_resource.prediction.h5ad"),
+  output = "test_resource.scores.h5ad"
 )
 
 cat("> Running metrics\n")
 out <- processx::run(
   command = "./calculate_cor",
   args = c(
-    "--input_solution", "resources_test/predict_modality/pbmc_1k_protein_v3.solution.h5ad",
-    "--input_prediction", "resources_test/predict_modality/pbmc_1k_protein_v3.prediction.h5ad",
-    "--output", "output.h5ad"
+    "--input_solution", par$input_solution,
+    "--input_prediction", par$input_prediction,
+    "--output", par$output
   ),
   stderr_to_stdout = TRUE
 )
 
 cat("> Checking whether output files were created\n")
-expect_true(file.exists("output.h5ad"))
+expect_true(file.exists(par$output))
 
 cat("> Checking contents of output.h5ad\n")
-adata_orig <- anndata::read_h5ad("resources_test/predict_modality/pbmc_1k_protein_v3.prediction.h5ad")
-adata <- anndata::read_h5ad("output.h5ad")
+ad_pred <- anndata::read_h5ad(par$input_prediction)
+ad_out <- anndata::read_h5ad(par$output)
 
-expect_equal(adata$uns[["dataset_id"]], adata_orig$uns[["dataset_id"]])
-expect_equal(adata$uns[["method_id"]], adata_orig$uns[["method_id"]])
-expect_gte(length(adata$uns[["metric_ids"]]), 1)
-expect_equal(length(adata$uns[["metric_ids"]]), length(adata$uns[["metric_values"]]))
+expect_equal(ad_out$uns[["dataset_id"]], ad_pred$uns[["dataset_id"]])
+expect_equal(ad_out$uns[["method_id"]], ad_pred$uns[["method_id"]])
+expect_gte(length(ad_out$uns[["metric_ids"]]), 1)
+expect_equal(length(ad_out$uns[["metric_ids"]]), length(ad_out$uns[["metric_values"]]))
 
 cat("> Test succeeded!\n")
