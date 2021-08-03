@@ -11,6 +11,7 @@ par = dict(
 print('Importing libraries')
 import pprint
 import scanpy as sc
+import anndata
 from scIB.metrics import silhouette_batch
 
 if par['debug']:
@@ -48,8 +49,24 @@ _, sil_clus = silhouette_batch(
 )
 score = sil_clus['silhouette_score'].mean()
 
-with open(output, 'w') as file:
-    header = ['dataset', 'output_type', 'metric', 'value']
-    entry = [dataset_id, OUTPUT_TYPE, METRIC, score]
-    file.write('\t'.join(header) + '\n')
-    file.write('\t'.join([str(x) for x in entry]))
+# store adata with metrics
+print("Create output object")
+out = anndata.AnnData(
+    uns=dict(
+        dataset_id=adata.uns['dataset_id'],
+        method_id=adata.uns['method_id'],
+        metric_ids=[METRIC],
+        metric_values=[score],
+        metric_moreisbetter=[True]
+    )
+)
+
+print("Write output to h5ad file")
+out.write(output, compression='gzip')
+
+# # store score as tsv
+# with open(output, 'w') as file:
+#     header = ['dataset', 'output_type', 'metric', 'value']
+#     entry = [dataset_id, OUTPUT_TYPE, METRIC, score]
+#     file.write('\t'.join(header) + '\n')
+#     file.write('\t'.join([str(x) for x in entry]))
