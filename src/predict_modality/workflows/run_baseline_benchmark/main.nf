@@ -13,7 +13,7 @@ include  { extract_scores }              from "$targetDir/common/extract_scores/
 workflow run_task1_benchmark {
   main:
   modsAndSolutions = 
-    Channel.fromPath("output/predict_modality/**.h5ad")
+    Channel.fromPath("output/public_datasets/predict_modality/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
       | groupTuple
       | map { id, datas -> 
