@@ -2,17 +2,17 @@
 
 ## NEW FEATURES
 
-### Task 1, Predict modality
+Task 1, Predict modality:
 
 * Method: Added Babel. It takes quite long to run and is expected to crash on small datasets or RNA+ADT datasets.
 * Dummy method: Added a method for predicting all zeros.
 
-### Task 2, Match Modality
+Task 2, Match Modality:
 
 * Dummy methods: Added methods for predicting all zeros or all ones.
 * NextFlow: Added pipeline for censoring common datasets.
 
-### Task 3, Joint Embedding
+Task 3, Joint Embedding:
 
 * Method: Added TotalVI.
 * NextFlow: Added pipeline for censoring common datasets.
@@ -25,6 +25,8 @@
   - `output/task1` became `output/public_datasets/predict_modality`.
   - `output/task2` became `output/public_datasets/match_modality`.
   - `output/task3` became `output/public_datasets/joint_embedding`.
+
+* Task 1 correlation metric: Reverted allowing multiple input files at once.
 
 # neurips2021_multimodal_viash 0.3.0
 
