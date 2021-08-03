@@ -1,6 +1,6 @@
 functionality:
   name: ari
-  namespace: joint_embedding/metrics
+  namespace: joint_embedding_metrics
   version: dev
   description: Adjusted rand index (ARI)
   authors:
