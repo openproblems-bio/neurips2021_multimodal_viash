@@ -2,6 +2,9 @@
 
 ## NEW FEATURES
 
+Common:
+* Prediction gatekeeper: Add a gatekeeper component for method predictions.
+
 Task 1, Predict modality:
 
 * Method: Added Babel. It takes quite long to run and is expected to crash on small datasets or RNA+ADT datasets.
