@@ -32,5 +32,3 @@ platforms:
   - type: docker
     image: "dataintuitive/randpy:r4.0" # contains a few bioconductor and the 'anndata' package
   - type: nextflow
-    publish: true
-    per_id: false
