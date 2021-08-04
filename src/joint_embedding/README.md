@@ -70,7 +70,6 @@ This component should output *one* h5ad file, `--output`, containing an embeddin
   * `.X`: Embedding matrix of the cells.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.uns['method_id']`: Name of the prediction method.
-  * `.obs['batch']`: Batch id (optional).
   * `.obs_names`: Ids for the cells.
 
 The embedding should have **at most 100 columns**.
@@ -88,7 +87,6 @@ The `input_prediction` file has the following attributes:
   * `.X`: Embedding matrix of the cells (at most 100 columns).
   * `.uns['dataset_id']`: Name of the dataset.
   * `.uns['method_id']`: Name of the prediction method.
-  * `.obs['batch']`: Batch id.
   * `.obs_names`: Ids for the cells.
 
 The `input_solution` file has the following attributes.
