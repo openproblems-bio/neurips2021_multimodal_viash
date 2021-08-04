@@ -67,7 +67,7 @@ This component should output *one* h5ad file, `--output`, containing an embeddin
   * `.X`: The embedding matrix of the cells.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
-  * `.obs['batch']`: Batch id.
+  * `.obs['batch']`: Batch id (optional).
   * `.obs_names`: Ids for the cells.
 
 The embedding should have **at most 100 columns**.
@@ -97,11 +97,10 @@ The `input_solution` file has the following attributes.
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output`, containing metric values which can be used to evaluate the performance of the method. It has the following attributes:
+This component should output only *one* tsv file, `--output`, containing method and dataset metadata, and metric values which can be used to evaluate the performance of the method. It has the following columns:
 
-  * `.uns['dataset_id']`: The name of the dataset.
-  * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
-  * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
-  * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-
-In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.
+  * `.uns['dataset_id]`: The name of the dataset.
+  * `.uns['method_id]`: The name of the prediction method (only for `input_prediction`).
+  * `.uns['metric_ids]`: The names of the outputted metrics (one or multiple).
+  * `.uns['metric_values]`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
+  * `.uns['metric_moreisbetter]`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
