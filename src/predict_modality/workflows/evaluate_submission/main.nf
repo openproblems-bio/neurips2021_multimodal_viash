@@ -6,14 +6,14 @@ targetDir = "${params.rootDir}/target/nextflow"
 include  { calculate_cor }             from "$targetDir/predict_modality_metrics/calculate_cor/main.nf"    params(params)
 include  { extract_scores }            from "$targetDir/common/extract_scores/main.nf"                     params(params)
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
-include  { getDatasetId as DID0; getDatasetId as DID1 } from "$srcDir/common/workflows/anndata_utils.nf"
+include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 params.solutions = "s3://neurips2021-multimodal-public-datasets/predict_modality/**.output_solution.h5ad"
 
 workflow {
   main:
-  def predictions = Channel.fromPath(params.predictions) | DID0
-  def solutions = Channel.fromPath(params.solutions) | DID1
+  def predictions = Channel.fromPath(params.predictions) | get_id_predictions
+  def solutions = Channel.fromPath(params.solutions) | get_id_solutions
 
   // create solutions meta
   def solutionsMeta = solutions
