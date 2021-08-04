@@ -39,6 +39,10 @@ Task 3, Joint Embedding:
   In addition, metric components no longer need to output a `.uns['metric_moreisbetter']` 
   field, as this is contained in the metric meta file.
 
+* Extract scores: Will check for missing predictions when provided with the 
+  method meta data. Requires a metrics meta file, can optionally consume
+  a methods and datasets meta file.
+
 # neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES
