@@ -2,7 +2,7 @@ functionality:
   name: totalvi_metrics
   namespace: joint_embedding_metrics
   version: dev
-  description: Calculate four totalvi metrics (latent mixing, feature retention, clustering, and measurement mixing) for the joint embedding task.
+  description: Calculate latent mixing metric for joint embedding task.
   authors:
     - name: Ann Chen
       email: ann.chen@czbiohub.org
@@ -28,7 +28,7 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: totalvi metrics calculated by comparing prediction to gold standard solution
+      description: Latent mixing metric measures how well the latent cell representations are mixed between batches relative to the global frequency of batches.
       required: true
   resources:
     - type: python_script
@@ -38,4 +38,4 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, scipy, sklearn, scvi ]
+        pip: [ anndata, scvi ]

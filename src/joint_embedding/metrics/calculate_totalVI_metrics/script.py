@@ -1,17 +1,6 @@
-import scvi
-from scvi.dataset import GeneExpressionDataset, CellMeasurement, AnnDatasetFromAnnData
-from scvi.models import VAE, TOTALVI
-from scvi.inference import TotalPosterior, TotalTrainer, Posterior, UnsupervisedTrainer
-import os
-import sys
-
-import anndata
 import scanpy as sc
-import numpy as np
-import pandas as pd
-
-sys.path.append("../utils/")
-from utils import *
+import anndata
+from utils import entropy_batch_mixing
 
 # VIASH START
 par = {
@@ -24,14 +13,13 @@ par = {
 predict_adata = sc.read_h5ad(par["input_prediction"])
 solution_adata = sc.read_h5ad(par["input_solution"])
 
-method_name = predict_adata.uns['method_id'] 
+method_name = predict_adata.uns["method_id"] 
 
 metrics_adata = predict_adata
 metrics_adata.obsm[method_name] = predict_adata.X
 
 # calculate mixing statistics
 ENTROPY_K = 100
-knn = np.ceil(metrics_adata.n_obs * (np.arange(0.1, 1, 0.1)) / 100).astype(int)
 
 # calculate latent mixing metric
 latent_mixing_metric = entropy_batch_mixing(
