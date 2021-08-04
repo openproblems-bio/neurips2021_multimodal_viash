@@ -19,6 +19,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
+  * `.obs['cell_type']`: Cell type each cell belongs to.
   * `.obs['organism']`: Organism the cell was taken from.
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: Modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
