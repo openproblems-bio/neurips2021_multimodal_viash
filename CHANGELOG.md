@@ -33,6 +33,12 @@ Task 3, Joint Embedding:
 
 * Task 1 correlation metric: Reverted allowing multiple input files at once.
 
+* Metrics: Metrics across all tasks now require a `metric_meta.tsv` file 
+  to be available in the component directory. This tsv file needs to 
+  contain the columns `metric_id`, `metric_min`, `metric_max` and `metric_higherisbetter`.
+  In addition, metric components no longer need to output a `.uns['metric_moreisbetter']` 
+  field, as this is contained in the metric meta file.
+
 # neurips2021_multimodal_viash 0.3.0
 
 ## NEW FEATURES

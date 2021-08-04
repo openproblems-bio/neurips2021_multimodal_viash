@@ -120,8 +120,7 @@ out <- anndata::AnnData(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
     metric_ids = names(values),
-    metric_values = as.numeric(values),
-    metric_moreisbetter = rep(TRUE, length(values))
+    metric_values = as.numeric(values)
   )
 )
 

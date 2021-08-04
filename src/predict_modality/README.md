@@ -104,4 +104,5 @@ This component should output only *one* h5ad file, `--output`, containing metric
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
   * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `.uns['metric_moreisbetter']`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+
+In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.

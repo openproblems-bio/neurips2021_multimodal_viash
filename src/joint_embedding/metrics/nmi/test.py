@@ -40,8 +40,6 @@ assert result.uns['method_id'] == pred.uns['method_id']
 assert 'metric_ids' in result.uns
 assert result.uns['metric_ids'] == [metric]
 
-assert 'metric_moreisbetter' in result.uns
-
 assert 'metric_values' in result.uns
 score = result.uns['metric_values'][0]
 print(score)
