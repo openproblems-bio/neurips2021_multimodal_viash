@@ -7,7 +7,8 @@ Common:
 
 Task 1, Predict modality:
 
-* Method: Added Babel. It takes quite long to run and is expected to crash on small datasets or RNA+ADT datasets.
+* Method: Added Babel. It takes quite long to run and is expected to crash on 
+  small datasets or RNA+ADT datasets.
 * Dummy method: Added a method for predicting all zeros.
 
 Task 2, Match Modality:
