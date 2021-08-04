@@ -995,5 +995,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_optimize_distances"
   executable: "target/nextflow/match_modality_methods/baseline_optimize_distances/baseline_optimize_distances"
   viash_version: "0.5.1"
-  git_commit: "db3103e541b8fb781d179f34cc5c6f96585648c0"
+  git_commit: "f17af09a34ecac6309bcd7b5f8f5122e09318e0c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
