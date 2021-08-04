@@ -60,8 +60,7 @@ out = anndata.AnnData(
         dataset_id=adata.uns['dataset_id'],
         method_id=adata.uns['method_id'],
         metric_ids=[METRIC],
-        metric_values=[score],
-        metric_moreisbetter=[True]
+        metric_values=[score]
     )
 )
 

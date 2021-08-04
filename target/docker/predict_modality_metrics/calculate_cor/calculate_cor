@@ -144,21 +144,21 @@ function ViashHelp {
   echo
   echo "Options:"
 
-  echo "   -ip, --input_prediction"
+  echo "   --input_prediction"
   echo "        type: file, required parameter"
   echo "        example: prediction.h5ad"
   echo "        Prediction by a method."
   echo ""
 
 
-  echo "   -io, --input_solution"
+  echo "   --input_solution"
   echo "        type: file, required parameter"
   echo "        example: solution.h5ad"
   echo "        Gold standard solution."
   echo ""
 
 
-  echo "   -o, --output"
+  echo "   --output"
   echo "        type: file, required parameter, output"
   echo "        example: output.h5ad"
   echo "        Metric scores by comparing the prediction to the gold standard solution."
@@ -476,10 +476,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT_PREDICTION=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -ip)
-            VIASH_PAR_INPUT_PREDICTION="$2"
-            shift 2
-            ;;
         --input_solution)
             VIASH_PAR_INPUT_SOLUTION="$2"
             shift 2
@@ -488,10 +484,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT_SOLUTION=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -io)
-            VIASH_PAR_INPUT_SOLUTION="$2"
-            shift 2
-            ;;
         --output)
             VIASH_PAR_OUTPUT="$2"
             shift 2
@@ -499,10 +491,6 @@ while [[ $# -gt 0 ]]; do
         --output=*)
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
             shift 1
-            ;;
-        -o)
-            VIASH_PAR_OUTPUT="$2"
-            shift 2
             ;;
         ---setup)
             ViashDockerSetup 'openproblems/predict_modality_metrics_calculate_cor:main_build' "$2"
@@ -619,24 +607,10 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 ## VIASH END
 
 cat("Reading solution file\\n")
-ad_sol <- 
-  tryCatch({
-    anndata::read_h5ad(par\$input_solution)
-  }, error = function(e) {
-    cat("Warning! Could not read solution file '", sol_path, "'. Error:\\n", sep = "")
-    cat(e\$message)
-    NULL
-  })
+ad_sol <- anndata::read_h5ad(par\$input_solution)
 
 cat("Reading prediction file\\n")
-ad_pred <- 
-  tryCatch({
-    anndata::read_h5ad(par\$input_prediction)
-  }, error = function(e) {
-    cat("Warning! Could not read prediction file '", sol_path, "'. Error:\\n", sep = "")
-    cat(e\$message)
-    NULL
-  })
+ad_pred <- anndata::read_h5ad(par\$input_prediction)
 
 cat("Check prediction format\\n")
 expect_equal(
@@ -656,17 +630,22 @@ pv <- ad_pred\$X
 # Compute metrics
 pearson_mat <- dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE)
 spearman_mat <- dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE)
-score_pearson <- mean(diag(pearson_mat)) / 2 + 0.5
-score_spearman <- mean(diag(spearman_mat)) / 2 + 0.5
+
+mean_pearson <- mean(diag(pearson_mat))
+mean_spearman <- mean(diag(spearman_mat))
+score_mean_pearson <- mean_pearson / 2 + .5
+score_mean_spearman <- mean_spearman / 2 + .5
+
+metric_ids <- c("mean_pearson", "mean_spearman", "score_mean_pearson", "score_mean_spearman")
+metric_values <- c(mean_pearson, mean_spearman, score_mean_pearson, score_mean_spearman)
 
 cat("Create output object\\n")
 out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred\$uns\$dataset_id,
     method_id = ad_pred\$uns\$method_id,
-    metric_ids = c("score_pearson", "score_spearman"),
-    metric_values = c(score_pearson, score_spearman),
-    metric_moreisbetter = c(TRUE, TRUE)
+    metric_ids = metric_ids,
+    metric_values = metric_values
   )
 )
 

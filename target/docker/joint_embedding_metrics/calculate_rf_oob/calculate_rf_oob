@@ -635,7 +635,7 @@ cat("Calculating metrics\\n")
 df <- data.frame(ad_pred\$X, SOLUTION_CELL_TYPE = ad_sol\$obs[["cell_type"]])
 rf <- ranger::ranger(SOLUTION_CELL_TYPE ~ ., df)
 
-rf_oob_correct_pred <- 1 - rf\$prediction.error
+rf_oob_pct_correct <- 1 - rf\$prediction.error
 
 
 cat("Create output object\\n")
@@ -645,9 +645,8 @@ out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred\$uns\$dataset_id,
     method_id = ad_pred\$uns\$method_id,
-    metric_ids = c("rf_oob_correct_pred"),
-    metric_values = c(rf_oob_correct_pred),
-    metric_moreisbetter = c(TRUE)
+    metric_ids = c("rf_oob_pct_correct"),
+    metric_values = c(rf_oob_pct_correct)
   )
 )
 

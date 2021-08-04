@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component gatekeep_predictions")
+      println("[ERROR] option --${it.name} not specified in component bind_tsv_rows")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "gatekeep_predictions." + it.name + "." + extOrName
+          ? "bind_tsv_rows." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process gatekeep_predictions_process {
+process bind_tsv_rows_process {
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -182,7 +182,7 @@ process gatekeep_predictions_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.gatekeep_predictions.tests.testScript} | tee $output
+      ./${params.bind_tsv_rows.tests.testScript} | tee $output
       """
     else
       """
@@ -195,14 +195,14 @@ process gatekeep_predictions_process {
       """
 }
 
-workflow gatekeep_predictions {
+workflow bind_tsv_rows {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "gatekeep_predictions"
+  def key = "bind_tsv_rows"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -247,7 +247,7 @@ workflow gatekeep_predictions {
       )
     }
 
-  result_ = gatekeep_predictions_process(id_input_output_function_cli_params_) \
+  result_ = bind_tsv_rows_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -277,7 +277,7 @@ workflow gatekeep_predictions {
 
 workflow {
   def id = params.id
-  def fname = "gatekeep_predictions"
+  def fname = "bind_tsv_rows"
 
   def _params = params
 
@@ -289,14 +289,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.gatekeep_predictions
+  def inputFiles = params.bind_tsv_rows
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = gatekeep_predictions(ch_)
+  result = bind_tsv_rows(ch_)
   result.view{ it[1] }
 }
 
@@ -309,17 +309,17 @@ workflow test {
 
   main:
   params.test = true
-  params.gatekeep_predictions.output = "gatekeep_predictions.log"
+  params.bind_tsv_rows.output = "bind_tsv_rows.log"
 
   Channel.from(rootDir) \
-    | filter { params.gatekeep_predictions.tests.isDefined } \
+    | filter { params.bind_tsv_rows.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.gatekeep_predictions.tests.testResources.collect{ file( p + it ) },
+        params.bind_tsv_rows.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | gatekeep_predictions
+    | bind_tsv_rows
 
   emit:
-  gatekeep_predictions.out
+  bind_tsv_rows.out
 }

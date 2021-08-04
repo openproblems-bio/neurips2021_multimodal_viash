@@ -878,5 +878,5 @@ info:
   output: "target/docker/common/quality_control"
   executable: "target/docker/common/quality_control/quality_control"
   viash_version: "0.5.1"
-  git_commit: "73902d0a6b6fb34ab5f79d7888a22929c7df202e"
+  git_commit: "3c955db4ac45c78792158bdbac63d01dd80b3631"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

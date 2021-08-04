@@ -22,6 +22,38 @@ functionality:
     multiple: true
     multiple_sep: ":"
   - type: "file"
+    name: "--method_meta"
+    alternatives: []
+    description: "A method metadata file. Must contain column 'method_id'."
+    example: "method_meta.tsv"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: true
+    multiple_sep: ":"
+  - type: "file"
+    name: "--dataset_meta"
+    alternatives: []
+    description: "A dataset metadata file. Must contain column 'dataset_id'."
+    example: "dataset_meta.tsv"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: true
+    multiple_sep: ":"
+  - type: "file"
+    name: "--metric_meta"
+    alternatives: []
+    description: "A metric metadata file containing the default value of each metric\
+      \ in case a method errored on a particular dataset. Must contain column 'metric_id'\
+      \ and 'metric_value'."
+    example: "metric_meta.tsv"
+    must_exist: false
+    required: true
+    direction: "Input"
+    multiple: true
+    multiple_sep: ":"
+  - type: "file"
     name: "--output"
     alternatives: []
     description: "Output tsv"
@@ -194,6 +226,27 @@ functionality:
         echo "        type: file, required parameter, multiple values allowed"
         echo "        example: input.h5ad"
         echo "        Input h5ad files containing metadata and metrics in adata.uns."
+        echo ""
+      
+      
+        echo "   --method_meta"
+        echo "        type: file, multiple values allowed"
+        echo "        example: method_meta.tsv"
+        echo "        A method metadata file. Must contain column 'method_id'."
+        echo ""
+      
+      
+        echo "   --dataset_meta"
+        echo "        type: file, multiple values allowed"
+        echo "        example: dataset_meta.tsv"
+        echo "        A dataset metadata file. Must contain column 'dataset_id'."
+        echo ""
+      
+      
+        echo "   --metric_meta"
+        echo "        type: file, required parameter, multiple values allowed"
+        echo "        example: metric_meta.tsv"
+        echo "        A metric metadata file containing the default value of each metric in case a method errored on a particular dataset. Must contain column 'metric_id' and 'metric_value'."
         echo ""
       
       
@@ -528,6 +581,54 @@ functionality:
                   fi
                   shift 1
                   ;;
+              --method_meta)
+                  if [ -z "$VIASH_PAR_METHOD_META" ]; then
+                    VIASH_PAR_METHOD_META="$2"
+                  else
+                    VIASH_PAR_METHOD_META="$VIASH_PAR_METHOD_META:""$2"
+                  fi
+                  shift 2
+                  ;;
+              --method_meta=*)
+                  if [ -z "$VIASH_PAR_METHOD_META" ]; then
+                    VIASH_PAR_METHOD_META=$(ViashRemoveFlags "$1")
+                  else
+                    VIASH_PAR_METHOD_META="$VIASH_PAR_METHOD_META:"$(ViashRemoveFlags "$1")
+                  fi
+                  shift 1
+                  ;;
+              --dataset_meta)
+                  if [ -z "$VIASH_PAR_DATASET_META" ]; then
+                    VIASH_PAR_DATASET_META="$2"
+                  else
+                    VIASH_PAR_DATASET_META="$VIASH_PAR_DATASET_META:""$2"
+                  fi
+                  shift 2
+                  ;;
+              --dataset_meta=*)
+                  if [ -z "$VIASH_PAR_DATASET_META" ]; then
+                    VIASH_PAR_DATASET_META=$(ViashRemoveFlags "$1")
+                  else
+                    VIASH_PAR_DATASET_META="$VIASH_PAR_DATASET_META:"$(ViashRemoveFlags "$1")
+                  fi
+                  shift 1
+                  ;;
+              --metric_meta)
+                  if [ -z "$VIASH_PAR_METRIC_META" ]; then
+                    VIASH_PAR_METRIC_META="$2"
+                  else
+                    VIASH_PAR_METRIC_META="$VIASH_PAR_METRIC_META:""$2"
+                  fi
+                  shift 2
+                  ;;
+              --metric_meta=*)
+                  if [ -z "$VIASH_PAR_METRIC_META" ]; then
+                    VIASH_PAR_METRIC_META=$(ViashRemoveFlags "$1")
+                  else
+                    VIASH_PAR_METRIC_META="$VIASH_PAR_METRIC_META:"$(ViashRemoveFlags "$1")
+                  fi
+                  shift 1
+                  ;;
               --output)
                   VIASH_PAR_OUTPUT="$2"
                   shift 2
@@ -587,6 +688,10 @@ functionality:
         ViashError '--input' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
+      if [ -z "$VIASH_PAR_METRIC_META" ]; then
+        ViashError '--metric_meta' is a required argument. Use "--help" to get more information on the parameters.
+        exit 1
+      fi
       if [ -z "$VIASH_PAR_OUTPUT" ]; then
         ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
@@ -612,6 +717,45 @@ functionality:
           fi
         done
         VIASH_PAR_INPUT="$VIASH_TEST_INPUT"
+      fi
+      if [ ! -z "$VIASH_PAR_METHOD_META" ]; then
+        IFS=":"
+        for var in $VIASH_PAR_METHOD_META; do
+          unset IFS
+          VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$var")"
+          if [ -z "$VIASH_TEST_METHOD_META" ]; then
+            VIASH_TEST_METHOD_META="$(ViashAutodetectMount "$var")"
+          else
+            VIASH_TEST_METHOD_META="$VIASH_TEST_METHOD_META:""$(ViashAutodetectMount "$var")"
+          fi
+        done
+        VIASH_PAR_METHOD_META="$VIASH_TEST_METHOD_META"
+      fi
+      if [ ! -z "$VIASH_PAR_DATASET_META" ]; then
+        IFS=":"
+        for var in $VIASH_PAR_DATASET_META; do
+          unset IFS
+          VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$var")"
+          if [ -z "$VIASH_TEST_DATASET_META" ]; then
+            VIASH_TEST_DATASET_META="$(ViashAutodetectMount "$var")"
+          else
+            VIASH_TEST_DATASET_META="$VIASH_TEST_DATASET_META:""$(ViashAutodetectMount "$var")"
+          fi
+        done
+        VIASH_PAR_DATASET_META="$VIASH_TEST_DATASET_META"
+      fi
+      if [ ! -z "$VIASH_PAR_METRIC_META" ]; then
+        IFS=":"
+        for var in $VIASH_PAR_METRIC_META; do
+          unset IFS
+          VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$var")"
+          if [ -z "$VIASH_TEST_METRIC_META" ]; then
+            VIASH_TEST_METRIC_META="$(ViashAutodetectMount "$var")"
+          else
+            VIASH_TEST_METRIC_META="$VIASH_TEST_METRIC_META:""$(ViashAutodetectMount "$var")"
+          fi
+        done
+        VIASH_PAR_METRIC_META="$VIASH_TEST_METRIC_META"
       fi
       if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
         VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$VIASH_PAR_OUTPUT")"
@@ -661,6 +805,9 @@ functionality:
       # The following code has been auto-generated by Viash.
       par <- list(
         "input" = $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "strsplit('$VIASH_PAR_INPUT', split = ':')[[1]]"; else echo NULL; fi ),
+        "method_meta" = $( if [ ! -z ${VIASH_PAR_METHOD_META+x} ]; then echo "strsplit('$VIASH_PAR_METHOD_META', split = ':')[[1]]"; else echo NULL; fi ),
+        "dataset_meta" = $( if [ ! -z ${VIASH_PAR_DATASET_META+x} ]; then echo "strsplit('$VIASH_PAR_DATASET_META', split = ':')[[1]]"; else echo NULL; fi ),
+        "metric_meta" = $( if [ ! -z ${VIASH_PAR_METRIC_META+x} ]; then echo "strsplit('$VIASH_PAR_METRIC_META', split = ':')[[1]]"; else echo NULL; fi ),
         "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
         "summary" = $( if [ ! -z ${VIASH_PAR_SUMMARY+x} ]; then echo "'$VIASH_PAR_SUMMARY'"; else echo NULL; fi )
       )
@@ -669,11 +816,24 @@ functionality:
       
       ## VIASH END
       
+      cat("Reading score meta files\\n")
+      metric_meta <- map_df(
+        par\$metric_meta,
+        read_tsv,
+        col_types = cols(
+          metric_id = "c",
+          metric_min = "d",
+          metric_max = "d",
+          metric_higherisbetter = "l"
+        )
+      )
+      # prepend 'metric_' to colnames if this was not done already
+      colnames(metric_meta) <- paste0("metric_", gsub("^metric_", "", colnames(metric_meta)))
       
-      cat("Reading input h5ad files")
+      cat("Reading input h5ad files\\n")
       scores <- map_df(par\$input, function(inp) {
         cat("Reading '", inp, "'\\n", sep = "")
-        ad <- read_h5ad(inp)
+        ad <- anndata::read_h5ad(inp)
       
         for (uns_name in c("dataset_id", "method_id", "metric_ids", "metric_values")) {
           expect_true(
@@ -685,14 +845,83 @@ functionality:
         as_tibble(ad\$uns[c("dataset_id", "method_id", "metric_ids", "metric_values")])
       })
       
-      summary <- 
-        scores %>% 
-        group_by(method_id, metric_ids) %>% 
-        summarise(metric_values = mean(metric_values), .groups = "drop")
+      expect_true(
+        all(scores\$metric_ids %in% metric_meta\$metric_id),
+        info = "All metric_ids in h5ad should be mentioned in the metric_meta"
+      )
       
-      score_spread <- scores %>% spread(metric_ids, metric_values)
+      # create method meta
+      method_meta <- 
+        if (is.null(par\$method_meta)) {
+          cat("No method meta found, defaulting to all method ids present in the h5ads.\\n")
+          tibble(
+            method_id = unique(scores\$method_id)
+          )
+        } else {
+          cat("Reading method meta files\\n")
+          map_df(
+            par\$method_meta,
+            read_tsv,
+            col_types = cols(
+              method_id = "c",
+              .default = "?"
+            )
+          )
+        }
+      # prepend 'method_' to colnames if this was not done already
+      colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_meta)))
+      
+      # create method meta
+      dataset_meta <- 
+        if (is.null(par\$dataset_meta)) {
+          cat("No dataset meta found, defaulting to all dataset ids present in the h5ads.\\n")
+          tibble(
+            dataset_id = unique(scores\$dataset_id)
+          )
+        } else {
+          cat("Reading method meta files\\n")
+          map_df(
+            par\$dataset_meta,
+            read_tsv,
+            col_types = cols(
+              dataset_id = "c",
+              .default = "?"
+            )
+          )
+        }
+      # prepend 'dataset_' to colnames if this was not done already
+      colnames(dataset_meta) <- paste0("dataset_", gsub("^dataset_", "", colnames(dataset_meta)))
+      
+      cat("Creating default scores for missing entries based on metrics meta\\n")
+      missing_values <- crossing(
+        dataset_meta %>% select(dataset_id),
+        method_meta %>% select(method_id),
+        metric_meta %>% transmute(
+          metric_ids = metric_id,
+          metric_values = ifelse(metric_higherisbetter, metric_min, metric_max)
+        )
+      )
+      
+      cat("Creating final scores object\\n")
+      final_scores <- bind_rows(
+        scores %>%
+          inner_join(method_meta, by = "method_id") %>%
+          inner_join(dataset_meta, by = "dataset_id") %>%
+          inner_join(metric_meta %>% select(metric_ids = metric_id), by = "metric_ids"),
+        anti_join(missing_values, scores, by = c("method_id", "dataset_id", "metric_ids"))
+      )
+      
+      cat("Computing summary scores\\n")
+      summary <-
+        final_scores %>% 
+        group_by(method_id, metric_ids) %>% 
+        summarise(metric_values = mean(metric_values), .groups = "drop") %>% 
+        inner_join(method_meta, by = "method_id")
+      
+      score_spread <- final_scores %>% spread(metric_ids, metric_values)
       summary_spread <- summary %>% spread(metric_ids, metric_values)
       
+      cat("Writing results to tsv files\\n")
       write_tsv(score_spread, par\$output)
       write_tsv(summary_spread, par\$summary)
       VIASHMAIN
@@ -728,5 +957,5 @@ info:
   output: "target/docker/common/extract_scores"
   executable: "target/docker/common/extract_scores/extract_scores"
   viash_version: "0.5.1"
-  git_commit: "73902d0a6b6fb34ab5f79d7888a22929c7df202e"
+  git_commit: "3c955db4ac45c78792158bdbac63d01dd80b3631"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

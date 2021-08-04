@@ -447,8 +447,7 @@ functionality:
           dataset_id = ad_pred\$uns\$dataset_id,
           method_id = ad_pred\$uns\$method_id,
           metric_ids = names(values),
-          metric_values = as.numeric(values),
-          metric_moreisbetter = rep(TRUE, length(values))
+          metric_values = as.numeric(values)
         )
       )
       
@@ -882,5 +881,5 @@ info:
   output: "target/nextflow/match_modality_metrics/calculate_auroc"
   executable: "target/nextflow/match_modality_metrics/calculate_auroc/calculate_auroc"
   viash_version: "0.5.1"
-  git_commit: "73902d0a6b6fb34ab5f79d7888a22929c7df202e"
+  git_commit: "3c955db4ac45c78792158bdbac63d01dd80b3631"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

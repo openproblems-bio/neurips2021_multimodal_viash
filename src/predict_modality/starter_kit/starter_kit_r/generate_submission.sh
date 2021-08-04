@@ -36,15 +36,15 @@ export NXF_VER=21.04.1
 [ -f output ] && rm -r output/
 
 # use this if you downloaded the datasets to a local folder first
-# dataset_loc='/path/to/downloaddir/task1_datasets/**.output_mod[12].h5ad'
-dataset_loc='s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad'
+# dataset_loc='/path/to/downloaddir/predict_modality/**.output_mod[12].h5ad'
+dataset_loc='s3://neurips2021-multimodal-public-datasets/predict_modality/**.output_mod[12].h5ad'
 
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r release \
-  -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
+  -main-script src/predict_modality/workflows/generate_submission/main.nf \
   --datasets "$dataset_loc" \
-  --publishDir output/task1_predictions/ \
+  --publishDir output/predictions/predict_modality/ \
   -resume
 
 echo ""

@@ -4,10 +4,12 @@
 
 Common:
 * Prediction gatekeeper: Add a gatekeeper component for method predictions.
+* Bind TSV rows: Added a component for binding the rows of multiple TSV files.
 
 Task 1, Predict modality:
 
-* Method: Added Babel. It takes quite long to run and is expected to crash on small datasets or RNA+ADT datasets.
+* Method: Added Babel. It takes quite long to run and is expected to crash on 
+  small datasets or RNA+ADT datasets.
 * Dummy method: Added a method for predicting all zeros.
 
 Task 2, Match Modality:
@@ -30,6 +32,16 @@ Task 3, Joint Embedding:
   - `output/task3` became `output/public_datasets/joint_embedding`.
 
 * Task 1 correlation metric: Reverted allowing multiple input files at once.
+
+* Metrics: Metrics across all tasks now require a `metric_meta.tsv` file 
+  to be available in the component directory. This tsv file needs to 
+  contain the columns `metric_id`, `metric_min`, `metric_max` and `metric_higherisbetter`.
+  In addition, metric components no longer need to output a `.uns['metric_moreisbetter']` 
+  field, as this is contained in the metric meta file.
+
+* Extract scores: Will check for missing predictions when provided with the 
+  method meta data. Requires a metrics meta file, can optionally consume
+  a methods and datasets meta file.
 
 # neurips2021_multimodal_viash 0.3.0
 
