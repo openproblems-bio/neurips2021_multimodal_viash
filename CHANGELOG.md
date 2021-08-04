@@ -4,6 +4,7 @@
 
 Common:
 * Prediction gatekeeper: Add a gatekeeper component for method predictions.
+* Bind TSV rows: Added a component for binding the rows of multiple TSV files.
 
 Task 1, Predict modality:
 
