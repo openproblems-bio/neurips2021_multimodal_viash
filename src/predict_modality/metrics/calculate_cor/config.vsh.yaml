@@ -10,21 +10,16 @@ functionality:
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
     - name: "--input_prediction"
-      alternatives: ["-ip"]
       type: "file"
       example: "prediction.h5ad"
       description: Prediction by a method.
       required: true
-      multiple: true
     - name: "--input_solution"
-      alternatives: ["-io"]
       type: "file"
       example: "solution.h5ad"
       description: Gold standard solution.
       required: true
-      multiple: true
     - name: "--output"
-      alternatives: ["-o"]
       type: "file"
       direction: "output"
       example: "output.h5ad"

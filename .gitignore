@@ -18,3 +18,8 @@ log.txt
 .nextflow*
 work
 output
+
+# vim ignores
+[._]*.sw[a-p]
+[._]sw[a-p]
+tags

@@ -18,7 +18,7 @@ par = {
 print("Reading input data")
 mod1 = anndata.read_h5ad(par["input_mod1"])
 mod2 = anndata.read_h5ad(par["input_mod2"])
-new_dataset_id = mod1.uns["dataset_id"] + "_matchmod"
+new_dataset_id = mod1.uns["dataset_id"] + "_MM"
 
 print("Shuffling rows of mod2")
 pairings = scipy.sparse.spdiags(np.full(mod1.shape[0], 1), diags=0, m=mod1.shape[0], n=mod2.shape[0], format="csr")

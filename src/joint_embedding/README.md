@@ -62,7 +62,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, contai
 
 #### Output data formats
 
-This component should output *one* h5ad file, `--output_prediction`, containing an embedding of the cells.
+This component should output *one* h5ad file, `--output`, containing an embedding of the cells.
 
   * `.X`: The embedding matrix of the cells.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -99,8 +99,8 @@ The `input_solution` file has the following attributes.
 
 This component should output only *one* tsv file, `--output`, containing method and dataset metadata, and metric values which can be used to evaluate the performance of the method. It has the following columns:
 
-  * `dataset_id`: The name of the dataset.
-  * `method_id`: The name of the prediction method (only for `input_prediction`).
-  * `metric_ids`: The names of the outputted metrics (one or multiple).
-  * `metric_values`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `metric_moreisbetter`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+  * `.uns['dataset_id]`: The name of the dataset.
+  * `.uns['method_id]`: The name of the prediction method (only for `input_prediction`).
+  * `.uns['metric_ids]`: The names of the outputted metrics (one or multiple).
+  * `.uns['metric_values]`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
+  * `.uns['metric_moreisbetter]`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).

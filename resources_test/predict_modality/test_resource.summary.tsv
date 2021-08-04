@@ -1,0 +1,2 @@
+method_id	mean_pearson	mean_spearman	score_mean_pearson	score_mean_spearman
+baseline_randomforest	0.3258529424224218	0.3363195733807204	0.6629264712112108	0.6681597866903601
