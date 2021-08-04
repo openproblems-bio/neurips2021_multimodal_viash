@@ -31,3 +31,9 @@ $target_dir/match_modality_metrics/calculate_auroc/calculate_auroc \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.solution.h5ad \
   --output ${out_file}.scores.h5ad
+
+$target_dir/common/extract_scores/extract_scores \
+  --input ${out_file}.scores.h5ad \
+  --metric_meta src/match_modality/metrics/calculate_auroc/metric_meta.tsv \
+  --output ${out_file}.scores.tsv \
+  --summary ${out_file}.summary.tsv
