@@ -25,3 +25,5 @@ curl -fsSL get.viash.io | bash -s -- --registry openproblems --tag 0.5.1 --log c
 cd bin
 
 curl -s https://get.nextflow.io | bash
+
+echo 'Now that viash is installed, make sure to add the neurips2021_multimodal_viash/bin/ directory to your PATH'
