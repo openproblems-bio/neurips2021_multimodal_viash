@@ -78,8 +78,8 @@ zip -9 -r submission.zip . \
   --exclude=*.git* \
   --exclude=*.nextflow* \
   --exclude=*work* \
-  --exclude=*.DS_Store*
-
+  --exclude=*.DS_Store* \
+  --exclude=nextflow.config
 
 # print message
 echo ""
