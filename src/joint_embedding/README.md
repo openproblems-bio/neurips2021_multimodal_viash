@@ -22,7 +22,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.obs['cell_type']`: Cell type each cell belongs to.
   * `.obs['organism']`: Organism the cell was taken from.
   * `.obs['S_score']`: Cell cycle score on S-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
-  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
   * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
   * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
   * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
