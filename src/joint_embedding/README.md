@@ -23,6 +23,9 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.obs['organism']`: Organism the cell was taken from.
   * `.obs['S_score']`: Cell cycle score on S-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
+  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
+  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
+  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: Modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -51,6 +54,9 @@ The `output_solution` file contains metadata on the cell profiles, which will be
   * `.obs['organism']`: Organism the cell was taken from.
   * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene symbols).
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
+  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
+  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
+  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
@@ -104,6 +110,9 @@ The `input_solution` file has the following attributes.
   * `.obs['organism']`: Organism the cell was taken from.
   * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene names).
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene names).
+  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
+  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
+  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
