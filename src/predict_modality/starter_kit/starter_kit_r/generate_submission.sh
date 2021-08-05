@@ -32,19 +32,26 @@ echo "######################################################################"
 echo "##            Generating submission files using nextflow            ##"
 echo "######################################################################"
 export NXF_VER=21.04.1
-# nextflow drop openproblems-bio/neurips2021_multimodal_viash
+PIPELINE_VERSION=main_build # TODO: set this to a fixed version, e.g. '0.5.0'
+
+# pulling latest version of pipeline
+nextflow pull openproblems-bio/neurips2021_multimodal_viash -r $PIPELINE_VERSION
+
+# removing previous output
 [ -f output ] && rm -r output/
 
 # use this if you downloaded the datasets to a local folder first
-# dataset_loc='/path/to/downloaddir/task1_datasets/**.output_mod[12].h5ad'
-dataset_loc='s3://neurips2021-multimodal-public-datasets/task1_datasets/**.output_mod[12].h5ad'
+# DATASET_LOC='/path/to/downloaddir/predict_modality/**.output_mod[12].h5ad'
+
+# only run on dyngen datasets for now
+DATASET_LOC='s3://neurips2021-multimodal-public-datasets/predict_modality/dyngen_**.output_mod[12].h5ad'
 
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
-  -r release \
-  -main-script src/predict_modality/workflows/generate_task1_submission/main.nf \
-  --datasets "$dataset_loc" \
-  --publishDir output/task1_predictions/ \
+  -r $PIPELINE_VERSION \
+  -main-script src/predict_modality/workflows/generate_submission/main.nf \
+  --datasets "$DATASET_LOC" \
+  --publishDir output/predictions/predict_modality/ \
   -resume
 
 echo ""

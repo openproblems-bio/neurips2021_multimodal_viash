@@ -1,10 +1,12 @@
-# Task 3: Joint Embedding
+# Task 2: Match Modality
 
 Predicting which profiles from one modality resembles a profile from another.
 
 ## Summary
 
-While joint profiling of two modalities in the same single cell is now possible, most single-cell datasets that exist are of a single modality and indeed separate communities have formed around protein, open chromatin, and gene expression measurement. As explained above, these modalities complement each other in their description of cellular state. Yet, it is challenging to analyse uni-modal datasets together when they do not share observations (cells) or a common feature space (genes, proteins, or open chromatin peaks). If we could map observations to one another across modalities, it would be possible to treat separately profiled datasets in the same manner as new multi-modal sequencing data. Mapping these modalities to one another opens up the vast amount of uni-modal single-cell datasets generated in the past years to multi-modal data analysis methods.
+While joint profiling of two modalities in the same single cell is now possible, most single-cell datasets that exist measure only a single modality. These modalities complement each other in their description of cellular state. Yet, it is challenging to analyse uni-modal datasets together when they do not share observations (cells) or a common feature space (genes, proteins, or open chromatin peaks). If we could map observations to one another across modalities, it would be possible to treat separately profiled datasets in the same manner as new multi-modal sequencing data. Mapping these modalities to one another opens up the vast amount of uni-modal single-cell datasets generated in the past years to multi-modal data analysis methods.
+
+Unlike in task 1, where the goal was to predict _all_ values of RNA or ADT from ATAC or RNA (respectively) in each cell, the goal of this task is to identify the corresponence between single-cell profiles. Because we are only interested in matching observations, the competitors are encouraged to consider feature selection to identify the representation of the input most important for matching observations.
 
 ## Component API
 
@@ -53,7 +55,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, for wh
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output_prediction`, containing the predicted pairings of the two input datasets.
+This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
   * `.X`: Sparse pairing matrix.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -83,4 +85,5 @@ This component should output only *one* h5ad file, `--output`, containing metric
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
   * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `.uns['metric_moreisbetter']`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+
+In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.

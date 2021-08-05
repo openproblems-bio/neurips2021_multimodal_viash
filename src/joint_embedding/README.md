@@ -1,4 +1,4 @@
-# Task 2: Joint Embedding
+# Task 3: Joint Embedding
 
 Learning of an embedded space that leverages the information of multiple modalities (e.g. for improved cell type annotation).
 
@@ -18,7 +18,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
-  * `.obs['batch']`: Batch id (optional).
+  * `.obs['batch']`: Batch id.
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -32,7 +32,7 @@ The `output_mod1` and `output_mod2` files contain the full profile matrices wher
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
-  * `.obs['batch']`: Batch id (optional).
+  * `.obs['batch']`: Batch id.
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -41,6 +41,7 @@ The `output_mod1` and `output_mod2` files contain the full profile matrices wher
 The `output_solution` file contains metadata on the cell profiles, which will be used to evaluate whether similar cells have been positioned closely to one another in the embedding.
 
   * `.obs["cell_type"]`: The cell type each cell belongs to.
+  * `.obs['batch']`: Batch id.  
   * `.uns['dataset_id']`: The name of the dataset.
   * `.obs_names`: Ids for the cells.
 
@@ -55,16 +56,18 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, contai
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
+  * `.obs['batch']`: Batch ids for all concatenated dataset batches.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
 #### Output data formats
 
-This component should output *one* h5ad file, `--output_prediction`, containing an embedding of the cells.
+This component should output *one* h5ad file, `--output`, containing an embedding of the cells.
 
   * `.X`: The embedding matrix of the cells.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
+  * `.obs['batch']`: Batch id (optional).
   * `.obs_names`: Ids for the cells.
 
 The embedding should have **at most 100 columns**.
@@ -82,20 +85,23 @@ The `input_prediction` file has the following attributes:
   * `.X`: The embedding matrix of the cells (at most 100 columns).
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
+  * `.obs['batch']`: Batch id.
   * `.obs_names`: Ids for the cells.
 
 The `input_solution` file has the following attributes.
 
   * `.obs["cell_type"]`: The cell type each cell belongs to.
+  * `.obs['batch']`: Batch id.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.obs_names`: Ids for the cells.
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output`, containing metric values which can be used to evaluate the performance of the method. It has the following attributes:
+This component should output only *one* tsv file, `--output`, containing method and dataset metadata, and metric values which can be used to evaluate the performance of the method. It has the following columns:
 
-  * `.uns['dataset_id']`: The name of the dataset.
-  * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
-  * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
-  * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `.uns['metric_moreisbetter']`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+  * `.uns['dataset_id]`: The name of the dataset.
+  * `.uns['method_id]`: The name of the prediction method (only for `input_prediction`).
+  * `.uns['metric_ids]`: The names of the outputted metrics (one or multiple).
+  * `.uns['metric_values]`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
+
+In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.

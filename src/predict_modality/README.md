@@ -63,12 +63,12 @@ This component expects two inputs, `--input_mod1` and `--input_mod2`. They both 
 
 The dimensions of these two h5ad files are different;
 
-  * `output_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
-  * `output_mod2` contains only modality 2 data of the `'train'` cells.
+  * `input_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
+  * `input_mod2` contains only modality 2 data of the `'train'` cells.
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output_prediction`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
+This component should output only *one* h5ad file, `--output`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -104,4 +104,5 @@ This component should output only *one* h5ad file, `--output`, containing metric
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
   * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `.uns['metric_moreisbetter']`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+
+In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.

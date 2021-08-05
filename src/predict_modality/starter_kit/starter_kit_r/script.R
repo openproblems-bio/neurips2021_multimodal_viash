@@ -17,7 +17,7 @@ par <- list(
 )
 ## VIASH END
 
-method_id = "mymethod" # fill in the name of your method here
+method_id <- "mymethod" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 ad1 <- read_h5ad(par$input_mod1)
@@ -64,4 +64,3 @@ out <- anndata::AnnData(
 
 cat("Writing predictions to file\n")
 out$write_h5ad(par$output, compression = "gzip")
-
