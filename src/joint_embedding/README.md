@@ -21,6 +21,8 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
   * `.obs['organism']`: Organism the cell was taken from.
+  * `.obs['S_score']`: Cell cycle score on S-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: Modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -42,11 +44,15 @@ The `output_mod1` and `output_mod2` files contain the full profile matrices wher
 
 The `output_solution` file contains metadata on the cell profiles, which will be used to evaluate whether similar cells have been positioned closely to one another in the embedding.
 
+  * `.X`: Sparse profile matrix of `"GEX"` features only.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
   * `.obs['organism']`: Organism the cell was taken from.
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene symbols).
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
   * `.obs_names`: Ids for the cells.
+  * `.var_names`: Ids for the features.
 
 ### Method component
 
@@ -91,11 +97,15 @@ The `input_prediction` file has the following attributes:
 
 The `input_solution` file has the following attributes.
 
+  * `.X`: Sparse profile matrix of `"GEX"` features only.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
   * `.obs['organism']`: Organism the cell was taken from.
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene names).
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene names).
   * `.obs_names`: Ids for the cells.
+  * `.var_names`: Ids for the features.
 
 #### Output data formats
 
