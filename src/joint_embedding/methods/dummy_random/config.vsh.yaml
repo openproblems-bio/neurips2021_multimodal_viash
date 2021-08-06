@@ -1,0 +1,43 @@
+functionality:
+  name: dummy_random
+  namespace: joint_embedding_methods
+  version: dev
+  description: A dummy method for comparing joint embedding methods against. Embeds with gaussian distributued values.
+  authors:
+    - name: Alex Tong
+      email: alexandertongdev@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: atong01 }
+  arguments:
+    - name: "--input_mod1"
+      type: "file"
+      example: "dataset_mod1.h5ad"
+      description: Censored dataset.
+      required: true
+    - name: "--input_mod2"
+      type: "file"
+      example: "dataset_mod2.h5ad"
+      description: Censored dataset.
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: Dataset with predicted values for modality2.
+      required: true
+    - name: "--n_dims"
+      type: "integer"
+      default: 100
+      description: Number of dimensions to output.
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, numpy ]
+  - type: nextflow
+    directive_time: 10m
+    directive_memory: "20 GB"

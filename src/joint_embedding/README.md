@@ -78,7 +78,7 @@ A component which compares the predicted embedding against the ground-truth cell
 
 #### Input data formats
 
-This component should output two h5ad files, `--input_prediction` and `--input_solution`.
+This component expects two h5ad files, `--input_prediction` and `--input_solution`.
 
 The `input_prediction` file has the following attributes:
 
