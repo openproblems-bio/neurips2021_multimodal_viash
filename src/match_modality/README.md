@@ -28,7 +28,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
 This component should output *three* h5ad files, `--output_mod1`, `--output_mod2`, and `--output_solution`. Since this is a supervised problem, the input cells have been grouped into two groups: `'train'` and `'test'`. 
 
-The `output_mod1` and `output_mod2` files contian the full profile matrices for the two modalities. The IDs for the cells have been removed, but for the train cells a 'pairing' is given. It has the following attributes:
+The `output_mod1` and `output_mod2` files contain the full profile matrices for the two modalities. The IDs for the cells have been removed, but for the train cells a 'pairing' is given. It has the following attributes:
 
   * `.X`: Sparse profile matrix.
   * **`.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.**
