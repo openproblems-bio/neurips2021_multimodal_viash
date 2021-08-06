@@ -27,9 +27,9 @@ The AnnData files should contain:
   * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
   * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
-  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features. If available, used for the trajectory conservation score in the joint embedding task.
-  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features. If available, used for the trajectory conservation score in the joint embedding task.
-  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features. If available, used for the trajectory conservation score in the joint embedding task.
+  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. If available, used for the trajectory conservation score in the joint embedding task.
+  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. If available, used for the trajectory conservation score in the joint embedding task.
+  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. If available, used for the trajectory conservation score in the joint embedding task.
 
 ## Required resource
 

@@ -20,12 +20,12 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
-  * `.obs['organism']`: Organism the cell was taken from.
-  * `.obs['S_score']`: Cell cycle score on S-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
-  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes only for `.var['feature_types'] == 'GEX'` (optional unless `var_names` aren't gene symbols).
-  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
-  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
-  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
+  * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. Required for trajectory conservation score.
+  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. Required for trajectory conservation score.
+  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. Required for trajectory conservation score.
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: Modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -51,14 +51,14 @@ The `output_solution` file contains metadata on the cell profiles, which will be
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
-  * `.obs['organism']`: Organism the cell was taken from.
-  * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene symbols).
-  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene symbols).
-  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
-  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
-  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
+  * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features (optional).
+  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features (optional).
+  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
-  * `.var_names`: Ids for the features.
+  * `.var_names`: Ids for the `"GEX"` features.
 
 ### Method component
 
@@ -107,12 +107,12 @@ The `input_solution` file has the following attributes.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.obs['batch']`: Batch id.
   * `.obs['cell_type']`: Cell type each cell belongs to.
-  * `.obs['organism']`: Organism the cell was taken from.
-  * `.obs['S_score']`: Cell cycle score on S-phase genes (optional unless `var_names` aren't gene names).
-  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (optional unless `var_names` aren't gene names).
-  * `.obs['RNA_trajectory']`: Trajectory scores for `"GEX"` features (optional).
-  * `.obs['ATAC_trajectory']`: Trajectory scores for `"ATAC"` features (optional).
-  * `.obs['ADT_trajectory']`: Trajectory scores for `"ADT"` features (optional).
+  * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
+  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features (optional).
+  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features (optional).
+  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
