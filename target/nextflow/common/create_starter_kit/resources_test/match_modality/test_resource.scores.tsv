@@ -1,0 +1,2 @@
+dataset_id	method_id	aupr	auroc	F1
+test_resource_MM	baseline_optimize_distances	0.0020989400397581903	0.5135882316039897	0.004180793948494515

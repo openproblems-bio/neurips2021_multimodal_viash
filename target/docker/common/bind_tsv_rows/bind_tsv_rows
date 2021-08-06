@@ -140,7 +140,7 @@ VIASH_RESOURCES_DIR=`ViashSourceDir ${BASH_SOURCE[0]}`
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "bind_tsv_rows main_build"
-  echo "Combine tsv files by binding the rows.s"
+  echo "Combine tsv files by binding the rows."
   echo
   echo "Options:"
 
