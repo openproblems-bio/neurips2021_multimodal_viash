@@ -782,5 +782,5 @@ info:
   output: "target/docker/joint_embedding_methods/baseline_lmds"
   executable: "target/docker/joint_embedding_methods/baseline_lmds/baseline_lmds"
   viash_version: "0.5.1"
-  git_commit: "f4a16f243d56c86a7abb2ec689401b00a4e8ca79"
+  git_commit: "a0e7645bfecfab42fad89bc96b304b4bb952c4af"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
