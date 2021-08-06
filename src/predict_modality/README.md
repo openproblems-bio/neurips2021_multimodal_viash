@@ -26,7 +26,8 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
 #### Output data formats
 
-This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. These all have the following attributes:
+This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. Since this is a supervised problem, the input cells have been grouped into two groups: `'train'` and `'test'`.
+The `output_mod1` and `output_mod2` files contain information on the train cells, while the `output_mod1` and `output_solution` contain information on the test cells. These files all have the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -72,7 +73,7 @@ This component should output only *one* h5ad file, `--output`, containing the pr
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
-  * **`.uns['method_id']`: The name of the prediction method.**
+  * `.uns['method_id']`: The name of the prediction method.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.obs_names`: Ids for the cells.
