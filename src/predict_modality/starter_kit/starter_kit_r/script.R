@@ -31,8 +31,8 @@ dr <- lmds(
 )
 
 # split up the train vs. test dimensionality reduction
-dr_train <- dr[ad1$obs$group == "train",]
-dr_test <- dr[ad1$obs$group == "test",]
+dr_train <- dr[ad1$obs$group == "train", ]
+dr_test <- dr[ad1$obs$group == "test", ]
 responses_train <- ad2$X
 
 cat("Run KNN regression.\n")
@@ -40,7 +40,7 @@ cat("Run KNN regression.\n")
 # using the K nearest mod2 train neighbors
 preds <- apply(responses_train, 2, function(yi) {
   FNN::knn.reg(
-    train = dr_train, 
+    train = dr_train,
     test = dr_test,
     y = yi,
     k = par$n_neighbors

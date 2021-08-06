@@ -1,17 +1,18 @@
+
 #!/bin/bash
 
 set -e
 
 # change these parameters if need be
-MAX_MEMORY="16 GB"
-MAX_TIME="10m"
-MAX_CPUS="4"
+MAX_MEMORY="$par_memory"
+MAX_TIME="$par_time"
+MAX_CPUS="$par_cpus"
 
 # dataset location
-DATASET_LOC='s3://neurips2021-multimodal-public-datasets/predict_modality/dyngen_**.output_mod[12].h5ad'
+DATASET_LOC='s3://neurips2021-multimodal-public-datasets/$par_task/dyngen_**.output_mod[12].h5ad'
 
 # alternatively, you could choose to download the contents to a local directory first.
-# DATASET_LOC='/path/to/downloaddir/predict_modality/**.output_mod[12].h5ad'
+# DATASET_LOC='/path/to/downloaddir/$par_task/**.output_mod[12].h5ad'
 
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 
@@ -44,10 +45,7 @@ echo "######################################################################"
 echo "##                     Fetch pipeline codebase                      ##"
 echo "######################################################################"
 
-# uncomment this to run the latest build:
-# PIPELINE_VERSION=main_build
-
-PIPELINE_VERSION=0.4.0
+PIPELINE_VERSION="$par_pipeline_version"
 
 # pulling latest version of pipeline
 export NXF_VER=21.04.1
@@ -64,9 +62,9 @@ echo "######################################################################"
 nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
-  -main-script src/predict_modality/workflows/generate_submission/main.nf \
+  -main-script src/$par_task/workflows/generate_submission/main.nf \
   --datasets "$DATASET_LOC" \
-  --publishDir output/predictions/predict_modality/ \
+  --publishDir output/predictions/$par_task/ \
   -resume
 
 echo ""
@@ -90,9 +88,9 @@ echo "Please upload your submission at the link below:"
 echo "  https://eval.ai/web/challenges/challenge-page/1111/submission"
 echo ""
 echo "Or use the command below create a private submission:"
-echo "> evalai challenge 1111 phase 2276 submit --file submission.zip --large --private"
+echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --private"
 echo ""
 echo "Or this command to create a public one:"
-echo "> evalai challenge 1111 phase 2276 submit --file submission.zip --large --public"
+echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --public"
 echo ""
 echo "Good luck!"
