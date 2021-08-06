@@ -733,5 +733,5 @@ info:
   output: "target/docker/joint_embedding_methods/dummy_random"
   executable: "target/docker/joint_embedding_methods/dummy_random/dummy_random"
   viash_version: "0.5.1"
-  git_commit: "b79432357c9849508b155d634898595f12396e19"
+  git_commit: "eb3978c5cc5869d4ffa564ed87cc566049b3e085"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 ## VIASH START
 par_input_dir=src/predict_modality/starter_kit/starter_kit_r/
@@ -26,6 +26,7 @@ mkdir -p $output_dir
 
 echo copy template files
 cp $resources_dir/template_files/* $output_dir/
+cp $resources_dir/template_files/.gitignore $output_dir/
 
 echo replace terms in templates
 sed -i "s#\\\$par_task_name#$par_task_name#g" $output_dir/*
@@ -44,9 +45,5 @@ cp $par_input_dir/* $output_dir
 echo copy sample resources
 mkdir -p $output_dir/sample_data/
 cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
-
-echo copy .gitignore file
-cp $resources_dir/template_files/.gitignore $output_dir/
-cp $resources_dir/template_files/nextflow.config $output_dir/
 
 echo starter kit is done!
