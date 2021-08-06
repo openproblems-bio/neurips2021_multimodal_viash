@@ -26,18 +26,20 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
 #### Output data formats
 
-This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. 
+This component should output *three* h5ad files, `--output_mod1`, `--output_mod2`, and `--output_solution`. Since this is a supervised problem, the input cells have been grouped into two groups: `'train'` and `'test'`. 
 
-The `output_mod1` and `output_mod2` files contain the full profile matrices, except the rows have been anonymised and shuffled. These have the following attributes:
+The `output_mod1` and `output_mod2` files contian the full profile matrices for the two modalities. The IDs for the cells have been removed, but for the train cells a 'pairing' is given. It has the following attributes:
 
   * `.X`: Sparse profile matrix.
+  * **`.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.**
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
+  * **`.obsm['pairing']`: The sparse pairing matrix (only in `output_mod1`).** A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column). This information is only given for the train cells.
 
-The `output_solution` file contains a sparse matrix with the correct pairing of samples:
+The `output_solution` file contains a sparse pairing matrix for the 'test' cells.
 
-  * `.X`: Sparse pairing matrix.
+  * `.X`: Sparse pairing matrix for the 'test' cells.
   * `.uns['dataset_id']`: The name of the dataset.
 
 ### Method component
@@ -49,15 +51,17 @@ A component that predicts which profiles from one modality might match with whic
 This component expects two h5ad files, `--input_mod1` and `--input_mod2`, for which the rows are shuffled and anonymised. These files have the following attributes:
 
   * `.X`: Sparse profile matrix.
+  * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
+  * `.obsm['pairing']`: The sparse pairing matrix (only in `output_mod1`). A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column). This information is only given for the train cells.
 
 #### Output data formats
 
 This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
-  * `.X`: Sparse pairing matrix.
+  * `.X`: Predicted sparse pairing matrix for the 'test' cells.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 
@@ -71,7 +75,7 @@ A component which compares the predicted pairing matrix against the ground-truth
 
 This component should output two h5ad files, `--input_prediction` and `--input_solution`. Both input files should have the following interface:
 
-  * `.X`: Sparse pairing matrix.
+  * `.X`: Sparse pairing matrix for the 'test' cells.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
 
