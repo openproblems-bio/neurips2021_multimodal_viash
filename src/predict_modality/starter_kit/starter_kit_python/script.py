@@ -30,9 +30,9 @@ logging.basicConfig(
 par = {
     'input_mod1': 'sample_data/test_resource.mod1.h5ad',
     'input_mod2': 'sample_data/test_resource.mod2.h5ad',
-    'metric': 'minkowski',
+    'distance_method': 'minkowski',
     'output': 'output.h5ad',
-    'n_components': 4,
+    'n_pcs': 4,
     'n_neighbors': 5,
 }
 
@@ -49,12 +49,12 @@ data_modality_2 = scanpy.read_h5ad(par['input_mod2'])
 logging.info('Performing dimensionality reduction on modality 1 values...')
 
 mds = MDS(
-    n_components=par['n_components'],
+    n_components=par['n_pcs'],
     dissimilarity='precomputed',
 )
 
 D = pairwise_distances(
-    data_modality_1.X.toarray(), metric=par['metric']
+    data_modality_1.X.toarray(), metric=par['distance_method']
 )
 
 X = mds.fit_transform(D)
@@ -76,7 +76,7 @@ logging.info('Running KNN regression...')
 
 reg = KNeighborsRegressor(
     n_neighbors=par['n_neighbors'],
-    metric=par['metric']
+    metric=par['distance_method']
 )
 
 reg.fit(X_train, y_train)
