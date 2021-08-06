@@ -31,11 +31,11 @@ functionality:
       description: Dataset with predicted values for modality2.
       required: true
     # additional parameters
-    - name: "--metric"
+    - name: "--distance_method"
       type: "string"
       default: "minkowski"
       description: The distance metric to use. Possible values include `euclidean` and `minkowski`.
-    - name: "--n_components"
+    - name: "--n_pcs"
       type: "integer"
       default: 4
       description: Number of components to use for dimensionality reduction.
