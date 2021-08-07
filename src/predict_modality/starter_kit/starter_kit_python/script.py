@@ -1,5 +1,5 @@
 # Dependencies:
-# pip: scikit-learn, anndata, scanpy
+# pip: scikit-learn, anndata, scanpy, umap-learn
 #
 # Python starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
 # with `TODO` are supposed to be changed by you.
@@ -9,11 +9,12 @@
 # https://viash.io/docs/creating_components/python/
 
 import anndata
-import scanpy
 import logging
+import scanpy
+import umap
 
-from sklearn.manifold import MDS
-from sklearn.metrics import pairwise_distances
+from scipy.sparse import csc_matrix
+
 from sklearn.neighbors import KNeighborsRegressor
 
 
@@ -48,25 +49,22 @@ data_modality_2 = scanpy.read_h5ad(par['input_mod2'])
 
 logging.info('Performing dimensionality reduction on modality 1 values...')
 
-mds = MDS(
+# Notice how this instantiation also uses the pre-defined parameter for
+# the distance method to be used here.
+embedder = umap.UMAP(
     n_components=par['n_pcs'],
-    dissimilarity='precomputed',
+    metric=par['distance_method'],
 )
 
-D = pairwise_distances(
-    data_modality_1.X.toarray(), metric=par['distance_method']
-)
-
-X = mds.fit_transform(D)
+X = embedder.fit_transform(data_modality_1.X)
 
 X_train = X[data_modality_1.obs['group'] == 'train']
 X_test = X[data_modality_1.obs['group'] == 'test']
 
 assert len(X_train) + len(X_test) == len(X)
 
-# Get all responses of the training data set. If you are
-# a `scikit-learn` user the nomenclature may be somewhat
-# unknown.
+# Get all responses of the training data set to fit the
+# KNN regressor later on.
 #
 # Make sure to use `toarray()` because the output might
 # be sparse and `KNeighborsRegressor` cannot handle it.
@@ -82,13 +80,17 @@ reg = KNeighborsRegressor(
 reg.fit(X_train, y_train)
 y_pred = reg.predict(X_test)
 
+# Store as sparse matrix to be efficient. Note that this might require
+# different classifiers/embedders before-hand. Not every class is able
+# to support such data structures.
+y_pred = csc_matrix(y_pred)
+
 adata = anndata.AnnData(
     X=y_pred,
     uns={
         'dataset_id': data_modality_1.uns['dataset_id'],
         'method_id': method_id,
     },
-    # FIXME: store `obs_names` and `var_names` also?
 )
 
 logging.info('Storing annotated data...')
