@@ -174,6 +174,12 @@ function ViashHelp {
   echo ""
 
 
+  echo "   --block_starter"
+  echo "        type: string, required parameter"
+  echo "        example: par <- list("
+  echo ""
+
+
   echo "   --evalai_phase"
   echo "        type: string, required parameter"
   echo "        example: 2276"
@@ -280,6 +286,14 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_LANGUAGE_NAME=$(ViashRemoveFlags "$1")
             shift 1
             ;;
+        --block_starter)
+            VIASH_PAR_BLOCK_STARTER="$2"
+            shift 2
+            ;;
+        --block_starter=*)
+            VIASH_PAR_BLOCK_STARTER=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
         --evalai_phase)
             VIASH_PAR_EVALAI_PHASE="$2"
             shift 2
@@ -362,6 +376,10 @@ if [ -z "$VIASH_PAR_LANGUAGE_NAME" ]; then
   ViashError '--language_name' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
+if [ -z "$VIASH_PAR_BLOCK_STARTER" ]; then
+  ViashError '--block_starter' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
 if [ -z "$VIASH_PAR_EVALAI_PHASE" ]; then
   ViashError '--evalai_phase' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
@@ -402,6 +420,7 @@ par_task='$VIASH_PAR_TASK'
 par_task_name='$VIASH_PAR_TASK_NAME'
 par_language='$VIASH_PAR_LANGUAGE'
 par_language_name='$VIASH_PAR_LANGUAGE_NAME'
+par_block_starter='$VIASH_PAR_BLOCK_STARTER'
 par_evalai_phase='$VIASH_PAR_EVALAI_PHASE'
 par_memory='$VIASH_PAR_MEMORY'
 par_time='$VIASH_PAR_TIME'
@@ -435,6 +454,11 @@ sed -i "s#\\\\\\\$par_memory#\$par_memory#g" \$output_dir/*
 sed -i "s#\\\\\\\$par_time#\$par_time#g" \$output_dir/*
 sed -i "s#\\\\\\\$par_cpus#\$par_cpus#g" \$output_dir/*
 sed -i "s#\\\\\\\$par_pipeline_version#\$par_pipeline_version#g" \$output_dir/*
+sed -i "s#\\\\\\\$par_block_starter#\$par_block_starter#g" \$output_dir/*
+
+echo run viash dockerfile
+dockerfile=\$(viash run \$par_input_dir/config.vsh.yaml -- ---dockerfile | sed 's#^#\\t#' | sed ':a;N;\$!ba;s/\\n/\\\\n/g' | sed 's#&#\\\\\\&#g')
+sed -i "s~\\\\\\\$codeblock_dockerfile~\$dockerfile~g" \$output_dir/*
 
 echo copy scripts
 cp \$par_input_dir/* \$output_dir

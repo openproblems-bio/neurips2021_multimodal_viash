@@ -62,10 +62,7 @@ $ viash run -- ---setup cachedbuild
 ```sh
 $ viash run -- ---dockerfile
 ```
-    FROM dataintuitive/randpy:r4.0_py3.8_bioc3.12
-
-    RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
-    Rscript -e 'remotes::install_cran(c("lmds", "FNN"), repos = "https://cran.rstudio.com")'
+$codeblock_dockerfile
 
 ## Troubleshooting
 What if running your method on the sample data works but fails when applied to the submission datasets? Given the following output:
@@ -104,11 +101,11 @@ You can view the `stdout` and `stderr` of this process by viewing the `.command.
 
 ```r
 ## VIASH START
-par <- list(
+$par_block_starter
     input_mod1 = "work/20/330b8a52b1a71489e7c53c66ef686e/dyngen_atac_bifurcating_converging_mod2.censor_dataset.output_mod1.h5ad",
     input_mod2 = "work/20/330b8a52b1a71489e7c53c66ef686e/dyngen_atac_bifurcating_converging_mod2.censor_dataset.output_mod2.h5ad",
     output = "debug.h5ad",
-    ... other parameters
+    # ... other parameters
 )
 ## VIASH END
 ```
