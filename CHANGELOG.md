@@ -1,3 +1,10 @@
+# neurips2021_multimodal_viash 0.5.0
+
+## NEW FEATURES
+
+Common:
+* Added dataset loader for Babel dataset.
+
 # neurips2021_multimodal_viash 0.4.0
 
 ## NEW FEATURES
