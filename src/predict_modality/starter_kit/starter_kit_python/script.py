@@ -47,6 +47,8 @@ logging.info('Reading `h5ad` files...')
 data_modality_1 = scanpy.read_h5ad(par['input_mod1'])
 data_modality_2 = scanpy.read_h5ad(par['input_mod2'])
 
+# TODO: implement own method
+
 logging.info('Performing dimensionality reduction on modality 1 values...')
 
 # Notice how this instantiation also uses the pre-defined parameter for

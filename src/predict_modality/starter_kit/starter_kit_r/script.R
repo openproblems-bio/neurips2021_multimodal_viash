@@ -1,3 +1,14 @@
+# Dependencies:
+#   python: anndata
+#   r: anndata, lmds
+#
+# R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
+# with `TODO` are supposed to be changed by you.
+#
+# More documentation:
+#
+# https://viash.io/docs/creating_components/r/
+
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE, quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
@@ -23,7 +34,11 @@ cat("Reading h5ad files\n")
 ad1 <- read_h5ad(par$input_mod1)
 ad2 <- read_h5ad(par$input_mod2)
 
+# TODO: implement own method
+
 cat("Performing dimensionality reduction on the mod1 values\n")
+# LMDS is more efficient than regular MDS because
+# it does not compure a square distance matrix.
 dr <- lmds(
   ad1$X,
   ndim = par$n_pcs,
@@ -48,6 +63,7 @@ preds <- apply(responses_train, 2, function(yi) {
 })
 
 cat("Creating output matrix\n")
+# store prediction as a sparse matrix
 prediction <- Matrix::Matrix(
   preds,
   sparse = TRUE,
