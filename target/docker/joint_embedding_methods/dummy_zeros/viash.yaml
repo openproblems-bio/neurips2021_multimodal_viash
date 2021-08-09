@@ -732,5 +732,5 @@ info:
   output: "target/docker/joint_embedding_methods/dummy_zeros"
   executable: "target/docker/joint_embedding_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.1"
-  git_commit: "81ea92d23348300bb04dd540d5ac5e354c3e46b4"
+  git_commit: "f0b057fcfc5f1b0acdb4f8db73e90edcaa79fdf3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
