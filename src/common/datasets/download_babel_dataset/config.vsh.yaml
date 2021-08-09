@@ -1,0 +1,49 @@
+functionality:
+  name: download_babel_datasets
+  namespace: common_datasets
+  version: dev
+  description: Download Babel GM12878 cell line ATAC-RNA multiome datasets
+  usage: |
+    download_babel_datasets \
+      --id babel_GM12878 \
+      --input https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file \
+      --output_rna resources_test/common/babel_GM12878_output_rna.h5ad \
+      --output_mod2 resources_test/common/babel_GM12878_output_mod2.h5ad
+  authors:
+    - name: Alejandro Granados
+      email: alejandro.granados@czbiohub.org
+      roles: [ author, maintainer ]
+      props: { github: agranado }
+  arguments:
+    - name: --id
+      type: string
+      example: babel_GM12878
+      description: The id of the output dataset id.
+      required: true
+    - name: --input
+      type: string
+      description: Location URL to the GEO raw counts tar file.
+      required: true
+      example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file"
+    - name: "--output_rna"
+      type: file
+      example: output_rna.h5ad
+      required: true
+      direction: output
+      description: Output h5ad RNA file.
+    - name: "--output_mod2"
+      type: file
+      example: output_mod2.h5ad
+      required: true
+      direction: output
+      description: Output h5ad modality2 file (ATAC or Antibody capture).
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, scanpy, scipy ]
+  - type: nextflow
