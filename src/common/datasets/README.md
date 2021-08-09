@@ -22,14 +22,19 @@ These AnnData files should both have the following attributes:
 For certain tasks, additional attributes are needed.
 The AnnData files should contain:
 
-  * `.obs['batch']`: A batch identifier. If available, this can be used downstream to make train/test splits.
-  * `.obs['cell_type']`: A cell type. If available, this dataset can be used for task 2, otherwise not.
-  * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
-  * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
-  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). If available, used for the cell cycle conservation score in the joint embedding task.
-  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. If available, used for the trajectory conservation score in the joint embedding task.
-  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. If available, used for the trajectory conservation score in the joint embedding task.
-  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. If available, used for the trajectory conservation score in the joint embedding task.
+  * `.obs['batch']`: A batch identifier. ¹
+  * `.obs['cell_type']`: A cell type. ²
+  * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features). ³
+  * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). ³
+  * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). ³
+  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. ⁴
+  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. ⁴
+  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. ⁴
+
+¹: Used in the 'predict modality' and 'match modality' tasks to make train/test splits.
+²: Used in the 'joint embedding' task to compute various metrics.
+³: Used in the 'joint embedding' task to compute the cell cycle conservation metric.
+⁴: Used in the 'joint embedding' task to compute the trajectory conservation metric.
 
 ## Required resource
 
