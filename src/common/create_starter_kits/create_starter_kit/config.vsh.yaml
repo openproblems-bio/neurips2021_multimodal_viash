@@ -29,6 +29,10 @@ functionality:
       type: "string"
       example: "R"
       required: true
+    - name: "--block_starter"
+      type: "string"
+      example: "par <- list("
+      required: true
     - name: "--evalai_phase"
       type: "string"
       example: "2276"
@@ -58,5 +62,5 @@ functionality:
       path: ../../../../resources_test
 platforms:
   - type: docker
-    image: ubuntu:18.04
+    image: dataintuitive/viash
   - type: nextflow
