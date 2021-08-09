@@ -1,6 +1,6 @@
 # Dependencies:
 #   python: anndata
-#   r: anndata, lmds
+#   r: anndata, lmds, FNN
 #
 # R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
 # with `TODO` are supposed to be changed by you.
@@ -13,6 +13,7 @@ cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE, quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 library(lmds, warn.conflicts = FALSE, quietly = TRUE)
+library(FNN, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 # Anything within this block will be removed by viash

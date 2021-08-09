@@ -12,6 +12,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --task_name "Predict Modality" \
   --language r \
   --language_name R \
+  --block_starter 'par <- list(' \
   --evalai_phase 2276
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -20,5 +21,6 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --task_name "Predict Modality" \
   --language python \
   --language_name Python \
+  --block_starter 'par = dict(' \
   --evalai_phase 2276
   

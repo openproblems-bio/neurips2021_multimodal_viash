@@ -14,6 +14,7 @@ par_cpus="4"
 par_pipeline_version="0.4.0"
 par_task_name="Predict Modality"
 par_language_name=R
+resources_dir=src/common/create_starter_kits/create_starter_kit/
 ## VIASH END
 
 output_dir="$par_output_dir/starter_kit-$par_task-$par_language/"
@@ -38,6 +39,11 @@ sed -i "s#\\\$par_memory#$par_memory#g" $output_dir/*
 sed -i "s#\\\$par_time#$par_time#g" $output_dir/*
 sed -i "s#\\\$par_cpus#$par_cpus#g" $output_dir/*
 sed -i "s#\\\$par_pipeline_version#$par_pipeline_version#g" $output_dir/*
+sed -i "s#\\\$par_block_starter#$par_block_starter#g" $output_dir/*
+
+echo run viash dockerfile
+dockerfile=$(viash run $par_input_dir/config.vsh.yaml -- ---dockerfile | sed 's#^#\t#' | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's#&#\\\&#g')
+sed -i "s~\\\$codeblock_dockerfile~$dockerfile~g" $output_dir/*
 
 echo copy scripts
 cp $par_input_dir/* $output_dir
