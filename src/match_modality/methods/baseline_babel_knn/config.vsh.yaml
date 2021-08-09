@@ -1,0 +1,51 @@
+functionality:
+  name: baseline_babel_knn
+  namespace: match_modality_methods
+  version: dev
+  description: A baseline method for comparing match modality methods against.
+  authors:
+    - name: Alejandro Granados
+      email: alejandro.granados@czbiohub.org
+      roles: [ author, maintainer ]
+      props: { github: agranado }
+  arguments:
+    - name: "--input_mod1"
+      type: "file"
+      example: "dataset_mod1.h5ad"
+      description: Censored dataset.
+      required: true
+    - name: "--input_mod2"
+      type: "file"
+      example: "dataset_mod2.h5ad"
+      description: Censored dataset.
+      required: true
+    - name: "--distance_method"
+      type: "string"
+      default: "spearman"
+      description: Distance method for dimensionality reduction.
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: Dataset with predicted modality match.
+      required: true
+    - name: "--n_dims"
+      type: "integer"
+      default: 10
+      description: Number of dimensions to use for dimensionality reduction.
+    - name: "--n_neigh"
+      type: "integer"
+      default: 10
+      description: Number of neighbors for KNN. Match probability will be 1/n_neigh
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        packages: [ lmds, FNN ]
+  - type: nextflow
+    directive_time: 45m
+    directive_memory: "20 GB"
