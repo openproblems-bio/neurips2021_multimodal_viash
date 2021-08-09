@@ -26,7 +26,8 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
 #### Output data formats
 
-This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. These all have the following attributes:
+This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. Since this is a supervised problem, the input cells have been grouped into two groups: `'train'` and `'test'`.
+The `output_mod1` and `output_mod2` files contain information on the train cells, while the `output_mod1` and `output_solution` contain information on the test cells. These files all have the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -63,16 +64,16 @@ This component expects two inputs, `--input_mod1` and `--input_mod2`. They both 
 
 The dimensions of these two h5ad files are different;
 
-  * `output_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
-  * `output_mod2` contains only modality 2 data of the `'train'` cells.
+  * `input_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
+  * `input_mod2` contains only modality 2 data of the `'train'` cells.
 
 #### Output data formats
 
-This component should output only *one* h5ad file, `--output_prediction`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
+This component should output only *one* h5ad file, `--output`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
-  * **`.uns['method_id']`: The name of the prediction method.**
+  * `.uns['method_id']`: The name of the prediction method.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.obs_names`: Ids for the cells.
@@ -104,4 +105,5 @@ This component should output only *one* h5ad file, `--output`, containing metric
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.uns['metric_ids']`: The names of the outputted metrics (one or multiple).
   * `.uns['metric_values']`: The values of the outputted metrics (one or multiple, same length as `metric_ids`).
-  * `.uns['metric_moreisbetter']`: Whether or not less is better, for this metric (one or multiple, same length as `metric_ids`).
+
+In addition, each metric component should also have a TSV file named `metrics_meta.tsv` in its directory. This TSV file should contain the columns `metric_id`, `metric_min`, `metric_max`, and `metric_higherisbetter`.

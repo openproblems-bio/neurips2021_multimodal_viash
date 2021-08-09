@@ -8,8 +8,8 @@ library(lmds, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_mod1 = "sample_data/pbmc_1k_protein_v3.mod1.h5ad",
-  input_mod2 = "sample_data/pbmc_1k_protein_v3.mod2.h5ad",
+  input_mod1 = "sample_data/test_resource.mod1.h5ad",
+  input_mod2 = "sample_data/test_resource.mod2.h5ad",
   distance_method = "spearman",
   output = "output.h5ad",
   n_pcs = 4L,
@@ -17,7 +17,7 @@ par <- list(
 )
 ## VIASH END
 
-method_id = "mymethod" # fill in the name of your method here
+method_id <- "mymethod" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 ad1 <- read_h5ad(par$input_mod1)
@@ -31,15 +31,16 @@ dr <- lmds(
 )
 
 # split up the train vs. test dimensionality reduction
-dr_train <- dr[ad1$obs$group == "train",]
-dr_test <- dr[ad1$obs$group == "test",]
+dr_train <- dr[ad1$obs$group == "train", ]
+dr_test <- dr[ad1$obs$group == "test", ]
 responses_train <- ad2$X
 
 cat("Run KNN regression.\n")
-# For every column in mod2, predict mod2 for the test cells using the K nearest mod2 neighbors
+# For every column in mod2, predict mod2 for the test cells
+# using the K nearest mod2 train neighbors
 preds <- apply(responses_train, 2, function(yi) {
   FNN::knn.reg(
-    train = dr_train, 
+    train = dr_train,
     test = dr_test,
     y = yi,
     k = par$n_neighbors
@@ -48,7 +49,7 @@ preds <- apply(responses_train, 2, function(yi) {
 
 cat("Creating output matrix\n")
 prediction <- Matrix::Matrix(
-  preds, 
+  preds,
   sparse = TRUE,
   dimnames = list(rownames(dr_test), colnames(ad2))
 )
@@ -63,5 +64,4 @@ out <- anndata::AnnData(
 )
 
 cat("Writing predictions to file\n")
-out$write_h5ad(par$output, compression = "gzip")
-
+zzz <- out$write_h5ad(par$output, compression = "gzip")

@@ -1,0 +1,50 @@
+functionality:
+  name: baseline_babel
+  namespace: predict_modality_methods
+  version: dev
+  description: A baseline method for comparing modality prediction methods against.
+  authors:
+    - name: Alejandro Granados
+      email: alejandro.granados@czbiohub.org
+      roles: [ author, maintainer ]
+      props: { github: agranado }
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ contributor ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_mod1"
+      type: "file"
+      example: "dataset_mod1.h5ad"
+      description: Censored dataset with train and test split.
+      required: true
+    - name: "--input_mod2"
+      type: "file"
+      example: "dataset_mod2.h5ad"
+      description: Censored dataset with test data.
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: Dataset with predicted values for modality2.
+      required: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    run_args: 
+      - "--shm-size=1024m"
+    setup:
+      - type: docker
+        run: 
+          - wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && /bin/bash ~/miniconda.sh -b -p /opt/conda && /opt/conda/bin/conda -V
+          - cd / && git clone --depth 1 https://github.com/wukevin/babel.git
+          - cd /babel && /opt/conda/bin/conda env create -f environment.yml
+      - type: r
+        bioc: [ DropletUtils ]
+  - type: nextflow
+    directive_time: 10m
+    directive_memory: "20 GB"

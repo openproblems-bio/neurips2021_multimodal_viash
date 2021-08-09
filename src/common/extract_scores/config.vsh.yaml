@@ -15,6 +15,22 @@ functionality:
       required: true
       example: "input.h5ad"
       description: "Input h5ad files containing metadata and metrics in adata.uns."
+    - name: "--method_meta"
+      type: file
+      example: "method_meta.tsv"
+      description: "A method metadata file. Must contain column 'method_id'."
+      multiple: true
+    - name: "--dataset_meta"
+      type: file
+      example: "dataset_meta.tsv"
+      description: "A dataset metadata file. Must contain column 'dataset_id'."
+      multiple: true
+    - name: "--metric_meta"
+      type: file
+      example: "metric_meta.tsv"
+      description: "A metric metadata file containing the default value of each metric in case a method errored on a particular dataset. Must contain column 'metric_id' and 'metric_value'."
+      multiple: true
+      required: true
     - name: "--output"
       type: "file"
       direction: "output"

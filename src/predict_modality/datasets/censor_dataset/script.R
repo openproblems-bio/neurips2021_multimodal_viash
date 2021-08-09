@@ -22,11 +22,11 @@ ad1_raw <- anndata::read_h5ad(par$input_mod1)
 ad2_raw <- anndata::read_h5ad(par$input_mod2)
 ad1_mod <- unique(ad1_raw$var[["feature_types"]])
 ad2_mod <- unique(ad2_raw$var[["feature_types"]])
-new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_predmod_", tolower(ad1_mod), "2", tolower(ad2_mod))
+new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
 cat("Determining train/test group\n")
-group <- 
+group <-
   if (!is.null(ad1_raw$obs[["batch"]]) && all(ad1_raw$obs[["batch"]] %in% c("train", "test"))) {
     ad1_raw$obs[["batch"]]
   } else if (!is.null(ad1_raw$obs[["batch"]])) {
@@ -86,17 +86,17 @@ ad2_var <- ad2_raw$var %>% select(one_of("gene_ids"), feature_types)
 ad2_obs <- ad2_raw$obs[splor, ] %>% select(one_of("batch")) %>% mutate(group)
 
 out_mod2 <- anndata::AnnData(
-  X = ad2_X[group == "train",, drop = FALSE],
+  X = ad2_X[group == "train", , drop = FALSE],
   var = ad2_var,
-  obs = ad2_obs[group == "train",, drop = FALSE],
+  obs = ad2_obs[group == "train", , drop = FALSE],
   uns = common_uns
 )
 
 cat("Create solution object\n")
 out_solution <- anndata::AnnData(
-  X = ad2_X[group == "test",, drop = FALSE],
+  X = ad2_X[group == "test", , drop = FALSE],
   var = ad2_var,
-  obs = ad2_obs[group == "test",, drop = FALSE],
+  obs = ad2_obs[group == "test", , drop = FALSE],
   uns = common_uns
 )
 

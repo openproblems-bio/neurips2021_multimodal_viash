@@ -28,7 +28,7 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: Dataset with prodicted values for modality2.
+      description: Dataset with predicted values for modality2.
       required: true
     # additional parameters
     - name: "--distance_method"
