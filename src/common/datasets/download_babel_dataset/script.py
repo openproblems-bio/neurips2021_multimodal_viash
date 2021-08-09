@@ -1,71 +1,70 @@
 import urllib.request
 import tempfile
-import anndata
-import scanpy as sc
+import anndata as ad
 import pandas as pd
-
 import tarfile
-import numpy as np
-import gzip
-import scipy.io
 
 
 ## VIASH START
 
 par = {
     "id": "babel_GM12878",
-    "input_count": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file",
+    "input": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file",
     "output_rna": "output_rna.h5ad",
-    "output_mod2": "output_mod2.h5ad"
+    "output_mod2": "output_mod2.h5ad",
     "rep_n": 1
 }
 
 ## VIASH END
 
+tempdir = tempfile.mkdtemp()
+# with tempfile.TemporaryDirectory() as tempdir:
 
-print("Downloading file from", par['input_count'])
-tar_temp = tempfile.NamedTemporaryFile()
-url = par['input_count']
+print("Downloading file from", par['input'])
+temptar = f"{tempdir}/GSE166797_RAW.tar"
+urllib.request.urlretrieve(par['input'], temptar)
 
-urllib.request.urlretrieve(url, tar_temp.name)
+# # two replicates available as independent datasets
+# samples = ['GSM5085810_GM12878_rep1',
+#           'GSM5085812_GM12878_rep2']
 
-# two replicates available as independent datasets
-samples = ['GSM5085810_GM12878_rep1',
-          'GSM5085812_GM12878_rep2']
+# sample = samples[par['rep_n']]
 
-sample = samples[par['rep_n']]
+print('Extracting tar file into', temptar)
+tf = tarfile.open(temptar)
+tf.extractall(tempdir)
+tf.close()
 
-with tarfile.open(tar_temp.name) as tar:
+print("Reading sample h5")
+ad_rep1 = ad.read_10x_h5(tempdir + '/GSM5085810_GM12878_rep1_filtered_feature_bc_matrix.h5', gex_only = False)
+ad_rep2 = ad.read_10x_h5(tempdir + '/GSM5085812_GM12878_rep2_filtered_feature_bc_matrix.h5', gex_only = False)
 
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        print('Extracting tar file into:', tmpdirname)
-        print("Processing sample " + sample)
-        # put tmp directory here instead:
-        tar.extractall(path=tmpdirname+'/')
+ad_rep1.var_names_make_unique()
+ad_rep2.var_names_make_unique()
 
-        #adata_file = tar.extractfile('tmp/',sample + '_filtered_feature_bc_matrix.h5')
-        adata = sc.read_10x_h5(tmpdirname+'/'+sample + '_filtered_feature_bc_matrix.h5', gex_only = False)
+print("Merging into one AnnData object")
+comb = ad.concat(
+    {"rep1": ad_rep1, "rep2": ad_rep2},
+    axis=0,
+    join="outer",
+    label="batch",
+    fill_value=0,
+    index_unique="-"
+)
+catvar = pd.concat([ad_rep1.var, ad_rep2.var]).drop_duplicates()
+comb.var = catvar.loc[comb.var_names]
 
-
-    tar.close()
-
-
-# Set up var data
-adata.var_names_make_unique()
-
-adata.var.feature_types = adata.var.feature_types.astype(str)
-
-adata_RNA = adata[:, adata.var.feature_types.str.startswith('Gene')].copy()
-
-adata_ATAC = adata[:, adata.var.feature_types.str.startswith('Peaks')].copy()
+print("Splitting up into GEX and ATAC")
+adata_RNA = comb[:, comb.var.feature_types == "Gene Expression"].copy()
+adata_ATAC = comb[:, comb.var.feature_types == "Peaks"].copy()
 
 adata_RNA.var.feature_types = 'GEX'
 adata_ATAC.var.feature_types = 'ATAC'
 
 uns = { "dataset_id" : par["id"] }
 adata_RNA.uns = uns
-adata_ATAC.uns =uns
+adata_ATAC.uns = uns
 
-print("Saving output")
+print("Writing output")
 adata_RNA.write_h5ad(par['output_rna'], compression = "gzip")
-adata_RNA.write_h5ad(par['output_mod2'], compression = "gzip")
+adata_ATAC.write_h5ad(par['output_mod2'], compression = "gzip")
