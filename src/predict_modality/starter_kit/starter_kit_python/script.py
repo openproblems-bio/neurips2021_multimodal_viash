@@ -8,9 +8,8 @@
 #
 # https://viash.io/docs/creating_components/python/
 
-import anndata
 import logging
-import scanpy
+import anndata as ad
 import umap
 
 from scipy.sparse import csc_matrix
@@ -44,8 +43,8 @@ method_id = "python_starter_kit"
 
 logging.info('Reading `h5ad` files...')
 
-data_modality_1 = scanpy.read_h5ad(par['input_mod1'])
-data_modality_2 = scanpy.read_h5ad(par['input_mod2'])
+ad_mod1 = ad.read_h5ad(par['input_mod1'])
+ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
 # TODO: implement own method
 
@@ -58,10 +57,10 @@ embedder = umap.UMAP(
     metric=par['distance_method'],
 )
 
-X = embedder.fit_transform(data_modality_1.X)
+X = embedder.fit_transform(ad_mod1.X)
 
-X_train = X[data_modality_1.obs['group'] == 'train']
-X_test = X[data_modality_1.obs['group'] == 'test']
+X_train = X[ad_mod1.obs['group'] == 'train']
+X_test = X[ad_mod1.obs['group'] == 'test']
 
 assert len(X_train) + len(X_test) == len(X)
 
@@ -70,7 +69,7 @@ assert len(X_train) + len(X_test) == len(X)
 #
 # Make sure to use `toarray()` because the output might
 # be sparse and `KNeighborsRegressor` cannot handle it.
-y_train = data_modality_2.X.toarray()
+y_train = ad_mod2.X.toarray()
 
 logging.info('Running KNN regression...')
 
@@ -87,10 +86,10 @@ y_pred = reg.predict(X_test)
 # to support such data structures.
 y_pred = csc_matrix(y_pred)
 
-adata = anndata.AnnData(
+adata = ad.AnnData(
     X=y_pred,
     uns={
-        'dataset_id': data_modality_1.uns['dataset_id'],
+        'dataset_id': ad_mod1.uns['dataset_id'],
         'method_id': method_id,
     },
 )
