@@ -45,5 +45,5 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, scanpy ]
+        pip: [ anndata, scanpy, scipy ]
   - type: nextflow

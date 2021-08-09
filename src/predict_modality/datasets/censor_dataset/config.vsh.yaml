@@ -1,0 +1,65 @@
+functionality:
+  name: censor_dataset
+  namespace: predict_modality_datasets
+  version: dev
+  description: |
+    A component for censoring modality alignment datasets to be given
+    to competition participants for the 'predict modality' task.
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_mod1"
+      type: "file"
+      example: "dataset.h5ad"
+      description: An input h5ad dataset.
+      required: true
+    - name: "--input_mod2"
+      type: "file"
+      example: "dataset.h5ad"
+      description: An input h5ad dataset.
+      required: true
+    - name: "--output_mod1"
+      type: "file"
+      direction: "output"
+      example: "dataset_mod1.h5ad"
+      description: Mod1 h5ad file for both train and test cells.
+      required: true
+    - name: "--output_mod2"
+      type: "file"
+      direction: "output"
+      example: "dataset_mod2.h5ad"
+      description: Mod2 h5ad file for only the train cells.
+      required: true
+    - name: "--output_solution"
+      type: "file"
+      direction: "output"
+      example: "dataset_solution.h5ad"
+      description: Mod2 h5ad file for only the test cells.
+      required: true
+    - name: "--seed"
+      type: integer
+      description: "The seed for determining the train/test split."
+    - name: "--max_mod1_columns"
+      type: integer
+      description: "The maximum number of columns in mod1."
+    - name: "--max_mod2_columns"
+      type: integer
+      description: "The maximum number of columns in mod2."
+  resources:
+    - type: r_script
+      path: script.R
+  tests:
+    - type: r_script
+      path: test.R
+    - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        packages: [ GA ]
+  - type: nextflow
+    publish: true

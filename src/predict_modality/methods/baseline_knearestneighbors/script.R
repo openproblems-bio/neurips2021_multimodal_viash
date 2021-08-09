@@ -6,8 +6,8 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/task1/pbmc_1k_protein_v3.mod1.h5ad",
-  input_mod2 = "resources_test/task1/pbmc_1k_protein_v3.mod2.h5ad",
+  input_mod1 = "resources_test/predict_modality/pbmc_1k_protein_v3.mod1.h5ad",
+  input_mod2 = "resources_test/predict_modality/pbmc_1k_protein_v3.mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L
 )
