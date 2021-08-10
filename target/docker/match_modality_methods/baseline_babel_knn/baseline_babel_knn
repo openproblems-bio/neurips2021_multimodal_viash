@@ -674,7 +674,7 @@ par <- list(
 if (!dir.exists(dirname(par\$input_mod1))) {
   stop(
     "Directory '", dirname(par\$input_mod1), "' does not exist.\\n",
-    "You probably need to run \`aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/\` first."
+    "You probably need to run \`aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/ --no-sign-request\` first."
   )
 }
 

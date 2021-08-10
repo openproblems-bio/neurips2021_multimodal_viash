@@ -747,7 +747,7 @@ functionality:
       if (!dir.exists(dirname(par\$input_mod1))) {
         stop(
           "Directory '", dirname(par\$input_mod1), "' does not exist.\\n",
-          "You probably need to run \`aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/\` first."
+          "You probably need to run \`aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/ --no-sign-request\` first."
         )
       }
       
@@ -946,5 +946,5 @@ info:
   output: "target/docker/match_modality_methods/baseline_babel_knn"
   executable: "target/docker/match_modality_methods/baseline_babel_knn/baseline_babel_knn"
   viash_version: "0.5.1"
-  git_commit: "c19065cf59b95573b4f389947952d38153f092d1"
+  git_commit: "51fdf0db28fa3e22056641d7f2f5531f9f3d4ea1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
