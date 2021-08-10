@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component baseline_optimize_distances")
+      println("[ERROR] option --${it.name} not specified in component baseline_dr_nn_knn")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "baseline_optimize_distances." + it.name + "." + extOrName
+          ? "baseline_dr_nn_knn." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process baseline_optimize_distances_process {
+process baseline_dr_nn_knn_process {
   time '10m'
   memory '20 GB'
   tag "${id}"
@@ -184,7 +184,7 @@ process baseline_optimize_distances_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.baseline_optimize_distances.tests.testScript} | tee $output
+      ./${params.baseline_dr_nn_knn.tests.testScript} | tee $output
       """
     else
       """
@@ -197,14 +197,14 @@ process baseline_optimize_distances_process {
       """
 }
 
-workflow baseline_optimize_distances {
+workflow baseline_dr_nn_knn {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "baseline_optimize_distances"
+  def key = "baseline_dr_nn_knn"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -249,7 +249,7 @@ workflow baseline_optimize_distances {
       )
     }
 
-  result_ = baseline_optimize_distances_process(id_input_output_function_cli_params_) \
+  result_ = baseline_dr_nn_knn_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -279,7 +279,7 @@ workflow baseline_optimize_distances {
 
 workflow {
   def id = params.id
-  def fname = "baseline_optimize_distances"
+  def fname = "baseline_dr_nn_knn"
 
   def _params = params
 
@@ -291,14 +291,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.baseline_optimize_distances
+  def inputFiles = params.baseline_dr_nn_knn
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = baseline_optimize_distances(ch_)
+  result = baseline_dr_nn_knn(ch_)
   result.view{ it[1] }
 }
 
@@ -311,17 +311,17 @@ workflow test {
 
   main:
   params.test = true
-  params.baseline_optimize_distances.output = "baseline_optimize_distances.log"
+  params.baseline_dr_nn_knn.output = "baseline_dr_nn_knn.log"
 
   Channel.from(rootDir) \
-    | filter { params.baseline_optimize_distances.tests.isDefined } \
+    | filter { params.baseline_dr_nn_knn.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.baseline_optimize_distances.tests.testResources.collect{ file( p + it ) },
+        params.baseline_dr_nn_knn.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | baseline_optimize_distances
+    | baseline_dr_nn_knn
 
   emit:
-  baseline_optimize_distances.out
+  baseline_dr_nn_knn.out
 }
