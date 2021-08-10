@@ -1,0 +1,66 @@
+functionality:
+  name: "create_starter_kit"
+  namespace: "common"
+  version: "dev"
+  description: "Create a starter kit."
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_dir"
+      type: "file"
+      required: true
+      example: "src/predict_modality/starter_kit/starter_kit_r/"
+    - name: "--task"
+      type: "string"
+      required: true
+      example: "predict_modality"
+    - name: "--task_name"
+      type: "string"
+      required: true
+      example: "Predict Modality"
+    - name: "--language"
+      type: "string"
+      example: "r"
+      required: true
+    - name: "--language_name"
+      type: "string"
+      example: "R"
+      required: true
+    - name: "--block_starter"
+      type: "string"
+      example: "par <- list("
+      required: true
+    - name: "--evalai_phase"
+      type: "string"
+      example: "2276"
+      required: true
+    - name: "--memory"
+      type: "string"
+      default: "16 GB"
+    - name: "--time"
+      type: "string"
+      default: "10m"
+    - name: "--cpus"
+      type: "string"
+      default: "4"
+    - name: "--pipeline_version"
+      type: "string"
+      default: "0.4.0"
+    - name: "--output_dir"
+      type: "file"
+      direction: "output"
+      default: "output/starter_kits"
+  resources:
+    - type: bash_script
+      path: script.sh
+    - type: file
+      path: template_files
+    - type: file
+      path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: dataintuitive/viash
+  - type: nextflow
