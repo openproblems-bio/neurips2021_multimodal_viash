@@ -23,7 +23,7 @@ echo ""
 echo "######################################################################"
 echo "##              Build docker executable and container               ##"
 echo "######################################################################"
-viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
+bin/viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
   -c '.functionality.name := "method"'
 
 
@@ -32,7 +32,7 @@ echo "######################################################################"
 echo "##                      Build nextflow module                       ##"
 echo "######################################################################"
 # change the max time, max cpu and max memory usage to suit your needs.
-viash build config.vsh.yaml -o target/nextflow -p nextflow \
+bin/viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.functionality.name := "method"' \
   -c '.platforms[.type == "nextflow"].publish := true' \
   -c ".platforms[.type == 'nextflow'].directive_time := '$MAX_TIME'" \
@@ -49,7 +49,7 @@ PIPELINE_VERSION="$par_pipeline_version"
 
 # pulling latest version of pipeline
 export NXF_VER=21.04.1
-nextflow pull openproblems-bio/neurips2021_multimodal_viash -r $PIPELINE_VERSION
+# bin/nextflow pull openproblems-bio/neurips2021_multimodal_viash -r $PIPELINE_VERSION
 
 echo ""
 echo "######################################################################"
@@ -59,13 +59,14 @@ echo "######################################################################"
 # removing previous output
 [ -f output ] && rm -r output/
 
-nextflow \
+bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/generate_submission/main.nf \
   --datasets "$DATASET_LOC" \
   --publishDir output/predictions/$par_task/ \
-  -resume
+  -resume \
+  -latest
 
 echo ""
 echo "######################################################################"
