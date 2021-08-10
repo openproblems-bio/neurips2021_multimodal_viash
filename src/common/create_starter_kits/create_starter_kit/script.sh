@@ -29,6 +29,7 @@ echo copy template files
 cp $resources_dir/template_files/README.md $output_dir/
 cp $resources_dir/template_files/generate_submission.sh $output_dir/
 cp $resources_dir/template_files/nextflow.config $output_dir/
+cp $resources_dir/template_files/LICENSE $output_dir/
 cp $resources_dir/template_files/.gitignore $output_dir/
 
 echo replace terms in templates
