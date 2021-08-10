@@ -798,5 +798,5 @@ info:
   output: "target/docker/joint_embedding_methods/totalvi"
   executable: "target/docker/joint_embedding_methods/totalvi/totalvi"
   viash_version: "0.5.1"
-  git_commit: "f0db64075736f5b4a18662e85af023c1f86d2314"
+  git_commit: "aa9c56ca105587ba540999527531be53c5d9f679"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
