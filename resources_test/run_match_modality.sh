@@ -35,7 +35,7 @@ bin/viash run src/match_modality/metrics/calculate_auroc/config.vsh.yaml -- \
   --input_solution ${out_file}.test_sol.h5ad \
   --output ${out_file}.scores.h5ad
 
-bin/viash run src/common/extract_scores/extract_scores -- \
+bin/viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
   --metric_meta src/match_modality/metrics/calculate_auroc/metric_meta.tsv \
   --output ${out_file}.scores.tsv \
