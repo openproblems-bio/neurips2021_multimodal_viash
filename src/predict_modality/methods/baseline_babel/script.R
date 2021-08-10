@@ -18,7 +18,7 @@ par <- list(
 if (!dir.exists(dirname(par$input_mod1))) {
   stop(
     "Directory '", dirname(par$input_mod1), "' does not exist.\n",
-    "You probably need to run `aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/` first."
+    "You probably need to run `aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/ --no-sign-request` first."
   )
 }
 ## VIASH END
@@ -127,7 +127,7 @@ pred_long <-
     i = match(rownames(pred), rownames(ad1_test))[i],
     j = match(colnames(pred), colnames(ad2))[j]
   )
-pred_expanded <- 
+pred_expanded <-
   Matrix::sparseMatrix(
     i = pred_long$i,
     j = pred_long$j,
