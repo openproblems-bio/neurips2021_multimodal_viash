@@ -1,6 +1,6 @@
 functionality:
   name: "quality_control"
-  namespace: "common"
+  namespace: "common_process_dataset"
   version: "main_build"
   authors:
   - name: "Robrecht Cannoodt"
@@ -49,24 +49,6 @@ functionality:
     must_exist: false
     required: true
     direction: "Output"
-    multiple: false
-    multiple_sep: ":"
-  - type: "integer"
-    name: "--min_counts_per_gene"
-    alternatives: []
-    description: "Minimum counts per gene."
-    default: 100
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
-  - type: "integer"
-    name: "--min_counts_per_cell"
-    alternatives: []
-    description: "Minimum counts per cell."
-    default: 100
-    required: false
-    direction: "Input"
     multiple: false
     multiple_sep: ":"
   resources:
@@ -245,20 +227,6 @@ functionality:
         echo "        Normalized h5ad file."
         echo ""
       
-      
-        echo "   --min_counts_per_gene"
-        echo "        type: integer"
-        echo "        default: 100"
-        echo "        Minimum counts per gene."
-        echo ""
-      
-      
-        echo "   --min_counts_per_cell"
-        echo "        type: integer"
-        echo "        default: 100"
-        echo "        Minimum counts per cell."
-        echo ""
-      
       }
       ######## Helper functions for setting up Docker images for viash ########
       
@@ -412,11 +380,8 @@ functionality:
         cat << 'VIASHDOCKER'
       FROM dataintuitive/randpy:r4.0_py3.8_bioc3.12
       
-      RUN pip install --upgrade pip && \
-        pip install --no-cache-dir "scanpy"
-      
       RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
-        Rscript -e 'remotes::install_cran(c("anndata"), repos = "https://cran.rstudio.com")'
+        Rscript -e 'remotes::install_cran(c("anndata", "GA"), repos = "https://cran.rstudio.com")'
       
       VIASHDOCKER
       }
@@ -598,28 +563,12 @@ functionality:
                   VIASH_PAR_OUTPUT_MOD2=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
-              --min_counts_per_gene)
-                  VIASH_PAR_MIN_COUNTS_PER_GENE="$2"
-                  shift 2
-                  ;;
-              --min_counts_per_gene=*)
-                  VIASH_PAR_MIN_COUNTS_PER_GENE=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
-              --min_counts_per_cell)
-                  VIASH_PAR_MIN_COUNTS_PER_CELL="$2"
-                  shift 2
-                  ;;
-              --min_counts_per_cell=*)
-                  VIASH_PAR_MIN_COUNTS_PER_CELL=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
               ---setup)
-                  ViashDockerSetup 'openproblems/common_quality_control:main_build' "$2"
+                  ViashDockerSetup 'openproblems/common_process_dataset_quality_control:main_build' "$2"
                   exit 0
                   ;;
               ---setup=*)
-                  ViashDockerSetup 'openproblems/common_quality_control:main_build' "$(ViashRemoveFlags "$1")"
+                  ViashDockerSetup 'openproblems/common_process_dataset_quality_control:main_build' "$(ViashRemoveFlags "$1")"
                   exit 0
                   ;;
               ---dockerfile)
@@ -635,8 +584,8 @@ functionality:
                   shift 1
                   ;;
               ---debug)
-                  ViashNotice "+ docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t openproblems/common_quality_control:main_build"
-                  docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t openproblems/common_quality_control:main_build
+                  ViashNotice "+ docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t openproblems/common_process_dataset_quality_control:main_build"
+                  docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t openproblems/common_process_dataset_quality_control:main_build
                   exit 0
                   ;;
               *)  # positional arg or unknown option
@@ -669,14 +618,9 @@ functionality:
         ViashError '--output_mod2' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
-      if [ -z "$VIASH_PAR_MIN_COUNTS_PER_GENE" ]; then
-        VIASH_PAR_MIN_COUNTS_PER_GENE="100"
-      fi
-      if [ -z "$VIASH_PAR_MIN_COUNTS_PER_CELL" ]; then
-        VIASH_PAR_MIN_COUNTS_PER_CELL="100"
-      fi
       
-      ViashDockerSetup 'openproblems/common_quality_control:main_build' ifneedbepullelsecachedbuild
+      
+      ViashDockerSetup 'openproblems/common_process_dataset_quality_control:main_build' ifneedbepullelsecachedbuild
       
       # detect volumes from file arguments
       if [ ! -z "$VIASH_PAR_INPUT_RNA" ]; then
@@ -708,16 +652,16 @@ functionality:
       function viash_perform_chown {
         
         if [ ! -z "$VIASH_PAR_OUTPUT_RNA" ]; then
-          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_quality_control:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT_RNA"
+          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_process_dataset_quality_control:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT_RNA"
         fi
         if [ ! -z "$VIASH_PAR_OUTPUT_MOD2" ]; then
-          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_quality_control:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT_MOD2"
+          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_process_dataset_quality_control:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT_MOD2"
         fi
       }
       trap viash_perform_chown EXIT
       
       
-      cat << VIASHEOF | eval docker run --entrypoint=bash -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_quality_control:main_build
+      cat << VIASHEOF | eval docker run --entrypoint=bash -i --rm $VIASH_EXTRA_MOUNTS openproblems/common_process_dataset_quality_control:main_build
       set -e
       tempscript=\$(mktemp "$VIASH_TEMP/viash-run-quality_control-XXXXXX")
       function clean_up {
@@ -725,15 +669,10 @@ functionality:
       }
       trap clean_up EXIT
       cat > "\$tempscript" << 'VIASHMAIN'
-      ##
-      ## TODO: Note that this script contains only very basic preprocessing.
-      ##   This should be replaced at a later stage with something that makes more sense.
-      ##
-      
       cat("Loading dependencies\\n")
       library(anndata, warn.conflicts = FALSE, quietly = TRUE)
       library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-      # sc <- reticulate::import("scanpy")
+      library(GA, warn.conflicts = FALSE, quietly = TRUE)
       
       ## VIASH START
       # The following code has been auto-generated by Viash.
@@ -741,79 +680,63 @@ functionality:
         "input_rna" = $( if [ ! -z ${VIASH_PAR_INPUT_RNA+x} ]; then echo "'$VIASH_PAR_INPUT_RNA'"; else echo NULL; fi ),
         "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
         "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
-        "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi ),
-        "min_counts_per_gene" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_GENE+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_GENE)"; else echo NULL; fi ),
-        "min_counts_per_cell" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_CELL+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_CELL)"; else echo NULL; fi )
+        "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi )
       )
       
       resources_dir = "$VIASH_RESOURCES_DIR"
       
       ## VIASH END
       
+      ideal_train_pct <- 0.66
+      
       cat("Reading h5ad file\\n")
       ad_rna <- anndata::read_h5ad(par\$input_rna)
       ad_mod2 <- anndata::read_h5ad(par\$input_mod2)
       
-      obs <- ad_rna\$obs
-      var_rna <- ad_rna\$var
-      var_mod2 <- ad_mod2\$var
-      mat_rna <- as(ad_rna\$X, "CsparseMatrix")
-      mat_mod2 <- as(ad_mod2\$X, "CsparseMatrix")
+      cat("Determining train/test group\\n")
+      is_train <-
+        if (!is.null(ad_rna\$obs[["batch"]])) {
+          # use batch label to optimise the best train/test split
+          batch <- as.character(ad_rna\$obs[["batch"]])
+          nums <- table(batch)
+          nums <- setNames(as.numeric(nums), names(nums))
       
-      cat("Filtering genes and cells\\n")
-      fil_rna_genes <- colSums(mat_rna) >= par\$min_counts_per_gene
-      fil_mod2_genes <- colSums(mat_mod2) >= par\$min_counts_per_gene
-      fil_cells <- rowSums(mat_rna) + rowSums(mat_mod2) >= par\$min_counts_per_cell
+          # try to find a split that best matches 0.66
+          ga_out <- GA::ga(
+            type = "binary",
+            nBits = length(nums),
+            fitness = function(x) {
+              -abs(sum(nums[x == 1]) / sum(nums) - ideal_train_pct)
+            },
+            maxiter = 500,
+            monitor = FALSE
+          )
+          train_batches <- names(nums)[ga_out@solution[1,] == 1]
+          batch %in% train_batches
+        } else {
+          # TODO: should batch effect be simulated
+          # if there is no batch in the dataset??
+          
+          # split randomly
+          set.seed(par\$seed)
+          ix <- sample.int(
+            nrow(ad_rna), 
+            size = nrow(ad_rna) * ideal_train_pct,
+            replace = FALSE
+          )
+          seq_len(nrow(ad_rna)) %in% ix
+        }
       
-      obs <- obs[fil_cells, , drop = FALSE]
-      var_rna <- var_rna[fil_rna_genes, , drop = FALSE]
-      var_mod2 <- var_mod2[fil_mod2_genes, , drop = FALSE]
-      mat_rna <- as(mat_rna[fil_cells, fil_rna_genes, drop = FALSE], "CsparseMatrix")
-      mat_mod2 <- as(mat_mod2[fil_cells, fil_mod2_genes, drop = FALSE], "CsparseMatrix")
-      
-      cat("Releveling factors\\n")
-      if (ncol(obs) == 0) {
-        obs <- NULL
-      } else {
-        # relevel factors
-        for (i in seq_len(ncol(obs))) {
-          if (is.factor(obs[[i]])) {
-            obs[[i]] <- forcats::fct_drop(obs[[i]])
-          }
-        }
-        # relevel factors
-        for (i in seq_len(ncol(var_rna))) {
-          if (is.factor(var_rna[[i]])) {
-            var_rna[[i]] <- forcats::fct_drop(var_rna[[i]])
-          }
-        }
-        # relevel factors
-        for (i in seq_len(ncol(var_mod2))) {
-          if (is.factor(var_mod2[[i]])) {
-            var_mod2[[i]] <- forcats::fct_drop(var_mod2[[i]])
-          }
-        }
-      }
+      ad_rna.obs["is_train"] <- is_train
+      ad_mod2.obs["is_train"] <- is_train
       
       cat("Writing mod1 data\\n")
-      ad_rna_new <- anndata::AnnData(
-        X = mat_rna,
-        obs = obs,
-        var = var_rna,
-        uns = ad_rna\$uns
-      )
-      print(ad_rna_new)
-      zzz <- ad_rna_new\$write_h5ad(par\$output_rna, compression = "gzip")
+      print(ad_rna)
+      zzz <- ad_rna\$write_h5ad(par\$output_rna, compression = "gzip")
       
       cat("Writing mod2 data\\n")
-      ad_mod2_new <- anndata::AnnData(
-        X = mat_mod2,
-        obs = obs,
-        var = var_mod2,
-        uns = ad_mod2\$uns
-      )
-      print(ad_mod2_new)
-      zzz <- ad_mod2_new\$write_h5ad(par\$output_mod2, compression = "gzip")
+      print(ad_mod2)
+      zzz <- ad_mod2\$write_h5ad(par\$output_mod2, compression = "gzip")
       VIASHMAIN
       PATH="$VIASH_RESOURCES_DIR:\$PATH"
       
@@ -825,12 +748,7 @@ functionality:
     dest: "quality_control"
     is_executable: true
   description: "Perform quality control of the cells and features in a dataset.\n"
-  tests:
-  - type: "r_script"
-    path: "test.R"
-    is_executable: true
-  - type: "file"
-    path: "../../../../resources_test"
+  tests: []
   info: {}
 platform:
   type: "docker"
@@ -843,24 +761,11 @@ platform:
   setup_strategy: "ifneedbepullelsecachedbuild"
   privileged: false
   setup:
-  - type: "python"
-    user: false
-    packages:
-    - "scanpy"
-    pip: []
-    git: []
-    github: []
-    gitlab: []
-    mercurial: []
-    svn: []
-    bazaar: []
-    url: []
-    script: []
-    oType: "python"
   - type: "r"
     packages: []
     cran:
     - "anndata"
+    - "GA"
     bioc: []
     git: []
     github: []
@@ -873,10 +778,10 @@ platform:
     oType: "r"
 platforms: []
 info:
-  config: "src/common/quality_control/config.vsh.yaml"
+  config: "src/common/process_dataset/split_traintest/config.vsh.yaml"
   platform: "docker"
-  output: "target/docker/common/quality_control"
-  executable: "target/docker/common/quality_control/quality_control"
+  output: "target/docker/common_process_dataset/split_traintest"
+  executable: "target/docker/common_process_dataset/split_traintest/quality_control"
   viash_version: "0.5.1"
-  git_commit: "9f307a9494cb13fb912dd493f119c13fa8c1f804"
+  git_commit: "567e26f708124a34c11604e8bce0d60ddde9331a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -1,6 +1,6 @@
 functionality:
   name: "quality_control"
-  namespace: "common"
+  namespace: "common_process_dataset"
   version: "dev"
   description: |
     Perform quality control of the cells and features in a dataset.

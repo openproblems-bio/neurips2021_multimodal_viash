@@ -19,7 +19,7 @@ $target_dir/common_datasets/download_totalvi_spleen_lymph/download_totalvi_splee
   --output_mod2 "${out_file}.tmp.output_mod2.h5ad"
 
 # stringent filtering to reduce the file size of test data
-$target_dir/common/quality_control/quality_control \
+$target_dir/common_process_dataset/quality_control/quality_control \
   --input_rna "${out_file}.tmp.output_rna.h5ad" \
   --input_mod2 "${out_file}.tmp.output_mod2.h5ad" \
   --output_rna "${out_file}.output_rna.h5ad" \
