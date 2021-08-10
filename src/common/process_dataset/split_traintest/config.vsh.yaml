@@ -3,7 +3,7 @@ functionality:
   namespace: "common_process_dataset"
   version: "dev"
   description: |
-    Perform quality control of the cells and features in a dataset.
+    Split cells into train and test sets.
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
