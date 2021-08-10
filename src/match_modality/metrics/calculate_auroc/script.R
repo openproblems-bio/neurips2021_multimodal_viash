@@ -33,7 +33,7 @@ expect_true(
 )
 X_sol <- ad_sol$X
 X_pred <- ad_pred$X
-dimnames(X_sol) <- dimnames(X_pred) <- NULL
+dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\n")
 sol_summ <- summary(X_sol) %>%
@@ -42,7 +42,6 @@ sol_summ <- summary(X_sol) %>%
 pred_summ <- summary(X_pred) %>%
   left_join(sol_summ %>% rename(gold = x), by = c("i", "j")) %>%
   as_tibble() %>%
-  arrange(desc(x)) %>% 
   mutate(gold = ifelse(is.na(gold), 0, gold))
 
 expect_true(
@@ -57,7 +56,7 @@ num_positive_interactions <- nrow(sol_summ)
 num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
 extend_by <- 10000
 
-ord <- order(rank(values, ties.method = "random"), decreasing = T)
+ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
 values <- values[ord]
 are_true <- are_true[ord]
 
@@ -115,7 +114,7 @@ area_under <- tibble(
 # GENIE3bis::plot_curves(list(area_under = area_under, metrics = metrics))
 
 cat("Create output object\n")
-values <- as.list(area_under)
+out_values <- as.list(area_under)
 
 out <- anndata::AnnData(
   X = NULL,
@@ -123,8 +122,8 @@ out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
-    metric_ids = names(values),
-    metric_values = as.numeric(values)
+    metric_ids = names(out_values),
+    metric_values = as.numeric(out_values)
   )
 )
 
