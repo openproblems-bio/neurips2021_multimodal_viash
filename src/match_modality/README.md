@@ -12,32 +12,35 @@ Unlike in task 1, where the goal was to predict _all_ values of RNA or ADT from 
 
 ### Dataset censor component
 
-A component that censors an input datasets to the task-specific format. It expects two h5ad files containing the paired single-cell profiles using two different modalities (e.g. RNA and ADT). 
+A component which partially censors a multimodal dataset. First, it will use the batch label (if available) to split the cells into train and test groups. The cell profiles are anonymised and written to file. The pairing matrices are stored as separate files.
 
 #### Input data formats
 
-This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They both contain the attributes below. If the `feature_types` of one file is `"GEX"`, then that of the other must be either `"ATAC"` or `"ADT"`.
+It expects two h5ad files containing the paired single-cell profiles using two different modalities (e.g. RNA and ADT), `--input_mod1` and `--input_mod2`. They both contain the attributes below. If the `feature_types` of one file is `"GEX"`, then that of the other must be either `"ATAC"` or `"ADT"`.
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
+  * `.obs['is_train']`: Whether or not the cell is a train or a test cell.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
 #### Output data formats
 
-This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. 
+This component outputs *six* h5ad files, namely `--output_train_mod1`, `--output_train_mod2`, `--output_train_sol`, `--output_test_mod1`, `--output_test_mod2`, `--output_test_sol`.
 
-The `output_mod1` and `output_mod2` files contain the full profile matrices, except the rows have been anonymised and shuffled. These have the following attributes:
+The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
 
-The `output_solution` file contains a sparse matrix with the correct pairing of samples:
+The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
 
-  * `.X`: Sparse pairing matrix.
+  * `X`: The sparse pairing matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
+  * `.obs_names`: Anonymized mod1 cell ids.
+  * `.var_names`: Anonymized mod2 cell ids.
   * `.uns['dataset_id']`: The name of the dataset.
 
 ### Method component
@@ -46,22 +49,29 @@ A component that predicts which profiles from one modality might match with whic
 
 #### Input data formats
 
-This component expects two h5ad files, `--input_mod1` and `--input_mod2`, for which the rows are shuffled and anonymised. These files have the following attributes:
+This component expects **five** h5ad files, `--input_train_mod1`, `--input_train_mod2`, `--input_train_sol`, `--input_test_mod1`, and `--input_test_mod2`.
+
+The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
 
+The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
+
+  * `X`: The sparse pairing matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
+  * `.uns['dataset_id']`: The name of the dataset.
+
 #### Output data formats
 
 This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
-  * `.X`: Sparse pairing matrix.
+  * `X`: The sparse pairing matrix. Dimensions N×N with at most 100×N non-zero values, where N is the number of cells in the test set.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 
-If `input_mod1` has dimensions N×P and `input_mod2` has dimensions N×Q, the pairing matrix must be a sparse N×N matrix containing **at most 100×N non-zero values**. Predictions with more than 100×N non-zero values will be rejected by the metric component.
+If `input_test_mod1` has dimensions N×P and `input_test_mod2` has dimensions N×Q, the pairing matrix must be a sparse N×N matrix containing **at most 100×N non-zero values**. Predictions with more than 100×N non-zero values will be rejected by the metric component.
 
 ### Metric component
 
@@ -71,11 +81,11 @@ A component which compares the predicted pairing matrix against the ground-truth
 
 This component should output two h5ad files, `--input_prediction` and `--input_solution`. Both input files should have the following interface:
 
-  * `.X`: Sparse pairing matrix.
+  * `X`: The sparse pairing matrix
   * `.uns['dataset_id']`: The name of the dataset.
-  * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
+  * `.uns['method_id']`: The name of the prediction method.
 
-If the original dataset contained N profiles, the sparse pairing matrices should have a dimensionality of N×N. The solution should have exactly N non-zero values (reflecting the correct pairing) while the prediction should have at most 100×N non-zero values. 
+If the test set contains N cells, the sparse pairing matrices should have a dimensionality of N×N with at most 100×N non-zero values.
 
 #### Output data formats
 

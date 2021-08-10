@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_optimize_distances
+  name: baseline_dr_nn_knn
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing match modality methods against.
@@ -9,15 +9,30 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-    - name: "--input_mod1"
+    - name: "--input_train_mod1"
       type: "file"
-      example: "dataset_mod1.h5ad"
-      description: Censored dataset.
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
       required: true
-    - name: "--input_mod2"
+    - name: "--input_train_mod2"
       type: "file"
-      example: "dataset_mod2.h5ad"
-      description: Censored dataset.
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
+      required: true
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
       required: true
     - name: "--output"
       type: "file"
@@ -32,15 +47,6 @@ functionality:
     - name: "--n_dims"
       type: "integer"
       default: 10
-      description: Number of dimensions to use.
-    - name: "--n_ga_pop"
-      type: "integer"
-      default: 50
-      description: Population size of genetic algorithm.
-    - name: "--n_ga_iter"
-      type: "integer"
-      default: 100
-      description: Number of GA iterations to perform.
   resources:
     - type: r_script
       path: script.R
@@ -53,7 +59,9 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds, dynutils, GA ]
+        packages: [ lmds, dynutils, keras ]
+      - type: python
+        packages: [ tensorflow ]
   - type: nextflow
     directive_time: 10m
     directive_memory: "20 GB"
