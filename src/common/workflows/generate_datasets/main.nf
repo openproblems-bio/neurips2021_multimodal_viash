@@ -8,7 +8,8 @@ include  { simulate_dyngen_dataset }            from "$targetDir/common_datasets
 include  { download_azimuth_dataset }           from "$targetDir/common_datasets/download_azimuth_dataset/main.nf"            params(params)
 include  { download_totalvi_spleen_lymph }      from "$targetDir/common_datasets/download_totalvi_spleen_lymph/main.nf"       params(params)
 include  { download_totalvi_10x_datasets }      from "$targetDir/common_datasets/download_totalvi_10x_datasets/main.nf"       params(params)
-include  { quality_control }                    from "$targetDir/common_process_dataset/quality_control/main.nf"                              params(params)
+include  { quality_control }                    from "$targetDir/common_process_dataset/quality_control/main.nf"              params(params)
+include  { split_traintest }                    from "$targetDir/common_process_dataset/split_traintest/main.nf"              params(params)
 include  { overrideOptionValue }                from "$srcDir/common/workflows/utils.nf"
 
 def flattenMap(entry) {
@@ -115,6 +116,7 @@ workflow generate_datasets {
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | quality_control
+      | split_traintest
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
       
     emit: output_
