@@ -9,11 +9,17 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: atong01 }
   arguments:
-    - name: "--input_mod1"
+    - name: "--input_mod1_train"
       alternatives: ["-i1"]
       type: "file"
-      example: "dataset_mod1.h5ad"
-      description: Censored dataset.
+      example: "dataset_mod1_train.h5ad"
+      description: Censored dataset, training cells.
+      required: true
+    - name: "--input_mod1_test"
+      alternatives: ["-i1"]
+      type: "file"
+      example: "dataset_mod1_test.h5ad"
+      description: Censored dataset, test cells.
       required: true
     - name: "--input_mod2"
       alternatives: ["-i2"]
