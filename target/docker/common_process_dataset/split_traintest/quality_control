@@ -140,7 +140,7 @@ VIASH_RESOURCES_DIR=`ViashSourceDir ${BASH_SOURCE[0]}`
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "quality_control main_build"
-  echo "Perform quality control of the cells and features in a dataset."
+  echo "Split cells into train and test sets."
   echo
   echo "Options:"
 
@@ -671,8 +671,8 @@ is_train <-
     seq_len(nrow(ad_rna)) %in% ix
   }
 
-ad_rna.obs["is_train"] <- is_train
-ad_mod2.obs["is_train"] <- is_train
+ad_rna\$obs["is_train"] <- is_train
+ad_mod2\$obs["is_train"] <- is_train
 
 cat("Writing mod1 data\\n")
 print(ad_rna)

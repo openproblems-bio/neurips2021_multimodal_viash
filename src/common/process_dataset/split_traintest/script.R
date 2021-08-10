@@ -52,8 +52,8 @@ is_train <-
     seq_len(nrow(ad_rna)) %in% ix
   }
 
-ad_rna.obs["is_train"] <- is_train
-ad_mod2.obs["is_train"] <- is_train
+ad_rna$obs["is_train"] <- is_train
+ad_mod2$obs["is_train"] <- is_train
 
 cat("Writing mod1 data\n")
 print(ad_rna)

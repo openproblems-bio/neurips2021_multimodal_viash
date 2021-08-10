@@ -4,6 +4,7 @@
 
 Common:
 * Added dataset loader for Babel dataset.
+* Added component for creating a train/test split.
 
 Task 1, Predict Modality:
 * Starter Kit: Added starter kit for Python users
