@@ -19,7 +19,7 @@ if debug:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'asw_batch'
+METRIC = 'cc_cons'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
