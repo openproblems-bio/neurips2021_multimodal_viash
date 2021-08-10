@@ -9,7 +9,8 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 par <- list(
   input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
   input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
-  output_mod1 = "output_mod1.h5ad",
+  output_mod1_train = "output_mod1_train.h5ad",
+  output_mod1_test = "output_mod1_test.h5ad",
   output_mod2 = "output_mod2.h5ad",
   output_solution = "solution.h5ad",
   seed = 1L,
@@ -73,11 +74,22 @@ if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_X)) {
   ad2_X <- ad2_X[, ad2_ix, drop = FALSE]
 }
 
-cat("Creating mod1 object\n")
-out_mod1 <- anndata::AnnData(
-  X = ad1_X,
-  var = ad1_raw$var %>% select(one_of("gene_ids"), feature_types),
-  obs = ad1_raw$obs[splor, ] %>% select(one_of("batch")) %>% mutate(group),
+cat("Creating mod1 train object\n")
+ad1_var <- ad1_raw$var %>% select(one_of("gene_ids"), feature_types)
+ad1_obs <- ad1_raw$obs[splor, ] %>% select(one_of("batch")) %>% mutate(group)
+
+out_mod1_train <- anndata::AnnData(
+  X = ad1_X[group == "train", , drop = FALSE],
+  var = ad1_var,
+  obs = ad1_obs[group == "train", , drop = FALSE],
+  uns = common_uns
+)
+
+cat("Create mod1 test object\n")
+out_mod1_test <- anndata::AnnData(
+  X = ad1_X[group == "test", , drop = FALSE],
+  var = ad1_var,
+  obs = ad1_obs[group == "test", , drop = FALSE],
   uns = common_uns
 )
 
@@ -101,9 +113,13 @@ out_solution <- anndata::AnnData(
 )
 
 cat("Saving output files as h5ad\n")
-cat("output_mod1:")
-print(out_mod1)
-zzz <- out_mod1$write_h5ad(par$output_mod1, compression = "gzip")
+cat("output_mod1_train:")
+print(out_mod1_train)
+zzz <- out_mod1_train$write_h5ad(par$output_mod1_train, compression = "gzip")
+
+cat("output_mod1_test:")
+print(out_mod1_test)
+zzz <- out_mod1_test$write_h5ad(par$output_mod1_test, compression = "gzip")
 
 cat("output_mod2:")
 print(out_mod2)
