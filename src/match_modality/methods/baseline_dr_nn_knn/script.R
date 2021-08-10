@@ -62,10 +62,11 @@ colnames(preds) <- colnames(dr_x2_test)
 
 
 cat("Performing KNN between test mod2 DR and predicted test mod2\n")
+par_frac <- 1
 knn_out <- FNN::get.knnx(
   preds,
   dr_x2_test,
-  k = min(100, ceiling(0.1 * nrow(preds)))
+  k = min(100, ceiling(par_frac * nrow(preds)))
 )
 
 cat("Creating output data structures\n")

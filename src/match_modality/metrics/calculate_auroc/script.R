@@ -8,7 +8,7 @@ requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "resources_test/match_modality/test_resource.solution.h5ad",
+  input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
   input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
   output = "resources_test/match_modality/test_resource.scores.h5ad"
 )
@@ -31,15 +31,19 @@ ad_pred <-
 expect_true(
   ad_sol$uns$dataset_id == ad_pred$uns$dataset_id
 )
+X_sol <- ad_sol$X
+X_pred <- ad_pred$X
+dimnames(X_sol) <- dimnames(X_pred) <- NULL
 
 cat("Data wrangling\n")
-sol_summ <- summary(ad_sol$X) %>% 
-  as_tibble() %>% 
+sol_summ <- summary(X_sol) %>%
+  as_tibble() %>%
   filter(x != 0)
-pred_summ <- summary(ad_pred$X) %>% 
+pred_summ <- summary(X_pred) %>%
   left_join(sol_summ %>% rename(gold = x), by = c("i", "j")) %>%
-  as_tibble() %>% 
-  arrange(desc(x))
+  as_tibble() %>%
+  arrange(desc(x)) %>% 
+  mutate(gold = ifelse(is.na(gold), 0, gold))
 
 expect_true(
   nrow(pred_summ) <= 100 * nrow(sol_summ),
@@ -48,7 +52,7 @@ expect_true(
 
 cat("Calculate area under the curve\n")
 values <- pred_summ$x
-are_true <- !is.na(pred_summ$gold)
+are_true <- pred_summ$gold
 num_positive_interactions <- nrow(sol_summ)
 num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
 extend_by <- 10000
@@ -129,3 +133,7 @@ out <- anndata::AnnData(
 
 cat("Write output to h5ad file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")
+
+
+
+
