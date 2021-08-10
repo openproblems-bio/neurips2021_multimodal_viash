@@ -1,4 +1,4 @@
-# Predict Modality - Starter Kit for R Users
+# $par_task_name - Starter Kit for $par_language_name Users
 
 ## Getting started
 This starter kit assumes you have Bash, Java and Docker installed.
@@ -11,7 +11,7 @@ Run `./generate_submission.sh` and submit your results to [eval.ai](https://eval
 In order of relevance:
 
     config.vsh.yaml             Metadata of your method.
-    script.R                    A script containing your code.
+    script.*                    A script containing your code.
     generate_submission.sh      A helper script for running your method on the input datasets
                                 and generating a submission file to upload to eval.ai.
     sample_data/                A sample dataset for testing and debugging your code.
@@ -39,20 +39,13 @@ $ viash run config.vsh.yaml -- \
   --input_mod2 sample_data/test_resource.mod2.h5ad \
   --output test_output.h5ad
 ```
-    Loading dependencies
-    Reading h5ad files
-    Performing dimensionality reduction on the mod1 values
-    Run KNN regression.
-    Creating output matrix
-    Creating output AnnData
-    Writing predictions to file
 
 **Tip:** You can also omit the `config.vsh.yaml` in the above command. 
 
 **Tip #2:** Run `viash run -- --help` to view the command-line interface of your component.
 
 ## Changing the method code and/or dependencies
-You can adapt `script.R` however you like. All the code between the `## VIASH START` and `## VIASH END` code blocks automatically
+You can adapt the script however you like. All the code between the `## VIASH START` and `## VIASH END` code blocks automatically
 gets removed by viash and can be used for debugging your script.
 
 Take a look at the `config.vsh.yaml`. It contains information on which parameters your component has, and which package dependencies
@@ -69,10 +62,7 @@ $ viash run -- ---setup cachedbuild
 ```sh
 $ viash run -- ---dockerfile
 ```
-    FROM dataintuitive/randpy:r4.0_py3.8_bioc3.12
-
-    RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
-    Rscript -e 'remotes::install_cran(c("lmds", "FNN"), repos = "https://cran.rstudio.com")'
+$codeblock_dockerfile
 
 ## Troubleshooting
 What if running your method on the sample data works but fails when applied to the submission datasets? Given the following output:
@@ -107,15 +97,15 @@ $ ls -1a work/20/330b8a52b1a71489e7c53c66ef686e/
     dyngen_atac_bifurcating_converging_mod2.censor_dataset.output_mod2.h5ad
     .exitcode
 
-You can view the `stdout` and `stderr` of this process by viewing the `.command.log` and `.command.err` files respectively. You can also try to run your component manually by editing the `VIASH START` and `VIASH END` code block in your `script.R` (see below) and running through the code manually.
+You can view the `stdout` and `stderr` of this process by viewing the `.command.log` and `.command.err` files respectively. You can also try to run your component manually by editing the `VIASH START` and `VIASH END` code block in your script (see below) and running through the code manually.
 
 ```r
 ## VIASH START
-par <- list(
+$par_block_starter
     input_mod1 = "work/20/330b8a52b1a71489e7c53c66ef686e/dyngen_atac_bifurcating_converging_mod2.censor_dataset.output_mod1.h5ad",
     input_mod2 = "work/20/330b8a52b1a71489e7c53c66ef686e/dyngen_atac_bifurcating_converging_mod2.censor_dataset.output_mod2.h5ad",
     output = "debug.h5ad",
-    ... other parameters
+    # ... other parameters
 )
 ## VIASH END
 ```

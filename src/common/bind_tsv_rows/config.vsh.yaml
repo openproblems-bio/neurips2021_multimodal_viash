@@ -2,7 +2,7 @@ functionality:
   name: "bind_tsv_rows"
   namespace: "common"
   version: "dev"
-  description: "Combine tsv files by binding the rows.s"
+  description: "Combine tsv files by binding the rows."
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

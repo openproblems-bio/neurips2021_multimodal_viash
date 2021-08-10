@@ -1,3 +1,16 @@
+# neurips2021_multimodal_viash 0.5.0
+
+## NEW FEATURES
+
+Common:
+* Added dataset loader for Babel dataset.
+
+Task 1, Predict Modality:
+* Starter Kit: Added starter kit for Python users
+
+Task 3, Joint Embedding:
+* Metric: Added TotalVI metric 'latent_mixing_metric'.
+
 # neurips2021_multimodal_viash 0.4.0
 
 ## NEW FEATURES
