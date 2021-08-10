@@ -943,5 +943,5 @@ info:
   output: "target/docker/predict_modality_datasets/censor_dataset"
   executable: "target/docker/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.1"
-  git_commit: "aa9c56ca105587ba540999527531be53c5d9f679"
+  git_commit: "6a542b8a3c6416fdb1bbc0688789ac74e5cc679a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
