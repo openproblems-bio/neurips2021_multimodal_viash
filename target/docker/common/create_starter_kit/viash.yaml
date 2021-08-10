@@ -109,6 +109,15 @@ functionality:
     direction: "Output"
     multiple: false
     multiple_sep: ":"
+  - type: "file"
+    name: "--bin"
+    alternatives: []
+    default: "bin"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   resources:
   - type: "bash_script"
     text: |
@@ -329,6 +338,12 @@ functionality:
         echo "        default: output/starter_kits"
         echo ""
       
+      
+        echo "   --bin"
+        echo "        type: file"
+        echo "        default: bin"
+        echo ""
+      
       }
       ######## Helper functions for setting up Docker images for viash ########
       
@@ -480,9 +495,13 @@ functionality:
       #   ViashDockerFile
       function ViashDockerfile {
         cat << 'VIASHDOCKER'
-      FROM dataintuitive/viash:latest
+      FROM ubuntu:21.04
       
-      RUN :
+      RUN apt-get update && \
+        apt-get install -y wget zip && \
+        rm -rf /var/lib/apt/lists/*
+      
+      RUN wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
       VIASHDOCKER
       }
       
@@ -727,6 +746,14 @@ functionality:
                   VIASH_PAR_OUTPUT_DIR=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --bin)
+                  VIASH_PAR_BIN="$2"
+                  shift 2
+                  ;;
+              --bin=*)
+                  VIASH_PAR_BIN=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               ---setup)
                   ViashDockerSetup 'openproblems/common_create_starter_kit:main_build' "$2"
                   exit 0
@@ -809,6 +836,9 @@ functionality:
       if [ -z "$VIASH_PAR_OUTPUT_DIR" ]; then
         VIASH_PAR_OUTPUT_DIR="output/starter_kits"
       fi
+      if [ -z "$VIASH_PAR_BIN" ]; then
+        VIASH_PAR_BIN="bin"
+      fi
       
       ViashDockerSetup 'openproblems/common_create_starter_kit:main_build' ifneedbepullelsecachedbuild
       
@@ -820,6 +850,10 @@ functionality:
       if [ ! -z "$VIASH_PAR_OUTPUT_DIR" ]; then
         VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$VIASH_PAR_OUTPUT_DIR")"
         VIASH_PAR_OUTPUT_DIR=$(ViashAutodetectMount "$VIASH_PAR_OUTPUT_DIR")
+      fi
+      if [ ! -z "$VIASH_PAR_BIN" ]; then
+        VIASH_EXTRA_MOUNTS="$VIASH_EXTRA_MOUNTS $(ViashAutodetectMountArg "$VIASH_PAR_BIN")"
+        VIASH_PAR_BIN=$(ViashAutodetectMount "$VIASH_PAR_BIN")
       fi
       
       # Always mount the resource directory
@@ -866,12 +900,13 @@ functionality:
       par_cpus='$VIASH_PAR_CPUS'
       par_pipeline_version='$VIASH_PAR_PIPELINE_VERSION'
       par_output_dir='$VIASH_PAR_OUTPUT_DIR'
+      par_bin='$VIASH_PAR_BIN'
       
       resources_dir="$VIASH_RESOURCES_DIR"
       
       ## VIASH END
       
-      output_dir="\$par_output_dir/starter_kit-\$par_task-\$par_language/"
+      output_dir="\$par_output_dir/starter_kit-\$par_task-\$par_language"
       
       echo remove previous results
       [[ -d \$output_dir ]] && rm -r \$output_dir
@@ -880,7 +915,9 @@ functionality:
       mkdir -p \$output_dir
       
       echo copy template files
-      cp \$resources_dir/template_files/* \$output_dir/
+      cp \$resources_dir/template_files/README.md \$output_dir/
+      cp \$resources_dir/template_files/generate_submission.sh \$output_dir/
+      cp \$resources_dir/template_files/nextflow.config \$output_dir/
       cp \$resources_dir/template_files/.gitignore \$output_dir/
       
       echo replace terms in templates
@@ -899,12 +936,21 @@ functionality:
       dockerfile=\$(viash run \$par_input_dir/config.vsh.yaml -- ---dockerfile | sed 's#^#\\t#' | sed ':a;N;\$!ba;s/\\n/\\\\n/g' | sed 's#&#\\\\\\&#g')
       sed -i "s~\\\\\\\$codeblock_dockerfile~\$dockerfile~g" \$output_dir/*
       
+      echo copy executables
+      mkdir \$output_dir/bin
+      cp \$par_bin/viash \$output_dir/bin/
+      cp \$par_bin/nextflow \$output_dir/bin/
+      
       echo copy scripts
       cp \$par_input_dir/* \$output_dir
       
       echo copy sample resources
       mkdir -p \$output_dir/sample_data/
       cp \$resources_dir/resources_test/\$par_task/test_resource.mod[12].h5ad \$output_dir/sample_data/
+      
+      echo zipping starter kit
+      [ -f \${output_dir}.zip ] && rm \${output_dir}.zip
+      cd  \${output_dir} && zip -9 -r ../\$(basename \$output_dir).zip *
       
       echo starter kit is done!
       VIASHMAIN
@@ -927,14 +973,26 @@ functionality:
 platform:
   type: "docker"
   id: "docker"
-  image: "dataintuitive/viash"
+  image: "ubuntu:21.04"
   target_registry: "openproblems"
   namespace_separator: "_"
   resolve_volume: "Automatic"
   chown: true
   setup_strategy: "ifneedbepullelsecachedbuild"
   privileged: false
-  setup: []
+  setup:
+  - type: "apt"
+    packages:
+    - "wget"
+    - "zip"
+    oType: "apt"
+  - type: "docker"
+    resources: []
+    run:
+    - "wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash"
+    build_args: []
+    env: []
+    oType: "docker"
 platforms: []
 info:
   config: "src/common/create_starter_kits/create_starter_kit/config.vsh.yaml"
@@ -942,5 +1000,5 @@ info:
   output: "target/docker/common/create_starter_kit"
   executable: "target/docker/common/create_starter_kit/create_starter_kit"
   viash_version: "0.5.1"
-  git_commit: "51fdf0db28fa3e22056641d7f2f5531f9f3d4ea1"
+  git_commit: "f0db64075736f5b4a18662e85af023c1f86d2314"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

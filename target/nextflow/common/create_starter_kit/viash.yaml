@@ -109,6 +109,15 @@ functionality:
     direction: "Output"
     multiple: false
     multiple_sep: ":"
+  - type: "file"
+    name: "--bin"
+    alternatives: []
+    default: "bin"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   resources:
   - type: "bash_script"
     text: |
@@ -329,6 +338,12 @@ functionality:
         echo "        default: output/starter_kits"
         echo ""
       
+      
+        echo "   --bin"
+        echo "        type: file"
+        echo "        default: bin"
+        echo ""
+      
       }
       
       # initialise array
@@ -456,6 +471,14 @@ functionality:
                   VIASH_PAR_OUTPUT_DIR=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --bin)
+                  VIASH_PAR_BIN="$2"
+                  shift 2
+                  ;;
+              --bin=*)
+                  VIASH_PAR_BIN=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               *)  # positional arg or unknown option
                   # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
                   VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -513,6 +536,9 @@ functionality:
       if [ -z "$VIASH_PAR_OUTPUT_DIR" ]; then
         VIASH_PAR_OUTPUT_DIR="output/starter_kits"
       fi
+      if [ -z "$VIASH_PAR_BIN" ]; then
+        VIASH_PAR_BIN="bin"
+      fi
       
       
       cat << VIASHEOF | bash
@@ -541,12 +567,13 @@ functionality:
       par_cpus='$VIASH_PAR_CPUS'
       par_pipeline_version='$VIASH_PAR_PIPELINE_VERSION'
       par_output_dir='$VIASH_PAR_OUTPUT_DIR'
+      par_bin='$VIASH_PAR_BIN'
       
       resources_dir="$VIASH_RESOURCES_DIR"
       
       ## VIASH END
       
-      output_dir="\$par_output_dir/starter_kit-\$par_task-\$par_language/"
+      output_dir="\$par_output_dir/starter_kit-\$par_task-\$par_language"
       
       echo remove previous results
       [[ -d \$output_dir ]] && rm -r \$output_dir
@@ -555,7 +582,9 @@ functionality:
       mkdir -p \$output_dir
       
       echo copy template files
-      cp \$resources_dir/template_files/* \$output_dir/
+      cp \$resources_dir/template_files/README.md \$output_dir/
+      cp \$resources_dir/template_files/generate_submission.sh \$output_dir/
+      cp \$resources_dir/template_files/nextflow.config \$output_dir/
       cp \$resources_dir/template_files/.gitignore \$output_dir/
       
       echo replace terms in templates
@@ -574,12 +603,21 @@ functionality:
       dockerfile=\$(viash run \$par_input_dir/config.vsh.yaml -- ---dockerfile | sed 's#^#\\t#' | sed ':a;N;\$!ba;s/\\n/\\\\n/g' | sed 's#&#\\\\\\&#g')
       sed -i "s~\\\\\\\$codeblock_dockerfile~\$dockerfile~g" \$output_dir/*
       
+      echo copy executables
+      mkdir \$output_dir/bin
+      cp \$par_bin/viash \$output_dir/bin/
+      cp \$par_bin/nextflow \$output_dir/bin/
+      
       echo copy scripts
       cp \$par_input_dir/* \$output_dir
       
       echo copy sample resources
       mkdir -p \$output_dir/sample_data/
       cp \$resources_dir/resources_test/\$par_task/test_resource.mod[12].h5ad \$output_dir/sample_data/
+      
+      echo zipping starter kit
+      [ -f \${output_dir}.zip ] && rm \${output_dir}.zip
+      cd  \${output_dir} && zip -9 -r ../\$(basename \$output_dir).zip *
       
       echo starter kit is done!
       VIASHMAIN
@@ -614,6 +652,7 @@ functionality:
           create_starter_kit__cpus = "4"
           create_starter_kit__pipeline_version = "0.4.0"
           create_starter_kit__output_dir = "output/starter_kits"
+          create_starter_kit__bin = "bin"
           id = ""
           testScript = ""
           testResources = [  ]
@@ -760,6 +799,17 @@ functionality:
                 multiple_sep = ":"
                 value = "${params.create_starter_kit__output_dir}"
                 dflt = "output/starter_kits"
+              }
+              bin {
+                name = "bin"
+                otype = "--"
+                required = false
+                type = "file"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.create_starter_kit__bin}"
+                dflt = "bin"
               }
             }
           }
@@ -1111,5 +1161,5 @@ info:
   output: "target/nextflow/common/create_starter_kit"
   executable: "target/nextflow/common/create_starter_kit/create_starter_kit"
   viash_version: "0.5.1"
-  git_commit: "51fdf0db28fa3e22056641d7f2f5531f9f3d4ea1"
+  git_commit: "f0db64075736f5b4a18662e85af023c1f86d2314"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

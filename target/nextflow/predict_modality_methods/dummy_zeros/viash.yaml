@@ -756,5 +756,5 @@ info:
   output: "target/nextflow/predict_modality_methods/dummy_zeros"
   executable: "target/nextflow/predict_modality_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.1"
-  git_commit: "51fdf0db28fa3e22056641d7f2f5531f9f3d4ea1"
+  git_commit: "f0db64075736f5b4a18662e85af023c1f86d2314"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -7,6 +7,7 @@ set -e
 MAX_MEMORY="$par_memory"
 MAX_TIME="$par_time"
 MAX_CPUS="$par_cpus"
+PIPELINE_VERSION="0.4.0"
 
 # dataset location
 DATASET_LOC='s3://neurips2021-multimodal-public-datasets/$par_task/dyngen_**.output_mod[12].h5ad'
@@ -23,7 +24,7 @@ echo ""
 echo "######################################################################"
 echo "##              Build docker executable and container               ##"
 echo "######################################################################"
-viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
+bin/viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
   -c '.functionality.name := "method"'
 
 
@@ -32,7 +33,7 @@ echo "######################################################################"
 echo "##                      Build nextflow module                       ##"
 echo "######################################################################"
 # change the max time, max cpu and max memory usage to suit your needs.
-viash build config.vsh.yaml -o target/nextflow -p nextflow \
+bin/viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.functionality.name := "method"' \
   -c '.platforms[.type == "nextflow"].publish := true' \
   -c ".platforms[.type == 'nextflow'].directive_time := '$MAX_TIME'" \
@@ -42,30 +43,38 @@ viash build config.vsh.yaml -o target/nextflow -p nextflow \
 
 echo ""
 echo "######################################################################"
-echo "##                     Fetch pipeline codebase                      ##"
+echo "##                      Sync datasets from S3                       ##"
 echo "######################################################################"
 
-PIPELINE_VERSION="$par_pipeline_version"
+if [ ! -f output/public_datasets/$par_task/ ]; then
+  mkdir -p output/public_datasets/$par_task/
 
-# pulling latest version of pipeline
-export NXF_VER=21.04.1
-nextflow pull openproblems-bio/neurips2021_multimodal_viash -r $PIPELINE_VERSION
+  docker run \
+    --user $(id -u):$(id -g) \
+    --rm -it \
+    -v $(pwd)/output:/output \
+    amazon/aws-cli \
+    s3 sync s3://neurips2021-multimodal-public-datasets/$par_task/ /output/public_datasets/$par_task/ --no-sign-request
+fi
 
 echo ""
 echo "######################################################################"
 echo "##            Generating submission files using nextflow            ##"
 echo "######################################################################"
 
-# removing previous output
-[ -f output ] && rm -r output/
+export NXF_VER=21.04.1
 
-nextflow \
+# removing previous output
+[ -f output/predictions/$par_task/ ] && rm -r output/predictions/$par_task/
+
+bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/generate_submission/main.nf \
-  --datasets "$DATASET_LOC" \
+  --datasets 'output/predictions/$par_task/**.output_mod[12].h5ad' \
   --publishDir output/predictions/$par_task/ \
-  -resume
+  -resume \
+  -latest
 
 echo ""
 echo "######################################################################"
