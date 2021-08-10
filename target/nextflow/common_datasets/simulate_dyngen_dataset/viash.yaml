@@ -1444,5 +1444,5 @@ info:
   output: "target/nextflow/common_datasets/simulate_dyngen_dataset"
   executable: "target/nextflow/common_datasets/simulate_dyngen_dataset/simulate_dyngen_dataset"
   viash_version: "0.5.1"
-  git_commit: "0aee0875ed69d4a4c5d0907f6363bb8170fcdfa9"
+  git_commit: "6f575b2a9df44c62b311887a52b1f9c16a9f6a1c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

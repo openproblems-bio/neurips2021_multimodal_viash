@@ -102,45 +102,87 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output_mod1 from the output Map
-process filterOutput_mod1 {
+// A process that filters out output_train_mod1 from the output Map
+process filterOutput_train_mod1 {
 
   input:
     tuple val(id), val(input), val(_params)
   output:
     tuple val(id), val(output), val(_params)
   when:
-    input.keySet().contains("output_mod1")
+    input.keySet().contains("output_train_mod1")
   exec:
-    output = input["output_mod1"]
+    output = input["output_train_mod1"]
 
 }
 
-// A process that filters out output_mod2 from the output Map
-process filterOutput_mod2 {
+// A process that filters out output_train_mod2 from the output Map
+process filterOutput_train_mod2 {
 
   input:
     tuple val(id), val(input), val(_params)
   output:
     tuple val(id), val(output), val(_params)
   when:
-    input.keySet().contains("output_mod2")
+    input.keySet().contains("output_train_mod2")
   exec:
-    output = input["output_mod2"]
+    output = input["output_train_mod2"]
 
 }
 
-// A process that filters out output_solution from the output Map
-process filterOutput_solution {
+// A process that filters out output_train_sol from the output Map
+process filterOutput_train_sol {
 
   input:
     tuple val(id), val(input), val(_params)
   output:
     tuple val(id), val(output), val(_params)
   when:
-    input.keySet().contains("output_solution")
+    input.keySet().contains("output_train_sol")
   exec:
-    output = input["output_solution"]
+    output = input["output_train_sol"]
+
+}
+
+// A process that filters out output_test_mod1 from the output Map
+process filterOutput_test_mod1 {
+
+  input:
+    tuple val(id), val(input), val(_params)
+  output:
+    tuple val(id), val(output), val(_params)
+  when:
+    input.keySet().contains("output_test_mod1")
+  exec:
+    output = input["output_test_mod1"]
+
+}
+
+// A process that filters out output_test_mod2 from the output Map
+process filterOutput_test_mod2 {
+
+  input:
+    tuple val(id), val(input), val(_params)
+  output:
+    tuple val(id), val(output), val(_params)
+  when:
+    input.keySet().contains("output_test_mod2")
+  exec:
+    output = input["output_test_mod2"]
+
+}
+
+// A process that filters out output_test_sol from the output Map
+process filterOutput_test_sol {
+
+  input:
+    tuple val(id), val(input), val(_params)
+  output:
+    tuple val(id), val(output), val(_params)
+  when:
+    input.keySet().contains("output_test_sol")
+  exec:
+    output = input["output_test_sol"]
 
 }
 
@@ -327,18 +369,33 @@ workflow {
   result = censor_dataset(ch_)
 
   result \
-    | filterOutput_mod1 \
-    | view{ "Output for output_mod1: " + it[1] }
+    | filterOutput_train_mod1 \
+    | view{ "Output for output_train_mod1: " + it[1] }
 
 
   result \
-    | filterOutput_mod2 \
-    | view{ "Output for output_mod2: " + it[1] }
+    | filterOutput_train_mod2 \
+    | view{ "Output for output_train_mod2: " + it[1] }
 
 
   result \
-    | filterOutput_solution \
-    | view{ "Output for output_solution: " + it[1] }
+    | filterOutput_train_sol \
+    | view{ "Output for output_train_sol: " + it[1] }
+
+
+  result \
+    | filterOutput_test_mod1 \
+    | view{ "Output for output_test_mod1: " + it[1] }
+
+
+  result \
+    | filterOutput_test_mod2 \
+    | view{ "Output for output_test_mod2: " + it[1] }
+
+
+  result \
+    | filterOutput_test_sol \
+    | view{ "Output for output_test_sol: " + it[1] }
 
 }
 
