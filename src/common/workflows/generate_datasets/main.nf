@@ -8,7 +8,7 @@ include  { simulate_dyngen_dataset }            from "$targetDir/common_datasets
 include  { download_azimuth_dataset }           from "$targetDir/common_datasets/download_azimuth_dataset/main.nf"            params(params)
 include  { download_totalvi_spleen_lymph }      from "$targetDir/common_datasets/download_totalvi_spleen_lymph/main.nf"       params(params)
 include  { download_totalvi_10x_datasets }      from "$targetDir/common_datasets/download_totalvi_10x_datasets/main.nf"       params(params)
-include  { quality_control }                    from "$targetDir/common/quality_control/main.nf"                              params(params)
+include  { quality_control }                    from "$targetDir/common_process_dataset/quality_control/main.nf"                              params(params)
 include  { overrideOptionValue }                from "$srcDir/common/workflows/utils.nf"
 
 def flattenMap(entry) {
