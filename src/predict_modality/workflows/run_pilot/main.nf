@@ -10,41 +10,46 @@ include  { dummy_zeros }                 from "$targetDir/predict_modality_metho
 include  { calculate_cor }               from "$targetDir/predict_modality_metrics/calculate_cor/main.nf"              params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                               params(params)
 
-workflow run_task1_benchmark {
+workflow pilot_wf {
   main:
-  modsAndSolutions = 
+  inputs = 
     Channel.fromPath("output/public_datasets/predict_modality/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
+      | filter { !it[1].name.contains("output_solution") && !it[1].name.contains("output_test_sol") }
       | groupTuple
       | map { id, datas -> 
-        def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2]), it ]}
-        [ id, fileMap ]
+        def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2].replace("output_", "input_")), it ]}
+        [ id, fileMap, params ]
       }
+  solution = 
+    Channel.fromPath("output/public_datasets/match_modality/**.h5ad")
+      | map { [ it.getParent().baseName, it ] }
+      | filter { it[1].name.contains("output_solution") || it[1].name.contains("output_test_sol") }
 
   // for now, code needs one of these code blocks per method.
-  rfOut = modsAndSolutions 
-    | map { id, data -> [ id, [ input_mod1: data.output_mod1, input_mod2: data.output_mod2 ], params ] }
+  rfOut = inputs 
+    | map { id, data -> [ id, data, params ] }
     | baseline_randomforest
-    | join(modsAndSolutions) 
-    | map { id, pred, params, modsAndSols -> [ id + "_rf", [ input_prediction: pred, input_solution: modsAndSols.output_solution ], params ]}
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_rf", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  lmOut = modsAndSolutions 
-    | map { id, data -> [ id, [ input_mod1: data.output_mod1, input_mod2: data.output_mod2 ], params ] }
+  lmOut = inputs 
+    | map { id, data -> [ id, data, params ] }
     | baseline_linearmodel
-    | join(modsAndSolutions) 
-    | map { id, pred, params, modsAndSols -> [ id + "_lm", [ input_prediction: pred, input_solution: modsAndSols.output_solution ], params ]}
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_lm", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  knnOut = modsAndSolutions 
-    | map { id, data -> [ id, [ input_mod1: data.output_mod1, input_mod2: data.output_mod2 ], params ] }
+  knnOut = inputs 
+    | map { id, data -> [ id, data, params ] }
     | baseline_knearestneighbors
-    | join(modsAndSolutions) 
-    | map { id, pred, params, modsAndSols -> [ id + "_knn", [ input_prediction: pred, input_solution: modsAndSols.output_solution ], params ]}
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_knn", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  dzOut = modsAndSolutions 
-    | map { id, data -> [ id, [ input_mod1: data.output_mod1, input_mod2: data.output_mod2 ], params ] }
+  dzOut = inputs 
+    | map { id, data -> [ id, data, params ] }
     | dummy_zeros
-    | join(modsAndSolutions) 
-    | map { id, pred, params, modsAndSols -> [ id + "_dz", [ input_prediction: pred, input_solution: modsAndSols.output_solution ], params ]}
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_dz", [ input_prediction: pred, input_solution: sol ], params ]}
 
   rfOut.mix(lmOut, knnOut, dzOut)
     // | view{ [ "BASELINE", it[0], it[1] ] }
@@ -52,6 +57,6 @@ workflow run_task1_benchmark {
     // | view{ [ "METRIC", it[0], it[1] ] }
     | map { it[1] }
     | toList()
-    | map { [ "task1", it, params ] }
+    | map { [ "predict_modality", it, params ] }
     | extract_scores
 }

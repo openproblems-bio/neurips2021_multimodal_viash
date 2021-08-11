@@ -10,8 +10,12 @@ Common:
 Task 1, Predict Modality:
 * Starter Kit: Added starter kit for Python users.
 
+Task 2, Match Modality
+* NextFlow: Added pipelines for running the pilot and generating a submission.
+
 Task 3, Joint Embedding:
 * Metric: Added TotalVI metric 'latent_mixing_metric'.
+* NextFlow: Added pipelines for running the pilot and generating a submission.
 
 ## MAJOR CHANGES
 
