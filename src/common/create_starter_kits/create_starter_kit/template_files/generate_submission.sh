@@ -7,13 +7,7 @@ set -e
 MAX_MEMORY="$par_memory"
 MAX_TIME="$par_time"
 MAX_CPUS="$par_cpus"
-PIPELINE_VERSION="0.4.0"
-
-# dataset location
-DATASET_LOC='s3://neurips2021-multimodal-public-datasets/$par_task/dyngen_**.output_mod[12].h5ad'
-
-# alternatively, you could choose to download the contents to a local directory first.
-# DATASET_LOC='/path/to/downloaddir/$par_task/**.output_mod[12].h5ad'
+PIPELINE_VERSION="$pipeline_version"
 
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 

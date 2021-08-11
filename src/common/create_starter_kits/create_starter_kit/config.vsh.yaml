@@ -72,4 +72,4 @@ platforms:
           - zip
       - type: docker
         run: 
-          - wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
+          - wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash && chmod +x /usr/bin/viash
