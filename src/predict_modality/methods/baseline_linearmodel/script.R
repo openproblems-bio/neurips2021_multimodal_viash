@@ -17,7 +17,7 @@ par <- list(
 cat("Reading h5ad files\n")
 ad1_train <- anndata::read_h5ad(par$input_train_mod1)
 ad1_test <- anndata::read_h5ad(par$input_test_mod1)
-ad2 <- anndata::read_h5ad(par$input_mod2)
+ad2 <- anndata::read_h5ad(par$input_train_mod2)
 
 cat("Performing DR on the mod1 values\n")
 dr <- lmds::lmds(
