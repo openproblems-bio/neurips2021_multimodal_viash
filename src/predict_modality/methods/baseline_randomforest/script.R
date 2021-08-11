@@ -7,27 +7,29 @@ requireNamespace("ranger", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.censor_dataset.output_mod1.h5ad",
-  input_mod2 = "work/ea/93e6cd67b9d52bac9c71ee00bf853d/lymph_node_lymphoma_14k_mod2.censor_dataset.output_mod2.h5ad",
+  input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
+  input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
+  input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L
 )
 ## VIASH END
 
 cat("Reading h5ad files\n")
-ad1 <- anndata::read_h5ad(par$input_mod1)
-ad2 <- anndata::read_h5ad(par$input_mod2)
+ad1_train <- anndata::read_h5ad(par$input_train_mod1)
+ad1_test <- anndata::read_h5ad(par$input_test_mod1)
+ad2 <- anndata::read_h5ad(par$input_train_mod2)
 
 cat("Performing DR on the mod1 values\n")
 dr <- lmds::lmds(
-  ad1$X, 
+  rbind(ad1_train$X, ad1_test$X), 
   ndim = par$n_pcs,
   distance_method = par$distance_method
 )
 
-dr_train <- dr[ad1$obs$group == "train",]
+dr_train <- dr[1:nrow(ad1_train),]
 responses_train <- ad2$X
-dr_test <- dr[ad1$obs$group == "test",]
+dr_test <- dr[(nrow(ad1_train)+1):nrow(dr),]
 
 cat("Predicting for each column in modality 2\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {
@@ -52,7 +54,7 @@ colnames(prediction) <- colnames(ad2)
 out <- anndata::AnnData(
   X = prediction,
   uns = list(
-    dataset_id = ad1$uns[["dataset_id"]],
+    dataset_id = ad2$uns[["dataset_id"]],
     method_id = "baseline_randomforest"
   )
 )
