@@ -783,5 +783,5 @@ info:
   output: "target/docker/common_datasets/download_totalvi_spleen_lymph"
   executable: "target/docker/common_datasets/download_totalvi_spleen_lymph/download_totalvi_spleen_lymph"
   viash_version: "0.5.1"
-  git_commit: "4c6e1e835fe2936616c5aa0aacb7a77b775a4e09"
+  git_commit: "26bd191dc9daf974617902431acb23c23e769dcc"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
