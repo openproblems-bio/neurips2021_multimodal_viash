@@ -59,8 +59,7 @@ functionality:
   resources:
     - type: bash_script
       path: script.sh
-    - type: file
-      path: template_files
+    - path: template_files
     - type: file
       path: ../../../../resources_test
 platforms:
@@ -74,4 +73,3 @@ platforms:
       - type: docker
         run: 
           - wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
-  - type: nextflow

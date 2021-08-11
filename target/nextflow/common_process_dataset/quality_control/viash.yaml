@@ -768,7 +768,7 @@ functionality:
         cache 'deep'
         stageInMode "symlink"
         container "${container}"
-        publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
+      
         input:
           tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
         output:
@@ -952,7 +952,6 @@ platform:
   id: "nextflow"
   registry: "openproblems"
   namespace_separator: "_"
-  publish: true
   labels: []
 platforms: []
 info:
@@ -961,5 +960,5 @@ info:
   output: "target/nextflow/common_process_dataset/quality_control"
   executable: "target/nextflow/common_process_dataset/quality_control/quality_control"
   viash_version: "0.5.1"
-  git_commit: "459aaae65181d6029437256720ba8797db6ab635"
+  git_commit: "b21cd3524133602e44165e0660075bda1babe750"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -56,6 +56,7 @@ cp $par_bin/nextflow $output_dir/bin/
 echo copy scripts
 cp $par_input_dir/* $output_dir
 
+# todo: update to multisample
 echo copy sample resources
 mkdir -p $output_dir/sample_data/
 cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/

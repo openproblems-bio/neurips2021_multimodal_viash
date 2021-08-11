@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_procrustes
+  name: baseline_procrustes_knn
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing modality matching methods against.

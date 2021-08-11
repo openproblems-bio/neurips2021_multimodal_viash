@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component quality_control")
+      println("[ERROR] option --${it.name} not specified in component split_traintest")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "quality_control." + it.name + "." + extOrName
+          ? "split_traintest." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -171,7 +171,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process quality_control_process {
+process split_traintest_process {
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -196,7 +196,7 @@ process quality_control_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.quality_control.tests.testScript} | tee $output
+      ./${params.split_traintest.tests.testScript} | tee $output
       """
     else
       """
@@ -209,14 +209,14 @@ process quality_control_process {
       """
 }
 
-workflow quality_control {
+workflow split_traintest {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "quality_control"
+  def key = "split_traintest"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -261,7 +261,7 @@ workflow quality_control {
       )
     }
 
-  result_ = quality_control_process(id_input_output_function_cli_params_) \
+  result_ = split_traintest_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -291,7 +291,7 @@ workflow quality_control {
 
 workflow {
   def id = params.id
-  def fname = "quality_control"
+  def fname = "split_traintest"
 
   def _params = params
 
@@ -303,14 +303,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.quality_control
+  def inputFiles = params.split_traintest
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = quality_control(ch_)
+  result = split_traintest(ch_)
 
   result \
     | filterOutput_rna \
@@ -332,17 +332,17 @@ workflow test {
 
   main:
   params.test = true
-  params.quality_control.output = "quality_control.log"
+  params.split_traintest.output = "split_traintest.log"
 
   Channel.from(rootDir) \
-    | filter { params.quality_control.tests.isDefined } \
+    | filter { params.split_traintest.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.quality_control.tests.testResources.collect{ file( p + it ) },
+        params.split_traintest.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | quality_control
+    | split_traintest
 
   emit:
-  quality_control.out
+  split_traintest.out
 }

@@ -70,7 +70,7 @@ prediction = ad.AnnData(
     X=pairing_matrix,
     uns={
         "dataset_id": input_train_mod1.uns["dataset_id"],
-        "method_id": "baseline_procrustes"
+        "method_id": "baseline_procrustes_knn"
     }
 )
 prediction.write_h5ad(par["output"])

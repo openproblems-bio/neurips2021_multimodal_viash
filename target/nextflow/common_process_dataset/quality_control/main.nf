@@ -177,7 +177,7 @@ process quality_control_process {
   cache 'deep'
   stageInMode "symlink"
   container "${container}"
-  publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
+
   input:
     tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
   output:
