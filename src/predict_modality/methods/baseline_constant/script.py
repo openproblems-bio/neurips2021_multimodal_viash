@@ -15,20 +15,18 @@ par = {
 # load dataset to be censored
 ad_rna_train = anndata.read_h5ad(par["input_train_mod1"])
 ad_rna_test = anndata.read_h5ad(par["input_test_mod1"])
-ad_mod2 = anndata.read_h5ad(par["input_mod2"])
+ad_mod2 = anndata.read_h5ad(par["input_train_mod2"])
 
 
 # Find the correct shape
-
-ad_mod2_train = ad_mod2[ad_mod2.obs["group"] == "train"]
-mean = np.array(ad_mod2_train.X.mean(axis=0)).flatten()
+mean = np.array(ad_mod2.X.mean(axis=0)).flatten()
 prediction = np.tile(mean, (ad_rna_test.shape[0], 1))
 
 # Write out prediction
 out = anndata.AnnData(
     X=prediction,
     uns={
-        "dataset_id": ad_rna.uns["dataset_id"],
+        "dataset_id": ad_mod2.uns["dataset_id"],
         "method_id": "baseline_zeros",
     }
 )
