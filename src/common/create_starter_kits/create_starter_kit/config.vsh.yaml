@@ -59,11 +59,7 @@ functionality:
   resources:
     - type: bash_script
       path: script.sh
-    - path: template_files/.gitignore
-    - path: template_files/generate_submission.sh
-    - path: template_files/LICENSE
-    - path: template_files/nextflow.config
-    - path: template_files/README.md
+    - path: template_files
     - type: file
       path: ../../../../resources_test
 platforms:

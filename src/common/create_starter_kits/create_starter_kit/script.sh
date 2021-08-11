@@ -26,16 +26,11 @@ echo create new output dir
 mkdir -p $output_dir
 
 echo copy template files
-# cp $resources_dir/template_files/README.md $output_dir/
-# cp $resources_dir/template_files/generate_submission.sh $output_dir/
-# cp $resources_dir/template_files/nextflow.config $output_dir/
-# cp $resources_dir/template_files/LICENSE $output_dir/
-# cp $resources_dir/template_files/.gitignore $output_dir/
-cp $resources_dir/README.md $output_dir/
-cp $resources_dir/generate_submission.sh $output_dir/
-cp $resources_dir/nextflow.config $output_dir/
-cp $resources_dir/LICENSE $output_dir/
-cp $resources_dir/.gitignore $output_dir/
+cp $resources_dir/template_files/README.md $output_dir/
+cp $resources_dir/template_files/generate_submission.sh $output_dir/
+cp $resources_dir/template_files/nextflow.config $output_dir/
+cp $resources_dir/template_files/LICENSE $output_dir/
+cp $resources_dir/template_files/.gitignore $output_dir/
 
 echo replace terms in templates
 sed -i "s#\\\$par_task_name#$par_task_name#g" $output_dir/*
@@ -61,6 +56,7 @@ cp $par_bin/nextflow $output_dir/bin/
 echo copy scripts
 cp $par_input_dir/* $output_dir
 
+# todo: update to multisample
 echo copy sample resources
 mkdir -p $output_dir/sample_data/
 cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
