@@ -828,5 +828,5 @@ info:
   output: "target/docker/common_datasets/download_10x_dataset"
   executable: "target/docker/common_datasets/download_10x_dataset/download_10x_dataset"
   viash_version: "0.5.1"
-  git_commit: "5717d94af41740f3ba36580f08b85216469e51f1"
+  git_commit: "813c3c57c3befad0242c979b683eaa298c362925"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
