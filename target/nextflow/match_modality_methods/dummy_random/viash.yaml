@@ -706,6 +706,8 @@ functionality:
       }
       
       process dummy_random_process {
+        time '10m'
+        memory '20 GB'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -883,6 +885,8 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   labels: []
+  directive_time: "10m"
+  directive_memory: "20 GB"
 platforms: []
 info:
   config: "src/match_modality/methods/dummy_random/config.vsh.yaml"
@@ -890,5 +894,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_random"
   executable: "target/nextflow/match_modality_methods/dummy_random/dummy_random"
   viash_version: "0.5.1"
-  git_commit: "b21cd3524133602e44165e0660075bda1babe750"
+  git_commit: "b3fb922784861d949a7d64d15c6367c46c5d94ad"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

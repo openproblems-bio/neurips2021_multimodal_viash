@@ -884,5 +884,5 @@ info:
   output: "target/nextflow/match_modality_metrics/calculate_auroc"
   executable: "target/nextflow/match_modality_metrics/calculate_auroc/calculate_auroc"
   viash_version: "0.5.1"
-  git_commit: "b21cd3524133602e44165e0660075bda1babe750"
+  git_commit: "b3fb922784861d949a7d64d15c6367c46c5d94ad"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
