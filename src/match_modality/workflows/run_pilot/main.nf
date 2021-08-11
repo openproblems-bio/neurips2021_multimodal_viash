@@ -84,6 +84,6 @@ workflow pilot_wf {
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
     | combine(solutionsMeta)
-    | map{ [ task, [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
+    | map{ [ "output", [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
     | extract_scores
 }

@@ -16,5 +16,5 @@ bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/ \
+  --publishDir output/pilot/match_modality/ \
   -resume
