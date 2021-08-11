@@ -4,14 +4,16 @@ import numpy as np
 
 # VIASH START
 par = {
-    "input_mod1": "resources_test/predict_modality/test_resource.mod1.h5ad",
+    "input_mod1_train": "resources_test/predict_modality/test_resource.mod1.train.h5ad",
+    "input_mod1_test": "resources_test/predict_modality/test_resource.mod1.test.h5ad",
     "input_mod2": "resources_test/predict_modality/test_resource.mod2.h5ad",
     "output": "test_resource.prediction.h5ad",
 }
 # VIASH END
 
 # load dataset to be censored
-ad_mod1 = anndata.read_h5ad(par["input_mod1"])
+ad_mod1_train = anndata.read_h5ad(par["input_mod1_train"])
+ad_mod1_test = anndata.read_h5ad(par["input_mod1_test"])
 ad_mod2 = anndata.read_h5ad(par["input_mod2"])
 ad_test = ad_mod1[ad_mod1.obs["group"] == "test"]
 
