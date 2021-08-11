@@ -1,9 +1,13 @@
 # $par_task_name - Starter Kit for $par_language_name Users
 
-## Getting started
-This starter kit assumes you have Bash, Java and Docker installed.
+## Online Documentation
+Full documentation for the competition, including much of the information here, can be found online at https://openproblems.bio/neurips_docs/
 
-Install [Viash](https://viash.io/docs/getting_started/installation/) and [NextFlow](https://www.nextflow.io/index.html#GetStarted).
+## Getting started
+This starter kit assumes you have Bash, Java >= 8.0, and Docker installed.
+
+* Install [Docker](https://docs.docker.com/get-docker/)
+* Install [Java](https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot)
 
 Run `./generate_submission.sh` and submit your results to [eval.ai](https://eval.ai/web/challenges/challenge-page/1111/submission) by uploading the `submission.zip` file (easiest) or using the evalai-cli (recommended).
 
@@ -15,7 +19,7 @@ In order of relevance:
     generate_submission.sh      A helper script for running your method on the input datasets
                                 and generating a submission file to upload to eval.ai.
     sample_data/                A sample dataset for testing and debugging your code.
-    nextflow.config             A config file to ensure the nextflow pipeline will be able to 
+    nextflow.config             A config file to ensure the nextflow pipeline will be able to
                                 find your method.
     .gitignore                  A simple gitignore file.
 
@@ -24,7 +28,7 @@ If successful, running the `./generate_submission.sh` script will generate the f
     submission.zip              The submission files to be uploaded to eval.ai.
     target/docker/              A standalone command-line script for running your method
                                 using a Docker backend.
-    target/nextflow/            A NextFlow module for using your method as part of a 
+    target/nextflow/            A NextFlow module for using your method as part of a
                                 NextFlow pipeline.
     output/predictions/         The predictions made by your method.
     work/                       Temporary data created by the NextFlow pipeline.
@@ -40,7 +44,7 @@ $ viash run config.vsh.yaml -- \
   --output test_output.h5ad
 ```
 
-**Tip:** You can also omit the `config.vsh.yaml` in the above command. 
+**Tip:** You can also omit the `config.vsh.yaml` in the above command.
 
 **Tip #2:** Run `viash run -- --help` to view the command-line interface of your component.
 
@@ -80,7 +84,7 @@ $ ./generate_submission.sh
     Ignored     : 32
     Failed      : 32
 
-You can still submit your solutions to eval.ai but you will get penalized for every failed execution. 
+You can still submit your solutions to eval.ai but you will get penalized for every failed execution.
 
 You can check out what went wrong by looking at the tag for the process that failed (e.g. `20/330b8a`):
 

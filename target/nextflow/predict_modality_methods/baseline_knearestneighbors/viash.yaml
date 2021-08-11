@@ -915,5 +915,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_knearestneighbors"
   executable: "target/nextflow/predict_modality_methods/baseline_knearestneighbors/baseline_knearestneighbors"
   viash_version: "0.5.1"
-  git_commit: "16d4ccd92c470523d196f7289a8e318c08e4243b"
+  git_commit: "4dbee36d91be6314cf96c46065b52c720abc1c5f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
