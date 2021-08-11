@@ -144,31 +144,45 @@ function ViashHelp {
   echo
   echo "Options:"
 
-  echo "   --input_mod1"
+  echo "   --input_train_mod1"
   echo "        type: file, required parameter"
-  echo "        example: dataset_mod1.h5ad"
-  echo "        Censored dataset."
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled train mod1 profiles."
   echo ""
 
 
-  echo "   --input_mod2"
+  echo "   --input_train_mod2"
   echo "        type: file, required parameter"
-  echo "        example: dataset_mod2.h5ad"
-  echo "        Censored dataset."
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled train mod2 profiles."
   echo ""
 
 
-  echo "   --distance_method"
-  echo "        type: string"
-  echo "        default: spearman"
-  echo "        Distance method for dimensionality reduction."
+  echo "   --input_train_sol"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_solution.h5ad"
+  echo "        The pairing of train mod1&mod2 profiles."
+  echo ""
+
+
+  echo "   --input_test_mod1"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled test mod1 profiles."
+  echo ""
+
+
+  echo "   --input_test_mod2"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled test mod2 profiles."
   echo ""
 
 
   echo "   --output"
   echo "        type: file, required parameter, output"
   echo "        example: output.h5ad"
-  echo "        Dataset with predicted modality match."
+  echo "        The predicted pairing of test mod1&mod2 profiles."
   echo ""
 
 
@@ -216,28 +230,44 @@ while [[ $# -gt 0 ]]; do
             echo "baseline_babel_knn main_build"
             exit
             ;;
-        --input_mod1)
-            VIASH_PAR_INPUT_MOD1="$2"
+        --input_train_mod1)
+            VIASH_PAR_INPUT_TRAIN_MOD1="$2"
             shift 2
             ;;
-        --input_mod1=*)
-            VIASH_PAR_INPUT_MOD1=$(ViashRemoveFlags "$1")
+        --input_train_mod1=*)
+            VIASH_PAR_INPUT_TRAIN_MOD1=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --input_mod2)
-            VIASH_PAR_INPUT_MOD2="$2"
+        --input_train_mod2)
+            VIASH_PAR_INPUT_TRAIN_MOD2="$2"
             shift 2
             ;;
-        --input_mod2=*)
-            VIASH_PAR_INPUT_MOD2=$(ViashRemoveFlags "$1")
+        --input_train_mod2=*)
+            VIASH_PAR_INPUT_TRAIN_MOD2=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --distance_method)
-            VIASH_PAR_DISTANCE_METHOD="$2"
+        --input_train_sol)
+            VIASH_PAR_INPUT_TRAIN_SOL="$2"
             shift 2
             ;;
-        --distance_method=*)
-            VIASH_PAR_DISTANCE_METHOD=$(ViashRemoveFlags "$1")
+        --input_train_sol=*)
+            VIASH_PAR_INPUT_TRAIN_SOL=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --input_test_mod1)
+            VIASH_PAR_INPUT_TEST_MOD1="$2"
+            shift 2
+            ;;
+        --input_test_mod1=*)
+            VIASH_PAR_INPUT_TEST_MOD1=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --input_test_mod2)
+            VIASH_PAR_INPUT_TEST_MOD2="$2"
+            shift 2
+            ;;
+        --input_test_mod2=*)
+            VIASH_PAR_INPUT_TEST_MOD2=$(ViashRemoveFlags "$1")
             shift 1
             ;;
         --output)
@@ -278,20 +308,29 @@ eval set -- $VIASH_POSITIONAL_ARGS
 
 
 # check whether required parameters exist
-if [ -z "$VIASH_PAR_INPUT_MOD1" ]; then
-  ViashError '--input_mod1' is a required argument. Use "--help" to get more information on the parameters.
+if [ -z "$VIASH_PAR_INPUT_TRAIN_MOD1" ]; then
+  ViashError '--input_train_mod1' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
-if [ -z "$VIASH_PAR_INPUT_MOD2" ]; then
-  ViashError '--input_mod2' is a required argument. Use "--help" to get more information on the parameters.
+if [ -z "$VIASH_PAR_INPUT_TRAIN_MOD2" ]; then
+  ViashError '--input_train_mod2' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TRAIN_SOL" ]; then
+  ViashError '--input_train_sol' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TEST_MOD1" ]; then
+  ViashError '--input_test_mod1' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TEST_MOD2" ]; then
+  ViashError '--input_test_mod2' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
 if [ -z "$VIASH_PAR_OUTPUT" ]; then
   ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
-fi
-if [ -z "$VIASH_PAR_DISTANCE_METHOD" ]; then
-  VIASH_PAR_DISTANCE_METHOD="spearman"
 fi
 if [ -z "$VIASH_PAR_N_DIMS" ]; then
   VIASH_PAR_N_DIMS="10"
@@ -309,18 +348,6 @@ function clean_up {
 }
 trap clean_up EXIT
 cat > "\$tempscript" << 'VIASHMAIN'
-# The following code has been auto-generated by Viash.
-par <- list(
-  "input_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_MOD1'"; else echo NULL; fi ),
-  "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
-  "distance_method" = $( if [ ! -z ${VIASH_PAR_DISTANCE_METHOD+x} ]; then echo "'$VIASH_PAR_DISTANCE_METHOD'"; else echo NULL; fi ),
-  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
-  "n_dims" = $( if [ ! -z ${VIASH_PAR_N_DIMS+x} ]; then echo "as.integer($VIASH_PAR_N_DIMS)"; else echo NULL; fi ),
-  "n_neigh" = $( if [ ! -z ${VIASH_PAR_N_NEIGH+x} ]; then echo "as.integer($VIASH_PAR_N_NEIGH)"; else echo NULL; fi )
-)
-
-resources_dir = "$VIASH_RESOURCES_DIR"
-
 cat(">> Loading dependencies\\n")
 
 requireNamespace("anndata", quietly = TRUE)
@@ -332,49 +359,46 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
 ## VIASH START
+# The following code has been auto-generated by Viash.
 par <- list(
-  input_mod1 = "output/task1_datasets/10x_pbmc_granulocyte_sorted_3k_rna/10x_pbmc_granulocyte_sorted_3k_rna.prepare_task1_dataset.output_mod1.h5ad",
-  input_mod2 = "output/task1_datasets/10x_pbmc_granulocyte_sorted_3k_rna/10x_pbmc_granulocyte_sorted_3k_rna.prepare_task1_dataset.output_mod2.h5ad",
-  output = "output_babel_knn.h5ad",
-  data_id = "granulocyte_multiome10x"
-  n_dims = 10,
-  n_neigh= 10
+  "input_train_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_MOD1'"; else echo NULL; fi ),
+  "input_train_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_MOD2'"; else echo NULL; fi ),
+  "input_train_sol" = $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_SOL+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_SOL'"; else echo NULL; fi ),
+  "input_test_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD1'"; else echo NULL; fi ),
+  "input_test_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD2'"; else echo NULL; fi ),
+  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
+  "n_dims" = $( if [ ! -z ${VIASH_PAR_N_DIMS+x} ]; then echo "as.integer($VIASH_PAR_N_DIMS)"; else echo NULL; fi ),
+  "n_neigh" = $( if [ ! -z ${VIASH_PAR_N_NEIGH+x} ]; then echo "as.integer($VIASH_PAR_N_NEIGH)"; else echo NULL; fi )
 )
-if (!dir.exists(dirname(par\$input_mod1))) {
-  stop(
-    "Directory '", dirname(par\$input_mod1), "' does not exist.\\n",
-    "You probably need to run \`aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/ --no-sign-request\` first."
-  )
-}
 
+resources_dir = "$VIASH_RESOURCES_DIR"
+
+## VIASH END
+
+cat("Reading h5ad files\\n")
+input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
+input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2)
+input_train_sol <- anndata::read_h5ad(par\$input_train_sol)
+input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
+input_test_mod2 <- anndata::read_h5ad(par\$input_test_mod2)
 
 babel_location <- "../babel/bin/"      # location of babel executables
 
 cat(">> Reading h5ad files\\n")
-ad1 <- anndata::read_h5ad(par\$input_mod1)
-if (is.null(ad1\$var\$gene_ids)) ad1\$var\$gene_ids <- colnames(ad1)
-ad2 <- anndata::read_h5ad(par\$input_mod2)
-if (is.null(ad2\$var\$gene_ids)) ad2\$var\$gene_ids <- colnames(ad2)
+if (is.null(input_train_mod1\$var\$gene_ids)) input_train_mod1\$var\$gene_ids <- colnames(input_train_mod1)
+if (is.null(input_train_mod2\$var\$gene_ids)) input_train_mod2\$var\$gene_ids <- colnames(input_train_mod2)
+if (is.null(input_test_mod1\$var\$gene_ids)) input_test_mod1\$var\$gene_ids <- colnames(input_test_mod1)
+if (is.null(input_test_mod2\$var\$gene_ids)) input_test_mod2\$var\$gene_ids <- colnames(input_test_mod2)
 
-mod1 <- unique(ad1\$var\$feature_types)
-
-# subset train and test
-ad1_train <- ad1[ad1\$obs\$group == "train", ]
-ad1_test <-  ad1[ad1\$obs\$group == "test", ]
-# obs2 also has train/test split
-ad2_train <- ad2[ad2\$obs\$group == "train", ]
-ad2_test <-  ad2[ad2\$obs\$group == "test", ]
+mod1 <- unique(input_test_mod1\$var\$feature_types)
 
 # multiome_matrix for export to Babel's input format
-multiome_matrix <- cbind(ad1_train\$X, ad2_train\$X)
-
-
+multiome_matrix <- cbind(input_train_mod1\$X, input_train_mod2\$X)
 
 # generate multiome anndata object for training
 ad_babel <- anndata::AnnData(
   X = multiome_matrix,
-  var = bind_rows(ad1_train\$var, ad2_train\$var),
-  obs = ad1_train\$obs
+  var = bind_rows(input_train_mod1\$var, input_train_mod2\$var)
 )
 
 # setting up babel dirs
@@ -411,17 +435,16 @@ DropletUtils::write10xCounts(
 cat(">> Writing test dataset as 10x-CellRanger H5 format\\n")
 DropletUtils::write10xCounts(
   paste0(dir_data, "test_input.h5"),
-  t(ad1_test\$X),
-  gene.id = ad1_test\$var\$gene_ids,
-  gene.symbol = colnames(ad1_test),
-  barcodes = rownames(ad1_test),
+  t(input_test_mod1\$X),
+  gene.id = input_test_mod1\$var\$gene_ids,
+  gene.symbol = colnames(input_test_mod1),
+  barcodes = rownames(input_test_mod1),
   type = "HDF5",
   version = "3",
   genome = "GRCh38",
-  gene.type = unname(feature_type_map[ad1_test\$var\$feature_types]),
+  gene.type = unname(feature_type_map[input_test_mod1\$var\$feature_types]),
   overwrite = TRUE
 )
-
 
 
 cat(">> Babel: train model\\n")
@@ -457,10 +480,10 @@ pred <- anndata::read_h5ad(paste0(dir_pred, "/rna_atac_adata.h5ad"))
 #####  KNN
 
 # Babel's output has filtered the features: select those in common
-ad2_test_filter = ad2_test[,row.names(ad2_test\$var) %in% row.names(pred\$var)]
+input_test_mod2_filter = input_test_mod2[,row.names(input_test_mod2\$var) %in% row.names(pred\$var)]
 
 # train matrix for KNN
-train_X = rbind(pred[,row.names(ad2_test_filter\$var)]\$X,ad2_test_filter\$X)
+train_X = rbind(pred[,row.names(input_test_mod2_filter\$var)]\$X,input_test_mod2_filter\$X)
 
 # dimensional reduction
 dr <- lmds::lmds(
