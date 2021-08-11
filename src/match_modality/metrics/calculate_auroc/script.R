@@ -7,10 +7,15 @@ requireNamespace("anndata", quietly = TRUE)
 requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
+# par <- list(
+#   input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
+#   input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
+#   output = "resources_test/match_modality/test_resource.scores.h5ad"
+# )
 par <- list(
-  input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
-  input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
-  output = "resources_test/match_modality/test_resource.scores.h5ad"
+  input_solution = list.files("work/f5/9ca16cf20b3bc2c72ba1b84e9be8af", pattern = "*.test_sol.h5ad", full.names = TRUE),
+  input_prediction = list.files("work/f5/9ca16cf20b3bc2c72ba1b84e9be8af", pattern = "*.output.h5ad", full.names = TRUE),
+  output = "debug.h5ad"
 )
 ## VIASH END
 
@@ -32,7 +37,7 @@ expect_true(
   ad_sol$uns$dataset_id == ad_pred$uns$dataset_id
 )
 X_sol <- ad_sol$X
-X_pred <- ad_pred$X
+X_pred <- as(ad_pred$X, "CsparseMatrix")
 dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\n")
