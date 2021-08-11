@@ -116,7 +116,7 @@ workflow generate_datasets {
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | quality_control
-    //   | split_traintest
+      | split_traintest
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
       
     emit: output_
