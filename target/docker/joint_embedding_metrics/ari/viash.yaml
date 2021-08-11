@@ -769,5 +769,5 @@ info:
   output: "target/docker/joint_embedding_metrics/ari"
   executable: "target/docker/joint_embedding_metrics/ari/ari"
   viash_version: "0.5.1"
-  git_commit: "5eecdf0f741bd995bbe77571dc2aac5819560338"
+  git_commit: "b221ccab2261e73ff24f9b228ed6aabf28d96a0a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
