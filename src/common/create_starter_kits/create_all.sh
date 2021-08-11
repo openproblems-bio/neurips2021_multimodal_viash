@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# run prior to running this script:
+# bin/viash_build -q common
+
+set -ex
+
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
