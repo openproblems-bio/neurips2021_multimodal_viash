@@ -313,7 +313,7 @@ adata_out = ad.AnnData(
     uns = {
         "dataset_id": predict_adata.uns["dataset_id"],
         "method_id" : predict_adata.uns["method_id"],
-        "method_ids" : ["latent_mixing_metric"],
+        "metric_ids" : ["latent_mixing_metric"],
         "metric_values" : [latent_mixing_metric]
     }
 )

@@ -16,5 +16,5 @@ bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/ \
+  --publishDir output/pilot/joint_embedding/ \
   -resume

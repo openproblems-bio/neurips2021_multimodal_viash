@@ -12,5 +12,5 @@ bin/nextflow \
   run . \
   -main-script src/predict_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/ \
+  --publishDir output/pilot/predict_modality/ \
   -resume

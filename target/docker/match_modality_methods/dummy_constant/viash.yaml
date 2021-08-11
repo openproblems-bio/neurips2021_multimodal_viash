@@ -810,5 +810,5 @@ info:
   output: "target/docker/match_modality_methods/dummy_constant"
   executable: "target/docker/match_modality_methods/dummy_constant/dummy_constant"
   viash_version: "0.5.1"
-  git_commit: "1ef8480efd579cb36d176b0efdda5819d3ca6395"
+  git_commit: "e440d6855f2a0c73d51b90c9f01f61c7f47da3c6"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
