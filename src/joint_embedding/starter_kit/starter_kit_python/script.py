@@ -1,5 +1,5 @@
 # Dependencies:
-# pip: scikit-learn, anndata, scanpy, umap-learn
+# pip: anndata, umap-learn
 #
 # Python starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
 # with `TODO` are supposed to be changed by you.
@@ -10,17 +10,9 @@
 
 import logging
 import anndata as ad
-import umap
+import umap.umap_ as umap
 
-from scipy.sparse import csc_matrix
-
-from sklearn.neighbors import KNeighborsRegressor
-
-
-logging.basicConfig(
-    level=logging.INFO
-)
-
+logging.basicConfig(level=logging.INFO)
 
 ## VIASH START
 
@@ -30,6 +22,7 @@ logging.basicConfig(
 par = {
     'input_mod1': 'sample_data/test_resource.mod1.h5ad',
     'input_mod2': 'sample_data/test_resource.mod2.h5ad',
+    'output': 'output.h5ad',
     'n_dim': 100,
 }
 
@@ -39,33 +32,18 @@ par = {
 method_id = "python_starter_kit"
 
 logging.info('Reading `h5ad` files...')
-
 ad_mod1 = ad.read_h5ad(par['input_mod1'])
 ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
-# TODO: implement own method
+# TODO: implement your own method
+logging.info('Concatenating modality 1 and modality 2')
+ad_combined = ad.concat([ad_mod1, ad_mod2], axis = 1)
 
-logging.info('Concatenating modality 1 and modality 2...')
-
-# Transpose the objects (concatenate only works along axis 0)
-ad_mod1.transpose()
-ad_mod2.transpose()
-
-# Concatenate the objects
-ad_combined = ad_mod1.concatenate(ad_mod2)
-
-# Transpose back
-ad_combined.transpose()
-
-logging.info('Performing dimensionality reduction on concatenated datasets...')
-
-embedder = umap.UMAP(
-    n_components=par['n_dim'],
-)
-
+logging.info('Performing dimensionality reduction on concatenated datasets')
+embedder = umap.UMAP(n_components=par['n_dim'])
 X_umap = embedder.fit_transform(ad_combined.X)
 
-# Replace ad.X with the dimensionaltiy reduced embedding
+logging.info('Storing output to file')
 adata = ad.AnnData(
     X=X_umap,
     uns={
@@ -73,7 +51,4 @@ adata = ad.AnnData(
         'method_id': method_id,
     },
 )
-
-logging.info('Storing annotated data...')
-
-adata.write(par['output'])
+adata.write_h5ad(par['output'], compression = "gzip")
