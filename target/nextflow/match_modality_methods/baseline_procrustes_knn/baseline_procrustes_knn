@@ -377,7 +377,7 @@ mod1te = mod1[mod1.obs["group"] == "test", :]
 mod2te = mod2[mod2.obs["group"] == "test", :]
 
 print("Perform PCA")
-n_svd = min(par["n_svd"], mod1.n_obs, mod2.n_obs)
+n_svd = min(par["n_svd"], mod1.n_obs, mod2.n_obs, mod1.n_vars, mod1.n_vars)
 
 mod1.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod1.X)
 mod2.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod2.X)

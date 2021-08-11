@@ -769,5 +769,5 @@ info:
   output: "target/docker/joint_embedding_metrics/nmi"
   executable: "target/docker/joint_embedding_metrics/nmi/nmi"
   viash_version: "0.5.1"
-  git_commit: "27b4caf57e5dd13d9b201dc94feb40ac252caab7"
+  git_commit: "9bf7a41e61442bc9df05735575ddf66f20776cd4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

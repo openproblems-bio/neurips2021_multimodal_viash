@@ -790,6 +790,7 @@ method_meta <-
       )
     )
   }
+print(method_meta)
 # prepend 'method_' to colnames if this was not done already
 colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_meta)))
 

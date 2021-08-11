@@ -805,7 +805,7 @@ functionality:
       mod2te = mod2[mod2.obs["group"] == "test", :]
       
       print("Perform PCA")
-      n_svd = min(par["n_svd"], mod1.n_obs, mod2.n_obs)
+      n_svd = min(par["n_svd"], mod1.n_obs, mod2.n_obs, mod1.n_vars, mod1.n_vars)
       
       mod1.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod1.X)
       mod2.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod2.X)
@@ -885,5 +885,5 @@ info:
   output: "target/docker/match_modality_methods/baseline_procrustes_knn"
   executable: "target/docker/match_modality_methods/baseline_procrustes_knn/baseline_procrustes_knn"
   viash_version: "0.5.1"
-  git_commit: "27b4caf57e5dd13d9b201dc94feb40ac252caab7"
+  git_commit: "9bf7a41e61442bc9df05735575ddf66f20776cd4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
