@@ -9,25 +9,36 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: agranado }
   arguments:
-    - name: "--input_mod1"
+    - name: "--input_train_mod1"
       type: "file"
-      example: "dataset_mod1.h5ad"
-      description: Censored dataset.
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
       required: true
-    - name: "--input_mod2"
+    - name: "--input_train_mod2"
       type: "file"
-      example: "dataset_mod2.h5ad"
-      description: Censored dataset.
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
       required: true
-    - name: "--distance_method"
-      type: "string"
-      default: "spearman"
-      description: Distance method for dimensionality reduction.
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
+      required: true
     - name: "--output"
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: Dataset with predicted modality match.
+      description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
     - name: "--n_dims"
       type: "integer"
@@ -44,8 +55,14 @@ platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
+      - type: docker
+        run: 
+          - wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && /bin/bash ~/miniconda.sh -b -p /opt/conda && /opt/conda/bin/conda -V
+          - cd / && git clone --depth 1 https://github.com/wukevin/babel.git
+          - cd /babel && /opt/conda/bin/conda env create -f environment.yml
       - type: r
-        packages: [ lmds, FNN ]
+        cran: [ lmds, FNN ]
+        bioc: [ DropletUtils ]
   - type: nextflow
     directive_time: 45m
     directive_memory: "20 GB"
