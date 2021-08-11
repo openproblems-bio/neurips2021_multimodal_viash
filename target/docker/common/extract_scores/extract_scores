@@ -768,7 +768,7 @@ scores <- map_df(par\$input, function(inp) {
 })
 
 expect_true(
-  all(scores\$metric_ids %in% metric_meta\$metric_id),
+  all(unique(scores\$metric_ids) %in% metric_meta\$metric_id),
   info = "All metric_ids in h5ad should be mentioned in the metric_meta"
 )
 

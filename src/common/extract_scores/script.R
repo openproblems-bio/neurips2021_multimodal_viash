@@ -6,12 +6,13 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/predict_modality/test_resource.scores.h5ad",
+  # input = "resources_test/predict_modality/test_resource.scores.h5ad",
+  input = list.files("work/e4/ae4cc2ae9e6f2c5649b8994b6c532c", pattern = "*.h5ad", full.names = TRUE),
   output = "tmp/task1_scores.tsv",
   summary = "tmp/task1_summary.tsv",
   method_meta = NULL,
   dataset_meta = NULL,
-  metric_meta = "src/predict_modality/metrics/calculate_cor/metric_meta.tsv"
+  metric_meta = "src/match_modality/metrics/calculate_auroc/metric_meta.tsv"
 )
 par$input <- par$input[!duplicated(basename(par$input))]
 inp <- par$input[[1]]
@@ -47,7 +48,7 @@ scores <- map_df(par$input, function(inp) {
 })
 
 expect_true(
-  all(scores$metric_ids %in% metric_meta$metric_id),
+  all(unique(scores$metric_ids) %in% metric_meta$metric_id),
   info = "All metric_ids in h5ad should be mentioned in the metric_meta"
 )
 

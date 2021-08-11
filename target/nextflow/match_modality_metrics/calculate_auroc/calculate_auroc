@@ -303,7 +303,7 @@ expect_true(
   ad_sol\$uns\$dataset_id == ad_pred\$uns\$dataset_id
 )
 X_sol <- ad_sol\$X
-X_pred <- ad_pred\$X
+X_pred <- as(ad_pred\$X, "CsparseMatrix")
 dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\\n")
