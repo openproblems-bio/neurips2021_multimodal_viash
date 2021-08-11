@@ -5,16 +5,16 @@ import numpy as np
 
 # VIASH START
 par = {
-    "input_mod1_train": "../../../../resources_test/predict_modality/test_resource.mod1.h5ad",
-    "input_mod1_test": "../../../../resources_test/predict_modality/test_resource.mod1.h5ad",
-    "input_mod2": "../../../../resources_test/predict_modality/test_resource.mod2.h5ad",
+    "input_train_mod1": "../../../../resources_test/predict_modality/test_resource.train_mod1.h5ad",
+    "input_test_mod1": "../../../../resources_test/predict_modality/test_resource.test_mod1.h5ad",
+    "input_train_mod2": "../../../../resources_test/predict_modality/test_resource.train_mod2.h5ad",
     "output": "../../../../resources_test/predict_modality/test_resource.prediction.h5ad",
 }
 # VIASH END
 
 # load dataset to be censored
-ad_rna_train = anndata.read_h5ad(par["input_mod1_train"])
-ad_rna_test = anndata.read_h5ad(par["input_mod1_test"])
+ad_rna_train = anndata.read_h5ad(par["input_train_mod1"])
+ad_rna_test = anndata.read_h5ad(par["input_test_mod1"])
 ad_mod2 = anndata.read_h5ad(par["input_mod2"])
 
 
