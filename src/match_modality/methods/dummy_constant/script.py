@@ -1,24 +1,27 @@
-import anndata
+import anndata as ad
 import numpy as np
 
 # VIASH START
 par = {
-    "input_mod1": "resources_test/match_modality/test_resource.mod1.h5ad",
-    "input_mod2": "resources_test/match_modality/test_resource.mod2.h5ad",
+    "input_train_mod1": "resources_test/match_modality/test_resource.train_mod1.h5ad",
+    "input_train_mod2": "resources_test/match_modality/test_resource.train_mod2.h5ad",
+    "input_train_sol": "resources_test/match_modality/test_resource.train_sol.h5ad",
+    "input_test_mod1": "resources_test/match_modality/test_resource.test_mod1.h5ad",
+    "input_test_mod2": "resources_test/match_modality/test_resource.test_mod2.h5ad",
     "output": "resources_test/match_modality/test_resource.prediction.h5ad",
 }
 # VIASH END
 
-# load dataset to be censored
-ad_mod1 = anndata.read_h5ad(par["input_mod1"])
-ad_mod2 = anndata.read_h5ad(par["input_mod2"])
+print("Load datasets")
+input_test_mod1 = ad.read_h5ad(par["input_test_mod1"])
+input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 
-# Write out prediction
-prediction = anndata.AnnData(
-    X=np.ones((ad_mod1.n_obs, ad_mod2.n_obs)),
+print("Writing predictions")
+prediction = ad.AnnData(
+    X=np.ones((input_test_mod1.n_obs, input_test_mod2.n_obs)),
     uns={
         "method_id": "dummy_constant",
-        "dataset_id": ad_mod1.uns["dataset_id"],
+        "dataset_id": input_test_mod1.uns["dataset_id"],
     }
 )
 prediction.write_h5ad(par["output"])

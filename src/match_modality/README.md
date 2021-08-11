@@ -21,22 +21,22 @@ It expects two h5ad files containing the paired single-cell profiles using two d
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
+  * `.obs['is_train']`: Whether or not the cell is a train or a test cell.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
 #### Output data formats
 
-This component outputs *six* h5ad files, namely `--output_train_mod1`, `--output_train_mod2`, `--output_train_pairing`, `--output_test_mod1`, `--output_test_mod2`, `--output_test_pairing`.
+This component outputs *six* h5ad files, namely `--output_train_mod1`, `--output_train_mod2`, `--output_train_sol`, `--output_test_mod1`, `--output_test_mod2`, `--output_test_sol`.
 
 The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs_names`: Anonymized cell ids.
   * `.var_names`: Ids for the features.
 
-The `output_train_pairing` and `output_test_pairing` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
+The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
 
   * `X`: The sparse pairing matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
   * `.obs_names`: Anonymized mod1 cell ids.
@@ -49,21 +49,18 @@ A component that predicts which profiles from one modality might match with whic
 
 #### Input data formats
 
-This component expects **five** h5ad files, `--input_train_mod1`, `--input_train_mod2`, `--input_train_pairing`, `--input_test_mod1`, and `--input_test_mod2`.
+This component expects **five** h5ad files, `--input_train_mod1`, `--input_train_mod2`, `--input_train_sol`, `--input_test_mod1`, and `--input_test_mod2`.
 
 The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs_names`: Anonymized cell ids.
   * `.var_names`: Ids for the features.
 
-The `output_train_pairing` and `output_test_pairing` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
+The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
 
   * `X`: The sparse pairing matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
-  * `.obs_names`: Anonymized mod1 cell ids.
-  * `.var_names`: Anonymized mod2 cell ids.
   * `.uns['dataset_id']`: The name of the dataset.
 
 #### Output data formats
@@ -71,8 +68,6 @@ The `output_train_pairing` and `output_test_pairing` files contain sparse matric
 This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
   * `X`: The sparse pairing matrix. Dimensions N×N with at most 100×N non-zero values, where N is the number of cells in the test set.
-  * `.obs_names`: Anonymized mod1 cell ids.
-  * `.var_names`: Anonymized mod2 cell ids.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 
@@ -87,8 +82,6 @@ A component which compares the predicted pairing matrix against the ground-truth
 This component should output two h5ad files, `--input_prediction` and `--input_solution`. Both input files should have the following interface:
 
   * `X`: The sparse pairing matrix
-  * `.obs_names`: Anonymized mod1 cell ids.
-  * `.var_names`: Anonymized mod2 cell ids.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 

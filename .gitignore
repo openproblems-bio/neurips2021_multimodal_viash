@@ -23,3 +23,6 @@ output
 [._]*.sw[a-p]
 [._]sw[a-p]
 tags
+
+# macOS
+.DS_store
