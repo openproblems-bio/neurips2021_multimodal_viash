@@ -159,7 +159,6 @@ def overrideIO(_params, inputs, outputs) {
 
 process calculate_rf_oob_process {
   time '45m'
-  memory '20 GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

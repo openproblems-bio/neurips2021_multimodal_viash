@@ -159,7 +159,6 @@ def overrideIO(_params, inputs, outputs) {
 
 process baseline_pca_process {
   time '10m'
-  memory '20 GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

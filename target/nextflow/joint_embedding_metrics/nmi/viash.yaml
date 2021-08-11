@@ -652,7 +652,6 @@ functionality:
       
       process nmi_process {
         time '45m'
-        memory '20 GB'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -835,7 +834,6 @@ platform:
   namespace_separator: "_"
   labels: []
   directive_time: "45m"
-  directive_memory: "20 GB"
 platforms: []
 info:
   config: "src/joint_embedding/metrics/nmi/config.vsh.yaml"
@@ -843,5 +841,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/nmi"
   executable: "target/nextflow/joint_embedding_metrics/nmi/nmi"
   viash_version: "0.5.1"
-  git_commit: "5cd34c6bf18725d7f078887102f5456eb545092e"
+  git_commit: "16d4ccd92c470523d196f7289a8e318c08e4243b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -158,6 +158,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process totalvi_process {
+  time '45m'
+  memory '20 GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

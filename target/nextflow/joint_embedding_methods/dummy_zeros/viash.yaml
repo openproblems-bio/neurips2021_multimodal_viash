@@ -606,7 +606,6 @@ functionality:
       
       process dummy_zeros_process {
         time '10m'
-        memory '20 GB'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -784,7 +783,6 @@ platform:
   namespace_separator: "_"
   labels: []
   directive_time: "10m"
-  directive_memory: "20 GB"
 platforms: []
 info:
   config: "src/joint_embedding/methods/dummy_zeros/config.vsh.yaml"
@@ -792,5 +790,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_zeros"
   executable: "target/nextflow/joint_embedding_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.1"
-  git_commit: "5cd34c6bf18725d7f078887102f5456eb545092e"
+  git_commit: "16d4ccd92c470523d196f7289a8e318c08e4243b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
