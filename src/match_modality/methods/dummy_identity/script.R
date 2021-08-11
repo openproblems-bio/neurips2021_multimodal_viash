@@ -25,5 +25,7 @@ cat("Reading h5ad files\n")
 # input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
 input_test_sol <- anndata::read_h5ad(par$input_test_sol)
 
+input_test_sol$uns[["method_id"]] <- "dummy_identity"
+
 cat("Writing predictions to file\n")
 zzz <- input_test_sol$write_h5ad(par$output, compression = "gzip")
