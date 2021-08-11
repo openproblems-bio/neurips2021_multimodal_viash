@@ -21,25 +21,25 @@ functionality:
       example: "dataset.h5ad"
       description: An input h5ad dataset.
       required: true
-    - name: "--output_mod1_train"
+    - name: "--output_train_mod1"
       type: "file"
       direction: "output"
-      example: "dataset_mod1_train.h5ad"
+      example: "dataset_train_mod1.h5ad"
       description: Mod1 h5ad file for only the train cells.
       required: true
-    - name: "--output_mod1_test"
-      type: "file"
-      direction: "output"
-      example: "dataset_mod1_test.h5ad"
-      description: Mod1 h5ad file for only the test cells.
-      required: true
-    - name: "--output_mod2"
+    - name: "--output_train_mod2"
       type: "file"
       direction: "output"
       example: "dataset_mod2.h5ad"
       description: Mod2 h5ad file for only the train cells.
       required: true
-    - name: "--output_solution"
+    - name: "--output_test_mod1"
+      type: "file"
+      direction: "output"
+      example: "dataset_test_mod1.h5ad"
+      description: Mod1 h5ad file for only the test cells.
+      required: true
+    - name: "--output_test_mod2"
       type: "file"
       direction: "output"
       example: "dataset_solution.h5ad"
