@@ -1001,5 +1001,5 @@ info:
   output: "target/docker/common/create_starter_kit"
   executable: "target/docker/common/create_starter_kit/create_starter_kit"
   viash_version: "0.5.1"
-  git_commit: "d6f21e588c1ad0df699193614d474a7012bea980"
+  git_commit: "61e00edfccd8b0d6ca171ca97fa741c651af0300"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
