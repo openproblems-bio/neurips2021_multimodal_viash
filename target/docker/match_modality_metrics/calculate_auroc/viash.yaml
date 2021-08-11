@@ -840,5 +840,5 @@ info:
   output: "target/docker/match_modality_metrics/calculate_auroc"
   executable: "target/docker/match_modality_metrics/calculate_auroc/calculate_auroc"
   viash_version: "0.5.1"
-  git_commit: "b221ccab2261e73ff24f9b228ed6aabf28d96a0a"
+  git_commit: "4c6e1e835fe2936616c5aa0aacb7a77b775a4e09"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

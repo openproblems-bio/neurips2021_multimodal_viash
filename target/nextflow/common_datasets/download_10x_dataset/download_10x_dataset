@@ -163,6 +163,13 @@ function ViashHelp {
   echo ""
 
 
+  echo "   --organism"
+  echo "        type: string, required parameter"
+  echo "        example: human"
+  echo "        The organism of the dataset"
+  echo ""
+
+
   echo "   --output_rna"
   echo "        type: file, required parameter, output"
   echo "        example: output_rna.h5ad"
@@ -223,6 +230,14 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT=$(ViashRemoveFlags "$1")
             shift 1
             ;;
+        --organism)
+            VIASH_PAR_ORGANISM="$2"
+            shift 2
+            ;;
+        --organism=*)
+            VIASH_PAR_ORGANISM=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
         --output_rna)
             VIASH_PAR_OUTPUT_RNA="$2"
             shift 2
@@ -261,6 +276,10 @@ if [ -z "$VIASH_PAR_INPUT" ]; then
   ViashError '--input' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
+if [ -z "$VIASH_PAR_ORGANISM" ]; then
+  ViashError '--organism' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
 if [ -z "$VIASH_PAR_OUTPUT_RNA" ]; then
   ViashError '--output_rna' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
@@ -291,6 +310,7 @@ sc <- reticulate::import("scanpy")
 par <- list(
   "id" = $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo NULL; fi ),
   "input" = $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "'$VIASH_PAR_INPUT'"; else echo NULL; fi ),
+  "organism" = $( if [ ! -z ${VIASH_PAR_ORGANISM+x} ]; then echo "'$VIASH_PAR_ORGANISM'"; else echo NULL; fi ),
   "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
   "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi )
 )
@@ -309,6 +329,7 @@ ad <- sc\$read_10x_h5(h5_tmp, gex_only = FALSE)
 
 cat("Setting dataset id\\n")
 ad\$uns[["dataset_id"]] <- par\$id
+ad\$uns[["organism"]] <- par\$organism
 
 cat("Making var names unique\\n")
 zzz <- ad\$var_names_make_unique()

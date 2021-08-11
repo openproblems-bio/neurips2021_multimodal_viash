@@ -172,7 +172,8 @@ if (par$store_chromatin) {
     obs = obs,
     var = var_atac,
     uns = list(
-      dataset_id = par$id
+      dataset_id = par$id,
+      organism = "synthetic"
     )
   )
 }
@@ -186,6 +187,3 @@ if (!is.null(par$plot)) {
   g <- plot_summary(model)
   ggsave(par$plot, g, width = 20, height = 16)
 }
-
-
-

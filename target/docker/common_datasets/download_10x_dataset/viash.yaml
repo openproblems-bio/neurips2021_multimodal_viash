@@ -29,6 +29,15 @@ functionality:
     direction: "Input"
     multiple: false
     multiple_sep: ":"
+  - type: "string"
+    name: "--organism"
+    alternatives: []
+    description: "The organism of the dataset"
+    example: "human"
+    required: true
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   - type: "file"
     name: "--output_rna"
     alternatives: []
@@ -214,6 +223,13 @@ functionality:
         echo "        type: string, required parameter"
         echo "        example: https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5"
         echo "        Location URL to an h5 file from the 10x genomics website."
+        echo ""
+      
+      
+        echo "   --organism"
+        echo "        type: string, required parameter"
+        echo "        example: human"
+        echo "        The organism of the dataset"
         echo ""
       
       
@@ -553,6 +569,14 @@ functionality:
                   VIASH_PAR_INPUT=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --organism)
+                  VIASH_PAR_ORGANISM="$2"
+                  shift 2
+                  ;;
+              --organism=*)
+                  VIASH_PAR_ORGANISM=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               --output_rna)
                   VIASH_PAR_OUTPUT_RNA="$2"
                   shift 2
@@ -614,6 +638,10 @@ functionality:
       fi
       if [ -z "$VIASH_PAR_INPUT" ]; then
         ViashError '--input' is a required argument. Use "--help" to get more information on the parameters.
+        exit 1
+      fi
+      if [ -z "$VIASH_PAR_ORGANISM" ]; then
+        ViashError '--organism' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
       if [ -z "$VIASH_PAR_OUTPUT_RNA" ]; then
@@ -678,6 +706,7 @@ functionality:
       par <- list(
         "id" = $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo NULL; fi ),
         "input" = $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "'$VIASH_PAR_INPUT'"; else echo NULL; fi ),
+        "organism" = $( if [ ! -z ${VIASH_PAR_ORGANISM+x} ]; then echo "'$VIASH_PAR_ORGANISM'"; else echo NULL; fi ),
         "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
         "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi )
       )
@@ -696,6 +725,7 @@ functionality:
       
       cat("Setting dataset id\\n")
       ad\$uns[["dataset_id"]] <- par\$id
+      ad\$uns[["organism"]] <- par\$organism
       
       cat("Making var names unique\\n")
       zzz <- ad\$var_names_make_unique()
@@ -798,5 +828,5 @@ info:
   output: "target/docker/common_datasets/download_10x_dataset"
   executable: "target/docker/common_datasets/download_10x_dataset/download_10x_dataset"
   viash_version: "0.5.1"
-  git_commit: "b221ccab2261e73ff24f9b228ed6aabf28d96a0a"
+  git_commit: "4c6e1e835fe2936616c5aa0aacb7a77b775a4e09"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
