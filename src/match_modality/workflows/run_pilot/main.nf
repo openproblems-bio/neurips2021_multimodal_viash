@@ -16,7 +16,7 @@ include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions 
 workflow pilot_wf {
   main:
 
-  // get method inputs
+  // get input files for methods
   def inputs = 
     Channel.fromPath("output/public_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }

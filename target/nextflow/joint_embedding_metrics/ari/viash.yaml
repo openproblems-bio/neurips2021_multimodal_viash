@@ -651,6 +651,8 @@ functionality:
       }
       
       process ari_process {
+        time '45m'
+        memory '20 GB'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -832,6 +834,8 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   labels: []
+  directive_time: "45m"
+  directive_memory: "20 GB"
 platforms: []
 info:
   config: "src/joint_embedding/metrics/ari/config.vsh.yaml"
@@ -839,5 +843,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ari"
   executable: "target/nextflow/joint_embedding_metrics/ari/ari"
   viash_version: "0.5.1"
-  git_commit: "6481c6bf32e24bd777e83cb8fac95eca51dcd13f"
+  git_commit: "41156d9cf38071aadac5a4920d2f9a85a8337ee9"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
