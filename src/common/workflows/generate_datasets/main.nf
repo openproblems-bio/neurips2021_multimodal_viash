@@ -106,9 +106,9 @@ workflow generate_totalvi_10x_datasets {
  */
 workflow generate_datasets {
     main:
-    // output_ = (generate_dyngen_datasets & generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
+    output_ = (generate_dyngen_datasets & generate_public_10x_datasets & generate_azimuth_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
     // ↑ don't rerun dyngen or azimuth unless necessary
-    output_ = (generate_public_10x_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
+    //output_ = (generate_public_10x_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
       | mix
       | groupTuple()
       | map { id, data, old_params -> [ id, flattenMap(data) ] }
@@ -116,7 +116,7 @@ workflow generate_datasets {
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | quality_control
-      | split_traintest
+    //   | split_traintest
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }
       
     emit: output_
