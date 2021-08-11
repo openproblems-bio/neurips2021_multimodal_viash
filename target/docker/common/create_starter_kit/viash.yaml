@@ -501,7 +501,7 @@ functionality:
         apt-get install -y wget zip && \
         rm -rf /var/lib/apt/lists/*
       
-      RUN wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
+      RUN wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash && chmod +x /usr/bin/viash
       VIASHDOCKER
       }
       
@@ -991,7 +991,8 @@ platform:
   - type: "docker"
     resources: []
     run:
-    - "wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash"
+    - "wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash\
+      \ && chmod +x /usr/bin/viash"
     build_args: []
     env: []
     oType: "docker"
@@ -1002,5 +1003,5 @@ info:
   output: "target/docker/common/create_starter_kit"
   executable: "target/docker/common/create_starter_kit/create_starter_kit"
   viash_version: "0.5.1"
-  git_commit: "b3fb922784861d949a7d64d15c6367c46c5d94ad"
+  git_commit: "5eecdf0f741bd995bbe77571dc2aac5819560338"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
