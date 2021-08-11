@@ -1,5 +1,6 @@
-import anndata
+import anndata as ad
 import scipy.spatial
+import scipy.sparse
 import numpy as np
 
 from sklearn.decomposition import TruncatedSVD
@@ -7,43 +8,69 @@ from sklearn.neighbors import NearestNeighbors
 
 # VIASH START
 par = {
-    "input_mod1": "../../../../resources_test/match_modality/test_resource.mod1.h5ad",
-    "input_mod2": "../../../../resources_test/match_modality/test_resource.mod2.h5ad",
-    "output": "../../../../resources_test/match_modality/test_resource.prediction.h5ad",
+    "input_train_mod1": "resources_test/match_modality/test_resource.train_mod1.h5ad",
+    "input_train_mod2": "resources_test/match_modality/test_resource.train_mod2.h5ad",
+    "input_train_sol": "resources_test/match_modality/test_resource.train_sol.h5ad",
+    "input_test_mod1": "resources_test/match_modality/test_resource.test_mod1.h5ad",
+    "input_test_mod2": "resources_test/match_modality/test_resource.test_mod2.h5ad",
+    "output": "resources_test/match_modality/test_resource.prediction.h5ad",
     "n_svd": 100,
 }
 # VIASH END
 
-# load dataset to be censored
-ad_rna = anndata.read_h5ad(par["input_mod1"])
-ad_mod2 = anndata.read_h5ad(par["input_mod2"])
+print("Load datasets")
+input_train_mod1 = ad.read_h5ad(par["input_train_mod1"])
+input_train_mod2 = ad.read_h5ad(par["input_train_mod2"])
+# input_train_sol = ad.read_h5ad(par["input_train_sol"])
+input_test_mod1 = ad.read_h5ad(par["input_test_mod1"])
+input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 
+# concatenate train and test data
+mod1 = ad.concat(
+    { "train": input_train_mod1, "test": input_test_mod1 }, 
+    index_unique="-",
+    label="group"
+)
+mod2 = ad.concat(
+    { "train": input_train_mod2, "test": input_test_mod2 }, 
+    index_unique="-",
+    label="group"
+)
+# create helper views
+mod1te = mod1[mod1.obs["group"] == "test", :]
+mod2te = mod2[mod2.obs["group"] == "test", :]
 
-rna, mod2 = ad_rna.X, ad_mod2.X
+print("Perform PCA")
+n_svd = min(par["n_svd"], mod1.n_obs, mod2.n_obs)
 
-n_svd = min(par["n_svd"], rna.shape[1], mod2.shape[1])
+mod1.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod1.X)
+mod2.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod2.X)
 
-rna_pca = TruncatedSVD(n_svd).fit_transform(rna)
-mod2_pca = TruncatedSVD(n_svd).fit_transform(mod2)
+print("Run procrustes")
+mod1.obsm["X_pro"], mod2.obsm["X_pro"], disparity = scipy.spatial.procrustes(
+    mod1.obsm["X_pca"], 
+    mod2.obsm["X_pca"]
+)
+print("> Disparity value is: %0.3f" % disparity)
 
-rna_procrustes, mod2_procrustes, disparity = scipy.spatial.procrustes(rna_pca, mod2_pca)
-print("Disparity value is: %0.3f" % disparity)
+print("Perform nearest neighbors")
+n_neighbors = min(100, mod1te.n_obs)
+nn = NearestNeighbors(n_neighbors=n_neighbors).fit(mod1te.obsm["X_pro"])
+distances, indices = nn.kneighbors(X=mod2te.obsm["X_pro"])
 
-# 2. Perform nearest neighbors: find nearest neighbors for mod2 based on the rna
-nn = NearestNeighbors(n_neighbors=1).fit(rna_procrustes)
-distances, indices = nn.kneighbors(X=mod2_procrustes)
+print("Create pairing matrix")
+ind_i = np.tile(np.arange(mod1te.n_obs), (n_neighbors, 1)).T.flatten()
+ind_j = indices.flatten()
+ind_dist = distances.flatten()
+ind_x = 2 * max(ind_dist) - ind_dist
+pairing_matrix = scipy.sparse.csr_matrix((ind_x, (ind_i, ind_j)))
 
-# 3. Helper: just a range -> so that each neighbor found with NN matches the right cell
-indices_rna = list(range(rna.shape[0]))
-
-pairing_matrix = np.zeros((rna.shape[0], mod2.shape[0]))
-pairing_matrix[indices_rna, [x[0] for x in indices]] = 1
-
-# Write out prediction
-prediction = anndata.AnnData(
+print("Write prediction output")
+prediction = ad.AnnData(
     X=pairing_matrix,
     uns={
-        "dataset_id": ad_rna.uns["dataset_id"],
+        "dataset_id": input_train_mod1.uns["dataset_id"],
+        "method_id": "baseline_procrustes"
     }
 )
 prediction.write_h5ad(par["output"])
