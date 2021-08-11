@@ -8,6 +8,7 @@ include  { baseline_dr_nn_knn }          from "$targetDir/${task}_methods/baseli
 include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseline_procrustes_knn/main.nf"     params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
+include  { dummy_identity }              from "$targetDir/${task}_methods/dummy_identity/main.nf"              params(params)
 include  { calculate_auroc }             from "$targetDir/${task}_metrics/calculate_auroc/main.nf"             params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                       params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
@@ -34,27 +35,30 @@ workflow pilot_wf {
       | filter { it[1].name.contains("output_solution") || it[1].name.contains("output_test_sol") }
 
   // for now, code needs one of these code blocks per method.
-  def out0 = inputs 
+  def b0 = inputs 
     | baseline_dr_nn_knn
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_dr_nn_knn", [ input_prediction: pred, input_solution: sol ], params ]}
-
-  def out1 = inputs 
+    | map { id, pred, params, sol -> [ id + "_baseline_dr_nn_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b1 = inputs 
     | baseline_procrustes_knn
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_procrustes_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_baseline_procrustes_knn", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def out2 = inputs 
+  def d0 = inputs 
     | dummy_constant
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_constant", [ input_prediction: pred, input_solution: sol ], params ]}
-
-  def out3 = inputs 
+    | map { id, pred, params, sol -> [ id + "_dummy_constant", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d1 = inputs 
     | dummy_random
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_random", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_dummy_random", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d2 = solution
+    | map { id, input -> [ id, input, params ] } 
+    | dummy_identity
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_dummy_identity", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = out0.mix(out1, out2, out3)
+  def predictions = b0.mix(b1, d0, d1, d2)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
