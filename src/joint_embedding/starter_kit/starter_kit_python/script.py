@@ -37,7 +37,7 @@ ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
 # TODO: implement your own method
 logging.info('Concatenating modality 1 and modality 2')
-ad_combined = ad.concat([ad_mod1, ad_mod2], axis = 1)
+ad_combined = ad.concat([ad_mod1, ad_mod2], axis=1)
 
 logging.info('Performing dimensionality reduction on concatenated datasets')
 embedder = umap.UMAP(n_components=par['n_dim'])
@@ -51,4 +51,4 @@ adata = ad.AnnData(
         'method_id': method_id,
     },
 )
-adata.write_h5ad(par['output'], compression = "gzip")
+adata.write_h5ad(par['output'], compression="gzip")
