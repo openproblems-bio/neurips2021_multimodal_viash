@@ -35,6 +35,7 @@ Task 1, Predict modality:
 Task 2, Match Modality:
 
 * Dummy methods: Added methods for predicting all zeros or all ones.
+* Baseline method: Added procrustes method.
 * NextFlow: Added pipeline for censoring common datasets.
 
 Task 3, Joint Embedding:
