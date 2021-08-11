@@ -713,5 +713,5 @@ info:
   output: "target/docker/predict_modality_methods/dummy_zeros"
   executable: "target/docker/predict_modality_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.1"
-  git_commit: "41156d9cf38071aadac5a4920d2f9a85a8337ee9"
+  git_commit: "5cd34c6bf18725d7f078887102f5456eb545092e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
