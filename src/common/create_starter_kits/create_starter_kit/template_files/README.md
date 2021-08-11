@@ -84,7 +84,7 @@ $ ./generate_submission.sh
     Ignored     : 32
     Failed      : 32
 
-You can still submit your solutions to eval.ai but you will get penalized for every failed execution.
+You can still submit your solutions to eval.ai but your submission may not execute properly.
 
 You can check out what went wrong by looking at the tag for the process that failed (e.g. `20/330b8a`):
 
