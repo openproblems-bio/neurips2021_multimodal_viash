@@ -26,6 +26,11 @@ functionality:
       description: "Location URL to an h5 file from the 10x genomics website."
       required: true
       example: "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5"
+    - name: "--organism"
+      type: string
+      description: "The organism of the dataset"
+      required: true
+      example: "human"
     - name: "--output_rna"
       type: file
       example: output_rna.h5ad
