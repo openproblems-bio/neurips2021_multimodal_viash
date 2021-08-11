@@ -758,5 +758,5 @@ info:
   output: "target/docker/joint_embedding_metrics/asw_label"
   executable: "target/docker/joint_embedding_metrics/asw_label/asw_label"
   viash_version: "0.5.1"
-  git_commit: "e893aa11327f8bdbd78db5ad831dbca2df60fb8c"
+  git_commit: "459aaae65181d6029437256720ba8797db6ab635"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

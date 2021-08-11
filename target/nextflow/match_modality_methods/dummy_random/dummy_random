@@ -144,24 +144,45 @@ function ViashHelp {
   echo
   echo "Options:"
 
-  echo "   -i1, --input_mod1"
+  echo "   --input_train_mod1"
   echo "        type: file, required parameter"
-  echo "        example: dataset.h5ad"
-  echo "        First modality of censored dataset."
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled train mod1 profiles."
   echo ""
 
 
-  echo "   -i2, --input_mod2"
+  echo "   --input_train_mod2"
   echo "        type: file, required parameter"
-  echo "        example: dataset.h5ad"
-  echo "        Second modality of censored dataset."
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled train mod2 profiles."
   echo ""
 
 
-  echo "   -o, --output"
+  echo "   --input_train_sol"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_solution.h5ad"
+  echo "        The pairing of train mod1&mod2 profiles."
+  echo ""
+
+
+  echo "   --input_test_mod1"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled test mod1 profiles."
+  echo ""
+
+
+  echo "   --input_test_mod2"
+  echo "        type: file, required parameter"
+  echo "        example: dataset_censored.h5ad"
+  echo "        The censored shuffled test mod2 profiles."
+  echo ""
+
+
+  echo "   --output"
   echo "        type: file, required parameter, output"
-  echo "        example: output_rna.csv"
-  echo "        Dataset with predicted values for modality2."
+  echo "        example: output.h5ad"
+  echo "        The predicted pairing of test mod1&mod2 profiles."
   echo ""
 
 }
@@ -195,29 +216,45 @@ while [[ $# -gt 0 ]]; do
             echo "dummy_random main_build"
             exit
             ;;
-        --input_mod1)
-            VIASH_PAR_INPUT_MOD1="$2"
+        --input_train_mod1)
+            VIASH_PAR_INPUT_TRAIN_MOD1="$2"
             shift 2
             ;;
-        --input_mod1=*)
-            VIASH_PAR_INPUT_MOD1=$(ViashRemoveFlags "$1")
+        --input_train_mod1=*)
+            VIASH_PAR_INPUT_TRAIN_MOD1=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -i1)
-            VIASH_PAR_INPUT_MOD1="$2"
+        --input_train_mod2)
+            VIASH_PAR_INPUT_TRAIN_MOD2="$2"
             shift 2
             ;;
-        --input_mod2)
-            VIASH_PAR_INPUT_MOD2="$2"
-            shift 2
-            ;;
-        --input_mod2=*)
-            VIASH_PAR_INPUT_MOD2=$(ViashRemoveFlags "$1")
+        --input_train_mod2=*)
+            VIASH_PAR_INPUT_TRAIN_MOD2=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -i2)
-            VIASH_PAR_INPUT_MOD2="$2"
+        --input_train_sol)
+            VIASH_PAR_INPUT_TRAIN_SOL="$2"
             shift 2
+            ;;
+        --input_train_sol=*)
+            VIASH_PAR_INPUT_TRAIN_SOL=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --input_test_mod1)
+            VIASH_PAR_INPUT_TEST_MOD1="$2"
+            shift 2
+            ;;
+        --input_test_mod1=*)
+            VIASH_PAR_INPUT_TEST_MOD1=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --input_test_mod2)
+            VIASH_PAR_INPUT_TEST_MOD2="$2"
+            shift 2
+            ;;
+        --input_test_mod2=*)
+            VIASH_PAR_INPUT_TEST_MOD2=$(ViashRemoveFlags "$1")
+            shift 1
             ;;
         --output)
             VIASH_PAR_OUTPUT="$2"
@@ -226,10 +263,6 @@ while [[ $# -gt 0 ]]; do
         --output=*)
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
             shift 1
-            ;;
-        -o)
-            VIASH_PAR_OUTPUT="$2"
-            shift 2
             ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
@@ -245,12 +278,24 @@ eval set -- $VIASH_POSITIONAL_ARGS
 
 
 # check whether required parameters exist
-if [ -z "$VIASH_PAR_INPUT_MOD1" ]; then
-  ViashError '--input_mod1' is a required argument. Use "--help" to get more information on the parameters.
+if [ -z "$VIASH_PAR_INPUT_TRAIN_MOD1" ]; then
+  ViashError '--input_train_mod1' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
-if [ -z "$VIASH_PAR_INPUT_MOD2" ]; then
-  ViashError '--input_mod2' is a required argument. Use "--help" to get more information on the parameters.
+if [ -z "$VIASH_PAR_INPUT_TRAIN_MOD2" ]; then
+  ViashError '--input_train_mod2' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TRAIN_SOL" ]; then
+  ViashError '--input_train_sol' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TEST_MOD1" ]; then
+  ViashError '--input_test_mod1' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_INPUT_TEST_MOD2" ]; then
+  ViashError '--input_test_mod2' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
 if [ -z "$VIASH_PAR_OUTPUT" ]; then
@@ -268,14 +313,18 @@ function clean_up {
 }
 trap clean_up EXIT
 cat > "\$tempscript" << 'VIASHMAIN'
-import anndata
+import anndata as ad
 import numpy as np
+import scipy.sparse
 
 # VIASH START
 # The following code has been auto-generated by Viash.
 par = {
-  'input_mod1': $( if [ ! -z ${VIASH_PAR_INPUT_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_MOD1'"; else echo None; fi ),
-  'input_mod2': $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo None; fi ),
+  'input_train_mod1': $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_MOD1'"; else echo None; fi ),
+  'input_train_mod2': $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_MOD2'"; else echo None; fi ),
+  'input_train_sol': $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_SOL+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_SOL'"; else echo None; fi ),
+  'input_test_mod1': $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD1'"; else echo None; fi ),
+  'input_test_mod2': $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD2'"; else echo None; fi ),
   'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo None; fi )
 }
 
@@ -283,20 +332,25 @@ resources_dir = '$VIASH_RESOURCES_DIR'
 
 # VIASH END
 
-# load dataset to be censored
-ad_mod1 = anndata.read_h5ad(par["input_mod1"])
-ad_mod2 = anndata.read_h5ad(par["input_mod2"])
+print("Load datasets")
+input_test_mod1 = ad.read_h5ad(par["input_test_mod1"])
+input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 
-pairing_matrix = np.zeros((ad_mod1.n_obs, ad_mod2.n_obs))
-indices = np.random.randint(ad_mod2.n_obs, size=ad_mod1.n_obs)
-pairing_matrix[np.arange(ad_mod1.n_obs), indices] = 1
+# determine number of values in array
+num_values = min(100, input_test_mod1.n_obs) * input_test_mod1.n_obs
+indices = np.random.randint(input_test_mod1.n_obs**2, size=num_values)
+
+mat_x = np.random.rand(num_values)
+mat_i = indices % input_test_mod1.n_obs
+mat_j = (indices / input_test_mod1.n_obs).astype(int)
+pairing_matrix = scipy.sparse.csr_matrix((mat_x, (mat_i, mat_j)))
 
 # Write out prediction
-prediction = anndata.AnnData(
+prediction = ad.AnnData(
     X=pairing_matrix,
     uns={
         "method_id": "dummy_random",
-        "dataset_id": ad_mod1.uns["dataset_id"]
+        "dataset_id": input_test_mod1.uns["dataset_id"]
     }
 )
 prediction.write_h5ad(par["output"])
