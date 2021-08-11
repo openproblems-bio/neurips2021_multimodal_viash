@@ -38,15 +38,8 @@ functionality:
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: Dataset with predicted values for modality2.
+      description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
-    - name: "--distance_method"
-      type: "string"
-      default: "spearman"
-      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
-    - name: "--n_dims"
-      type: "integer"
-      default: 10
   resources:
     - type: r_script
       path: script.R

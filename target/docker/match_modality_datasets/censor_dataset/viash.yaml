@@ -844,19 +844,20 @@ functionality:
       new_dataset_id = mod1.uns["dataset_id"] + "_MM"
       
       print("Shuffling train cells")
-      train_mod1_ix = np.where(mod1.obs["is_train"])[0]
+      train_ix = np.where(mod1.obs["is_train"])[0]
+      train_mod1 = mod1[train_ix, :]
+      train_mod1_ix = list(range(train_mod1.n_obs))
       train_mod2_ix = train_mod1_ix.copy()
       random.shuffle(train_mod2_ix)
-      train_mod1 = mod1[train_mod1_ix, :]
-      train_mod2 = mod2[train_mod2_ix, :]
+      train_mod2 = mod2[train_ix, :][train_mod2_ix, :]
       
       print("Shuffling test cells")
-      test_mod1_ix = np.where(~mod1.obs["is_train"])[0]
+      test_ix = np.where(~mod1.obs["is_train"])[0]
+      test_mod1 = mod1[test_ix, :]
+      test_mod1_ix = list(range(test_mod1.n_obs))
       test_mod2_ix = test_mod1_ix.copy()
       random.shuffle(test_mod2_ix)
-      test_mod1 = mod1[test_mod1_ix, :]
-      test_mod2 = mod2[test_mod2_ix, :]
-      
+      test_mod2 = mod2[test_ix, :][test_mod2_ix, :]
       
       print("Creating mod1 outputs")
       desired_var1_cols = [x for x in ["gene_ids", "feature_types"] if x in mod1.var.columns]
@@ -890,7 +891,7 @@ functionality:
       
       print("Creating solution outputs")
       out_train_sol_mat = scipy.sparse.csr_matrix(
-        (np.ones(train_mod1_ix.size), (train_mod1_ix, train_mod2_ix))
+        (np.ones(train_mod1.n_obs), (train_mod1_ix, train_mod2_ix))
       )
       out_train_sol = ad.AnnData(
           X=out_train_sol_mat,
@@ -898,7 +899,7 @@ functionality:
           dtype="float32",
       )
       out_test_sol_mat = scipy.sparse.csr_matrix(
-        (np.ones(test_mod1_ix.size), (test_mod1_ix, test_mod2_ix))
+        (np.ones(test_mod1.n_obs), (test_mod1_ix, test_mod2_ix))
       )
       out_test_sol = ad.AnnData(
           X=out_test_sol_mat,
@@ -966,5 +967,5 @@ info:
   output: "target/docker/match_modality_datasets/censor_dataset"
   executable: "target/docker/match_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.1"
-  git_commit: "6a542b8a3c6416fdb1bbc0688789ac74e5cc679a"
+  git_commit: "d6f21e588c1ad0df699193614d474a7012bea980"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

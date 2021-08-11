@@ -5,12 +5,18 @@
 Common:
 * Added dataset loader for Babel dataset.
 * Added component for creating a train/test split.
+* Added component for creating starter kits.
 
 Task 1, Predict Modality:
-* Starter Kit: Added starter kit for Python users
+* Starter Kit: Added starter kit for Python users.
 
 Task 3, Joint Embedding:
 * Metric: Added TotalVI metric 'latent_mixing_metric'.
+
+## MAJOR CHANGES
+
+* Refactored Task 2, Match Modality into a supervised problem with a train/test split.
+  Train data, test data and pairings data are stored in separate files.
 
 # neurips2021_multimodal_viash 0.4.0
 
@@ -29,6 +35,7 @@ Task 1, Predict modality:
 Task 2, Match Modality:
 
 * Dummy methods: Added methods for predicting all zeros or all ones.
+* Baseline method: Added procrustes method.
 * NextFlow: Added pipeline for censoring common datasets.
 
 Task 3, Joint Embedding:

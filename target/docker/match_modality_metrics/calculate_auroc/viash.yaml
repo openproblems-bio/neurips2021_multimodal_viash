@@ -689,15 +689,18 @@ functionality:
       expect_true(
         ad_sol\$uns\$dataset_id == ad_pred\$uns\$dataset_id
       )
+      X_sol <- ad_sol\$X
+      X_pred <- ad_pred\$X
+      dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
       
       cat("Data wrangling\\n")
-      sol_summ <- summary(ad_sol\$X) %>% 
-        as_tibble() %>% 
+      sol_summ <- summary(X_sol) %>%
+        as_tibble() %>%
         filter(x != 0)
-      pred_summ <- summary(ad_pred\$X) %>% 
+      pred_summ <- summary(X_pred) %>%
         left_join(sol_summ %>% rename(gold = x), by = c("i", "j")) %>%
-        as_tibble() %>% 
-        arrange(desc(x))
+        as_tibble() %>%
+        mutate(gold = ifelse(is.na(gold), 0, gold))
       
       expect_true(
         nrow(pred_summ) <= 100 * nrow(sol_summ),
@@ -706,12 +709,12 @@ functionality:
       
       cat("Calculate area under the curve\\n")
       values <- pred_summ\$x
-      are_true <- !is.na(pred_summ\$gold)
+      are_true <- pred_summ\$gold
       num_positive_interactions <- nrow(sol_summ)
       num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
       extend_by <- 10000
       
-      ord <- order(rank(values, ties.method = "random"), decreasing = T)
+      ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
       values <- values[ord]
       are_true <- are_true[ord]
       
@@ -769,7 +772,7 @@ functionality:
       # GENIE3bis::plot_curves(list(area_under = area_under, metrics = metrics))
       
       cat("Create output object\\n")
-      values <- as.list(area_under)
+      out_values <- as.list(area_under)
       
       out <- anndata::AnnData(
         X = NULL,
@@ -777,8 +780,8 @@ functionality:
         uns = list(
           dataset_id = ad_pred\$uns\$dataset_id,
           method_id = ad_pred\$uns\$method_id,
-          metric_ids = names(values),
-          metric_values = as.numeric(values)
+          metric_ids = names(out_values),
+          metric_values = as.numeric(out_values)
         )
       )
       
@@ -837,5 +840,5 @@ info:
   output: "target/docker/match_modality_metrics/calculate_auroc"
   executable: "target/docker/match_modality_metrics/calculate_auroc/calculate_auroc"
   viash_version: "0.5.1"
-  git_commit: "6a542b8a3c6416fdb1bbc0688789ac74e5cc679a"
+  git_commit: "d6f21e588c1ad0df699193614d474a7012bea980"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
