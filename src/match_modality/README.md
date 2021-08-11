@@ -12,7 +12,7 @@ Unlike in task 1, where the goal was to predict _all_ values of RNA or ADT from 
 
 ### Dataset censor component
 
-A component which partially censors a multimodal dataset. First, it will use the batch label (if available) to split the cells into train and test groups. The cell profiles are anonymised and written to file. The pairing matrices are stored as separate files.
+A component which partially censors a multimodal dataset. First, it will use the `.obs['is_train']` label (if available) to split the cells into train and test groups. The cell profiles are anonymised and written to file. The pairing matrices are stored as separate files.
 
 #### Input data formats
 
