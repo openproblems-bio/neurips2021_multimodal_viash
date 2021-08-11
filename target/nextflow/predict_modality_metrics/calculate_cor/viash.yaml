@@ -792,5 +792,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/calculate_cor"
   executable: "target/nextflow/predict_modality_metrics/calculate_cor/calculate_cor"
   viash_version: "0.5.1"
-  git_commit: "d54201c5c8e05f37cb0d93410ba6ae02186f6524"
+  git_commit: "1ef8480efd579cb36d176b0efdda5819d3ca6395"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

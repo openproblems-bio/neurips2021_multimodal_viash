@@ -479,35 +479,40 @@ pred <- anndata::read_h5ad(paste0(dir_pred, "/rna_atac_adata.h5ad"))
 #######################################
 #####  KNN
 
-# Babel's output has filtered the features: select those in common
-input_test_mod2_filter = input_test_mod2[,row.names(input_test_mod2\$var) %in% row.names(pred\$var)]
+# Only some features are present in Babel's output
+input_test_mod2_filter <- input_test_mod2[, row.names(input_test_mod2\$var) %in% row.names(pred\$var)]
 
-# train matrix for KNN
-train_X = rbind(pred[,row.names(input_test_mod2_filter\$var)]\$X,input_test_mod2_filter\$X)
+# Dimensional reduction of both predicted and test profiles
+pred_profiles <- pred[, row.names(input_test_mod2_filter\$var)]\$X
+train_X <- rbind(pred_profiles, input_test_mod2_filter\$X)
 
-# dimensional reduction
+cat("Performing DR on test values\\n")
 dr <- lmds::lmds(
   train_X,
   ndim = par\$n_dims,
   distance_method = par\$distance_method
 )
 
-# partition reduced matrix into train/test
-n_cells = dim(dr)[1]
+n_cells <- dim(dr)[1]
 
-dr_knn = dr[ 1:n_cells , ] # predicted mod2 profiles babel
-dr_y = dr[(n_cells+1):dim(dr)[1],] # actual mod2 profiles (shuffled)
+dr_knn <- dr[1:n_cells, ]
+dr_y <- dr[(n_cells + 1):dim(dr)[1], ]
 
-# find k nearest neighbors for test data:
-knn_indexes  = apply(dr_y, 1, function(x){
-	FNN::get.knnx(dr_knn, query = x %>% t, k=par\$n_neigh)\$nn.index })
+
+cat("Predicting for each cell profile in mod2 2\\n")
+knn_indexes  <- apply(dr_y, 1, function(yi) {
+	FNN::get.knnx(dr_knn,
+    query = t(yi),
+    k=par\$n_neigh
+  )\$nn.index
+})
 
 # matrix of matched cells
-matched_cells = matrix(0, dim(knn_indexes)[2], dim(knn_indexes)[2])
+matched_cells <- matrix(0, dim(knn_indexes)[2], dim(knn_indexes)[2])
 # assing probabilities
-for(i in 1:dim(matched_cells)[1])
-	matched_cells[i, knn_indexes[,i]] = 1/par\$n_neigh # assign equal probability to the k nearest neighbors
-
+for (i in 1:dim(matched_cells)[1]) {
+	matched_cells[i, knn_indexes[, i]] <- 1/par\$n_neigh # assign equal probability to the k nearest neighbors
+}
 # make sparse matrix
 out <- anndata::AnnData(
   X = as(matched_cells, "CsparseMatrix"),
