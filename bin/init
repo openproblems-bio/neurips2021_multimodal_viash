@@ -3,7 +3,7 @@
 # Check Java installed
 if ! command -v java --version &> /dev/null
 then
-    echo "Please ensure Java Runtime 8 is installed. You can find an open source installer here: https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot"
+    echo "Please ensure Java Runtime ≥8 is installed. You can find an open source installer here: https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot"
     exit
 fi
 

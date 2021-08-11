@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# run prior to running this script:
+# bin/viash_build -q 'common|predict_modality'
+
 set -ex
 
 # get the root of the directory

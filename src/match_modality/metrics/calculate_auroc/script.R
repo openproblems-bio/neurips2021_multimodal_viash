@@ -8,7 +8,7 @@ requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "resources_test/match_modality/test_resource.solution.h5ad",
+  input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
   input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
   output = "resources_test/match_modality/test_resource.scores.h5ad"
 )
@@ -31,15 +31,18 @@ ad_pred <-
 expect_true(
   ad_sol$uns$dataset_id == ad_pred$uns$dataset_id
 )
+X_sol <- ad_sol$X
+X_pred <- ad_pred$X
+dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\n")
-sol_summ <- summary(ad_sol$X) %>% 
-  as_tibble() %>% 
+sol_summ <- summary(X_sol) %>%
+  as_tibble() %>%
   filter(x != 0)
-pred_summ <- summary(ad_pred$X) %>% 
+pred_summ <- summary(X_pred) %>%
   left_join(sol_summ %>% rename(gold = x), by = c("i", "j")) %>%
-  as_tibble() %>% 
-  arrange(desc(x))
+  as_tibble() %>%
+  mutate(gold = ifelse(is.na(gold), 0, gold))
 
 expect_true(
   nrow(pred_summ) <= 100 * nrow(sol_summ),
@@ -48,12 +51,12 @@ expect_true(
 
 cat("Calculate area under the curve\n")
 values <- pred_summ$x
-are_true <- !is.na(pred_summ$gold)
+are_true <- pred_summ$gold
 num_positive_interactions <- nrow(sol_summ)
 num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
 extend_by <- 10000
 
-ord <- order(rank(values, ties.method = "random"), decreasing = T)
+ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
 values <- values[ord]
 are_true <- are_true[ord]
 
@@ -111,7 +114,7 @@ area_under <- tibble(
 # GENIE3bis::plot_curves(list(area_under = area_under, metrics = metrics))
 
 cat("Create output object\n")
-values <- as.list(area_under)
+out_values <- as.list(area_under)
 
 out <- anndata::AnnData(
   X = NULL,
@@ -119,8 +122,8 @@ out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
-    metric_ids = names(values),
-    metric_values = as.numeric(values)
+    metric_ids = names(out_values),
+    metric_values = as.numeric(out_values)
   )
 )
 
@@ -129,3 +132,7 @@ out <- anndata::AnnData(
 
 cat("Write output to h5ad file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")
+
+
+
+

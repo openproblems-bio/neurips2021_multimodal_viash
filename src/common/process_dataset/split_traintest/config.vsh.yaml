@@ -1,5 +1,5 @@
 functionality:
-  name: "quality_control"
+  name: "split_traintest"
   namespace: "common_process_dataset"
   version: "dev"
   description: |

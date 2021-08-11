@@ -8,7 +8,7 @@ include  { extract_scores }            from "$targetDir/common/extract_scores/ma
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
-params.solutions = "s3://neurips2021-multimodal-public-datasets/predict_modality/**.output_solution.h5ad"
+params.solutions = "s3://neurips2021-multimodal-public-datasets/predict_modality/**.output_test_sol.h5ad"
 
 workflow {
   main:

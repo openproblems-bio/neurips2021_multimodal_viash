@@ -10,7 +10,7 @@ export NXF_VER=21.04.1
 
 bin/nextflow \
   run . \
-  -main-script src/predict_modality/workflows/run_baseline_benchmark/main.nf \
-  -entry run_task1_benchmark \
+  -main-script src/predict_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
   --publishDir output/ \
   -resume

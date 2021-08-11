@@ -53,14 +53,23 @@ functionality:
       type: "file"
       direction: "output"
       default: "output/starter_kits"
+    - name: "--bin"
+      type: "file"
+      default: "bin"
   resources:
     - type: bash_script
       path: script.sh
-    - type: file
-      path: template_files
+    - path: template_files
     - type: file
       path: ../../../../resources_test
 platforms:
   - type: docker
-    image: dataintuitive/viash
-  - type: nextflow
+    image: ubuntu:21.04
+    setup:
+      - type: apt
+        packages:
+          - wget
+          - zip
+      - type: docker
+        run: 
+          - wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
