@@ -59,8 +59,11 @@ functionality:
   resources:
     - type: bash_script
       path: script.sh
-    - type: file
-      path: template_files
+    - path: template_files/.gitignore
+    - path: template_files/generate_submission.sh
+    - path: template_files/LICENSE
+    - path: template_files/nextflow.config
+    - path: template_files/README.md
     - type: file
       path: ../../../../resources_test
 platforms:
@@ -74,4 +77,3 @@ platforms:
       - type: docker
         run: 
           - wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash
-  - type: nextflow

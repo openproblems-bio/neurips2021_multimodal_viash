@@ -26,11 +26,16 @@ echo create new output dir
 mkdir -p $output_dir
 
 echo copy template files
-cp $resources_dir/template_files/README.md $output_dir/
-cp $resources_dir/template_files/generate_submission.sh $output_dir/
-cp $resources_dir/template_files/nextflow.config $output_dir/
-cp $resources_dir/template_files/LICENSE $output_dir/
-cp $resources_dir/template_files/.gitignore $output_dir/
+# cp $resources_dir/template_files/README.md $output_dir/
+# cp $resources_dir/template_files/generate_submission.sh $output_dir/
+# cp $resources_dir/template_files/nextflow.config $output_dir/
+# cp $resources_dir/template_files/LICENSE $output_dir/
+# cp $resources_dir/template_files/.gitignore $output_dir/
+cp $resources_dir/README.md $output_dir/
+cp $resources_dir/generate_submission.sh $output_dir/
+cp $resources_dir/nextflow.config $output_dir/
+cp $resources_dir/LICENSE $output_dir/
+cp $resources_dir/.gitignore $output_dir/
 
 echo replace terms in templates
 sed -i "s#\\\$par_task_name#$par_task_name#g" $output_dir/*
