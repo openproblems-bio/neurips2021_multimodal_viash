@@ -27,7 +27,7 @@ out = anndata.AnnData(
     X=prediction,
     uns={
         "dataset_id": ad_mod2.uns["dataset_id"],
-        "method_id": "baseline_zeros",
+        "method_id": "dummy_constant",
     }
 )
 out.write_h5ad(par["output"])

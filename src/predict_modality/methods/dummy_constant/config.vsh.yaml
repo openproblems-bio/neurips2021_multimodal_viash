@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_constant
+  name: dummy_constant
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against. Predicts the mean training vector
@@ -43,3 +43,5 @@ platforms:
     setup:
       - type: python
         pip: [ anndata, scipy, sklearn ]
+  - type: nextflow
+    directive_time: 10m
