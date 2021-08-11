@@ -1,9 +1,5 @@
 cat("Loading dependencies\n")
-options(tidyverse.quiet = TRUE)
-library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
-library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-library(keras, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
