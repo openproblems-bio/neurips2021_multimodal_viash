@@ -50,8 +50,6 @@ ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
 logging.info('Performing dimensionality reduction on modality 1 values...')
 
-# Notice how this instantiation also uses the pre-defined parameter for
-# the distance method to be used here.
 embedder = TruncatedSVD(
     n_components=par['n_pcs'],
 )
