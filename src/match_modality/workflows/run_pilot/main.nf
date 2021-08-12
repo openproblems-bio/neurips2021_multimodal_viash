@@ -10,6 +10,7 @@ include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
 include  { dummy_identity }              from "$targetDir/${task}_methods/dummy_identity/main.nf"              params(params)
 include  { calculate_auroc }             from "$targetDir/${task}_metrics/calculate_auroc/main.nf"             params(params)
+include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                       params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"

@@ -16,6 +16,7 @@ include  { ari }                        from "$targetDir/${task}_metrics/ari/mai
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
 include  { asw_label }                  from "$targetDir/${task}_metrics/asw_label/main.nf"                    params(params)
 include  { nmi }                        from "$targetDir/${task}_metrics/nmi/main.nf"                          params(params)
+include  { check_format }               from "$targetDir/${task}_metrics/check_format/main.nf"                 params(params)
 include  { extract_scores }             from "$targetDir/common/extract_scores/main.nf"                        params(params)
 include  { bind_tsv_rows }              from "$targetDir/common/bind_tsv_rows/main.nf"                         params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"

@@ -834,5 +834,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/asw_label"
   executable: "target/nextflow/joint_embedding_metrics/asw_label/asw_label"
   viash_version: "0.5.1"
-  git_commit: "53cafda52f02612563bed618cf8b7e232c59d4fa"
+  git_commit: "4ffb9d70913c1093a0c45649fed955506294294d"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

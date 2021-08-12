@@ -7,7 +7,7 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 par <- list(
   # input = "resources_test/predict_modality/test_resource.scores.h5ad",
-  input = list.files("work/f2/76020c558a40e0d469f18dc56bb258", pattern = "*.h5ad", full.names = TRUE),
+  input = list.files("work/f2/76020c558a40e0d469f18dc56bb258", pattern = "*.(h5ad|output)$", full.names = TRUE),
   output = "output/pilot/joint_embedding/output.extract_scores.output.tsv",
   summary = "output/pilot/joint_embedding/output.extract_scores.summary.tsv",
   method_meta = NULL,
