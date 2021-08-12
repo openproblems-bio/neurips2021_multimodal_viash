@@ -1,2 +1,2 @@
-id	input_count	input_meta
-azimuth_ref	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file&file=GSE164378%5Fsc%2Emeta%2Edata%5F3P%2Ecsv%2Egz
+id	organism	input_count	input_meta
+azimuth_ref	human	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file	https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file&file=GSE164378%5Fsc%2Emeta%2Edata%5F3P%2Ecsv%2Egz

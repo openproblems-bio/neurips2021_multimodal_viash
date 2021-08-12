@@ -24,7 +24,16 @@ functionality:
     name: "--input"
     alternatives: []
     description: "Location URL to the GEO raw counts tar file."
-    example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file"
+    example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file"
+    required: true
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "string"
+    name: "--organism"
+    alternatives: []
+    description: "The organism of the dataset"
+    example: "human"
     required: true
     direction: "Input"
     multiple: false
@@ -212,8 +221,15 @@ functionality:
       
         echo "   --input"
         echo "        type: string, required parameter"
-        echo "        example: https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file"
+        echo "        example: https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file"
         echo "        Location URL to the GEO raw counts tar file."
+        echo ""
+      
+      
+        echo "   --organism"
+        echo "        type: string, required parameter"
+        echo "        example: human"
+        echo "        The organism of the dataset"
         echo ""
       
       
@@ -550,6 +566,14 @@ functionality:
                   VIASH_PAR_INPUT=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --organism)
+                  VIASH_PAR_ORGANISM="$2"
+                  shift 2
+                  ;;
+              --organism=*)
+                  VIASH_PAR_ORGANISM=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               --output_rna)
                   VIASH_PAR_OUTPUT_RNA="$2"
                   shift 2
@@ -611,6 +635,10 @@ functionality:
       fi
       if [ -z "$VIASH_PAR_INPUT" ]; then
         ViashError '--input' is a required argument. Use "--help" to get more information on the parameters.
+        exit 1
+      fi
+      if [ -z "$VIASH_PAR_ORGANISM" ]; then
+        ViashError '--organism' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
       if [ -z "$VIASH_PAR_OUTPUT_RNA" ]; then
@@ -676,6 +704,7 @@ functionality:
       par = {
         'id': $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo None; fi ),
         'input': $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "'$VIASH_PAR_INPUT'"; else echo None; fi ),
+        'organism': $( if [ ! -z ${VIASH_PAR_ORGANISM+x} ]; then echo "'$VIASH_PAR_ORGANISM'"; else echo None; fi ),
         'output_rna': $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo None; fi ),
         'output_mod2': $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo None; fi )
       }
@@ -722,7 +751,7 @@ functionality:
       adata_RNA.var.feature_types = 'GEX'
       adata_ATAC.var.feature_types = 'ATAC'
       
-      uns = { "dataset_id" : par["id"] }
+      uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
       adata_RNA.uns = uns
       adata_ATAC.uns = uns
       
@@ -778,5 +807,5 @@ info:
   output: "target/docker/common_datasets/download_babel_dataset"
   executable: "target/docker/common_datasets/download_babel_dataset/download_babel_datasets"
   viash_version: "0.5.1"
-  git_commit: "0ea195f52434e5eb89479a7be89b7d535bce4ad4"
+  git_commit: "53cafda52f02612563bed618cf8b7e232c59d4fa"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

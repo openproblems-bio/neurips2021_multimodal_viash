@@ -173,6 +173,13 @@ function ViashHelp {
   echo ""
 
 
+  echo "   --organism"
+  echo "        type: string, required parameter"
+  echo "        example: human"
+  echo "        The organism of the dataset"
+  echo ""
+
+
   echo "   --output_rna"
   echo "        type: file, required parameter, output"
   echo "        example: output_rna.h5ad"
@@ -514,6 +521,14 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT_META=$(ViashRemoveFlags "$1")
             shift 1
             ;;
+        --organism)
+            VIASH_PAR_ORGANISM="$2"
+            shift 2
+            ;;
+        --organism=*)
+            VIASH_PAR_ORGANISM=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
         --output_rna)
             VIASH_PAR_OUTPUT_RNA="$2"
             shift 2
@@ -579,6 +594,10 @@ if [ -z "$VIASH_PAR_INPUT_COUNT" ]; then
 fi
 if [ -z "$VIASH_PAR_INPUT_META" ]; then
   ViashError '--input_meta' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
+if [ -z "$VIASH_PAR_ORGANISM" ]; then
+  ViashError '--organism' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
 if [ -z "$VIASH_PAR_OUTPUT_RNA" ]; then
@@ -650,6 +669,7 @@ par = {
   'id': $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo None; fi ),
   'input_count': $( if [ ! -z ${VIASH_PAR_INPUT_COUNT+x} ]; then echo "'$VIASH_PAR_INPUT_COUNT'"; else echo None; fi ),
   'input_meta': $( if [ ! -z ${VIASH_PAR_INPUT_META+x} ]; then echo "'$VIASH_PAR_INPUT_META'"; else echo None; fi ),
+  'organism': $( if [ ! -z ${VIASH_PAR_ORGANISM+x} ]; then echo "'$VIASH_PAR_ORGANISM'"; else echo None; fi ),
   'output_rna': $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo None; fi ),
   'output_mod2': $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo None; fi )
 }
@@ -733,7 +753,7 @@ adata.var['feature_types'] = "GEX"
 protein.var['feature_types'] = "ADT"
 
 # set uns 
-uns = { "dataset_id" : par["id"] }
+uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 adata.uns = uns
 protein.uns = uns
 

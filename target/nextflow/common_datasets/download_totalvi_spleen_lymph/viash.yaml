@@ -29,6 +29,15 @@ functionality:
     direction: "Input"
     multiple: false
     multiple_sep: ":"
+  - type: "string"
+    name: "--organism"
+    alternatives: []
+    description: "The organism of the dataset"
+    example: "mouse"
+    required: true
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   - type: "file"
     name: "--output_rna"
     alternatives: []
@@ -217,6 +226,13 @@ functionality:
         echo ""
       
       
+        echo "   --organism"
+        echo "        type: string, required parameter"
+        echo "        example: mouse"
+        echo "        The organism of the dataset"
+        echo ""
+      
+      
         echo "   --output_rna"
         echo "        type: file, required parameter, output"
         echo "        example: output_rna.h5ad"
@@ -277,6 +293,14 @@ functionality:
                   VIASH_PAR_INPUT=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --organism)
+                  VIASH_PAR_ORGANISM="$2"
+                  shift 2
+                  ;;
+              --organism=*)
+                  VIASH_PAR_ORGANISM=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               --output_rna)
                   VIASH_PAR_OUTPUT_RNA="$2"
                   shift 2
@@ -315,6 +339,10 @@ functionality:
         ViashError '--input' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
+      if [ -z "$VIASH_PAR_ORGANISM" ]; then
+        ViashError '--organism' is a required argument. Use "--help" to get more information on the parameters.
+        exit 1
+      fi
       if [ -z "$VIASH_PAR_OUTPUT_RNA" ]; then
         ViashError '--output_rna' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
@@ -347,6 +375,7 @@ functionality:
       par = {
         'id': $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo None; fi ),
         'input': $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "'$VIASH_PAR_INPUT'"; else echo None; fi ),
+        'organism': $( if [ ! -z ${VIASH_PAR_ORGANISM+x} ]; then echo "'$VIASH_PAR_ORGANISM'"; else echo None; fi ),
         'output_rna': $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo None; fi ),
         'output_mod2': $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo None; fi )
       }
@@ -371,7 +400,7 @@ functionality:
       ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
       ###############################################################################
       new_obs = adata.obs.rename(columns = {'cell_types': 'cell_type', 'batch_indices': 'batch'}, inplace = False)
-      uns = { "dataset_id" : par["id"] }
+      uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
       
       print("Extracting RNA counts")
       adata_rna = anndata.AnnData(
@@ -421,6 +450,7 @@ functionality:
         params {
           download_totalvi_spleen_lymph__id = "viash_no_value"
           download_totalvi_spleen_lymph__input = "viash_no_value"
+          download_totalvi_spleen_lymph__organism = "viash_no_value"
           download_totalvi_spleen_lymph__output_rna = "viash_no_value"
           download_totalvi_spleen_lymph__output_mod2 = "viash_no_value"
           id = ""
@@ -461,6 +491,18 @@ functionality:
                 value = "${params.download_totalvi_spleen_lymph__input}"
                 example = "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad"
                 description = "Location URL to an h5ad file from the totalVI reproducibility github."
+              }
+              organism {
+                name = "organism"
+                otype = "--"
+                required = true
+                type = "string"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.download_totalvi_spleen_lymph__organism}"
+                example = "mouse"
+                description = "The organism of the dataset"
               }
               output_rna {
                 name = "output_rna"
@@ -862,5 +904,5 @@ info:
   output: "target/nextflow/common_datasets/download_totalvi_spleen_lymph"
   executable: "target/nextflow/common_datasets/download_totalvi_spleen_lymph/download_totalvi_spleen_lymph"
   viash_version: "0.5.1"
-  git_commit: "0ea195f52434e5eb89479a7be89b7d535bce4ad4"
+  git_commit: "53cafda52f02612563bed618cf8b7e232c59d4fa"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

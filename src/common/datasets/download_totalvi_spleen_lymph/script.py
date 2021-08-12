@@ -9,6 +9,7 @@ from scipy import sparse
 ## VIASH START
 par = {
     "id": "spleen_lymph_111",
+    "organism": "mouse",
     "input": "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad",
     "output_rna": "output_rna.h5ad",
     "output_mod2": "output_mod2.h5ad"
@@ -31,7 +32,7 @@ h5ad_temp.close()
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
 new_obs = adata.obs.rename(columns = {'cell_types': 'cell_type', 'batch_indices': 'batch'}, inplace = False)
-uns = { "dataset_id" : par["id"] }
+uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 
 print("Extracting RNA counts")
 adata_rna = anndata.AnnData(
