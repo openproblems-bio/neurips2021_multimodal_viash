@@ -6,7 +6,7 @@ set -e
 MAX_MEMORY="$par_memory"
 MAX_TIME="$par_time"
 MAX_CPUS="$par_cpus"
-PIPELINE_VERSION="$pipeline_version"
+PIPELINE_VERSION="$par_pipeline_version"
 
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 
