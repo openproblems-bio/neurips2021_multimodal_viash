@@ -10,7 +10,7 @@ par <- list(
 
 cat("Reading h5ad files\n")
 ad2_test <- anndata::read_h5ad(par$input_test_mod2)
-ad2_test$uns[["method_id"]] <- "dummy_identity"
+ad2_test$uns[["method_id"]] <- "dummy_solution"
 
 cat("Writing predictions to file\n")
 zzz <- ad2_test$write_h5ad(par$output, compression = "gzip")

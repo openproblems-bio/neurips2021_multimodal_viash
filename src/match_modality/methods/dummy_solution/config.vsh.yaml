@@ -1,5 +1,5 @@
 functionality:
-  name: dummy_identity
+  name: dummy_solution
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing match modality methods against.
@@ -9,31 +9,6 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-  #   - name: "--input_train_mod1"
-  #     type: "file"
-  #     example: "dataset_censored.h5ad"
-  #     description: "The censored shuffled train mod1 profiles."
-  #     required: true
-  #   - name: "--input_train_mod2"
-  #     type: "file"
-  #     example: "dataset_censored.h5ad"
-  #     description: "The censored shuffled train mod2 profiles."
-  #     required: true
-  #   - name: "--input_train_sol"
-  #     type: "file"
-  #     example: "dataset_solution.h5ad"
-  #     description: "The pairing of train mod1&mod2 profiles."
-  #     required: true
-  #   - name: "--input_test_mod1"
-  #     type: "file"
-  #     example: "dataset_censored.h5ad"
-  #     description: "The censored shuffled test mod1 profiles."
-  #     required: true
-  #   - name: "--input_test_mod2"
-  #     type: "file"
-  #     example: "dataset_censored.h5ad"
-  #     description: "The censored shuffled test mod2 profiles."
-  #     required: true
     - name: "--input_test_sol"
       type: "file"
       example: "dataset_solution.h5ad"

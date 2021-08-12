@@ -10,7 +10,7 @@ include  { baseline_knearestneighbors }  from "$targetDir/${task}_methods/baseli
 include  { baseline_babel }              from "$targetDir/${task}_methods/baseline_babel/main.nf"             params(params)
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
-include  { dummy_identity }              from "$targetDir/${task}_methods/dummy_identity/main.nf"             params(params)
+include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"             params(params)
 include  { calculate_cor }               from "$targetDir/${task}_metrics/calculate_cor/main.nf"              params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"               params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                      params(params)
@@ -65,9 +65,9 @@ workflow pilot_wf {
     | map { id, pred, params, sol -> [ id + "_dummy_constant", [ input_prediction: pred, input_solution: sol ], params ]}
   def d2 = solution
     | map { id, input -> [ id, input, params ] }  
-    | dummy_identity
+    | dummy_solution
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_dummy_identity", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def predictions = b0.mix(b1, b2, b3, d0, d1, d2)
 
