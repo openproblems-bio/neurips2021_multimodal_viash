@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component totalvi")
+      println("[ERROR] option --${it.name} not specified in component baseline_totalvi")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "totalvi." + it.name + "." + extOrName
+          ? "baseline_totalvi." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process totalvi_process {
+process baseline_totalvi_process {
   time '45m'
   memory '20 GB'
   tag "${id}"
@@ -184,7 +184,7 @@ process totalvi_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.totalvi.tests.testScript} | tee $output
+      ./${params.baseline_totalvi.tests.testScript} | tee $output
       """
     else
       """
@@ -197,14 +197,14 @@ process totalvi_process {
       """
 }
 
-workflow totalvi {
+workflow baseline_totalvi {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "totalvi"
+  def key = "baseline_totalvi"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -249,7 +249,7 @@ workflow totalvi {
       )
     }
 
-  result_ = totalvi_process(id_input_output_function_cli_params_) \
+  result_ = baseline_totalvi_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -279,7 +279,7 @@ workflow totalvi {
 
 workflow {
   def id = params.id
-  def fname = "totalvi"
+  def fname = "baseline_totalvi"
 
   def _params = params
 
@@ -291,14 +291,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.totalvi
+  def inputFiles = params.baseline_totalvi
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = totalvi(ch_)
+  result = baseline_totalvi(ch_)
   result.view{ it[1] }
 }
 
@@ -311,17 +311,17 @@ workflow test {
 
   main:
   params.test = true
-  params.totalvi.output = "totalvi.log"
+  params.baseline_totalvi.output = "baseline_totalvi.log"
 
   Channel.from(rootDir) \
-    | filter { params.totalvi.tests.isDefined } \
+    | filter { params.baseline_totalvi.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.totalvi.tests.testResources.collect{ file( p + it ) },
+        params.baseline_totalvi.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | totalvi
+    | baseline_totalvi
 
   emit:
-  totalvi.out
+  baseline_totalvi.out
 }

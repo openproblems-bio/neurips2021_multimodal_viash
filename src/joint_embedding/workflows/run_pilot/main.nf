@@ -7,9 +7,10 @@ task = "joint_embedding"
 include  { baseline_lmds }              from "$targetDir/${task}_methods/baseline_lmds/main.nf"                params(params)
 include  { baseline_pca }               from "$targetDir/${task}_methods/baseline_pca/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
+include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
-include  { totalvi }                    from "$targetDir/${task}_methods/totalvi/main.nf"                      params(params)
+include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
 include  { calculate_rf_oob }           from "$targetDir/${task}_metrics/calculate_rf_oob/main.nf"             params(params)
 include  { calculate_totalvi_metrics }  from "$targetDir/${task}_metrics/calculate_totalvi_metrics/main.nf"    params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
@@ -54,6 +55,10 @@ workflow pilot_wf {
     | baseline_umap
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_umap", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b3 = inputs 
+    | baseline_totalvi
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_random
@@ -63,13 +68,13 @@ workflow pilot_wf {
     | dummy_zeros
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d2 = solution
+    | map { id, input -> [ id, input, params ] }  
+    | dummy_solution
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def m0 = inputs 
-    | totalvi
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
-
-  def predictions = b0.mix(b1, b2, d0, d1, m0)
+  def predictions = b0.mix(b1, b2, b3, d0, d1, d2)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions

@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component dummy_identity")
+      println("[ERROR] option --${it.name} not specified in component dummy_solution")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "dummy_identity." + it.name + "." + extOrName
+          ? "dummy_solution." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process dummy_identity_process {
+process dummy_solution_process {
   time '10m'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
@@ -183,7 +183,7 @@ process dummy_identity_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.dummy_identity.tests.testScript} | tee $output
+      ./${params.dummy_solution.tests.testScript} | tee $output
       """
     else
       """
@@ -196,14 +196,14 @@ process dummy_identity_process {
       """
 }
 
-workflow dummy_identity {
+workflow dummy_solution {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "dummy_identity"
+  def key = "dummy_solution"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -248,7 +248,7 @@ workflow dummy_identity {
       )
     }
 
-  result_ = dummy_identity_process(id_input_output_function_cli_params_) \
+  result_ = dummy_solution_process(id_input_output_function_cli_params_) \
     | join(id_input_params_) \
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -278,7 +278,7 @@ workflow dummy_identity {
 
 workflow {
   def id = params.id
-  def fname = "dummy_identity"
+  def fname = "dummy_solution"
 
   def _params = params
 
@@ -290,14 +290,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.dummy_identity
+  def inputFiles = params.dummy_solution
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = dummy_identity(ch_)
+  result = dummy_solution(ch_)
   result.view{ it[1] }
 }
 
@@ -310,17 +310,17 @@ workflow test {
 
   main:
   params.test = true
-  params.dummy_identity.output = "dummy_identity.log"
+  params.dummy_solution.output = "dummy_solution.log"
 
   Channel.from(rootDir) \
-    | filter { params.dummy_identity.tests.isDefined } \
+    | filter { params.dummy_solution.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.dummy_identity.tests.testResources.collect{ file( p + it ) },
+        params.dummy_solution.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | dummy_identity
+    | dummy_solution
 
   emit:
-  dummy_identity.out
+  dummy_solution.out
 }

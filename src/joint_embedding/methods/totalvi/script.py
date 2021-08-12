@@ -43,7 +43,7 @@ adata_out = anndata.AnnData(
     obs=adata_mod1.obs[['batch']],
     uns={
         "dataset_id": adata_mod1.uns["dataset_id"],
-        "method_id": "totalvi"
+        "method_id": "baseline_totalvi"
     }
 )
 adata_out.write_h5ad(par['output'], compression = "gzip")
