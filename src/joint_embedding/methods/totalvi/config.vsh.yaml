@@ -1,10 +1,10 @@
 functionality:
-  name: totalvi
+  name: baseline_totalvi
   namespace: joint_embedding_methods
   version: dev
   description: totalVI for comparing joint embedding methods against.
   usage: |
-    totalvi \
+    baseline_totalvi \
       --input_mod1 spleen_lymph_111.mod1.h5ad \
       --input_mod2 spleen_lymph_111.mod2.h5ad \
       --output spleen_lymph_111.predict.h5ad \
