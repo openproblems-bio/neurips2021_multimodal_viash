@@ -783,5 +783,5 @@ info:
   output: "target/docker/common_process_dataset/split_traintest"
   executable: "target/docker/common_process_dataset/split_traintest/split_traintest"
   viash_version: "0.5.1"
-  git_commit: "813c3c57c3befad0242c979b683eaa298c362925"
+  git_commit: "bcb039584d51d9f899f85d95fceb762e7efff254"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

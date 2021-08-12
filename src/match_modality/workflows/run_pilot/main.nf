@@ -71,7 +71,7 @@ workflow pilot_wf {
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/$task/**/metric_meta.tsv")
+    Channel.fromPath("$srcDir/$task/**/metric_meta*.tsv")
       | toList()
       | map{ [ "meta", it, params ] }
       | bind_tsv_rows

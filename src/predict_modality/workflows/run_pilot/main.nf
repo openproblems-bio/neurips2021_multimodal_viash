@@ -2,61 +2,93 @@ nextflow.enable.dsl=2
 
 srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
+task = "predict_modality"
 
-include  { baseline_randomforest }       from "$targetDir/predict_modality_methods/baseline_randomforest/main.nf"      params(params)
-include  { baseline_linearmodel }        from "$targetDir/predict_modality_methods/baseline_linearmodel/main.nf"       params(params)
-include  { baseline_knearestneighbors }  from "$targetDir/predict_modality_methods/baseline_knearestneighbors/main.nf" params(params)
-include  { dummy_zeros }                 from "$targetDir/predict_modality_methods/dummy_zeros/main.nf"                params(params)
-include  { calculate_cor }               from "$targetDir/predict_modality_metrics/calculate_cor/main.nf"              params(params)
-include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                               params(params)
+include  { baseline_randomforest }       from "$targetDir/${task}_methods/baseline_randomforest/main.nf"      params(params)
+include  { baseline_linearmodel }        from "$targetDir/${task}_methods/baseline_linearmodel/main.nf"       params(params)
+include  { baseline_knearestneighbors }  from "$targetDir/${task}_methods/baseline_knearestneighbors/main.nf" params(params)
+include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
+include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
+include  { dummy_identity }              from "$targetDir/${task}_methods/dummy_identity/main.nf"             params(params)
+include  { calculate_cor }               from "$targetDir/${task}_metrics/calculate_cor/main.nf"              params(params)
+include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                      params(params)
+include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
+include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 workflow pilot_wf {
   main:
-  inputs = 
-    Channel.fromPath("output/public_datasets/predict_modality/**.h5ad")
+
+  // get input files for methods
+  def inputs = 
+    Channel.fromPath("output/public_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
-      | filter { !it[1].name.contains("output_solution") && !it[1].name.contains("output_test_sol") }
+      | filter { !it[1].name.contains("output_solution") && !it[1].name.contains("output_test_mod2") }
       | groupTuple
       | map { id, datas -> 
         def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2].replace("output_", "input_")), it ]}
         [ id, fileMap, params ]
       }
-  solution = 
-    Channel.fromPath("output/public_datasets/match_modality/**.h5ad")
+  
+  // get solutions
+  def solution = 
+    Channel.fromPath("output/public_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
-      | filter { it[1].name.contains("output_solution") || it[1].name.contains("output_test_sol") }
+      | filter { it[1].name.contains("output_solution") || it[1].name.contains("output_test_mod2") }
 
   // for now, code needs one of these code blocks per method.
-  rfOut = inputs 
-    | map { id, data -> [ id, data, params ] }
+  def b0 = inputs 
     | baseline_randomforest
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_rf", [ input_prediction: pred, input_solution: sol ], params ]}
-
-  lmOut = inputs 
-    | map { id, data -> [ id, data, params ] }
+    | map { id, pred, params, sol -> [ id + "_baseline_randomforest", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b1 = inputs 
     | baseline_linearmodel
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_lm", [ input_prediction: pred, input_solution: sol ], params ]}
-
-  knnOut = inputs 
-    | map { id, data -> [ id, data, params ] }
+    | map { id, pred, params, sol -> [ id + "_baseline_linearmodel", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b2 = inputs 
     | baseline_knearestneighbors
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_baseline_knearestneighbors", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  dzOut = inputs 
-    | map { id, data -> [ id, data, params ] }
+  def d0 = inputs 
     | dummy_zeros
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_dz", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d1 = inputs 
+    | dummy_constant
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_dummy_constant", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d2 = solution
+    | map { id, input -> [ id, input, params ] }  
+    | dummy_identity
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_dummy_identity", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  rfOut.mix(lmOut, knnOut, dzOut)
-    // | view{ [ "BASELINE", it[0], it[1] ] }
+  def predictions = b0.mix(b1, b2, d0, d1, d2)
+
+  // fetch dataset ids in predictions and in solutions
+  def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
+  def solution_dids = solution | map { it[1] } | get_id_solutions
+
+  // create solutions meta
+  def solutionsMeta = solution_dids
+    | map{ it[0] }
+    | collectFile(name: "solutions_meta.tsv", newLine: true, seed: "dataset_id")
+  
+  // create metrics meta
+  def metricsMeta = 
+    Channel.fromPath("$srcDir/$task/**/metric_meta*.tsv")
+      | toList()
+      | map{ [ "meta", it, params ] }
+      | bind_tsv_rows
+      | map{ it[1] }
+
+  // compute metrics & combine results
+  predictions
     | calculate_cor
-    // | view{ [ "METRIC", it[0], it[1] ] }
-    | map { it[1] }
     | toList()
-    | map { [ "predict_modality", it, params ] }
+    | map{ [ it.collect{it[1]} ] }
+    | combine(metricsMeta)
+    | combine(solutionsMeta)
+    | map{ [ "output", [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
     | extract_scores
 }

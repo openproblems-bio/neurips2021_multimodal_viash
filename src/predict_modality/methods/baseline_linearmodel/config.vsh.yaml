@@ -53,4 +53,4 @@ platforms:
         packages: [ lmds ]
   - type: nextflow
     directive_time: 10m
-    directive_memory: "20 GB"
+    directive_memory: "10 GB"

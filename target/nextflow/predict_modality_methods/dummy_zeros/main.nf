@@ -158,6 +158,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process dummy_zeros_process {
+  time '10m'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

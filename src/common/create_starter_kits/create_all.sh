@@ -15,6 +15,8 @@ cd "$REPO_ROOT"
 
 pipeline_version=main_build
 
+bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- ---setup cb
+
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
   --input_dir src/predict_modality/starter_kit/starter_kit_r/ \
   --task predict_modality \

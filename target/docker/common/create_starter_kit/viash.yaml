@@ -498,7 +498,7 @@ functionality:
       FROM ubuntu:21.04
       
       RUN apt-get update && \
-        apt-get install -y wget zip && \
+        apt-get install -y wget zip openjdk-17-jre-headless && \
         rm -rf /var/lib/apt/lists/*
       
       RUN wget https://github.com/viash-io/viash/releases/download/0.5.1/viash -O /usr/bin/viash && chmod +x /usr/bin/viash
@@ -948,7 +948,15 @@ functionality:
       # todo: update to multisample
       echo copy sample resources
       mkdir -p \$output_dir/sample_data/
-      cp \$resources_dir/resources_test/\$par_task/test_resource.mod[12].h5ad \$output_dir/sample_data/
+      if [[ \$par_task == "predict_modality" ]]; then
+        cp \$resources_dir/resources_test/\$par_task/test_resource.train_mod[12].h5ad \$output_dir/sample_data/
+        cp \$resources_dir/resources_test/\$par_task/test_resource.test_mod1.h5ad \$output_dir/sample_data/
+      elif [[ \$par_task == "match_modality" ]]; then
+        cp \$resources_dir/resources_test/\$par_task/test_resource.train_*.h5ad \$output_dir/sample_data/
+        cp \$resources_dir/resources_test/\$par_task/test_resource.test_mod[12].h5ad \$output_dir/sample_data/
+      elif [[ \$par_task == "joint_embedding" ]]; then
+        cp \$resources_dir/resources_test/\$par_task/test_resource.mod[12].h5ad \$output_dir/sample_data/
+      fi
       
       echo zipping starter kit
       [ -f \${output_dir}.zip ] && rm \${output_dir}.zip
@@ -987,6 +995,7 @@ platform:
     packages:
     - "wget"
     - "zip"
+    - "openjdk-17-jre-headless"
     oType: "apt"
   - type: "docker"
     resources: []
@@ -1003,5 +1012,5 @@ info:
   output: "target/docker/common/create_starter_kit"
   executable: "target/docker/common/create_starter_kit/create_starter_kit"
   viash_version: "0.5.1"
-  git_commit: "813c3c57c3befad0242c979b683eaa298c362925"
+  git_commit: "bcb039584d51d9f899f85d95fceb762e7efff254"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

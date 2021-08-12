@@ -615,6 +615,7 @@ functionality:
       }
       
       process dummy_zeros_process {
+        time '10m'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -792,6 +793,7 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   labels: []
+  directive_time: "10m"
 platforms: []
 info:
   config: "src/predict_modality/methods/dummy_zeros/config.vsh.yaml"
@@ -799,5 +801,5 @@ info:
   output: "target/nextflow/predict_modality_methods/dummy_zeros"
   executable: "target/nextflow/predict_modality_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.1"
-  git_commit: "813c3c57c3befad0242c979b683eaa298c362925"
+  git_commit: "bcb039584d51d9f899f85d95fceb762e7efff254"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

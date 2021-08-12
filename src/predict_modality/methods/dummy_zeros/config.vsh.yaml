@@ -40,3 +40,4 @@ platforms:
       - type: python
         pip: [ anndata, scipy ]
   - type: nextflow
+    directive_time: 10m

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# run prior to running this script:
+# bin/viash_build -q 'common'
+# bin/viash_build -q 'predict_modality' --max_threads 4
+
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
