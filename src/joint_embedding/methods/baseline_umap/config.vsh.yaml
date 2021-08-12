@@ -31,7 +31,7 @@ functionality:
       description: Number of dimensions to output.
     - name: "--metric"
       type: "string"
-      default: "spearman"
+      default: "euclidean"
       description: The metric to use. Possible values are euclidean, cosine, manhattan.
     - name: "--n_neighbors"
       type: "integer"
