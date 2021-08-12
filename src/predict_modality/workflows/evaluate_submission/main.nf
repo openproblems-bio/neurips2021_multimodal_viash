@@ -2,13 +2,15 @@ nextflow.enable.dsl=2
 
 srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
+task = "predict_modality"
 
-include  { calculate_cor }             from "$targetDir/predict_modality_metrics/calculate_cor/main.nf"    params(params)
+include  { calculate_cor }             from "$targetDir/${task}_metrics/calculate_cor/main.nf"             params(params)
+include  { check_format }              from "$targetDir/${task}_metrics/check_format/main.nf"              params(params)
 include  { extract_scores }            from "$targetDir/common/extract_scores/main.nf"                     params(params)
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
-params.solutions = "s3://neurips2021-multimodal-public-datasets/predict_modality/**.output_test_mod2.h5ad"
+params.solutions = "output/public_datasets/$task/**.output_test_mod2.h5ad"
 
 workflow {
   main:
@@ -22,7 +24,7 @@ workflow {
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/predict_modality/**/metric_meta_*.tsv")
+    Channel.fromPath("$srcDir/$task/**/metric_meta_*.tsv")
       | toList()
       | map{ [ "meta", it, params ] }
       | bind_tsv_rows
@@ -30,7 +32,8 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | calculate_cor
+    | (calculate_cor & check_format)
+    | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)

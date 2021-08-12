@@ -2,13 +2,13 @@ nextflow.enable.dsl=2
 
 include { method } from "$launchDir/target/nextflow/main.nf" params(params)
 
-params.datasets = "s3://neurips2021-multimodal-public-datasets/joint_embedding/**.output_*.h5ad"
+params.datasets = "s3://neurips2021-multimodal-public-datasets/joint_embedding/**.h5ad"
 
 workflow {
   main:
   Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] }
-    | filter { !it[1].name.contains("output_solution") && !it[1].name.contains("output_test_sol") }
+    | filter { !it[1].name.contains("output_solution") }
     // | view { [ "DEBUG0", it[0], it[1] ]}
     | groupTuple
     | map { id, datas -> 
