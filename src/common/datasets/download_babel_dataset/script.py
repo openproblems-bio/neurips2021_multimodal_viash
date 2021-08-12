@@ -10,6 +10,7 @@ import scanpy as sc
 par = {
     "id": "babel_GM12878",
     "input": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file",
+    "organism": "human",
     "output_rna": "output_rna.h5ad",
     "output_mod2": "output_mod2.h5ad",
     "rep_n": 1
@@ -55,7 +56,7 @@ adata_ATAC = comb[:, comb.var.feature_types == "Peaks"].copy()
 adata_RNA.var.feature_types = 'GEX'
 adata_ATAC.var.feature_types = 'ATAC'
 
-uns = { "dataset_id" : par["id"] }
+uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 adata_RNA.uns = uns
 adata_ATAC.uns = uns
 
