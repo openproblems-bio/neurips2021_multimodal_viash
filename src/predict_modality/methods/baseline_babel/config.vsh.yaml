@@ -34,12 +34,6 @@ functionality:
       example: "output.h5ad"
       description: "The predicted test mod2 profiles."
       required: true
-    - name: "--output"
-      type: "file"
-      direction: "output"
-      example: "output.h5ad"
-      description: Dataset with predicted values for modality2.
-      required: true
   resources:
     - type: r_script
       path: script.R
