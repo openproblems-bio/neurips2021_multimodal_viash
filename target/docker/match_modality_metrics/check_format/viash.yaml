@@ -733,5 +733,5 @@ info:
   output: "target/docker/match_modality_metrics/check_format"
   executable: "target/docker/match_modality_metrics/check_format/check_format"
   viash_version: "0.5.1"
-  git_commit: "d4b6b825a0b2c9cd70a8e2e129fa832becf85d22"
+  git_commit: "938818d512bc6b5b1e3872cd8459203e4693ef5b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
