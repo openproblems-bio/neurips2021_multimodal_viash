@@ -18,10 +18,11 @@ solution_adata = ad.read_h5ad(par["input_solution"])
 
 print("Merge prediction with solution")
 merged_adata = predict_adata.copy()
-merged_adata.obs["batch"] = solution_adata.obs["batch"][merged_adata.obs_names]
 
-batch_val = merged_adata.obs["batch"].values
+batch_val = solution_adata.obs["batch"].astype(str)
+batch_unique_values, batch_index = np.unique(batch_val, return_inverse=True)
 
+merged_adata.obs["batch"] = batch_index
 
 def entropy_batch_mixing(
     latent_space, batches, n_neighbors=50, n_pools=50, n_samples_per_pool=100
