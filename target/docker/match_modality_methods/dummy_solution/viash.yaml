@@ -656,5 +656,5 @@ info:
   output: "target/docker/match_modality_methods/dummy_solution"
   executable: "target/docker/match_modality_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.1"
-  git_commit: "0f4a93a1410f845b1f5275bfc654e3f8d6634a68"
+  git_commit: "4f7cccf7818518553b85083f1a9506d60e48cb6c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
