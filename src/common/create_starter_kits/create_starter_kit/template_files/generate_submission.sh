@@ -39,7 +39,7 @@ echo "######################################################################"
 echo "##                      Sync datasets from S3                       ##"
 echo "######################################################################"
 
-if [ ! -f output/public_datasets/$par_task/ ]; then
+if [ ! -d output/public_datasets/$par_task/ ]; then
   mkdir -p output/public_datasets/$par_task/
 
   docker run \
@@ -58,7 +58,7 @@ echo "######################################################################"
 export NXF_VER=21.04.1
 
 # removing previous output
-[ -f output/predictions/$par_task/ ] && rm -r output/predictions/$par_task/
+[ -d output/predictions/$par_task/ ] && rm -r output/predictions/$par_task/
 
 bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
