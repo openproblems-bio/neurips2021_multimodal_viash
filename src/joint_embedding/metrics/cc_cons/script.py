@@ -1,6 +1,6 @@
 ## VIASH START
 par = dict(
-    input_prediction="resources_test/joint_embedding/test_resource.mod1.h5ad",
+    input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
     output="resources_test/joint_embedding/test_resource.cc_cons.tsv",
     debug=True
@@ -13,6 +13,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
+import numpy as np
 from scIB.metrics import cell_cycle
 
 if debug:
@@ -28,7 +29,11 @@ output = par['output']
 print("Read prediction anndata")
 adata = sc.read(input_prediction)
 dataset_id = adata.uns['dataset_id']
-organism = adata.uns['organism']
+
+if 'organism' in adata.uns:
+    organism = adata.uns['organism']
+else:
+    organism = 'synthetic'
 
 print("Read solution anndata")
 adata_solution = sc.read(input_solution)
@@ -40,18 +45,29 @@ if debug:
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
+recompute_cc = not np.all(np.in1d(['S_score', 'G2M_score'], adata_solution.obs_keys()))
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-score = cell_cycle(
-    adata_pre=adata_solution,
-    adata_post=adata,
-    batch_key='batch',
-    embed='X_emb',
-    organism=organism
-)
+if organism == 'synthetic':
+    score = np.nan if recompute_cc else cell_cycle(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        batch_key='batch',
+        embed='X_emb',
+        recompute_cc=False
+    )
+else:
+    score = cell_cycle(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        batch_key='batch',
+        embed='X_emb',
+        recompute_cc=recompute_cc,
+        organism=organism
+    )
 
 # store adata with metrics
 print("Create output object")
