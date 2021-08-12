@@ -45,7 +45,8 @@ if debug:
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
-recompute_cc = not np.all(np.in1d(['S_score', 'G2M_score'], adata_solution.obs_keys()))
+recompute_cc = 'S_score' not in adata_solution.obs_keys() or \
+               'G2M_score' not in adata_solution.obs_keys()
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
