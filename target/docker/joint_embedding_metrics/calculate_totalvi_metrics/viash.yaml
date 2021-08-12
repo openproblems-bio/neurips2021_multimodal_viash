@@ -684,10 +684,11 @@ functionality:
       
       print("Merge prediction with solution")
       merged_adata = predict_adata.copy()
-      merged_adata.obs["batch"] = solution_adata.obs["batch"][merged_adata.obs_names]
       
-      batch_val = merged_adata.obs["batch"].values
+      batch_val = solution_adata.obs["batch"].astype(str)
+      batch_unique_values, batch_index = np.unique(batch_val, return_inverse=True)
       
+      merged_adata.obs["batch"] = batch_index
       
       def entropy_batch_mixing(
           latent_space, batches, n_neighbors=50, n_pools=50, n_samples_per_pool=100
@@ -802,5 +803,5 @@ info:
   output: "target/docker/joint_embedding_metrics/calculate_totalvi_metrics"
   executable: "target/docker/joint_embedding_metrics/calculate_totalvi_metrics/calculate_totalvi_metrics"
   viash_version: "0.5.1"
-  git_commit: "981a41ea948e743cba6fe7e9153ec64f661f15e0"
+  git_commit: "80121113ba419fdcfd15a78b6685c70871f84775"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
