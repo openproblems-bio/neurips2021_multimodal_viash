@@ -1,19 +1,31 @@
-
+import anndata as ad
 import numpy as np
 import scipy
 from sklearn.neighbors import NearestNeighbors
 
+# VIASH START
+par = {
+    "input_prediction": "resources_test/joint_embedding/test_resource.prediction.h5ad",
+    "input_solution": "resources_test/joint_embedding/test_resource.solution.h5ad",
+    "output": "resources_test/joint_embedding/test_resource.scores_totalvi.h5ad",
+    "n_neighbors": 100
+}
+# VIASH END
+
+print("Read input files")
+predict_adata = ad.read_h5ad(par["input_prediction"])
+solution_adata = ad.read_h5ad(par["input_solution"])
+
+print("Merge prediction with solution")
+merged_adata = predict_adata.copy()
+merged_adata.obs["batch"] = solution_adata.obs["batch"][merged_adata.obs_names]
+
+batch_val = merged_adata.obs["batch"].values
+
+
 def entropy_batch_mixing(
     latent_space, batches, n_neighbors=50, n_pools=50, n_samples_per_pool=100
 ):
-    def entropy(hist_data):
-        n_batches = len(np.unique(hist_data))
-        if n_batches > 2:
-            raise ValueError("Should be only two clusters for this metric")
-        frequency = np.mean(hist_data == 1)
-        if frequency == 0 or frequency == 1:
-            return 0
-        return -frequency * np.log(frequency) - (1 - frequency) * np.log(1 - frequency)
 
     def neg_kl(hist_data, global_freq):
         n_batches = len(np.unique(hist_data))
@@ -57,3 +69,23 @@ def entropy_batch_mixing(
             ]
         )
     return score / float(n_pools)
+
+
+print("Calculate latent mixing metric")
+latent_mixing_metric = entropy_batch_mixing(
+    latent_space=merged_adata.X,
+    batches=merged_adata.obs["batch"].values,
+    n_neighbors=par["n_neighbors"]
+)
+
+print("Write output")
+adata_out = ad.AnnData(
+    uns = {
+        "dataset_id": predict_adata.uns["dataset_id"],
+        "method_id" : predict_adata.uns["method_id"],
+        "metric_ids" : ["latent_mixing_metric"],
+        "metric_values" : [latent_mixing_metric]
+    }
+)
+
+adata_out.write_h5ad(par['output'], compression = "gzip")
