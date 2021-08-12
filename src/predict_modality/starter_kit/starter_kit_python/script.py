@@ -1,5 +1,5 @@
 # Dependencies:
-# pip: scikit-learn, anndata, scanpy, umap-learn
+# pip: scikit-learn, anndata, scanpy
 #
 # Python starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
 # with `TODO` are supposed to be changed by you.
@@ -10,10 +10,10 @@
 
 import logging
 import anndata as ad
-import umap
 
 from scipy.sparse import csc_matrix
 
+from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import KNeighborsRegressor
 
 
@@ -52,9 +52,8 @@ logging.info('Performing dimensionality reduction on modality 1 values...')
 
 # Notice how this instantiation also uses the pre-defined parameter for
 # the distance method to be used here.
-embedder = umap.UMAP(
+embedder = TruncatedSVD(
     n_components=par['n_pcs'],
-    metric=par['distance_method'],
 )
 
 X = embedder.fit_transform(ad_mod1.X)
