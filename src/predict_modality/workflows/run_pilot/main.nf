@@ -24,7 +24,7 @@ workflow pilot_wf {
   def inputs = 
     Channel.fromPath("output/public_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
-      | filter { !it[1].name.contains("output_solution") && !it[1].name.contains("output_test_mod2") }
+      | filter { !it[1].name.contains("output_test_mod2") }
       | groupTuple
       | map { id, datas -> 
         def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2].replace("output_", "input_")), it ]}
@@ -35,7 +35,7 @@ workflow pilot_wf {
   def solution = 
     Channel.fromPath("output/public_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
-      | filter { it[1].name.contains("output_solution") || it[1].name.contains("output_test_mod2") }
+      | filter { it[1].name.contains("output_test_mod2") }
 
   // for now, code needs one of these code blocks per method.
   def b0 = inputs 

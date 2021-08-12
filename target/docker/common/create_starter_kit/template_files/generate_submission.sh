@@ -64,7 +64,7 @@ bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/generate_submission/main.nf \
-  --datasets 'output/public_datasets/$par_task/dyngen_**.output_mod[12].h5ad' \
+  --datasets 'output/public_datasets/$par_task/dyngen_**.h5ad' \
   --publishDir output/predictions/$par_task/ \
   -resume \
   -latest
