@@ -144,21 +144,21 @@ function ViashHelp {
   echo
   echo "Options:"
 
-  echo "   -ip, --input_prediction"
-  echo "        type: file"
+  echo "   --input_prediction"
+  echo "        type: file, required parameter"
   echo "        example: prediction.h5ad"
-  echo "        Prediction by a method."
+  echo "        Prediction by a method"
   echo ""
 
 
-  echo "   -io, --input_solution"
+  echo "   --input_solution"
   echo "        type: file, required parameter"
   echo "        example: solution.h5ad"
   echo "        Gold standard solution."
   echo ""
 
 
-  echo "   -o, --output"
+  echo "   --output"
   echo "        type: file, required parameter, output"
   echo "        example: output.h5ad"
   echo "        Metric scores by comparing the prediction to the gold standard solution."
@@ -476,10 +476,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT_PREDICTION=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -ip)
-            VIASH_PAR_INPUT_PREDICTION="$2"
-            shift 2
-            ;;
         --input_solution)
             VIASH_PAR_INPUT_SOLUTION="$2"
             shift 2
@@ -488,10 +484,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_INPUT_SOLUTION=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        -io)
-            VIASH_PAR_INPUT_SOLUTION="$2"
-            shift 2
-            ;;
         --output)
             VIASH_PAR_OUTPUT="$2"
             shift 2
@@ -499,10 +491,6 @@ while [[ $# -gt 0 ]]; do
         --output=*)
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
             shift 1
-            ;;
-        -o)
-            VIASH_PAR_OUTPUT="$2"
-            shift 2
             ;;
         ---setup)
             ViashDockerSetup 'openproblems/joint_embedding_metrics_calculate_rf_oob:main_build' "$2"
@@ -543,6 +531,10 @@ eval set -- $VIASH_POSITIONAL_ARGS
 
 
 # check whether required parameters exist
+if [ -z "$VIASH_PAR_INPUT_PREDICTION" ]; then
+  ViashError '--input_prediction' is a required argument. Use "--help" to get more information on the parameters.
+  exit 1
+fi
 if [ -z "$VIASH_PAR_INPUT_SOLUTION" ]; then
   ViashError '--input_solution' is a required argument. Use "--help" to get more information on the parameters.
   exit 1

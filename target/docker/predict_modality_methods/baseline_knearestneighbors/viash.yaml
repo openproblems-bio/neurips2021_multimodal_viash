@@ -782,9 +782,10 @@ functionality:
         distance_method = par\$distance_method
       )
       
-      dr_train <- dr[1:nrow(ad1_train),]
+      ix <- seq_len(nrow(ad1_train))
+      dr_train <- dr[ix, , drop = FALSE]
       responses_train <- ad2\$X
-      dr_test <- dr[(nrow(ad1_train)+1):nrow(dr),]
+      dr_test <- dr[-ix, , drop = FALSE]
       
       cat("Predicting for each column in modality 2\\n")
       preds <- apply(responses_train, 2, function(yi) {
@@ -864,5 +865,5 @@ info:
   output: "target/docker/predict_modality_methods/baseline_knearestneighbors"
   executable: "target/docker/predict_modality_methods/baseline_knearestneighbors/baseline_knearestneighbors"
   viash_version: "0.5.1"
-  git_commit: "bcb039584d51d9f899f85d95fceb762e7efff254"
+  git_commit: "07f5aa97c14ffbd2effc405971d21ce5d93c971a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

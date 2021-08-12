@@ -679,9 +679,10 @@ dr <- lmds::lmds(
   distance_method = par\$distance_method
 )
 
-dr_train <- dr[1:nrow(ad1_train),]
+ix <- seq_len(nrow(ad1_train))
+dr_train <- dr[ix, , drop = FALSE]
 responses_train <- ad2\$X
-dr_test <- dr[(nrow(ad1_train)+1):nrow(dr),]
+dr_test <- dr[-ix, , drop = FALSE]
 
 cat("Predicting for each column in modality 2\\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {

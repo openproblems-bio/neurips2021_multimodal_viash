@@ -8,7 +8,6 @@ include  { baseline_lmds }              from "$targetDir/${task}_methods/baselin
 include  { baseline_pca }               from "$targetDir/${task}_methods/baseline_pca/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
-include  { dummy_single_mod }           from "$targetDir/${task}_methods/dummy_single_mod/main.nf"             params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { totalvi }                    from "$targetDir/${task}_methods/totalvi/main.nf"                      params(params)
 include  { calculate_rf_oob }           from "$targetDir/${task}_metrics/calculate_rf_oob/main.nf"             params(params)
@@ -60,10 +59,6 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_random", [ input_prediction: pred, input_solution: sol ], params ]}
   def d1 = inputs 
-    | dummy_single_mod
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_dummy_single_mod", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d2 = inputs 
     | dummy_zeros
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
@@ -73,7 +68,7 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, d0, d1, d2, m0)
+  def predictions = b0.mix(b1, b2, d0, d1, m0)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
