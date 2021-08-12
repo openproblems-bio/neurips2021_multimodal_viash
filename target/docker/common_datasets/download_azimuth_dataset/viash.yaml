@@ -889,5 +889,5 @@ info:
   output: "target/docker/common_datasets/download_azimuth_dataset"
   executable: "target/docker/common_datasets/download_azimuth_dataset/download_azimuth_dataset"
   viash_version: "0.5.1"
-  git_commit: "c4232f5043a47078c2ea43d48ddb31f57ca02a46"
+  git_commit: "d4b6b825a0b2c9cd70a8e2e129fa832becf85d22"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
