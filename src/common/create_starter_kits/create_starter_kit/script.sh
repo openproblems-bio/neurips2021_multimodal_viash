@@ -59,7 +59,15 @@ cp $par_input_dir/* $output_dir
 # todo: update to multisample
 echo copy sample resources
 mkdir -p $output_dir/sample_data/
-cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
+if [[ $par_task == "predict_modality" ]]; then
+  cp $resources_dir/resources_test/$par_task/test_resource.train_mod[12].h5ad $output_dir/sample_data/
+  cp $resources_dir/resources_test/$par_task/test_resource.test_mod1.h5ad $output_dir/sample_data/
+elif [[ $par_task == "match_modality" ]]; then
+  cp $resources_dir/resources_test/$par_task/test_resource.train_*.h5ad $output_dir/sample_data/
+  cp $resources_dir/resources_test/$par_task/test_resource.test_mod[12].h5ad $output_dir/sample_data/
+elif [[ $par_task == "joint_embedding" ]]; then
+  cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
+fi
 
 echo zipping starter kit
 [ -f ${output_dir}.zip ] && rm ${output_dir}.zip
