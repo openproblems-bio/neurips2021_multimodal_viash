@@ -25,7 +25,7 @@ functionality:
       description: Location URL to an h5ad file from the totalVI reproducibility github.
       required: true
       example: "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad"
-   - name: "--organism"
+    - name: "--organism"
       type: string
       description: "The organism of the dataset"
       required: true

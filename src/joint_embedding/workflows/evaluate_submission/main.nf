@@ -27,7 +27,7 @@ workflow {
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/joint_embedding/**/metric_meta.tsv")
+    Channel.fromPath("$srcDir/joint_embedding/**/metric_meta_*.tsv")
       | toList()
       | map{ [ "meta", it, params ] }
       | bind_tsv_rows

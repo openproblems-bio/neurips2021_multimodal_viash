@@ -37,6 +37,6 @@ $target_dir/predict_modality_metrics/calculate_cor/calculate_cor \
 
 $target_dir/common/extract_scores/extract_scores \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/predict_modality/metrics/calculate_cor/metric_meta.tsv \
+  --metric_meta src/predict_modality/metrics/calculate_cor/metric_meta_calculate_cor.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

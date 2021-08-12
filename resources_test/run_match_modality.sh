@@ -40,6 +40,6 @@ bin/viash run src/match_modality/metrics/calculate_auroc/config.vsh.yaml -- \
 
 bin/viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/match_modality/metrics/calculate_auroc/metric_meta.tsv \
+  --metric_meta src/match_modality/metrics/calculate_auroc/metric_meta_calculate_auroc.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

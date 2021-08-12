@@ -90,7 +90,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (calculate_rf_oob & calculate_totalvi_metrics & ari & asw_batch & asw_label & nmi)
+    | (calculate_rf_oob & calculate_totalvi_metrics & ari & asw_batch & asw_label & nmi & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

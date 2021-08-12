@@ -55,7 +55,7 @@ functionality:
     name: "--metric"
     alternatives: []
     description: "The metric to use. Possible values are euclidean, cosine, manhattan."
-    default: "spearman"
+    default: "euclidean"
     required: false
     direction: "Input"
     multiple: false
@@ -257,7 +257,7 @@ functionality:
       
         echo "   --metric"
         echo "        type: string"
-        echo "        default: spearman"
+        echo "        default: euclidean"
         echo "        The metric to use. Possible values are euclidean, cosine, manhattan."
         echo ""
       
@@ -690,7 +690,7 @@ functionality:
         VIASH_PAR_N_DIMS="10"
       fi
       if [ -z "$VIASH_PAR_METRIC" ]; then
-        VIASH_PAR_METRIC="spearman"
+        VIASH_PAR_METRIC="euclidean"
       fi
       if [ -z "$VIASH_PAR_N_NEIGHBORS" ]; then
         VIASH_PAR_N_NEIGHBORS="15"
@@ -848,5 +848,5 @@ info:
   output: "target/docker/joint_embedding_methods/baseline_umap"
   executable: "target/docker/joint_embedding_methods/baseline_umap/baseline_umap"
   viash_version: "0.5.1"
-  git_commit: "4ffb9d70913c1093a0c45649fed955506294294d"
+  git_commit: "584f56e03db09c49c69f043f31f0e8489419849e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

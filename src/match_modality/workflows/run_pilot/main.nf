@@ -80,7 +80,8 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | calculate_auroc
+    | (calculate_auroc & check_format)
+    | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
