@@ -22,7 +22,7 @@ workflow {
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/match_modality/**/metric_meta.tsv")
+    Channel.fromPath("$srcDir/match_modality/**/metric_meta_*.tsv")
       | toList()
       | map{ [ "meta", it, params ] }
       | bind_tsv_rows
