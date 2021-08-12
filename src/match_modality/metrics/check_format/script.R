@@ -3,9 +3,9 @@ library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
-task <- "predict_modality"
+task <- "match_modality"
 par <- list(
-  input_solution = paste0("resources_test/", task, "/test_resource.test_mod2.h5ad"),
+  input_solution = paste0("resources_test/", task, "/test_resource.test_sol.h5ad"),
   input_prediction = paste0("resources_test/", task, "/test_resource.prediction.h5ad"),
   output = paste0("resources_test/", task, "/test_resource.scores.h5ad")
 )
@@ -36,8 +36,8 @@ correct_format <- tryCatch({
     ad_pred$n_obs == ad_sol$n_obs,
     ad_pred$n_vars == ad_sol$n_vars,
     !is.null(ad_pred$obs_names),
-    !is.null(ad_pred$var_names),
     all(ad_pred$obs_names == ad_sol$obs_names),
+    !is.null(ad_pred$var_names),
     all(ad_pred$var_names == ad_sol$var_names)
   )
 
