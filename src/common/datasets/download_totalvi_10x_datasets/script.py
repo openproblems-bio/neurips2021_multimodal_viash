@@ -10,6 +10,7 @@ from scipy import sparse
 par = {
     "id": "totalVI_x_malt_k",
     "input": "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/malt_10k_protein_v3.h5ad",
+    "organism": "human",
     "output_rna": "output_rna.h5ad",
     "output_mod2": "output_mod2.h5ad"
 }
@@ -30,7 +31,7 @@ h5ad_temp.close()
 ###############################################################################
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
-uns = { "dataset_id" : par["id"] }
+uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 
 print("Extracting RNA counts")
 adata_rna = anndata.AnnData(

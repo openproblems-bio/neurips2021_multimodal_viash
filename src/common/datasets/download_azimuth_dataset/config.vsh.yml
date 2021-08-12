@@ -33,6 +33,11 @@ functionality:
       description: Location URL to the GEO meta data file
       required: true
       example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file&file=GSE164378%5Fsc%2Emeta%2Edata%5F3P%2Ecsv%2Egz"
+    - name: "--organism"
+      type: string
+      description: "The organism of the dataset"
+      required: true
+      example: "human"
     - name: "--output_rna"
       type: file
       example: output_rna.h5ad

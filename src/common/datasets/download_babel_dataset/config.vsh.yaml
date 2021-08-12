@@ -24,7 +24,12 @@ functionality:
       type: string
       description: Location URL to the GEO raw counts tar file.
       required: true
-      example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file"
+      example: "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE166797&format=file"
+    - name: "--organism"
+      type: string
+      description: "The organism of the dataset"
+      required: true
+      example: "human"
     - name: "--output_rna"
       type: file
       example: output_rna.h5ad

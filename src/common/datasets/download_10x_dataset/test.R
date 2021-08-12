@@ -5,6 +5,7 @@ cat(">> Testing with citeseq dataset\n")
 system(paste0(
   "./download_10x_dataset ",
   "--input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 ",
+  "--organism human ",
   "--output_rna output1_rna.h5ad ",
   "--output_mod2 output1_mod2.h5ad ",
   "--id dataset1"
@@ -54,6 +55,7 @@ expect_is(ad1$X, "sparseMatrix")
 expect_gte(nrow(ad1), 100)
 expect_gte(ncol(ad1), 100)
 expect_equal(ad1$uns[["dataset_id"]], "dataset2")
+expect_equal(ad1$uns[["organism"]], "human")
 
 cat(">> Checking antibody data\n")
 expect_is(ad2$X, "sparseMatrix")
