@@ -38,6 +38,16 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
+  --input_dir src/match_modality/starter_kit/starter_kit_r/ \
+  --task match_modality \
+  --task_name "Match Modality" \
+  --language r \
+  --language_name R \
+  --block_starter 'par <- list(' \
+  --evalai_phase XXXX \
+  --pipeline_version $pipeline_version
+
+bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
   --input_dir src/joint_embedding/starter_kit/starter_kit_python/ \
   --task joint_embedding \
   --task_name "Joint Embedding" \
