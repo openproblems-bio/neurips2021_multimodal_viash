@@ -8,6 +8,9 @@ requireNamespace("DropletUtils", quietly = TRUE)
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
+babel_location <- "/babel/bin/"
+conda_bin <- "/opt/conda/bin/conda"
+
 ## VIASH START
 par <- list(
   input_train_mod1 = "resources_test/match_modality/test_resource.train_mod1.h5ad",
@@ -19,6 +22,8 @@ par <- list(
   n_dims = 10,
   n_neighs = 10
 )
+conda_bin <- "conda"
+babel_location <- "../babel/bin/"
 ## VIASH END
 
 cat("Reading h5ad files\n")
@@ -27,8 +32,6 @@ input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
 input_train_sol <- anndata::read_h5ad(par$input_train_sol)
 input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
-
-babel_location <- "../babel/bin/"      # location of babel executables
 
 cat(">> Reading h5ad files\n")
 if (is.null(input_train_mod1$var$gene_ids)) input_train_mod1$var$gene_ids <- colnames(input_train_mod1)
@@ -95,7 +98,7 @@ DropletUtils::write10xCounts(
 
 cat(">> Babel: train model\n")
 babel_train_cmd <- paste0(
-  "/opt/conda/bin/conda run -n babel ",
+  conda_bin, " run -n babel ",
   "python ", babel_location, "train_model.py ",
   "--data ", dir_data, "train_input.h5 ",
   "--outdir ", dir_model
@@ -107,7 +110,7 @@ expect_equal(out1, 0, info = paste0("Model training failed with exit code ", out
 
 cat(">> Babel: predict from model\n")
 babel_pred_cmd <- paste0(
-  "/opt/conda/bin/conda run -n babel ",
+  conda_bin, " run -n babel ",
   "python ", babel_location, "predict_model.py ",
   "--checkpoint ", dir_model, " ",
   "--data ", dir_data, "test_input.h5 ",

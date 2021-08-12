@@ -8,43 +8,43 @@ requireNamespace("DropletUtils", quietly = TRUE)
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
+babel_location <- "/babel/bin/"
+conda_bin <- "/opt/conda/bin/conda"
+
 ## VIASH START
 par <- list(
-  input_mod1 = "output/task1_datasets/10x_pbmc_granulocyte_sorted_3k_rna/10x_pbmc_granulocyte_sorted_3k_rna.prepare_task1_dataset.output_mod1.h5ad",
-  input_mod2 = "output/task1_datasets/10x_pbmc_granulocyte_sorted_3k_rna/10x_pbmc_granulocyte_sorted_3k_rna.prepare_task1_dataset.output_mod2.h5ad",
-  output = "output_babel.h5ad",
-  data_id = "granulocyte_multiome10x"
+  input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
+  input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
+  input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
+  output = "output.h5ad"
 )
-if (!dir.exists(dirname(par$input_mod1))) {
-  stop(
-    "Directory '", dirname(par$input_mod1), "' does not exist.\n",
-    "You probably need to run `aws s3 sync s3://neurips2021-multimodal-public-datasets/ output/ --no-sign-request` first."
-  )
-}
+conda_bin <- "conda"
+babel_location <- "../babel/bin/"
 ## VIASH END
 
-babel_location <- "../babel/bin/"      # location of babel executables
+
+cat("Reading h5ad files\n")
+input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
+input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
+input_train_sol <- anndata::read_h5ad(par$input_train_sol)
+input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
+input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
 
 cat(">> Reading h5ad files\n")
-ad1 <- anndata::read_h5ad(par$input_mod1)
-if (is.null(ad1$var$gene_ids)) ad1$var$gene_ids <- colnames(ad1)
-ad2 <- anndata::read_h5ad(par$input_mod2)
-if (is.null(ad2$var$gene_ids)) ad2$var$gene_ids <- colnames(ad2)
+if (is.null(input_train_mod1$var$gene_ids)) input_train_mod1$var$gene_ids <- colnames(input_train_mod1)
+if (is.null(input_train_mod2$var$gene_ids)) input_train_mod2$var$gene_ids <- colnames(input_train_mod2)
+if (is.null(input_test_mod1$var$gene_ids)) input_test_mod1$var$gene_ids <- colnames(input_test_mod1)
+if (is.null(input_test_mod2$var$gene_ids)) input_test_mod2$var$gene_ids <- colnames(input_test_mod2)
 
-mod1 <- unique(ad1$var$feature_types)
-
-# subset train and test
-ad1_train <- ad1[ad1$obs$group == "train", ]
-ad1_test <- ad1[ad1$obs$group == "test", ]
+mod1 <- unique(input_test_mod1$var$feature_types)
 
 # multiome_matrix for export to Babel's input format
-multiome_matrix <- cbind(ad1_train$X, ad2$X)
+multiome_matrix <- cbind(input_train_mod1$X, input_train_mod2$X)
 
-# generate multiome anndata objects
+# generate multiome anndata object for training
 ad_babel <- anndata::AnnData(
   X = multiome_matrix,
-  var = bind_rows(ad1_train$var, ad2$var),
-  obs = ad1_train$obs
+  var = bind_rows(input_train_mod1$var, input_train_mod2$var)
 )
 
 # setting up babel dirs
@@ -81,20 +81,21 @@ DropletUtils::write10xCounts(
 cat(">> Writing test dataset as 10x-CellRanger H5 format\n")
 DropletUtils::write10xCounts(
   paste0(dir_data, "test_input.h5"),
-  t(ad1_test$X),
-  gene.id = ad1_test$var$gene_ids,
-  gene.symbol = colnames(ad1_test),
-  barcodes = rownames(ad1_test),
+  t(input_test_mod1$X),
+  gene.id = input_test_mod1$var$gene_ids,
+  gene.symbol = colnames(input_test_mod1),
+  barcodes = rownames(input_test_mod1),
   type = "HDF5",
   version = "3",
   genome = "GRCh38",
-  gene.type = unname(feature_type_map[ad1_test$var$feature_types]),
+  gene.type = unname(feature_type_map[input_test_mod1$var$feature_types]),
   overwrite = TRUE
 )
 
+
 cat(">> Babel: train model\n")
 babel_train_cmd <- paste0(
-  "/opt/conda/bin/conda run -n babel ",
+  conda_bin, " run -n babel ",
   "python ", babel_location, "train_model.py ",
   "--data ", dir_data, "train_input.h5 ",
   "--outdir ", dir_model
@@ -106,7 +107,7 @@ expect_equal(out1, 0, info = paste0("Model training failed with exit code ", out
 
 cat(">> Babel: predict from model\n")
 babel_pred_cmd <- paste0(
-  "/opt/conda/bin/conda run -n babel ",
+  conda_bin, " run -n babel ",
   "python ", babel_location, "predict_model.py ",
   "--checkpoint ", dir_model, " ",
   "--data ", dir_data, "test_input.h5 ",
