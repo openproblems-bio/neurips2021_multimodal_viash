@@ -722,5 +722,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_solution"
   executable: "target/nextflow/joint_embedding_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.1"
-  git_commit: "0eb0fc72d17e26b806bb23cb9a53158f3bffcdc4"
+  git_commit: "a72c20f23f1ce5bb7119dab8f251e1b78b8beec3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
