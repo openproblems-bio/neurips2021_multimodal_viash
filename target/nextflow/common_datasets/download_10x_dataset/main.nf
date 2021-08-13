@@ -237,8 +237,8 @@ workflow download_10x_dataset {
       )
     }
 
-  result_ = download_10x_dataset_process(id_input_output_function_cli_params_) \
-    | join(id_input_params_) \
+  result_ = download_10x_dataset_process(id_input_output_function_cli_params_)
+    | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
           .findAll{ it.type == "file" && it.direction == "Output" }
