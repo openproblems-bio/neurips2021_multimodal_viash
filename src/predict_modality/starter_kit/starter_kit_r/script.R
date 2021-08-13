@@ -20,40 +20,39 @@ library(FNN, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_mod1 = "sample_data/test_resource.mod1.h5ad",
-  input_mod2 = "sample_data/test_resource.mod2.h5ad",
-  distance_method = "spearman",
+  input_train_mod1 = "sample_data/test_resource.train_mod1.h5ad",
+  input_test_mod1 = "sample_data/test_resource.test_mod1.h5ad",
+  input_train_mod2 = "sample_data/test_resource.train_mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L,
-  n_neighbors = 5L
+  n_neighbors = 3
 )
 ## VIASH END
 
 method_id <- "mymethod" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
-ad1 <- read_h5ad(par$input_mod1)
-ad2 <- read_h5ad(par$input_mod2)
+ad1_train <- anndata::read_h5ad(par$input_train_mod1)
+ad1_test <- anndata::read_h5ad(par$input_test_mod1)
+ad2 <- anndata::read_h5ad(par$input_train_mod2)
 
 # TODO: implement own method
 
-cat("Performing dimensionality reduction on the mod1 values\n")
+cat("Performing DR on the mod1 values\n")
 # LMDS is more efficient than regular MDS because
 # it does not compure a square distance matrix.
-dr <- lmds(
-  ad1$X,
+dr <- lmds::lmds(
+  rbind(ad1_train$X, ad1_test$X),
   ndim = par$n_pcs,
   distance_method = par$distance_method
 )
 
-# split up the train vs. test dimensionality reduction
-dr_train <- dr[ad1$obs$group == "train", ]
-dr_test <- dr[ad1$obs$group == "test", ]
+ix <- seq_len(nrow(ad1_train))
+dr_train <- dr[ix, , drop = FALSE]
+dr_test <- dr[-ix, , drop = FALSE]
 responses_train <- ad2$X
 
-cat("Run KNN regression.\n")
-# For every column in mod2, predict mod2 for the test cells
-# using the K nearest mod2 train neighbors
+cat("Predicting for each column in modality 2\n")
 preds <- apply(responses_train, 2, function(yi) {
   FNN::knn.reg(
     train = dr_train,
@@ -63,7 +62,7 @@ preds <- apply(responses_train, 2, function(yi) {
   )$pred
 })
 
-cat("Creating output matrix\n")
+cat("Creating outputs object\n")
 # store prediction as a sparse matrix
 prediction <- Matrix::Matrix(
   preds,
@@ -71,12 +70,11 @@ prediction <- Matrix::Matrix(
   dimnames = list(rownames(dr_test), colnames(ad2))
 )
 
-cat("Creating output AnnData\n")
 out <- anndata::AnnData(
   X = prediction,
   uns = list(
-    dataset_id = ad1$uns[["dataset_id"]],
-    method_id = method_id
+    dataset_id = ad1_train$uns[["dataset_id"]],
+    method_id = "baseline_knearestneighbors"
   )
 )
 

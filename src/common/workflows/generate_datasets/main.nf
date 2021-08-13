@@ -110,16 +110,12 @@ workflow generate_datasets {
     // ↑ don't rerun dyngen or azimuth unless necessary
     //output_ = (generate_public_10x_datasets & generate_totalvi_spleen_lymph & generate_totalvi_10x_datasets)
       | mix
-      | groupTuple()
-      | map { id, data, old_params -> [ id, flattenMap(data) ] }
-      | map { id, data -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], params ]}
+      | map { id, data, prms-> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_gene", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       | map { overrideOptionValue(it, "quality_control", "min_counts_per_cell", (it[0] ==~ /dyngen_.*_small/) ? "0" : "100") }
       // | view { ["DEBUG0", it[0], it[1] ] }
       | quality_control
-      | groupTuple()
-      | map { id, data, old_params -> [ id, flattenMap(data) ] }
-      | map { id, data -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], params ]}
+      | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG1", it[0], it[1] ] }
       | split_traintest
       | view { "Publishing dataset with ${it[0]} from ${it[1]}" }

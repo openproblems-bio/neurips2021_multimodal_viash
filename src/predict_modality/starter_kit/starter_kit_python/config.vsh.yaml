@@ -13,12 +13,17 @@ functionality:
   # parameters
   arguments:
     # required inputs
-    - name: "--input_mod1"
+    - name: "--input_train_mod1"
       type: "file"
       example: "dataset_mod1.h5ad"
-      description: Censored dataset.
+      description: Censored dataset, training cells.
       required: true
-    - name: "--input_mod2"
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_mod1.h5ad"
+      description: Censored dataset, test cells.
+      required: true
+    - name: "--input_train_mod2"
       type: "file"
       example: "dataset_mod2.h5ad"
       description: Censored dataset.

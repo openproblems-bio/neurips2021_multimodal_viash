@@ -6,10 +6,10 @@ params.datasets = "s3://neurips2021-multimodal-public-datasets/predict_modality/
 
 workflow {
   main:
+  print(params.datasets)
   Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] }
-    | filter { !it[1].name.contains("output_test_sol") }
-    // | view { [ "DEBUG0", it[0], it[1] ]}
+    | filter { !it[1].name.contains("output_test_mod2") }
     | groupTuple
     | map { id, datas -> 
       def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2].replace("output_", "input_")), it ]}

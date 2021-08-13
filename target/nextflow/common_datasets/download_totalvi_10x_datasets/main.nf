@@ -261,8 +261,8 @@ workflow download_totalvi_10x_datasets {
       )
     }
 
-  result_ = download_totalvi_10x_datasets_process(id_input_output_function_cli_params_) \
-    | join(id_input_params_) \
+  result_ = download_totalvi_10x_datasets_process(id_input_output_function_cli_params_)
+    | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
           .findAll{ it.type == "file" && it.direction == "Output" }
@@ -275,11 +275,9 @@ workflow download_totalvi_10x_datasets {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
+  result_
+     | filter { it[1].keySet().size() > 1 }
+     | view{">> Be careful, multiple outputs from this component!"}
 
   emit:
   result_.flatMap{ it ->
