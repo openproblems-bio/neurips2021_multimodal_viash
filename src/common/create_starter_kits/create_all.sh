@@ -44,7 +44,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language r \
   --language_name R \
   --block_starter 'par <- list(' \
-  --evalai_phase XXXX \
+  --evalai_phase 2277 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -54,7 +54,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language python \
   --language_name Python \
   --block_starter 'par = dict(' \
-  --evalai_phase XXXX \
+  --evalai_phase 2277 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -64,7 +64,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language python \
   --language_name Python \
   --block_starter 'par = dict(' \
-  --evalai_phase XXXX \
+  --evalai_phase 2278 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -74,7 +74,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language r \
   --language_name R \
   --block_starter 'par <- list(' \
-  --evalai_phase XXXX \
+  --evalai_phase 2278 \
   --pipeline_version $pipeline_version
 
 if [ $USER == "rcannood" ]; then
