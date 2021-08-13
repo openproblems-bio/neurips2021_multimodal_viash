@@ -33,6 +33,7 @@ workflow {
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
     | (calculate_auroc & check_format)
+    | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
