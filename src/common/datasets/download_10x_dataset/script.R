@@ -12,6 +12,7 @@ par <- list(
   # output_mod2 = "output_mod2.h5ad"
   id = "pbmc_1k_protein_v3",
   input = "https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5",
+  organism = "human",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad"
 )
@@ -27,6 +28,7 @@ ad <- sc$read_10x_h5(h5_tmp, gex_only = FALSE)
 
 cat("Setting dataset id\n")
 ad$uns[["dataset_id"]] <- par$id
+ad$uns[["organism"]] <- par$organism
 
 cat("Making var names unique\n")
 zzz <- ad$var_names_make_unique()

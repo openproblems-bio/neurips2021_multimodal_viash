@@ -13,21 +13,26 @@ functionality:
       roles: [ contributor ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-    - name: "--input_mod1"
+    - name: "--input_train_mod1"
       type: "file"
-      example: "dataset_mod1.h5ad"
-      description: Censored dataset with train and test split.
+      example: "dataset_censored.h5ad"
+      description: "The train mod1 profiles."
       required: true
-    - name: "--input_mod2"
+    - name: "--input_train_mod2"
       type: "file"
-      example: "dataset_mod2.h5ad"
-      description: Censored dataset with test data.
+      example: "dataset_censored.h5ad"
+      description: "The train mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The test mod1 profiles."
       required: true
     - name: "--output"
       type: "file"
       direction: "output"
       example: "output.h5ad"
-      description: Dataset with predicted values for modality2.
+      description: "The predicted test mod2 profiles."
       required: true
   resources:
     - type: r_script

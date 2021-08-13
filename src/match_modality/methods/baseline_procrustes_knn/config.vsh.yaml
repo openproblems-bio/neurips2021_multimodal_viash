@@ -1,0 +1,58 @@
+functionality:
+  name: baseline_procrustes_knn
+  namespace: match_modality_methods
+  version: dev
+  description: A baseline method for comparing modality matching methods against.
+  authors:
+    - name: Alex Tong
+      email: alexandertongdev@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: atong01 }
+  arguments:
+    - name: "--input_train_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
+      required: true
+    - name: "--input_train_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
+      required: true
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "The predicted pairing of test mod1&mod2 profiles."
+      required: true
+    - name: "--n_svd"
+      type: "integer"
+      default: 100
+      description: Number of SVD components to compress to
+  resources:
+    - type: python_script
+      path: script.py
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, scipy, sklearn ]
+  - type: nextflow
+    directive_time: 10m
+    directive_memory: "20 GB"

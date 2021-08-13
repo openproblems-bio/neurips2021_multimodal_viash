@@ -1,3 +1,37 @@
+# neurips2021_multimodal_viash 0.5.0
+
+## NEW FEATURES
+
+Common:
+* Dataset loader: Added babel_GM12878 dataset.
+* Dataset processing: Added component for creating a train/test split.
+* Dataset processing: Added component for creating starter kits.
+
+Task 1, Predict Modality:
+* Metric: Added component for checking the format of a prediction.
+* Starter Kit: Added starter kit for Python users.
+* NextFlow: Added pipeline for running the pilot.
+
+Task 2, Match Modality
+* Metric: Added component for checking the format of a prediction.
+* NextFlow: Added pipeline for running the pilot.
+* NextFlow: Added pipeline for generating a submission.
+* NextFlow: Added pipeline for evaluating a submission.
+
+Task 3, Joint Embedding:
+* Metric: Added component for computing the 'latent_mixing_metric' metric from TotalVI.
+* Metric: Added component for checking the format of a prediction.
+* NextFlow: Added pipeline for running the pilot.
+* NextFlow: Added pipeline for generating a submission.
+* NextFlow: Added pipeline for evaluating a submission.
+* Starter Kit: Added starter kit for Python users.
+* Starter Kit: Added starter kit for R users.
+
+## MAJOR CHANGES
+
+* Refactored Task 2, Match Modality into a supervised problem with a train/test split.
+  Train data, test data and pairings data are stored in separate files.
+
 # neurips2021_multimodal_viash 0.4.0
 
 ## NEW FEATURES
@@ -15,6 +49,7 @@ Task 1, Predict modality:
 Task 2, Match Modality:
 
 * Dummy methods: Added methods for predicting all zeros or all ones.
+* Baseline method: Added procrustes method.
 * NextFlow: Added pipeline for censoring common datasets.
 
 Task 3, Joint Embedding:

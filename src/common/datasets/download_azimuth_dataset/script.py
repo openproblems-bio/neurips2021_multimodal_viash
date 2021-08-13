@@ -15,6 +15,7 @@ par = {
     "id": "azimuth_ref",
     "input_count": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file",
     "input_meta": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE164378&format=file&file=GSE164378%5Fsc%2Emeta%2Edata%5F3P%2Ecsv%2Egz",
+    "organism": "human",
     "output_rna": "output_rna.h5ad",
     "output_mod2": "output_mod2.h5ad"
 }
@@ -95,7 +96,7 @@ adata.var['feature_types'] = "GEX"
 protein.var['feature_types'] = "ADT"
 
 # set uns 
-uns = { "dataset_id" : par["id"] }
+uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 adata.uns = uns
 protein.uns = uns
 

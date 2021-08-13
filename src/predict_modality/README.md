@@ -11,7 +11,7 @@ Experimental techniques to measure multiple modalities within the same single ce
 
 ### Dataset censor component
 
-A component that censors an input datasets to the task-specific format. It expects two h5ad files containing the paired single-cell profiles using two different modalities (e.g. RNA and ADT). 
+A component which partially censors a multimodal dataset, using the `.obs['is_train']` label (if available) to split the cells into train and test groups.
 
 #### Input data formats
 
@@ -26,22 +26,22 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
 
 #### Output data formats
 
-This component should output *three* h5ad files, `--output_mod1`, `--output_mod2` and `--output_solution`. These all have the following attributes:
+This component outputs *four* h5ad files, namely `--output_train_mod1`, `--output_train_mod2`, `--output_test_mod1`, and `--output_test_mod2`. Each of these files contain the following attributes:
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * **`.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.**
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
-The dimensions of the three h5ad files are different;
+The dimensions of the four h5ad files are different;
 
-  * `output_mod1` contains the same data as `input_mod1` (though variables and observations might be ordered differently).
-  * `output_mod2` contains only the `input_mod2` data of the `"train"` cells.
-  * `output_solution` contains only the `input_mod2` data of the `"test"` cells.
+  * `output_train_mod1` contains the cells in `input_mod1` for which `.obs['is_train']` is true.
+  * `output_train_mod2` contains the cells in `input_mod2` for which `.obs['is_train']` is true.
+  * `output_test_mod1` contains the cells in `input_mod1` for which `.obs['is_train']` is false.
+  * `output_test_mod2` contains the cells in `input_mod2` for which `.obs['is_train']` is false.
 
-The `output_mod1` and `output_mod2` will be passed to the downstream regression method, whereas `output_solution` will be passed to the metric.
+The train and test mod1 files will be passed to the downstream regression method, whereas `output_test_mod2` will be passed to the metric.
 
 ### Method component
 
@@ -52,19 +52,13 @@ for the test cells.
 
 #### Input data formats
 
-This component expects two inputs, `--input_mod1` and `--input_mod2`. They both contain the attributes below. If the `feature_types` of one file is `"GEX"`, then that of the other must be either `"ATAC"` or `"ADT"`.
+This component expects three inputs, `--input_train_mod1`, `--input_train_mod2`, and `--input_test_mod1`. These should contain the attributes below. 
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
-
-The dimensions of these two h5ad files are different;
-
-  * `input_mod1` contains the modality 1 data of both the `"train"` and the `"test"` cells.
-  * `input_mod2` contains only modality 2 data of the `'train'` cells.
 
 #### Output data formats
 
@@ -72,12 +66,10 @@ This component should output only *one* h5ad file, `--output`, containing the pr
 
   * `.X`: Sparse profile matrix.
   * `.uns['dataset_id']`: The name of the dataset.
-  * **`.uns['method_id']`: The name of the prediction method.**
+  * `.uns['method_id']`: The name of the prediction method.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
-
 
 
 ### Metric component
@@ -92,7 +84,6 @@ This component expects two h5ad files, `--input_prediction` and `--input_solutio
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs['group']`: Denotes whether a cell belongs to the 'train' or the 'test' set.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 

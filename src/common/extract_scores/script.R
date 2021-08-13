@@ -6,12 +6,13 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input = "resources_test/predict_modality/test_resource.scores.h5ad",
-  output = "tmp/task1_scores.tsv",
-  summary = "tmp/task1_summary.tsv",
+  # input = "resources_test/predict_modality/test_resource.scores.h5ad",
+  input = list.files("work/f2/76020c558a40e0d469f18dc56bb258", pattern = "*.(h5ad|output)$", full.names = TRUE),
+  output = "output/pilot/joint_embedding/output.extract_scores.output.tsv",
+  summary = "output/pilot/joint_embedding/output.extract_scores.summary.tsv",
   method_meta = NULL,
-  dataset_meta = NULL,
-  metric_meta = "src/predict_modality/metrics/calculate_cor/metric_meta.tsv"
+  dataset_meta = "work/f2/76020c558a40e0d469f18dc56bb258/solutions_meta.tsv",
+  metric_meta = "work/f2/76020c558a40e0d469f18dc56bb258/meta.bind_tsv_rows.output.tsv"
 )
 par$input <- par$input[!duplicated(basename(par$input))]
 inp <- par$input[[1]]
@@ -47,7 +48,7 @@ scores <- map_df(par$input, function(inp) {
 })
 
 expect_true(
-  all(scores$metric_ids %in% metric_meta$metric_id),
+  all(unique(scores$metric_ids) %in% metric_meta$metric_id),
   info = "All metric_ids in h5ad should be mentioned in the metric_meta"
 )
 
@@ -69,6 +70,7 @@ method_meta <-
       )
     )
   }
+print(method_meta)
 # prepend 'method_' to colnames if this was not done already
 colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_meta)))
 

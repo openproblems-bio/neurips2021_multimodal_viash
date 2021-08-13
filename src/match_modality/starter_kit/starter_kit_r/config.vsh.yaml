@@ -1,0 +1,89 @@
+functionality:
+  name: method
+  
+  # metadata for your method
+  version: dev
+  description: A description for your method.
+  authors:
+    - name: John Doe
+      email: johndoe@youremailprovider.com
+      roles: [ author, maintainer ]
+      props: { github: johndoe, orcid: "0000-1111-2222-3333" }
+      
+  # parameters
+  arguments:
+    # required inputs
+    - name: "--input_train_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
+      required: true
+    - name: "--input_train_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
+      required: true
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
+      required: true
+    # required outputs
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "The predicted pairing of test mod1&mod2 profiles."
+      required: true
+    # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
+    - name: "--distance_method"
+      type: "string"
+      default: "pearson"
+      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
+      
+  # files your script needs
+  resources:
+    - type: r_script
+      path: script.R
+      
+# target platforms
+platforms:
+
+  # By specifying 'docker' platform, viash will build a standalone
+  # executable which uses docker in the back end to run your method.
+  - type: docker
+    # you need to specify a base image that contains at least
+    # R, python, bash and the 'anndata' python package.
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    # You can specify additional dependencies with 'setup'. 
+    # See https://viash.io/docs/reference_config/platform-docker/#setup-list
+    # for more information on how to add more dependencies.
+    setup:
+      # - type: apt
+      #   packages:
+      #     - bash
+      # - type: python
+      #   packages:
+      #     - scanpy
+      - type: r
+        packages: [ lmds, dynutils, keras ]
+      - type: python
+        packages: [ tensorflow ]
+
+  # By specifying a 'nextflow', viash will also build a viash module
+  # which uses the docker container built above to also be able to 
+  # run your method as part of a nextflow pipeline.
+  - type: nextflow
+    publish: true
+    directive_time: 5m
+    directive_memory: 10 GB

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# run prior to running this script:
+# bin/viash_build -q 'common|joint_embedding'
+
 set -ex
 
 # get the root of the directory
@@ -32,6 +35,6 @@ $target_dir/joint_embedding_metrics/calculate_rf_oob/calculate_rf_oob \
 
 $target_dir/common/extract_scores/extract_scores \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/joint_embedding/metrics/calculate_rf_oob/metric_meta.tsv \
+  --metric_meta src/joint_embedding/metrics/calculate_rf_oob/metric_meta_rf_oob.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv
