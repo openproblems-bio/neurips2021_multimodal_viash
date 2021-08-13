@@ -47,6 +47,17 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --evalai_phase XXXX \
   --pipeline_version $pipeline_version
 
+
+bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
+  --input_dir src/match_modality/starter_kit/starter_kit_python/ \
+  --task match_modality \
+  --task_name "Match Modality" \
+  --language python \
+  --language_name Python \
+  --block_starter 'par = dict(' \
+  --evalai_phase XXXX \
+  --pipeline_version $pipeline_version
+
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
   --input_dir src/joint_embedding/starter_kit/starter_kit_python/ \
   --task joint_embedding \
