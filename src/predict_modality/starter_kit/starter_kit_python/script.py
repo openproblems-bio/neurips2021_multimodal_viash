@@ -19,10 +19,8 @@ from sklearn.neighbors import KNeighborsRegressor
 logging.basicConfig(level=logging.INFO)
 
 ## VIASH START
-
 # Anything within this block will be removed by `viash` and will be
 # replaced with the parameters as specified in your config.vsh.yaml.
-
 par = {
     'input_train_mod1': 'sample_data/test_resource.train_mod1.h5ad',
     'input_train_mod2': 'sample_data/test_resource.train_mod2.h5ad',
@@ -32,16 +30,6 @@ par = {
     'n_pcs': 4,
     'n_neighbors': 5,
 }
-par = {
-    'input_train_mod1': 'resources_test/predict_modality/test_resource.train_mod1.h5ad',
-    'input_train_mod2': 'resources_test/predict_modality/test_resource.train_mod2.h5ad',
-    'input_test_mod1': 'resources_test/predict_modality/test_resource.test_mod1.h5ad',
-    'distance_method': 'minkowski',
-    'output': 'output.h5ad',
-    'n_pcs': 4,
-    'n_neighbors': 5,
-}
-
 ## VIASH END
 
 # TODO: change this to the name of your method
@@ -65,7 +53,7 @@ input_train = ad.concat(
 
 logging.info('Performing dimensionality reduction on modality 1 values...')
 embedder = TruncatedSVD(n_components=par['n_pcs'])
-X = embedder.fit_transform(ad1.X)
+X = embedder.fit_transform(input_train.X)
 
 # split dimred back up
 X_train = X[input_train.obs['group'] == 'train']
