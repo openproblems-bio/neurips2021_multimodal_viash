@@ -20,7 +20,13 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-curl -fsSL get.viash.io | bash -s -- --registry openproblems --tag 0.5.1 --log check_results/results.tsv
+curl -fsSL get.viash.io | bash -s -- \
+  --registry openproblems \
+  --tag 0.5.2 \
+  --log check_results/results.tsv \
+  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false' \
+  --config_mod '.platforms[.type == "nextflow"].directive_memory := "10GB"' \
+  --config_mod '.platforms[.type == "nextflow"].directive_time := "10 m"'
 
 cd bin
 
