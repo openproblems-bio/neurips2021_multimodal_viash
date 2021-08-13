@@ -70,7 +70,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
 if [ $USER == "rcannood" ]; then
   echo "Moving starter kits to Downloads dir"
   COPY_DIR="$HOME/Downloads/starter_kits"
-  rm -r $COPY_DIR
+  [ -d $COPY_DIR ] && rm -r $COPY_DIR
   cp -r output/starter_kits `dirname $COPY_DIR`
 
   for name in $COPY_DIR/*; do
