@@ -102,47 +102,6 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output_mod1 from the output Map
-process filterOutput_mod1 {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_mod1")
-  exec:
-    output = input["output_mod1"]
-
-}
-
-// A process that filters out output_mod2 from the output Map
-process filterOutput_mod2 {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_mod2")
-  exec:
-    output = input["output_mod2"]
-
-}
-
-// A process that filters out output_solution from the output Map
-process filterOutput_solution {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_solution")
-  exec:
-    output = input["output_solution"]
-
-}
 
 def overrideIO(_params, inputs, outputs) {
 
@@ -186,6 +145,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process censor_dataset_process {
+  time '10 m'
+  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -289,18 +250,8 @@ workflow censor_dataset {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
-
   emit:
-  result_.flatMap{ it ->
-    (it[1].keySet().size() > 1)
-      ? it[1].collect{ k, el -> [ it[0], [ (k): el ], it[2] ] }
-      : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
-  }
+  result_
 }
 
 workflow {
@@ -325,21 +276,7 @@ workflow {
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
   result = censor_dataset(ch_)
-
-  result \
-    | filterOutput_mod1 \
-    | view{ "Output for output_mod1: " + it[1] }
-
-
-  result \
-    | filterOutput_mod2 \
-    | view{ "Output for output_mod2: " + it[1] }
-
-
-  result \
-    | filterOutput_solution \
-    | view{ "Output for output_solution: " + it[1] }
-
+  result.view{ it[1] }
 }
 
 // This workflow is not production-ready yet, we leave it in for future dev

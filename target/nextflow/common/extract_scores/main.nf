@@ -102,33 +102,6 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output from the output Map
-process filterOutput {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output")
-  exec:
-    output = input["output"]
-
-}
-
-// A process that filters out summary from the output Map
-process filterSummary {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("summary")
-  exec:
-    output = input["summary"]
-
-}
 
 def overrideIO(_params, inputs, outputs) {
 
@@ -172,6 +145,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process extract_scores_process {
+  time '10 m'
+  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -275,18 +250,8 @@ workflow extract_scores {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
-
   emit:
-  result_.flatMap{ it ->
-    (it[1].keySet().size() > 1)
-      ? it[1].collect{ k, el -> [ it[0], [ (k): el ], it[2] ] }
-      : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
-  }
+  result_
 }
 
 workflow {
@@ -311,16 +276,7 @@ workflow {
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
   result = extract_scores(ch_)
-
-  result \
-    | filterOutput \
-    | view{ "Output for output: " + it[1] }
-
-
-  result \
-    | filterSummary \
-    | view{ "Output for summary: " + it[1] }
-
+  result.view{ it[1] }
 }
 
 // This workflow is not production-ready yet, we leave it in for future dev

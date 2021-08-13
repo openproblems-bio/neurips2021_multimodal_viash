@@ -102,33 +102,6 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output_rna from the output Map
-process filterOutput_rna {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_rna")
-  exec:
-    output = input["output_rna"]
-
-}
-
-// A process that filters out output_mod2 from the output Map
-process filterOutput_mod2 {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output_mod2")
-  exec:
-    output = input["output_mod2"]
-
-}
 
 def overrideIO(_params, inputs, outputs) {
 
@@ -172,6 +145,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_totalvi_10x_datasets_process {
+  time '10 m'
+  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -275,18 +250,8 @@ workflow download_totalvi_10x_datasets {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
-
   emit:
-  result_.flatMap{ it ->
-    (it[1].keySet().size() > 1)
-      ? it[1].collect{ k, el -> [ it[0], [ (k): el ], it[2] ] }
-      : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
-  }
+  result_
 }
 
 workflow {
@@ -311,16 +276,7 @@ workflow {
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
   result = download_totalvi_10x_datasets(ch_)
-
-  result \
-    | filterOutput_rna \
-    | view{ "Output for output_rna: " + it[1] }
-
-
-  result \
-    | filterOutput_mod2 \
-    | view{ "Output for output_mod2: " + it[1] }
-
+  result.view{ it[1] }
 }
 
 // This workflow is not production-ready yet, we leave it in for future dev

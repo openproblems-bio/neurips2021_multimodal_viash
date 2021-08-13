@@ -102,19 +102,6 @@ def outFromIn(_params) {
 
 }
 
-// A process that filters out output from the output Map
-process filterOutput {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("output")
-  exec:
-    output = input["output"]
-
-}
 
 def overrideIO(_params, inputs, outputs) {
 
@@ -158,6 +145,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process nmi_process {
+  time '10 m'
+  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -261,18 +250,8 @@ workflow nmi {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
-
   emit:
-  result_.flatMap{ it ->
-    (it[1].keySet().size() > 1)
-      ? it[1].collect{ k, el -> [ it[0], [ (k): el ], it[2] ] }
-      : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
-  }
+  result_
 }
 
 workflow {
