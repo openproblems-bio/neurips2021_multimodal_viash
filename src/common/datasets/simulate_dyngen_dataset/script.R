@@ -123,6 +123,21 @@ ad_mod1 <- anndata::AnnData(
   )
 )
 
+cat("Preprocess cell cycle")
+#' Embed all batches into joint PCA
+#' Take PC2
+#' Median per batch of PC2
+#' a ~ runif between 0 and 0.5
+#' If cell > PC2 batch boundary: S_score = 1-a; G2M_score = a
+#' If cell < PC2 batch boundary: S_score = a; G2M_score = 1-a
+sc <- import("scanpy")
+sc$pp$pca(ad_mod1)
+ad_mod1$obs$PC2 <- adata$obsm$X_pca[, 2]
+ad_mod1$obs %>% group_by(batch) %>% mutate(median_pc = median(PC2)) -> ad_mod1$obs
+a <- runif(1, 0, 0.5)
+ad_mod1$obs$S_score <- ifelse(ad_mod1$obs$median_pc > ad_mod1$obs$PC2, 1 - a, a)
+ad_mod1$obs$G2M_score <- ifelse(ad_mod1$obs$median_pc > ad_mod1$obs$PC2, a, 1 - a)
+
 if (par$store_protein) {
   cat("Processing Antibody data\n")
   # construct AbSeq-like data from protein counts
