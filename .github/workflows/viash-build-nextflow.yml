@@ -24,7 +24,6 @@ jobs:
         bin/viash -h
 
     - name: Build components
-      if: runner.name 
       run: |
         # allow publishing the target folder
         sed -i '/^target\/$/d' .gitignore
