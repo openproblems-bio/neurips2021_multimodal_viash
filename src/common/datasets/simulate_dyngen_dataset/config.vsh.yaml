@@ -39,11 +39,6 @@ functionality:
       example: "plot.pdf"
       description: "A visualisation of the simulation."
       required: true
-    - name: "--backbone"
-      alternatives: [ "-b" ]
-      type: "string"
-      default: "bifurcating"
-      description: Which dyngen backbone to use for the simulation.
     - name: "--num_cells"
       type: integer
       default: 100
@@ -80,6 +75,9 @@ functionality:
       type: integer
       default: 1
       description: Parallellisation level.
+    - name: "--seed"
+      type: integer
+      description: Seed
     - name: "--cache_dir"
       type: file
       description: "A caching directory for files that dyngen downloads."
@@ -96,5 +94,7 @@ platforms:
       - type: r
         github:
           - dynverse/dyngen@devel
+        cran: 
+          - dynwrap
   - type: nextflow
     directive_cpus: 8
