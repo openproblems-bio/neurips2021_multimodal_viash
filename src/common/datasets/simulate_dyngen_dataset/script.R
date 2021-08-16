@@ -5,14 +5,13 @@ library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
-
 ## VIASH START
 par <- list(
   id = "test",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
-  backbone = "linear",
-  num_cells = 100,
+  backbone = "cycle",
+  num_cells = 300,
   num_genes = 120,
   num_simulations = 10,
   num_threads = 10,
@@ -21,7 +20,8 @@ par <- list(
   census_interval = 1,
   store_chromatin = FALSE,
   store_protein = TRUE,
-  num_proteins = 50
+  num_proteins = 50,
+  cache_dir = tools::R_user_dir("dyngen", "data")
 )
 ## VIASH END
 
@@ -37,6 +37,25 @@ if (is.null(par$backbone)) {
 }
 
 backbone <- backbones[[par$backbone]]()
+
+cycle_waypoints <-
+  if (par$backbone == "cycle") {
+    tribble(
+      ~phase, ~waypoint_id, ~milestone_id, ~percentage,
+      "S", "wp1", "s1", 1,
+      "G2M", "wp2", "s2", 0.5,
+      "G2M", "wp2", "s3", 0.5
+    )
+  } else if (par$backbone == "bifurcating_cycle") {
+    tribble(
+      ~phase, ~waypoint_id, ~milestone_id, ~percentage,
+      "S", "wp1", "sB", 1,
+      "G2M", "wp2", "sC", 1,
+      "G2M", "wp3", "sD", 1
+    )
+  } else {
+    stop("Only backbones with a cycle (e.g. cycle and bifurcating_cycle) are supported.")
+  }
 
 cat("Generating regulatory network\n")
 num_tfs <- nrow(backbone$module_info)
@@ -90,29 +109,49 @@ model_test <-
 cat("Combine simulations into one dataset\n")
 model <- combine_models(
   list(
-    batch1 = model_train, 
+    batch1 = model_train,
     batch2 = model_test
   ),
   duplicate_gold_standard = FALSE
 )
-dataset <- as_list(model)
+dataset <- as_dyno(model)
 
 # verify batch effects
-# dat <- as_dyno(model)
 # grouping <- dat$cell_info %>% select(cell_id, model) %>% deframe()
 # dynplot::plot_dimred(dat, grouping = grouping)
+
+cat("Preprocess cell cycle")
+geo_dist_matrix <- dynwrap::calculate_geodesic_distances(
+  trajectory = dataset,
+  waypoint_milestone_percentages = cycle_waypoints %>% select(-phase),
+  directed = FALSE
+)
+phase_scores <- geo_dist_matrix %>%
+  reshape2::melt(varnames = c("waypoint_id", "cell_id")) %>%
+  left_join(cycle_waypoints %>% select(waypoint_id, phase) %>% unique(), by = c("waypoint_id")) %>%
+  group_by(phase, cell_id) %>%
+  summarise(value = min(value), .groups = "drop") %>%
+  mutate(
+    phase = paste0(phase, "_score"),
+    value = max(value) - value # transform distance to score
+  ) %>%
+  spread(phase, value)
+
+# ggplot(phase_scores) + geom_point(aes(G2M, S))
+
 cat("Create RNA dataset\n")
 celltypes <- dataset$milestone_percentages %>%
   group_by(cell_id) %>%
   slice(which.max(percentage)) %>%
-  ungroup() %>% 
+  ungroup() %>%
   select(cell_id, cell_type = milestone_id)
-obs <- dataset$cell_info %>% 
+obs <- dataset$cell_info %>%
   left_join(celltypes, by = "cell_id") %>%
+  left_join(phase_scores, by = "cell_id") %>%
   rename(batch = model) %>%
   column_to_rownames("cell_id")
-var <- dataset$feature_info %>% 
-  select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>% 
+var <- dataset$feature_info %>%
+  select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>%
   column_to_rownames("feature_id")
 ad_mod1 <- anndata::AnnData(
   X = dataset$counts,
@@ -122,21 +161,6 @@ ad_mod1 <- anndata::AnnData(
     dataset_id = par$id
   )
 )
-
-cat("Preprocess cell cycle")
-#' Embed all batches into joint PCA
-#' Take PC2
-#' Median per batch of PC2
-#' a ~ runif between 0 and 0.5
-#' If cell > PC2 batch boundary: S_score = 1-a; G2M_score = a
-#' If cell < PC2 batch boundary: S_score = a; G2M_score = 1-a
-sc <- import("scanpy")
-sc$pp$pca(ad_mod1)
-ad_mod1$obs$PC2 <- adata$obsm$X_pca[, 2]
-ad_mod1$obs %>% group_by(batch) %>% mutate(median_pc = median(PC2)) -> ad_mod1$obs
-a <- runif(1, 0, 0.5)
-ad_mod1$obs$S_score <- ifelse(ad_mod1$obs$median_pc > ad_mod1$obs$PC2, 1 - a, a)
-ad_mod1$obs$G2M_score <- ifelse(ad_mod1$obs$median_pc > ad_mod1$obs$PC2, a, 1 - a)
 
 if (par$store_protein) {
   cat("Processing Antibody data\n")

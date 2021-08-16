@@ -1,10 +1,7 @@
 id	backbone	num_cells	num_genes	num_simulations	store_chromatin	store_protein	num_threads
-dyngen_atac_linear	linear	1000	1000	100	TRUE	FALSE	10
-dyngen_atac_bifurcating_loop	bifurcating_loop	1000	1000	100	TRUE	FALSE	10
-dyngen_atac_bifurcating_converging	bifurcating_converging	1000	1000	100	TRUE	FALSE	10
-dyngen_atac_small	linear	100	120	10	TRUE	FALSE	10
-dyngen_citeseq_bifurcating	bifurcating	1000	1000	100	FALSE	TRUE	10
-dyngen_citeseq_trifurcating	trifurcating	1000	1000	100	FALSE	TRUE	10
+dyngen_atac_cycle	cycle	1000	1000	100	TRUE	FALSE	10
+dyngen_atac_bifurcating_cycle	bifurcating_cycle	1000	1000	100	TRUE	FALSE	10
+dyngen_atac_small	cycle	200	120	10	TRUE	FALSE	10
+dyngen_citeseq_cycle	cycle	1000	1000	100	FALSE	TRUE	10
 dyngen_citeseq_bifurcating_cycle	bifurcating_cycle	1000	1000	100	FALSE	TRUE	10
-dyngen_citeseq_disconnected	disconnected	1000	1000	100	FALSE	TRUE	10
-dyngen_citeseq_small	linear	100	120	10	FALSE	TRUE	10
+dyngen_citeseq_small	cycle	200	120	10	FALSE	TRUE	10

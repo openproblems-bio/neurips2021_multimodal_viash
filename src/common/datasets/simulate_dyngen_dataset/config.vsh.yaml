@@ -96,5 +96,7 @@ platforms:
       - type: r
         github:
           - dynverse/dyngen@devel
+        cran: 
+          - dynwrap
   - type: nextflow
     directive_cpus: 8

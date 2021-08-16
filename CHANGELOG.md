@@ -1,3 +1,10 @@
+# neurips2021_multimodal_viash 0.6.0
+
+## MINOR CHANGES
+
+* Common / Dataset loader / dyngen: Subset simulations to cyclical backbones. 
+  Added cell cycle scores to dyngen outputs. 
+
 # neurips2021_multimodal_viash 0.5.0
 
 ## NEW FEATURES
