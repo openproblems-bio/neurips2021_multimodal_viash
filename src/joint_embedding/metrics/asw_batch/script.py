@@ -37,7 +37,6 @@ adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
-sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Compute score')
 _, sil_clus = silhouette_batch(

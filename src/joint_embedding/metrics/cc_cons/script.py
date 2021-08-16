@@ -2,23 +2,25 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.asw_batch.tsv",
+    output="resources_test/joint_embedding/test_resource.cc_cons.tsv",
     debug=True
 )
-
 ## VIASH END
+
+debug = par['debug']
 
 print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.metrics import silhouette
+import numpy as np
+from scIB.metrics import cell_cycle
 
-if par['debug']:
+if debug:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'asw_label'
+METRIC = 'cc_cons'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
@@ -28,18 +30,45 @@ print("Read prediction anndata")
 adata = sc.read(input_prediction)
 dataset_id = adata.uns['dataset_id']
 
+if 'organism' in adata.uns:
+    organism = adata.uns['organism']
+else:
+    organism = 'synthetic'
+
 print("Read solution anndata")
 adata_solution = sc.read(input_solution)
+if debug:
+    print(adata_solution.X)
+    print(adata_solution.var)
+    print(adata.var)
 
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
+recompute_cc = 'S_score' not in adata_solution.obs_keys() or \
+               'G2M_score' not in adata_solution.obs_keys()
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-score = silhouette(adata, group_key='cell_type', embed='X_emb')
+if organism == 'synthetic':
+    score = np.nan if recompute_cc else cell_cycle(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        batch_key='batch',
+        embed='X_emb',
+        recompute_cc=False
+    )
+else:
+    score = cell_cycle(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        batch_key='batch',
+        embed='X_emb',
+        recompute_cc=recompute_cc,
+        organism=organism
+    )
 
 # store adata with metrics
 print("Create output object")
