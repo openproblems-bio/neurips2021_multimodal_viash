@@ -5,38 +5,76 @@ library(dyngen, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
-
 ## VIASH START
 par <- list(
   id = "test",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
-  backbone = "linear",
-  num_cells = 100,
+  num_cells = 300,
   num_genes = 120,
-  num_simulations = 10,
+  num_simulations = 50,
   num_threads = 10,
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
   store_chromatin = FALSE,
   store_protein = TRUE,
-  num_proteins = 50
+  num_proteins = 50,
+  cache_dir = tools::R_user_dir("dyngen", "data"),
+  seed = 1
 )
 ## VIASH END
 
+if (!is.null(par$seed)) {
+  set.seed(par$seed)
+}
 if (par$store_protein == par$store_chromatin) {
   cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
 }
 
-cat("Creating dyngen backbone\n")
-backbones <- list_backbones()
+# start from given backbone and a cyclic backbone
+backbone_init <- bblego(
+  bblego_start("A", type = "simple"),
+  bblego_linear("A", "B", num_modules = 10),
+  bblego_linear("B", "C", num_modules = 10),
+  bblego_linear("C", "D", num_modules = 10),
+  bblego_end("D")
+)
 
-if (is.null(par$backbone)) {
-  par$backbone <- sample(names(backbones), 1)
-}
 
-backbone <- backbones[[par$backbone]]()
+module_info <- bind_rows(
+  backbone_init$module_info %>% select(-color),
+  tribble(
+    ~module_id, ~basal, ~burn, ~independence,
+    "CC1", 0, TRUE, 1,
+    "CC2", 1, TRUE, 1,
+    "CC3", 0, TRUE, 1,
+    "CC4", 1, TRUE, 1,
+    "CC5", 0, TRUE, 1
+  )
+)
+
+module_network <- bind_rows(
+  backbone_init$module_network,
+  tribble(
+    ~from, ~to, ~effect, ~strength, ~hill,
+    "Burn1", "CC1", 1L, 1, 2,
+    "CC1", "CC2", -1L, 100, 2,
+    "CC2", "CC3", 1L, 1, 2,
+    "CC3", "CC4", -1L, 100, 2,
+    "CC4", "CC5", 1L, 1, 2,
+    "CC5", "CC1", -1L, 100, 2
+  )
+)
+
+backbone <- backbone(
+  module_info = module_info,
+  module_network = module_network,
+  expression_patterns = backbone_init$expression_patterns
+)
+
+burn_time <- simtime_from_backbone(backbone, burn = TRUE) * 4
+total_time <- simtime_from_backbone(backbone, burn = FALSE) / 3
 
 cat("Generating regulatory network\n")
 num_tfs <- nrow(backbone$module_info)
@@ -52,6 +90,8 @@ model_init <- initialise_model(
   num_targets = num_targets,
   num_hks = num_hks,
   simulation_params = simulation_default(
+    burn_time = burn_time,
+    total_time = total_time,
     census_interval = par$census_interval,
     ssa_algorithm = ssa_etl(tau = par$ssa_tau),
     experiment_params = simulation_type_wild_type(
@@ -90,29 +130,63 @@ model_test <-
 cat("Combine simulations into one dataset\n")
 model <- combine_models(
   list(
-    batch1 = model_train, 
+    batch1 = model_train,
     batch2 = model_test
   ),
   duplicate_gold_standard = FALSE
 )
-dataset <- as_list(model)
+dataset <- as_dyno(model)
+# check whether output dataset looks nice
+# and whether batch effect is present
+# plot_summary(model)
 
-# verify batch effects
-# dat <- as_dyno(model)
-# grouping <- dat$cell_info %>% select(cell_id, model) %>% deframe()
-# dynplot::plot_dimred(dat, grouping = grouping)
+
+cat("Compute cell cycle scores\n")
+phase_scores <- map_df(unique(dataset$cell_info$model), function(mod) {
+  ix <- dataset$cell_info$model == mod
+  cp <- dataset$counts_protein[ix, ]
+  expr1 <- dynutils::scale_quantile(cp[, "CC2_TF1"])
+  expr2 <- dynutils::scale_quantile(cp[, "CC5_TF1"])
+  tibble(
+    cell_id = rownames(cp),
+    S_score = (expr1 - expr2) / 2 + .5,
+    G2M_score = (expr2 - expr1) / 2 + .5
+  )
+})
+
+# ggplot(phase_scores) + geom_point(aes(S_score, G2M_score))
+
+cat("Compute pseudotime from root\n")
+pseudotime <- dataset %>% 
+  dynwrap::add_root(root_milestone_id = "sA") %>%
+  dynwrap::calculate_pseudotime() %>%
+  enframe("cell_id", "pseudotime")
+
 cat("Create RNA dataset\n")
 celltypes <- dataset$milestone_percentages %>%
   group_by(cell_id) %>%
   slice(which.max(percentage)) %>%
-  ungroup() %>% 
+  ungroup() %>%
   select(cell_id, cell_type = milestone_id)
-obs <- dataset$cell_info %>% 
+obs <- dataset$cell_info %>%
   left_join(celltypes, by = "cell_id") %>%
+  left_join(phase_scores, by = "cell_id") %>%
+  left_join(pseudotime, by = "cell_id") %>%
   rename(batch = model) %>%
+  mutate(RNA_trajectory = pseudotime) %>%
   column_to_rownames("cell_id")
-var <- dataset$feature_info %>% 
-  select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>% 
+
+# save pseudotime under different names
+if (par$store_chromatin) {
+  obs$ATAC_trajectory <- obs$pseudotime
+}
+if (par$store_protein) {
+  obs$ADT_trajectory <- obs$pseudotime
+}
+
+# ggplot(obs) + geom_point(aes(pseudotime, G2M_score, colour = batch))
+var <- dataset$feature_info %>%
+  select(feature_id, module_id, basal, burn, independence, color, is_tf, is_hk) %>%
   column_to_rownames("feature_id")
 ad_mod1 <- anndata::AnnData(
   X = dataset$counts,

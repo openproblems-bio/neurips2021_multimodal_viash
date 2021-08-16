@@ -1,3 +1,11 @@
+# neurips2021_multimodal_viash 0.6.0
+
+## MINOR CHANGES
+
+* Common / Dataset loader / dyngen: dyngen always simulates a linear trajectory. 
+  The component now also outputs a pseudotime (`.obs["pseudotime"]`) and cell cycle 
+  scores (`.obs["S_score"]` and `.obs["G2M_score"]`).
+
 # neurips2021_multimodal_viash 0.5.0
 
 ## NEW FEATURES
