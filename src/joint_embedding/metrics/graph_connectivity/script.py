@@ -2,7 +2,7 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.asw_batch.tsv",
+    output="resources_test/joint_embedding/test_resource.graph_conn.tsv",
     debug=True
 )
 
@@ -12,13 +12,13 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.metrics import silhouette
+from scIB.metrics import graph_connectivity
 
 if par['debug']:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'asw_label'
+METRIC = 'graph_conn'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
@@ -37,9 +37,10 @@ adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
+sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Compute score')
-score = silhouette(adata, group_key='cell_type', embed='X_emb')
+score = graph_connectivity(adata, label_key='cell_type')
 
 # store adata with metrics
 print("Create output object")
@@ -55,7 +56,7 @@ out = anndata.AnnData(
 print("Write output to h5ad file")
 out.write(output, compression='gzip')
 
-# # store score as tsv
+# store score as tsv
 # with open(output, 'w') as file:
 #     header = ['dataset', 'output_type', 'metric', 'value']
 #     entry = [dataset_id, OUTPUT_TYPE, METRIC, score]

@@ -2,23 +2,25 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.asw_batch.tsv",
+    output="resources_test/joint_embedding/test_resource.ti_cons.tsv",
     debug=True
 )
-
 ## VIASH END
+
+debug = par['debug']
 
 print('Importing libraries')
 import pprint
+import numpy as np
 import scanpy as sc
 import anndata
-from scIB.metrics import silhouette
+from scIB.metrics import trajectory_conservation
 
-if par['debug']:
+if debug:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'asw_label'
+METRIC = 'ti_cons'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
@@ -34,12 +36,32 @@ adata_solution = sc.read(input_solution)
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
+adt_atac_trajectory = 'ATAC_trajectory'
 
-print('Preprocessing')
-adata.obsm['X_emb'] = adata.X
+print('Compute scores')
+obs_keys = adata_solution.obs_keys()
 
-print('Compute score')
-score = silhouette(adata, group_key='cell_type', embed='X_emb')
+if 'RNA_trajectory' in obs_keys:
+    score_rna = trajectory_conservation(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        label_key='cell_type',
+        pseudotime_key='RNA_trajectory'
+    )
+else:
+    score_rna = np.nan
+
+if 'ADT_trajectory' in obs_keys or 'ATAC_trajectory' in obs_keys:
+    score_adt_atac = trajectory_conservation(
+        adata_pre=adata_solution,
+        adata_post=adata,
+        label_key='cell_type',
+        pseudotime_key=adt_atac_trajectory
+    )
+else:
+    score_adt_atac = np.nan
+
+score_mean = (score_rna + score_adt_atac) / 2
 
 # store adata with metrics
 print("Create output object")
@@ -47,8 +69,8 @@ out = anndata.AnnData(
     uns=dict(
         dataset_id=adata.uns['dataset_id'],
         method_id=adata.uns['method_id'],
-        metric_ids=[METRIC],
-        metric_values=[score]
+        metric_ids=['ti_cons_RNA', 'ti_cons_ADT_ATAC', 'ti_cons_mean'],
+        metric_values=[score_rna, score_adt_atac, score_mean]
     )
 )
 

@@ -1,0 +1,41 @@
+functionality:
+  name: cc_cons
+  namespace: joint_embedding_metrics
+  version: dev
+  description: Cell cycle conservation score
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Metric scores by comparing the prediction to the gold standard solution.
+      required: true
+    - name: --input_prediction
+      type: file
+      description: Prediction by a method
+      required: true
+    - name: --input_solution
+      type: file
+      description: Gold standard solution.
+      required: true
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging.
+      default: False
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: test.py
+    - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: mumichae/scib-base:0.1
+  - type: native
+  - type: nextflow
