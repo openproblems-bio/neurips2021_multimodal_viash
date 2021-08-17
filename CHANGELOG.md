@@ -5,6 +5,9 @@
 Task 1, Predict Modality:
 * Testing: Added reusable unit test for method components. ¹
 
+Task 2, Match Modality:
+* Testing: Added reusable unit test for method components. ¹
+
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test for method components. ¹
   
@@ -18,6 +21,9 @@ Task 3, Joint Embedding:
 ## BUG FIXES
 
 Task 1, Predict Modality:
+* Testing: Fix unit tests for method components.
+
+Task 2, Match Modality:
 * Testing: Fix unit tests for method components.
 
 Task 3, Joint Embedding:

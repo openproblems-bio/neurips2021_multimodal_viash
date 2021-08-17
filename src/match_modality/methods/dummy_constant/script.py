@@ -1,5 +1,6 @@
 import anndata as ad
 import numpy as np
+from scipy.sparse import csc_matrix
 
 # VIASH START
 par = {
@@ -17,8 +18,9 @@ input_test_mod1 = ad.read_h5ad(par["input_test_mod1"])
 input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 
 print("Writing predictions")
+X = csc_matrix(np.ones((input_test_mod1.n_obs, input_test_mod2.n_obs)))
 prediction = ad.AnnData(
-    X=np.ones((input_test_mod1.n_obs, input_test_mod2.n_obs)),
+    X=X,
     uns={
         "method_id": "dummy_constant",
         "dataset_id": input_test_mod1.uns["dataset_id"],
