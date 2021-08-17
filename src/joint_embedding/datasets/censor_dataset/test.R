@@ -1,36 +1,51 @@
 library(testthat, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
+par <- list(
+  input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
+  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
+  output_mod1 = "output_mod1.h5ad",
+  output_mod2 = "output_mod2.h5ad",
+  output_solution = "solution.h5ad"
+)
+
 cat("> Running censor component\n")
 out <- processx::run(
-  command = "./censor_dataset",
+  command = paste0("./", meta["functionality_name"]),
   args = c(
-    "--input_rna", "resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad",
-    "--input_mod2", "resources_test/common/pbmc_1k_protein_v3.normalize.output_mod2.h5ad",
-    "--output_mod1", "output_mod1.h5ad",
-    "--output_mod2", "output_mod2.h5ad",
-    "--output_solution", "output_solution.h5ad"
+    "--input_mod1", par$input_mod1,
+    "--input_mod2", par$input_mod2,
+    "--output_mod1", par$output_mod1,
+    "--output_mod2", par$output_mod2,
+    "--output_solution", par$output_solution
   ),
   stderr_to_stdout = TRUE
 )
 
 cat("> Checking whether output files were created\n")
-expect_true(file.exists("output_mod1.h5ad"))
-expect_true(file.exists("output_mod2.h5ad"))
-expect_true(file.exists("output_solution.h5ad"))
+expect_true(file.exists(par$output_mod1))
+expect_true(file.exists(par$output_mod2))
+expect_true(file.exists(par$output_solution))
 
 cat("> Reading h5ad files\n")
-adata_orig <- anndata::read_h5ad("resources_test/common/pbmc_1k_protein_v3.normalize.output_rna.h5ad")
-adata_mod1 <- anndata::read_h5ad("output_mod1.h5ad")
-adata_mod2 <- anndata::read_h5ad("output_mod2.h5ad")
-adata_sol <- anndata::read_h5ad("output_solution.h5ad")
+input_mod1 <- anndata::read_h5ad(par$input_mod1)
+input_mod2 <- anndata::read_h5ad(par$input_mod2)
+output_mod1 <- anndata::read_h5ad(par$output_mod1)
+output_mod2 <- anndata::read_h5ad(par$output_mod2)
+output_solution <- anndata::read_h5ad(par$output_solution)
 
 cat("> Checking contents of h5ad files\n")
-expect_equal(adata_mod1$uns[["dataset_id"]], paste0(adata_orig$uns[["dataset_id"]], "_task1"))
-expect_equal(adata_mod2$uns[["dataset_id"]], paste0(adata_orig$uns[["dataset_id"]], "_task1"))
-expect_equal(adata_sol$uns[["dataset_id"]], paste0(adata_orig$uns[["dataset_id"]], "_task1"))
-expect_equal(adata_mod1$n_obs, adata_orig$n_obs)
-expect_equal(adata_mod2$n_obs + adata_sol$n_obs, adata_orig$n_obs)
+expect_equal(output_mod1$uns[["dataset_id"]], paste0(input_mod1$uns[["dataset_id"]], "_JE"))
+expect_equal(output_mod2$uns[["dataset_id"]], paste0(input_mod1$uns[["dataset_id"]], "_JE"))
+expect_equal(output_solution$uns[["dataset_id"]], paste0(input_mod1$uns[["dataset_id"]], "_JE"))
+expect_equal(output_mod1$n_obs, input_mod1$n_obs)
+expect_equal(output_mod2$n_obs, input_mod2$n_obs)
+expect_equal(output_mod1$n_vars, input_mod1$n_vars)
+expect_equal(output_mod2$n_vars, input_mod2$n_vars)
+expect_equal(output_mod1$var_names, input_mod1$var_names)
+expect_equal(output_mod2$var_names, input_mod2$var_names)
+expect_equal(output_mod1$obs_names, input_mod1$obs_names)
+expect_equal(output_mod2$obs_names, input_mod2$obs_names)
 
 # TODO check contents of matrices, check rownames
 
