@@ -1,6 +1,5 @@
 import anndata
-import scipy.spatial
-from scipy.sparse import csr_matrix
+from scipy.sparse import csc_matrix
 import numpy as np
 
 # VIASH START
@@ -13,20 +12,22 @@ par = {
 # VIASH END
 
 # load dataset to be censored
-ad_rna_train = anndata.read_h5ad(par["input_train_mod1"])
-ad_rna_test = anndata.read_h5ad(par["input_test_mod1"])
-ad_mod2 = anndata.read_h5ad(par["input_train_mod2"])
+# input_train_mod1 = anndata.read_h5ad(par["input_train_mod1"])
+input_test_mod1 = anndata.read_h5ad(par["input_test_mod1"])
+input_train_mod2 = anndata.read_h5ad(par["input_train_mod2"])
 
 
 # Find the correct shape
-mean = np.array(ad_mod2.X.mean(axis=0)).flatten()
-prediction = np.tile(mean, (ad_rna_test.shape[0], 1))
+mean = np.array(input_train_mod2.X.mean(axis=0)).flatten()
+prediction = csc_matrix(np.tile(mean, (input_test_mod1.shape[0], 1)))
 
 # Write out prediction
 out = anndata.AnnData(
     X=prediction,
+    obs=input_test_mod1.obs,
+    var=input_train_mod2.var,
     uns={
-        "dataset_id": ad_mod2.uns["dataset_id"],
+        "dataset_id": input_test_mod1.uns["dataset_id"],
         "method_id": "dummy_constant",
     }
 )

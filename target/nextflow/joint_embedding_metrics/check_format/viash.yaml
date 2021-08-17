@@ -397,8 +397,8 @@ functionality:
           check_format__input_solution = "viash_no_value"
           check_format__output = "viash_no_value"
           id = ""
-          testScript = "test.R"
-          testResources = [ "test.R", "../../../../resources_test" ]
+          testScript = "test_metric.py"
+          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_check_format.tsv" ]
           check_format {
             name = "check_format"
             container = "joint_embedding_metrics_check_format"
@@ -407,8 +407,8 @@ functionality:
             command = "check_format"
             tests {
               isDefined = true
-              testScript = "test.R"
-              testResources = [ "test.R", "../../../../resources_test" ]
+              testScript = "test_metric.py"
+              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_check_format.tsv" ]
             }
             arguments {
               input_prediction {
@@ -782,11 +782,14 @@ functionality:
     dest: "main.nf"
   description: "Checking whether the prediction of a method has the right format."
   tests:
-  - type: "r_script"
-    path: "test.R"
+  - type: "python_script"
+    path: "../../unit_tests/test_metric.py"
     is_executable: true
   - type: "file"
     path: "../../../../resources_test"
+  - type: "file"
+    path: "metric_meta_check_format.tsv"
+    dest: "metric_meta.tsv"
   info: {}
 platform:
   type: "nextflow"
@@ -803,5 +806,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/check_format"
   executable: "target/nextflow/joint_embedding_metrics/check_format/check_format"
   viash_version: "0.5.3dev"
-  git_commit: "504ee1e46ca4af60875b6517e3cdc11ef1399f79"
+  git_commit: "261384d0c64175a4c916fd156447c77eefad4814"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -1,5 +1,6 @@
 functionality:
   name: python_starter_kit
+  namespace: joint_embedding_starter_kits
 
   # metadata for your method
   description: A description for your method.
@@ -53,9 +54,8 @@ platforms:
   # By specifying 'docker' platform, viash will build a standalone
   # executable which uses docker in the back end to run your method.
   - type: docker
-    # you need to specify a base image that contains at least
-    # R, python, bash and the 'anndata' python package.
-    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    # you need to specify a base image that contains at least bash and python
+    image: dataintuitive/randpy:py3.8
     # You can specify additional dependencies with 'setup'.
     # See https://viash.io/docs/reference_config/platform-docker/#setup-list
     # for more information on how to add more dependencies.

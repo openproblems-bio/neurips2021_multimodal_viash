@@ -1,8 +1,8 @@
 # Dependencies:
 # pip: scikit-learn, anndata, scanpy
 #
-# Python starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# Python starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #
@@ -85,6 +85,8 @@ y_pred = csc_matrix(y_pred)
 
 adata = ad.AnnData(
     X=y_pred,
+    obs=input_test_mod1.obs,
+    var=input_train_mod2.var,
     uns={
         'dataset_id': input_train_mod1.uns['dataset_id'],
         'method_id': method_id,

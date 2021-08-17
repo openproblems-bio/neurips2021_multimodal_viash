@@ -1,21 +1,24 @@
 # neurips2021_multimodal_viash 0.6.0
 
-## MAJOR CHANGES
-
-Task 3, Joint Embedding:
-* Testing: Added reusable unit test for method components. ¹
-  
-
 ## MINOR CHANGES
 
 * Common / Dataset loader / dyngen: dyngen always simulates a linear trajectory. 
   The component now also outputs a pseudotime (`.obs["pseudotime"]`) and cell cycle 
   scores (`.obs["S_score"]` and `.obs["G2M_score"]`).
 
+Task 1, Predict Modality:
+* Testing: Added reusable unit test¹ for method components and starter kits.
+
+Task 2, Match Modality:
+* Testing: Added reusable unit test¹ for method components and starter kits.
+
+Task 3, Joint Embedding:
+* Testing: Added reusable unit test¹ for method components and starter kits.
+* Testing: Added reusable unit test¹ for metrics.
+
 ## NOTES
 
-¹ With viash 0.5.3 you can access the component name with `meta['functionality_name']`.
-  This is needed for writing reusable unit tests.
+¹ Requires viash 0.5.3.
 
 # neurips2021_multimodal_viash 0.5.0
 

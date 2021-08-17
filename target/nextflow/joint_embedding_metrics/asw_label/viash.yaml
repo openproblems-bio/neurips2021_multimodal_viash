@@ -421,8 +421,8 @@ functionality:
           asw_label__output = "viash_no_value"
           asw_label__debug = "false"
           id = ""
-          testScript = "test.py"
-          testResources = [ "test.py", "../../../../resources_test" ]
+          testScript = "test_metric.py"
+          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_asw_label.tsv" ]
           asw_label {
             name = "asw_label"
             container = "joint_embedding_metrics_asw_label"
@@ -431,8 +431,8 @@ functionality:
             command = "asw_label"
             tests {
               isDefined = true
-              testScript = "test.py"
-              testResources = [ "test.py", "../../../../resources_test" ]
+              testScript = "test_metric.py"
+              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_asw_label.tsv" ]
             }
             arguments {
               input_prediction {
@@ -819,10 +819,13 @@ functionality:
   description: "Average silhouette width (ASW) of labels"
   tests:
   - type: "python_script"
-    path: "test.py"
+    path: "../../unit_tests/test_metric.py"
     is_executable: true
   - type: "file"
     path: "../../../../resources_test"
+  - type: "file"
+    path: "metric_meta_asw_label.tsv"
+    dest: "metric_meta.tsv"
   info: {}
 platform:
   type: "nextflow"
@@ -839,5 +842,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/asw_label"
   executable: "target/nextflow/joint_embedding_metrics/asw_label/asw_label"
   viash_version: "0.5.3dev"
-  git_commit: "504ee1e46ca4af60875b6517e3cdc11ef1399f79"
+  git_commit: "261384d0c64175a4c916fd156447c77eefad4814"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

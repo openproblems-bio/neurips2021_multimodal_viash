@@ -1,5 +1,6 @@
 functionality:
   name: python_starter_kit
+  namespace: predict_modality_starter_kits
   
   # metadata for your method
   version: dev
@@ -54,11 +55,11 @@ functionality:
     - type: python_script
       path: script.py
   
-  # # resources for unit testing your component
-  # tests:
-  #   - type: python_script
-  #     path: test.py
-  #   - path: sample_data
+  # resources for unit testing your component
+  tests:
+    - type: python_script
+      path: test.py
+    - path: sample_data
       
 # target platforms
 platforms:
@@ -66,9 +67,8 @@ platforms:
   # By specifying 'docker' platform, viash will build a standalone
   # executable which uses docker in the back end to run your method.
   - type: docker
-    # you need to specify a base image that contains at least
-    # R, python, bash and the 'anndata' python package.
-    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    # you need to specify a base image that contains at least bash and python
+    image: dataintuitive/randpy:py3.8
     # You can specify additional dependencies with 'setup'. 
     # See https://viash.io/docs/reference_config/platform-docker/#setup-list
     # for more information on how to add more dependencies.

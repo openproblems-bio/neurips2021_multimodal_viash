@@ -547,8 +547,8 @@ functionality:
           baseline_procrustes_knn__output = "viash_no_value"
           baseline_procrustes_knn__n_svd = "100"
           id = ""
-          testScript = ""
-          testResources = [  ]
+          testScript = "test_method.py"
+          testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
           baseline_procrustes_knn {
             name = "baseline_procrustes_knn"
             container = "match_modality_methods_baseline_procrustes_knn"
@@ -556,9 +556,9 @@ functionality:
             containerRegistry = "openproblems"
             command = "baseline_procrustes_knn"
             tests {
-              isDefined = false
-              testScript = "NA"
-              testResources = [  ]
+              isDefined = true
+              testScript = "test_method.py"
+              testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
             }
             arguments {
               input_train_mod1 {
@@ -980,7 +980,12 @@ functionality:
 
     dest: "main.nf"
   description: "A baseline method for comparing modality matching methods against."
-  tests: []
+  tests:
+  - type: "python_script"
+    path: "../../unit_tests/test_method.py"
+    is_executable: true
+  - type: "file"
+    path: "../../../../resources_test"
   info: {}
 platform:
   type: "nextflow"
@@ -998,5 +1003,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_procrustes_knn"
   executable: "target/nextflow/match_modality_methods/baseline_procrustes_knn/baseline_procrustes_knn"
   viash_version: "0.5.3dev"
-  git_commit: "504ee1e46ca4af60875b6517e3cdc11ef1399f79"
+  git_commit: "261384d0c64175a4c916fd156447c77eefad4814"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -2,8 +2,8 @@
 #   python: anndata
 #   r: anndata, lmds, FNN
 #
-# R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# R starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #

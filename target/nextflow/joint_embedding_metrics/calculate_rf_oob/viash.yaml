@@ -359,13 +359,11 @@ functionality:
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
-        X = NULL,
-        shape = dim(ad_sol),
         uns = list(
           dataset_id = ad_pred\$uns\$dataset_id,
           method_id = ad_pred\$uns\$method_id,
-          metric_ids = c("rf_oob_pct_correct"),
-          metric_values = c(rf_oob_pct_correct)
+          metric_ids = list("rf_oob_pct_correct"),
+          metric_values = list(rf_oob_pct_correct)
         )
       )
       
@@ -391,8 +389,8 @@ functionality:
           calculate_rf_oob__input_solution = "viash_no_value"
           calculate_rf_oob__output = "viash_no_value"
           id = ""
-          testScript = "test.R"
-          testResources = [ "test.R", "../../../../resources_test" ]
+          testScript = "test_metric.py"
+          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_rf_oob.tsv" ]
           calculate_rf_oob {
             name = "calculate_rf_oob"
             container = "joint_embedding_metrics_calculate_rf_oob"
@@ -401,8 +399,8 @@ functionality:
             command = "calculate_rf_oob"
             tests {
               isDefined = true
-              testScript = "test.R"
-              testResources = [ "test.R", "../../../../resources_test" ]
+              testScript = "test_metric.py"
+              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_rf_oob.tsv" ]
             }
             arguments {
               input_prediction {
@@ -776,11 +774,14 @@ functionality:
     dest: "main.nf"
   description: "Calculating basic metrics for the joint embedding task."
   tests:
-  - type: "r_script"
-    path: "test.R"
+  - type: "python_script"
+    path: "../../unit_tests/test_metric.py"
     is_executable: true
   - type: "file"
     path: "../../../../resources_test"
+  - type: "file"
+    path: "metric_meta_rf_oob.tsv"
+    dest: "metric_meta.tsv"
   info: {}
 platform:
   type: "nextflow"
@@ -797,5 +798,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/calculate_rf_oob"
   executable: "target/nextflow/joint_embedding_metrics/calculate_rf_oob/calculate_rf_oob"
   viash_version: "0.5.3dev"
-  git_commit: "504ee1e46ca4af60875b6517e3cdc11ef1399f79"
+  git_commit: "261384d0c64175a4c916fd156447c77eefad4814"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -47,6 +47,10 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: "python:3.8"

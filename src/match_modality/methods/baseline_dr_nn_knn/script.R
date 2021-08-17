@@ -12,7 +12,7 @@ par <- list(
   input_train_sol = "resources_test/match_modality/test_resource.train_sol.h5ad",
   input_test_mod1 = "resources_test/match_modality/test_resource.test_mod1.h5ad",
   input_test_mod2 = "resources_test/match_modality/test_resource.test_mod2.h5ad",
-  output = "output.h5ad",
+  output = "output.h5ad"
 )
 ## VIASH END
 

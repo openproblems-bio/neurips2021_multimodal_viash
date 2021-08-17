@@ -73,13 +73,12 @@ viash build $par_src/$par_task/metrics/check_format/config.vsh.yaml -p docker -o
 echo "  Copy sample resources"
 mkdir -p $output_dir/sample_data/
 if [[ $par_task == "predict_modality" ]]; then
-  cp $resources_dir/resources_test/$par_task/test_resource.train_mod[12].h5ad $output_dir/sample_data/
-  cp $resources_dir/resources_test/$par_task/test_resource.test_mod1.h5ad $output_dir/sample_data/
+  cp $resources_dir/resources_test/$par_task/test_resource.t*.h5ad $output_dir/sample_data/
 elif [[ $par_task == "match_modality" ]]; then
-  cp $resources_dir/resources_test/$par_task/test_resource.train_*.h5ad $output_dir/sample_data/
-  cp $resources_dir/resources_test/$par_task/test_resource.test_mod[12].h5ad $output_dir/sample_data/
+  cp $resources_dir/resources_test/$par_task/test_resource.t*.h5ad $output_dir/sample_data/
 elif [[ $par_task == "joint_embedding" ]]; then
   cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
+  cp $resources_dir/resources_test/$par_task/test_resource.solution.h5ad $output_dir/sample_data/
 fi
 
 echo "  Zipping starter kit"

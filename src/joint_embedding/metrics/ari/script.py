@@ -2,7 +2,7 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.ari.tsv",
+    output="test_resource.ari.had",
     debug=True
 )
 

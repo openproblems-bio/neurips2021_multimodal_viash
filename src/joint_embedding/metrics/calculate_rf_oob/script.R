@@ -8,7 +8,7 @@ requireNamespace("anndata", quietly = TRUE)
 par <- list(
   input_solution = "resources_test/joint_embedding/test_resource.solution.h5ad",
   input_prediction = "resources_test/joint_embedding/test_resource.prediction.h5ad",
-  output = "resources_test/joint_embedding/test_resource.scores.h5ad"
+  output = "scores.h5ad"
 )
 ## VIASH END
 
@@ -39,13 +39,11 @@ rf_oob_pct_correct <- 1 - rf$prediction.error
 
 cat("Create output object\n")
 out <- anndata::AnnData(
-  X = NULL,
-  shape = dim(ad_sol),
   uns = list(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
-    metric_ids = c("rf_oob_pct_correct"),
-    metric_values = c(rf_oob_pct_correct)
+    metric_ids = list("rf_oob_pct_correct"),
+    metric_values = list(rf_oob_pct_correct)
   )
 )
 

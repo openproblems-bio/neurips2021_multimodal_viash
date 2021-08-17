@@ -1,5 +1,6 @@
 functionality:
   name: r_starter_kit
+  namespace: joint_embedding_starter_kits
   
   # metadata for your method
   version: dev

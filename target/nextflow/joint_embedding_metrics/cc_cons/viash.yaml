@@ -450,8 +450,8 @@ functionality:
           cc_cons__input_solution = "viash_no_value"
           cc_cons__debug = "false"
           id = ""
-          testScript = "test.py"
-          testResources = [ "test.py", "../../../../resources_test" ]
+          testScript = "test_metric.py"
+          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_cc_cons.tsv" ]
           cc_cons {
             name = "cc_cons"
             container = "joint_embedding_metrics_cc_cons"
@@ -460,8 +460,8 @@ functionality:
             command = "cc_cons"
             tests {
               isDefined = true
-              testScript = "test.py"
-              testResources = [ "test.py", "../../../../resources_test" ]
+              testScript = "test_metric.py"
+              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_cc_cons.tsv" ]
             }
             arguments {
               output {
@@ -844,10 +844,13 @@ functionality:
   description: "Cell cycle conservation score"
   tests:
   - type: "python_script"
-    path: "test.py"
+    path: "../../unit_tests/test_metric.py"
     is_executable: true
   - type: "file"
     path: "../../../../resources_test"
+  - type: "file"
+    path: "metric_meta_cc_cons.tsv"
+    dest: "metric_meta.tsv"
   info: {}
 platform:
   type: "nextflow"
@@ -863,5 +866,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/cc_cons"
   executable: "target/nextflow/joint_embedding_metrics/cc_cons/cc_cons"
   viash_version: "0.5.3dev"
-  git_commit: "504ee1e46ca4af60875b6517e3cdc11ef1399f79"
+  git_commit: "261384d0c64175a4c916fd156447c77eefad4814"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
