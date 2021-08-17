@@ -18,7 +18,8 @@ bin/viash run src/common/datasets/download_totalvi_spleen_lymph/config.vsh.yaml 
   --id test_resource \
   --input "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad" \
   --output_rna "${out_file}.tmp.output_rna.h5ad" \
-  --output_mod2 "${out_file}.tmp.output_mod2.h5ad"
+  --output_mod2 "${out_file}.tmp.output_mod2.h5ad" \
+  --organism human
 
 # stringent filtering to reduce the file size of test data
 bin/viash run src/common/process_dataset/quality_control/config.vsh.yaml -- \
@@ -36,4 +37,4 @@ bin/viash run src/common/process_dataset/split_traintest/config.vsh.yaml -- \
   --output_rna "${out_file}.output_rna.h5ad" \
   --output_mod2 "${out_file}.output_mod2.h5ad"
 
-rm "${out_file}.tmp*.output_*.h5ad"
+rm ${out_file}.tmp*
