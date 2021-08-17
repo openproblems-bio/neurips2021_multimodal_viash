@@ -22,7 +22,7 @@ cd "$REPO_ROOT"
 
 curl -fsSL get.viash.io | bash -s -- \
   --registry openproblems \
-  --tag 0.5.2 \
+  --tag develop \
   --log check_results/results.tsv \
   --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false' \
   --config_mod '.platforms[.type == "nextflow"].directive_memory := "10GB"' \
@@ -31,5 +31,3 @@ curl -fsSL get.viash.io | bash -s -- \
 cd bin
 
 curl -s https://get.nextflow.io | bash
-
-echo 'Now that viash is installed, make sure to add the neurips2021_multimodal_viash/bin/ directory to your PATH'
