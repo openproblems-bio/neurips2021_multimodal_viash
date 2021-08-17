@@ -376,8 +376,8 @@ functionality:
           dummy_zeros__output = "viash_no_value"
           dummy_zeros__n_dims = "1"
           id = ""
-          testScript = "test_method.py"
-          testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
+          testScript = ""
+          testResources = [  ]
           dummy_zeros {
             name = "dummy_zeros"
             container = "joint_embedding_methods_dummy_zeros"
@@ -385,9 +385,9 @@ functionality:
             containerRegistry = "openproblems"
             command = "dummy_zeros"
             tests {
-              isDefined = true
-              testScript = "test_method.py"
-              testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
+              isDefined = false
+              testScript = "NA"
+              testResources = [  ]
             }
             arguments {
               input_mod1 {
@@ -772,12 +772,7 @@ functionality:
 
     dest: "main.nf"
   description: "A baseline method for comparing joint embedding methods against."
-  tests:
-  - type: "python_script"
-    path: "../../unit_tests/test_method.py"
-    is_executable: true
-  - type: "file"
-    path: "../../../../resources_test"
+  tests: []
   info: {}
 platform:
   type: "nextflow"
@@ -794,5 +789,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_zeros"
   executable: "target/nextflow/joint_embedding_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.2"
-  git_commit: "23aeac12fb6be749cdeb7d1df0ae577609d098ed"
+  git_commit: "77d405e05296af0699b2fbb4a8ef9adfc985dc5f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
