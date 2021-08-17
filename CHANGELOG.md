@@ -10,7 +10,6 @@ Task 2, Match Modality:
 
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test for method components. ¹
-  
 
 ## MINOR CHANGES
 

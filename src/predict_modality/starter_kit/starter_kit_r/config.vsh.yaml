@@ -54,11 +54,11 @@ functionality:
     - type: r_script
       path: script.R
   
-  # # resources for unit testing your component
-  # tests:
-  #   - type: r_script
-  #     path: test.R
-  #   - path: sample_data
+  # resources for unit testing your component
+  tests:
+    - type: r_script
+      path: test.R
+    - path: sample_data
       
 # target platforms
 platforms:
