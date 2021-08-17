@@ -436,8 +436,8 @@ functionality:
           baseline_totalvi__hvg_number = "4000"
           baseline_totalvi__max_epochs = "400"
           id = ""
-          testScript = "test_method.py"
-          testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
+          testScript = ""
+          testResources = [  ]
           baseline_totalvi {
             name = "baseline_totalvi"
             container = "joint_embedding_methods_baseline_totalvi"
@@ -445,9 +445,9 @@ functionality:
             containerRegistry = "openproblems"
             command = "baseline_totalvi"
             tests {
-              isDefined = true
-              testScript = "test_method.py"
-              testResources = [ "../../unit_tests/test_method.py", "../../../../resources_test" ]
+              isDefined = false
+              testScript = "NA"
+              testResources = [  ]
             }
             arguments {
               input_mod1 {
@@ -848,12 +848,7 @@ functionality:
   usage: "baseline_totalvi \\\n  --input_mod1 spleen_lymph_111.mod1.h5ad \\\n  --input_mod2\
     \ spleen_lymph_111.mod2.h5ad \\\n  --output spleen_lymph_111.predict.h5ad \\\n\
     \  --hvg_number 4000 \\\n  --max_epochs 400\n"
-  tests:
-  - type: "python_script"
-    path: "../../unit_tests/test_method.py"
-    is_executable: true
-  - type: "file"
-    path: "../../../../resources_test"
+  tests: []
   info: {}
 platform:
   type: "nextflow"
@@ -866,10 +861,10 @@ platform:
   directive_memory: "20 GB"
 platforms: []
 info:
-  config: "src/joint_embedding/methods/baseline_totalvi/config.vsh.yaml"
+  config: "src/joint_embedding/methods/totalvi/config.vsh.yaml"
   platform: "nextflow"
-  output: "target/nextflow/joint_embedding_methods/baseline_totalvi"
-  executable: "target/nextflow/joint_embedding_methods/baseline_totalvi/baseline_totalvi"
+  output: "target/nextflow/joint_embedding_methods/totalvi"
+  executable: "target/nextflow/joint_embedding_methods/totalvi/baseline_totalvi"
   viash_version: "0.5.2"
-  git_commit: "7a9baf79135756b6224ea4995dab4137d607d8d8"
+  git_commit: "77d405e05296af0699b2fbb4a8ef9adfc985dc5f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
