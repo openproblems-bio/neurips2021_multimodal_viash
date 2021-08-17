@@ -251,7 +251,11 @@ workflow dummy_random {
       }
 
   emit:
-  result_
+  result_.flatMap{ it ->
+    (it[1].keySet().size() > 1)
+      ? it
+      : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
+  }
 }
 
 workflow {

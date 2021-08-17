@@ -698,7 +698,11 @@ functionality:
             }
       
         emit:
-        result_
+        result_.flatMap{ it ->
+          (it[1].keySet().size() > 1)
+            ? it
+            : it[1].collect{ k, el -> [ it[0], el, it[2] ] }
+        }
       }
       
       workflow {
@@ -775,5 +779,5 @@ info:
   output: "target/nextflow/match_modality_metrics/check_format"
   executable: "target/nextflow/match_modality_metrics/check_format/check_format"
   viash_version: "0.5.2"
-  git_commit: "cfb1863e1c5b74b28d5f83885129ee7151cbebeb"
+  git_commit: "d0bc7832b83ed65cbde944b1199ed52953f897a8"
   git_remote: "git@github.com:openproblems-bio/neurips2021_multimodal_viash.git"

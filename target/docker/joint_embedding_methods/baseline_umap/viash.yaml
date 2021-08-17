@@ -848,5 +848,5 @@ info:
   output: "target/docker/joint_embedding_methods/baseline_umap"
   executable: "target/docker/joint_embedding_methods/baseline_umap/baseline_umap"
   viash_version: "0.5.2"
-  git_commit: "cfb1863e1c5b74b28d5f83885129ee7151cbebeb"
+  git_commit: "d0bc7832b83ed65cbde944b1199ed52953f897a8"
   git_remote: "git@github.com:openproblems-bio/neurips2021_multimodal_viash.git"
