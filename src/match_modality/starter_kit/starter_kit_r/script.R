@@ -31,7 +31,7 @@ par <- list(
 )
 ## VIASH END
 
-method_id <- "mymethod" # fill in the name of your method here
+method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
@@ -44,7 +44,14 @@ match_train <- apply(input_train_sol$X, 1, function(x) which(x > 0)) %>% unname
 
 # TODO: implement own method
 
-cat("Running LMDS on input data\n")
+# This starter kit is split up into several steps.
+# * compute dimensionality reduction on [train_mod1, test_mod1] data
+# * train regression model to predict the train_mod2 data from the dr_mod1 values
+# * predict test_mod2 matrix from model and test_mod1
+# * calculate k nearest neighbors between test_mod2 and predicted test_mod2
+# * transform k nearest neighbors into a pairing matrix
+
+cat("compute dimensionality reduction on [train_mod1, test_mod1] data\n")
 # merge input matrices
 mod1_X <- rbind(input_train_mod1$X, input_test_mod1$X)
 mod2_X <- rbind(input_train_mod2$X[match_train, , drop = FALSE], input_test_mod2$X)
@@ -59,7 +66,7 @@ dr_x2_train <- dr_x2[seq_len(nrow(input_train_mod1)), , drop = FALSE]
 dr_x1_test <- dr_x1[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
 dr_x2_test <- dr_x2[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
 
-cat("Training neural network to predict mod2 dr\n")
+cat("train regression model to predict the train_mod2 data from the dr_mod1 values\n")
 model <-
   keras_model_sequential() %>%
   layer_dense(100, "relu", input_shape = ncol(dr_x1)) %>%
@@ -70,13 +77,14 @@ model %>% compile(
   loss = "mse",
   optimizer = "adam"
 )
-
 model %>% fit(dr_x1_train, dr_x2_train, epochs = 200, verbose = FALSE)
+
+cat("predict test_mod2 matrix from model and test_mod1\n")
 preds <- predict(model, dr_x1_test)
 colnames(preds) <- colnames(dr_x2_test)
 
 
-cat("Performing KNN between test mod2 DR and predicted test mod2\n")
+cat("calculate k nearest neighbors between test_mod2 and predicted test_mod2\n")
 par_frac <- 1
 knn_out <- FNN::get.knnx(
   preds,
@@ -84,7 +92,7 @@ knn_out <- FNN::get.knnx(
   k = min(100, ceiling(par_frac * nrow(preds)))
 )
 
-cat("Creating output data structures\n")
+cat("transform k nearest neighbors into a pairing matrix\n")
 df <- tibble(
   i = as.vector(row(knn_out$nn.index)),
   j = as.vector(knn_out$nn.index),
@@ -92,14 +100,12 @@ df <- tibble(
 )
 knn_mat <- Matrix::sparseMatrix(i = df$i, j = df$j, x = df$x)
 
-cat("Creating output anndata\n")
+cat("write prediction output\n")
 out <- anndata::AnnData(
   X = as(knn_mat, "CsparseMatrix"),
   uns = list(
     dataset_id = input_train_mod1$uns[["dataset_id"]],
-    method_id = "baseline_dr_nn_knn"
+    method_id = method_id
   )
 )
-
-cat("Writing predictions to file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")

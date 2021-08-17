@@ -1,5 +1,5 @@
 functionality:
-  name: method
+  name: python_starter_kit
 
   # metadata for your method
   description: A description for your method.
@@ -40,6 +40,12 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  
+  # resources for unit testing your component
+  tests:
+    - type: python_script
+      path: test.py
+    - path: sample_data
 
 # target platforms
 platforms:

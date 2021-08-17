@@ -5,24 +5,16 @@ import anndata as ad
 par = {
     "input_mod1": "resources_test/joint_embedding/test_resource.mod1.h5ad",
     "input_mod2": "resources_test/joint_embedding/test_resource.mod2.h5ad",
-    "input_solution": "resources_test/joint_embedding/test_resource.solution.h5ad",
     "output": "output.h5ad",
 }
 
-if meta['functionality_name'] != "dummy_solution":
-  args = [
-    "--input_mod1", par['input_mod1'],
-    "--input_mod2", par['input_mod2'],
-    "--output", par['output']
-  ]
-else:
-  args = [
-    "--input_solution", par['input_solution'],
-    "--output", par['output']
-  ]
-
 print("> Running method")
-out = subprocess.check_output(["./" + meta['functionality_name']] + args).decode("utf-8")
+out = subprocess.check_output([
+  "./" + meta['functionality_name'],
+  "--input_mod1", par['input_mod1'],
+  "--input_mod2", par['input_mod2'],
+  "--output", par['output']
+]).decode("utf-8")
 
 print("> Checking whether output files were created")
 assert path.exists(par['output'])

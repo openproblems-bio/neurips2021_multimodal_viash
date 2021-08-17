@@ -27,7 +27,7 @@ par <- list(
 )
 ## VIASH END
 
-method_id <- "mymethod" # fill in the name of your method here
+method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 ad1 <- read_h5ad(par$input_mod1)

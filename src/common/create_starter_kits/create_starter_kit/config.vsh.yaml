@@ -28,6 +28,10 @@ functionality:
       type: "string"
       example: "R"
       required: true
+    - name: "--language_ext"
+      type: "string"
+      example: "R"
+      required: true
     - name: "--block_starter"
       type: "string"
       example: "par <- list("

@@ -1,5 +1,5 @@
 functionality:
-  name: method
+  name: python_starter_kit
 
   version: dev
   description: A description for your method.
@@ -44,10 +44,18 @@ functionality:
       description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
     # Method-defined parameters. You may change these.
-    - name: "--n_svd"
+    - name: "--distance_method"
+      type: "string"
+      default: "minkowski"
+      description: The distance metric to use. Possible values include `euclidean` and `minkowski`.
+    - name: "--n_pcs"
       type: "integer"
-      default: 100
-      description: Number of SVD components to compress to
+      default: 4
+      description: Number of components to use for dimensionality reduction.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 5
+      description: Number of neighbors to use.
   resources:
     - type: python_script
       path: script.py

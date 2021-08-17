@@ -57,10 +57,17 @@ cp $par_bin/viash $output_dir/bin/
 cp $par_bin/nextflow $output_dir/bin/
 
 echo "  Copy scripts"
-cp $input_dir/* $output_dir
+cp $input_dir/config.vsh.yaml $output_dir/config.vsh.yaml
+cat $input_dir/script.$par_language_ext  | sed "s#resources_test/$par_task#sample_data#g" > $output_dir/script.$par_language_ext
+
+unit_test=$par_src/$par_task/unit_tests/test_method.$par_language_ext
+if [[ -f $unit_test ]]; then
+  echo "  Copy unit test"
+  cat $unit_test | sed "s#resources_test/$par_task#sample_data#g" > $output_dir/test.$par_language_ext
+fi
 
 echo "  Build check_format component"
-viash build $src/$par_task/metrics/check_format/config.vsh.yaml -p docker -o $output_dir/bin/
+viash build $par_src/$par_task/metrics/check_format/config.vsh.yaml -p docker -o $output_dir/bin/
 
 # todo: update to multisample
 echo "  Copy sample resources"
