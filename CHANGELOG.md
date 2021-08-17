@@ -2,6 +2,9 @@
 
 ## MAJOR CHANGES
 
+Task 1, Predict Modality:
+* Testing: Added reusable unit test for method components. ¹
+
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test for method components. ¹
   
@@ -11,6 +14,14 @@ Task 3, Joint Embedding:
 * Common / Dataset loader / dyngen: dyngen always simulates a linear trajectory. 
   The component now also outputs a pseudotime (`.obs["pseudotime"]`) and cell cycle 
   scores (`.obs["S_score"]` and `.obs["G2M_score"]`).
+
+## BUG FIXES
+
+Task 1, Predict Modality:
+* Testing: Fix unit tests for method components.
+
+Task 3, Joint Embedding:
+* Testing: Fix unit tests for method components.
 
 ## NOTES
 
