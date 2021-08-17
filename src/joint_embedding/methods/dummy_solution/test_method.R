@@ -4,6 +4,7 @@ requireNamespace("anndata", quietly = TRUE)
 par <- list(
   input_mod1 = "resources_test/joint_embedding/test_resource.mod1.h5ad",
   input_mod2 = "resources_test/joint_embedding/test_resource.mod2.h5ad",
+  input_solution = "resources_test/joint_embedding/test_resource.solution.h5ad",
   output = "output.h5ad"
 )
 
@@ -11,8 +12,7 @@ cat("> Running method\n")
 out <- processx::run(
   command = paste0("./", meta[["functionality_name"]]),
   args = c(
-    "--input_mod1", par$input_mod1,
-    "--input_mod2", par$input_mod2,
+    "--input_solution", par$input_solution,
     "--output", par$output
   ),
   stderr_to_stdout = TRUE
