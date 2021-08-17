@@ -46,7 +46,7 @@ functionality:
       path: script.R
   tests:
     - type: r_script
-      path: test.R
+      path: ../../unit_tests/test_method.R
     - path: ../../../../resources_test
 platforms:
   - type: docker
