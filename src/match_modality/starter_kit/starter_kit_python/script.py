@@ -1,8 +1,8 @@
 # Dependencies:
 # pip: scikit-learn, anndata, scanpy
 #
-# Python starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# Python starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #

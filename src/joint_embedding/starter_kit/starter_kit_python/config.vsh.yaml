@@ -1,5 +1,6 @@
 functionality:
   name: python_starter_kit
+  namespace: joint_embedding_starter_kits
 
   # metadata for your method
   description: A description for your method.

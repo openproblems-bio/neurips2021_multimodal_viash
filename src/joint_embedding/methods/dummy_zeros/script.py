@@ -17,7 +17,7 @@ X = np.zeros((adata_mod1.shape[0], par["n_dims"]))
 print("Saving output")
 adata_out = anndata.AnnData(
     X=X,
-    obs=adata_mod1.obs[["batch"]],
+    obs=adata_mod1.obs,
     uns={"dataset_id": adata_mod1.uns["dataset_id"], "method_id": "dummy_zeros"},
 )
 adata_out.write_h5ad(par["output"], compression="gzip")

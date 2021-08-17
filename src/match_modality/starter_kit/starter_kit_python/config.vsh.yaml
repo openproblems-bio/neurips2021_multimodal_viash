@@ -1,5 +1,6 @@
 functionality:
   name: python_starter_kit
+  namespace: match_modality_starter_kits
   
   # metadata for your method
   version: dev
