@@ -1,5 +1,5 @@
 functionality:
-  name: calculate_totalvi_metrics
+  name: latent_mixing
   namespace: joint_embedding_metrics
   version: dev
   description: Calculate latent mixing metric for joint embedding task.
@@ -32,6 +32,12 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_metric.py
+    - path: ../../../../resources_test
+    - path: metric_meta_totalvi.tsv
+      dest: metric_meta.tsv
 platforms:
   - type: docker
     image: "python:3.8"

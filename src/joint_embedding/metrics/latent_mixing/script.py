@@ -73,7 +73,7 @@ def entropy_batch_mixing(
 
 
 print("Calculate latent mixing metric")
-latent_mixing_metric = entropy_batch_mixing(
+latent_mixing = entropy_batch_mixing(
     latent_space=merged_adata.X,
     batches=merged_adata.obs["batch"].values,
     n_neighbors=par["n_neighbors"]
@@ -84,8 +84,8 @@ adata_out = ad.AnnData(
     uns = {
         "dataset_id": predict_adata.uns["dataset_id"],
         "method_id" : predict_adata.uns["method_id"],
-        "metric_ids" : ["latent_mixing_metric"],
-        "metric_values" : [latent_mixing_metric]
+        "metric_ids" : ["latent_mixing"],
+        "metric_values" : [latent_mixing]
     }
 )
 
