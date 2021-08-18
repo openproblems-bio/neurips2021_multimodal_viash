@@ -1,2 +1,2 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
-latent_mixing	0	1	true
+latent_mixing	-1	0	true
