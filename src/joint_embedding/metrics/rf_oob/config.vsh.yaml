@@ -1,5 +1,5 @@
 functionality:
-  name: calculate_rf_oob
+  name: rf_oob
   namespace: joint_embedding_metrics
   version: dev
   description: Calculating basic metrics for the joint embedding task.

@@ -40,7 +40,7 @@ functionality:
       dest: metric_meta.tsv
 platforms:
   - type: docker
-    image: mumichae/scib-base:0.1
+    image: mumichae/scib-base:0.1.1
   - type: native
   - type: nextflow
     directive_time: 45m

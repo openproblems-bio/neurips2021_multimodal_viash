@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component calculate_rf_oob")
+      println("[ERROR] option --${it.name} not specified in component rf_oob")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "calculate_rf_oob." + it.name + "." + extOrName
+          ? "rf_oob." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process calculate_rf_oob_process {
+process rf_oob_process {
   time '45m'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
@@ -183,7 +183,7 @@ process calculate_rf_oob_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.calculate_rf_oob.tests.testScript} | tee $output
+      ./${params.rf_oob.tests.testScript} | tee $output
       """
     else
       """
@@ -196,14 +196,14 @@ process calculate_rf_oob_process {
       """
 }
 
-workflow calculate_rf_oob {
+workflow rf_oob {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "calculate_rf_oob"
+  def key = "rf_oob"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -248,7 +248,7 @@ workflow calculate_rf_oob {
       )
     }
 
-  result_ = calculate_rf_oob_process(id_input_output_function_cli_params_)
+  result_ = rf_oob_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -276,7 +276,7 @@ workflow calculate_rf_oob {
 
 workflow {
   def id = params.id
-  def fname = "calculate_rf_oob"
+  def fname = "rf_oob"
 
   def _params = params
 
@@ -288,14 +288,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.calculate_rf_oob
+  def inputFiles = params.rf_oob
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = calculate_rf_oob(ch_)
+  result = rf_oob(ch_)
   result.view{ it[1] }
 }
 
@@ -308,17 +308,17 @@ workflow test {
 
   main:
   params.test = true
-  params.calculate_rf_oob.output = "calculate_rf_oob.log"
+  params.rf_oob.output = "rf_oob.log"
 
   Channel.from(rootDir) \
-    | filter { params.calculate_rf_oob.tests.isDefined } \
+    | filter { params.rf_oob.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.calculate_rf_oob.tests.testResources.collect{ file( p + it ) },
+        params.rf_oob.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | calculate_rf_oob
+    | rf_oob
 
   emit:
-  calculate_rf_oob.out
+  rf_oob.out
 }
