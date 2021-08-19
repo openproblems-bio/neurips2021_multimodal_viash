@@ -15,7 +15,8 @@ par <- list(
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
   min_counts_per_cell = 10000,
-  min_counts_per_gene = 150000
+  min_counts_per_gene = 150000,
+  keep_genes = "src/common/resources/all_genes_tirosh.txt"
 )
 ## VIASH END
 
@@ -29,9 +30,12 @@ var_mod2 <- ad_mod2$var
 mat_rna <- as(ad_rna$X, "CsparseMatrix")
 mat_mod2 <- as(ad_mod2$X, "CsparseMatrix")
 
+# read in which genes are supposed to be kept. multiple files are supported.
+keep_genes <- map(par$keep_genes, readr::read_lines) %>% unlist()
+
 cat("Filtering genes and cells\n")
-fil_rna_genes <- colSums(mat_rna) >= par$min_counts_per_gene
-fil_mod2_genes <- colSums(mat_mod2) >= par$min_counts_per_gene
+fil_rna_genes <- colSums(mat_rna) >= par$min_counts_per_gene | colnames(mat_rna) %in% keep_genes
+fil_mod2_genes <- colSums(mat_mod2) >= par$min_counts_per_gene | colnames(mat_mod2) %in% keep_genes
 fil_cells <- rowSums(mat_rna) + rowSums(mat_mod2) >= par$min_counts_per_cell
 
 obs <- obs[fil_cells, , drop = FALSE]

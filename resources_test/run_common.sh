@@ -28,7 +28,8 @@ bin/viash run src/common/process_dataset/quality_control/config.vsh.yaml -- \
   --output_rna "${out_file}.tmp2.output_rna.h5ad" \
   --output_mod2 "${out_file}.tmp2.output_mod2.h5ad" \
   --min_counts_per_gene 10000 \
-  --min_counts_per_cell 15000
+  --min_counts_per_cell 15000 \
+  --keep_genes src/common/resources/all_genes_tirosh.txt
 
 # predetermine traintest split
 bin/viash run src/common/process_dataset/split_traintest/config.vsh.yaml -- \
