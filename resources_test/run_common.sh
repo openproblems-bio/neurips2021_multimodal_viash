@@ -36,5 +36,3 @@ bin/viash run src/common/process_dataset/split_traintest/config.vsh.yaml -- \
   --input_mod2 "${out_file}.tmp2.output_mod2.h5ad" \
   --output_rna "${out_file}.output_rna.h5ad" \
   --output_mod2 "${out_file}.output_mod2.h5ad"
-
-rm ${out_file}.tmp*
