@@ -2,9 +2,11 @@
 
 ## MINOR CHANGES
 
-* Common / Dataset loader / dyngen: dyngen always simulates a linear trajectory. 
+* Common / Dataset loader: dyngen always simulates a linear trajectory. 
   The component now also outputs a pseudotime (`.obs["pseudotime"]`) and cell cycle 
   scores (`.obs["S_score"]` and `.obs["G2M_score"]`).
+* Common / Dataset processor: Added a component for computing pseudotime scores
+  if none are provided.
 
 Task 1, Predict Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
