@@ -5,7 +5,7 @@ import pandas as pd
 
 par = {
   "input_prediction": "resources_test/match_modality/test_resource.prediction.h5ad",
-  "input_solution": "resources_test/match_modality/test_resource.solution.h5ad",
+  "input_solution": "resources_test/match_modality/test_resource.test_sol.h5ad",
   "output": "output.h5ad"
 }
 meta_path = resources_dir + '/metric_meta.tsv'
