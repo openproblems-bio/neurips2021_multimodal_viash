@@ -1,5 +1,5 @@
 functionality:
-  name: calculate_auroc
+  name: aupr
   namespace: match_modality_metrics
   version: dev
   description: Calculating basic metrics for task2.
@@ -38,6 +38,8 @@ functionality:
     - type: python_script
       path: ../../unit_tests/test_metric.py
     - path: ../../../../resources_test
+    - path: metric_meta_aupr.tsv
+      dest: metric_meta.tsv
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
