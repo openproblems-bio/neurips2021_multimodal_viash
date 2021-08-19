@@ -620,7 +620,10 @@ model <- combine_models(
   ),
   duplicate_gold_standard = FALSE
 )
-dataset <- as_dyno(model)
+dataset <- as_dyno(model) %>% 
+  dynwrap::simplify_trajectory()
+
+milestone_labels <- c("sA" = "start", "sEndD" = "end")
 # check whether output dataset looks nice
 # and whether batch effect is present
 # plot_summary(model)
@@ -640,12 +643,23 @@ phase_scores <- map_df(unique(dataset\$cell_info\$model), function(mod) {
 })
 
 # ggplot(phase_scores) + geom_point(aes(S_score, G2M_score))
+cat("Process trajectory percentages")
+trajectory_topology <-
+  dataset\$milestone_network %>%
+  transmute(
+    from = milestone_labels[from],
+    to = milestone_labels[to],
+    length
+  )
+trajectory_percentages <- 
+  dataset\$milestone_percentages %>%
+  mutate(
+    milestone_id = milestone_labels[milestone_id]
+  ) %>%
+  reshape2::acast(cell_id~milestone_id, value.var = "percentage") %>%
+  Matrix::Matrix(sparse = TRUE)
 
-cat("Compute pseudotime from root\\n")
-pseudotime <- dataset %>% 
-  dynwrap::add_root(root_milestone_id = "sA") %>%
-  dynwrap::calculate_pseudotime() %>%
-  enframe("cell_id", "pseudotime")
+trajectory_percentages <- trajectory_percentages[dataset\$cell_ids, unname(milestone_labels)]
 
 cat("Create RNA dataset\\n")
 celltypes <- dataset\$milestone_percentages %>%
@@ -656,18 +670,8 @@ celltypes <- dataset\$milestone_percentages %>%
 obs <- dataset\$cell_info %>%
   left_join(celltypes, by = "cell_id") %>%
   left_join(phase_scores, by = "cell_id") %>%
-  left_join(pseudotime, by = "cell_id") %>%
   rename(batch = model) %>%
-  mutate(RNA_trajectory = pseudotime) %>%
   column_to_rownames("cell_id")
-
-# save pseudotime under different names
-if (par\$store_chromatin) {
-  obs\$ATAC_trajectory <- obs\$pseudotime
-}
-if (par\$store_protein) {
-  obs\$ADT_trajectory <- obs\$pseudotime
-}
 
 # ggplot(obs) + geom_point(aes(pseudotime, G2M_score, colour = batch))
 var <- dataset\$feature_info %>%
@@ -677,8 +681,12 @@ ad_mod1 <- anndata::AnnData(
   X = dataset\$counts,
   obs = obs,
   var = var %>% mutate(feature_types = "GEX"),
+  obsm = list(
+    trajectory_percentages = trajectory_percentages
+  ),
   uns = list(
-    dataset_id = par\$id
+    dataset_id = par\$id,
+    trajectory_topology = trajectory_topology
   )
 )
 
@@ -700,8 +708,12 @@ if (par\$store_protein) {
     X = counts_protein,
     obs = obs,
     var = var_protein,
+    obsm = list(
+      trajectory_percentages = trajectory_percentages
+    ),
     uns = list(
-      dataset_id = par\$id
+      dataset_id = par\$id,
+      trajectory_topology = trajectory_topology
     )
   )
 }
@@ -730,6 +742,9 @@ if (par\$store_chromatin) {
     X = regsc,
     obs = obs,
     var = var_atac,
+    obsm = list(
+      trajectory_percentages = trajectory_percentages
+    ),
     uns = list(
       dataset_id = par\$id,
       organism = "synthetic"
