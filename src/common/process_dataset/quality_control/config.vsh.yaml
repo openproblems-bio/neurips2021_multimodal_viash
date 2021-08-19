@@ -42,6 +42,7 @@ functionality:
       description: "Minimum counts per cell."
     - name: "--keep_genes"
       type: "file"
+      multiple: true
       example: "all_genes_tirosh.txt"
       description: File with genes to keep during filtering.
       required: false
