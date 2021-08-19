@@ -398,7 +398,8 @@ functionality:
       ad1_raw <- anndata::read_h5ad(par\$input_mod1)
       ad2_raw <- anndata::read_h5ad(par\$input_mod2)
       new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_JE")
-      common_uns <- list(dataset_id = new_dataset_id)
+      organism <- ad1_raw\$uns[["organism"]]
+      common_uns <- list(dataset_id = new_dataset_id, organism = organism)
       
       cat("Creating mod1 object\\n")
       out_mod1 <- anndata::AnnData(
@@ -747,11 +748,14 @@ functionality:
           STUB=1 $cli
           """
         script:
+          def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
           if (params.test)
             """
             # Some useful stuff
             export NUMBA_CACHE_DIR=/tmp/numba-cache
             # Running the pre-hook when necessary
+            # Pass viash temp dir
+            export VIASH_TEMP="${viash_temp}"
             # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
             export PATH="./:${moduleDir}:\$PATH"
             ./${params.censor_dataset.tests.testScript} | tee $output
@@ -761,6 +765,8 @@ functionality:
             # Some useful stuff
             export NUMBA_CACHE_DIR=/tmp/numba-cache
             # Running the pre-hook when necessary
+            # Pass viash temp dir
+            export VIASH_TEMP="${viash_temp}"
             # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
             export PATH="${moduleDir}:\$PATH"
             $cli
@@ -933,5 +939,5 @@ info:
   output: "target/nextflow/joint_embedding_datasets/censor_dataset"
   executable: "target/nextflow/joint_embedding_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "4143e4cedc3ca5685e226db7f5734cee139dfb98"
+  git_commit: "522aecf741696eb4a1fedfe55ef506c677e7abc3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

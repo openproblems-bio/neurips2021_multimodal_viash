@@ -175,11 +175,14 @@ process cc_cons_process {
     STUB=1 $cli
     """
   script:
+    def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
     if (params.test)
       """
       # Some useful stuff
       export NUMBA_CACHE_DIR=/tmp/numba-cache
       # Running the pre-hook when necessary
+      # Pass viash temp dir
+      export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
       ./${params.cc_cons.tests.testScript} | tee $output
@@ -189,6 +192,8 @@ process cc_cons_process {
       # Some useful stuff
       export NUMBA_CACHE_DIR=/tmp/numba-cache
       # Running the pre-hook when necessary
+      # Pass viash temp dir
+      export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="${moduleDir}:\$PATH"
       $cli

@@ -801,11 +801,14 @@ functionality:
           STUB=1 $cli
           """
         script:
+          def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
           if (params.test)
             """
             # Some useful stuff
             export NUMBA_CACHE_DIR=/tmp/numba-cache
             # Running the pre-hook when necessary
+            # Pass viash temp dir
+            export VIASH_TEMP="${viash_temp}"
             # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
             export PATH="./:${moduleDir}:\$PATH"
             ./${params.baseline_knearestneighbors.tests.testScript} | tee $output
@@ -815,6 +818,8 @@ functionality:
             # Some useful stuff
             export NUMBA_CACHE_DIR=/tmp/numba-cache
             # Running the pre-hook when necessary
+            # Pass viash temp dir
+            export VIASH_TEMP="${viash_temp}"
             # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
             export PATH="${moduleDir}:\$PATH"
             $cli
@@ -973,5 +978,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_knearestneighbors"
   executable: "target/nextflow/predict_modality_methods/baseline_knearestneighbors/baseline_knearestneighbors"
   viash_version: "0.5.3dev"
-  git_commit: "4143e4cedc3ca5685e226db7f5734cee139dfb98"
+  git_commit: "522aecf741696eb4a1fedfe55ef506c677e7abc3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
