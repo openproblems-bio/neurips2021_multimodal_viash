@@ -1,3 +1,6 @@
+# python ignores
+__pycache__/
+
 # repo ignores
 output_bash
 
