@@ -18,9 +18,10 @@ par <- list(
 cat("Reading input data\n")
 ad1_raw <- anndata::read_h5ad(par$input_mod1)
 ad2_raw <- anndata::read_h5ad(par$input_mod2)
-new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_JE")
-organism <- ad1_raw$uns[["organism"]]
-common_uns <- list(dataset_id = new_dataset_id, organism = organism)
+common_uns <- list(
+  dataset_id = paste0(ad1_raw$uns[["dataset_id"]], "_JE"),
+  organism = ad1_raw$uns[["organism"]]
+)
 
 cat("Creating mod1 object\n")
 out_mod1 <- anndata::AnnData(
