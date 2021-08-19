@@ -1008,5 +1008,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_procrustes_knn"
   executable: "target/nextflow/match_modality_methods/baseline_procrustes_knn/baseline_procrustes_knn"
   viash_version: "0.5.3dev"
-  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
+  git_commit: "6a1f74b05b3ead70643a803a3bc514d5e5486380"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

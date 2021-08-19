@@ -317,13 +317,9 @@ print("Read prediction anndata")
 adata = sc.read(input_prediction)
 dataset_id = adata.uns['dataset_id']
 
-if 'organism' in adata.uns:
-    organism = adata.uns['organism']
-else:
-    organism = 'synthetic'
-
 print("Read solution anndata")
 adata_solution = sc.read(input_solution)
+organism = adata_solution.uns['organism']
 if debug:
     print(adata_solution.X)
     print(adata_solution.var)
@@ -339,23 +335,14 @@ print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-if organism == 'synthetic':
-    score = np.nan if recompute_cc else cell_cycle(
-        adata_pre=adata_solution,
-        adata_post=adata,
-        batch_key='batch',
-        embed='X_emb',
-        recompute_cc=False
-    )
-else:
-    score = cell_cycle(
-        adata_pre=adata_solution,
-        adata_post=adata,
-        batch_key='batch',
-        embed='X_emb',
-        recompute_cc=recompute_cc,
-        organism=organism
-    )
+score = cell_cycle(
+    adata_pre=adata_solution,
+    adata_post=adata,
+    batch_key='batch',
+    embed='X_emb',
+    recompute_cc=recompute_cc,
+    organism=organism
+)
 
 # store adata with metrics
 print("Create output object")
