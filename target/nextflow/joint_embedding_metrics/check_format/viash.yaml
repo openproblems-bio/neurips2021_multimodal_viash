@@ -811,5 +811,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/check_format"
   executable: "target/nextflow/joint_embedding_metrics/check_format/check_format"
   viash_version: "0.5.3dev"
-  git_commit: "16a07758c7f08359659b55464622e34b20bccdc2"
+  git_commit: "69ac78b4d715225de67760882d70ad5e378c28b1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

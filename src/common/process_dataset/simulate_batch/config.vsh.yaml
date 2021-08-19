@@ -1,9 +1,9 @@
 functionality:
-  name: "pseudotime_order"
+  name: "simulate_batch"
   namespace: "common_process_dataset"
   version: "dev"
   description: |
-    Add pseudotime ordering to dataset if none are provided.
+    Simulate batch effects if no batch effects 
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -32,6 +32,14 @@ functionality:
       required: true
       direction: output
       description: Normalized h5ad file.
+    - name: "--num_batches"
+      type: integer
+      default: 2
+      description: Number of batches to simulate when dataset doesn't contain any batches.
+    - name: "--batch_sd"
+      type: double
+      default: 0.4
+      description: Noise generator for generating the batch effects.
   resources:
     - type: r_script
       path: script.R

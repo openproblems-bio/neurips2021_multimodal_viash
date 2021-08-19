@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="pseudotime_order"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "pseudotime_order main_build"
-  echo "Perform quality control of the cells and features in a dataset."
+  echo "Add pseudotime ordering to dataset if none are provided."
   echo
   echo "Options:"
 
@@ -172,20 +172,6 @@ function ViashHelp {
   echo "        type: file, required parameter, output"
   echo "        example: output.h5ad"
   echo "        Normalized h5ad file."
-  echo ""
-
-
-  echo "   --min_counts_per_gene"
-  echo "        type: integer"
-  echo "        default: 100"
-  echo "        Minimum counts per gene."
-  echo ""
-
-
-  echo "   --min_counts_per_cell"
-  echo "        type: integer"
-  echo "        default: 100"
-  echo "        Minimum counts per cell."
   echo ""
 
 }
@@ -251,22 +237,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_OUTPUT_MOD2=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --min_counts_per_gene)
-            VIASH_PAR_MIN_COUNTS_PER_GENE="$2"
-            shift 2
-            ;;
-        --min_counts_per_gene=*)
-            VIASH_PAR_MIN_COUNTS_PER_GENE=$(ViashRemoveFlags "$1")
-            shift 1
-            ;;
-        --min_counts_per_cell)
-            VIASH_PAR_MIN_COUNTS_PER_CELL="$2"
-            shift 2
-            ;;
-        --min_counts_per_cell=*)
-            VIASH_PAR_MIN_COUNTS_PER_CELL=$(ViashRemoveFlags "$1")
-            shift 1
-            ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
             VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -297,12 +267,7 @@ if [ -z "$VIASH_PAR_OUTPUT_MOD2" ]; then
   ViashError '--output_mod2' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
-if [ -z "$VIASH_PAR_MIN_COUNTS_PER_GENE" ]; then
-  VIASH_PAR_MIN_COUNTS_PER_GENE="100"
-fi
-if [ -z "$VIASH_PAR_MIN_COUNTS_PER_CELL" ]; then
-  VIASH_PAR_MIN_COUNTS_PER_CELL="100"
-fi
+
 
 
 cat << VIASHEOF | bash
@@ -324,9 +289,7 @@ par <- list(
   "input_rna" = $( if [ ! -z ${VIASH_PAR_INPUT_RNA+x} ]; then echo "'$VIASH_PAR_INPUT_RNA'"; else echo NULL; fi ),
   "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
   "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
-  "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi ),
-  "min_counts_per_gene" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_GENE+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_GENE)"; else echo NULL; fi ),
-  "min_counts_per_cell" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_CELL+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_CELL)"; else echo NULL; fi )
+  "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi )
 )
 
 # get meta parameters

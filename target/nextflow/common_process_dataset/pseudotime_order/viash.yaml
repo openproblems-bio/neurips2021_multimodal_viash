@@ -51,24 +51,6 @@ functionality:
     direction: "Output"
     multiple: false
     multiple_sep: ":"
-  - type: "integer"
-    name: "--min_counts_per_gene"
-    alternatives: []
-    description: "Minimum counts per gene."
-    default: 100
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
-  - type: "integer"
-    name: "--min_counts_per_cell"
-    alternatives: []
-    description: "Minimum counts per cell."
-    default: 100
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
   resources:
   - type: "bash_script"
     text: |
@@ -217,7 +199,7 @@ functionality:
       # ViashHelp: Display helpful explanation about this executable
       function ViashHelp {
         echo "pseudotime_order main_build"
-        echo "Perform quality control of the cells and features in a dataset."
+        echo "Add pseudotime ordering to dataset if none are provided."
         echo
         echo "Options:"
       
@@ -246,20 +228,6 @@ functionality:
         echo "        type: file, required parameter, output"
         echo "        example: output.h5ad"
         echo "        Normalized h5ad file."
-        echo ""
-      
-      
-        echo "   --min_counts_per_gene"
-        echo "        type: integer"
-        echo "        default: 100"
-        echo "        Minimum counts per gene."
-        echo ""
-      
-      
-        echo "   --min_counts_per_cell"
-        echo "        type: integer"
-        echo "        default: 100"
-        echo "        Minimum counts per cell."
         echo ""
       
       }
@@ -325,22 +293,6 @@ functionality:
                   VIASH_PAR_OUTPUT_MOD2=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
-              --min_counts_per_gene)
-                  VIASH_PAR_MIN_COUNTS_PER_GENE="$2"
-                  shift 2
-                  ;;
-              --min_counts_per_gene=*)
-                  VIASH_PAR_MIN_COUNTS_PER_GENE=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
-              --min_counts_per_cell)
-                  VIASH_PAR_MIN_COUNTS_PER_CELL="$2"
-                  shift 2
-                  ;;
-              --min_counts_per_cell=*)
-                  VIASH_PAR_MIN_COUNTS_PER_CELL=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
               *)  # positional arg or unknown option
                   # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
                   VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -371,12 +323,7 @@ functionality:
         ViashError '--output_mod2' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
-      if [ -z "$VIASH_PAR_MIN_COUNTS_PER_GENE" ]; then
-        VIASH_PAR_MIN_COUNTS_PER_GENE="100"
-      fi
-      if [ -z "$VIASH_PAR_MIN_COUNTS_PER_CELL" ]; then
-        VIASH_PAR_MIN_COUNTS_PER_CELL="100"
-      fi
+      
       
       
       cat << VIASHEOF | bash
@@ -398,9 +345,7 @@ functionality:
         "input_rna" = $( if [ ! -z ${VIASH_PAR_INPUT_RNA+x} ]; then echo "'$VIASH_PAR_INPUT_RNA'"; else echo NULL; fi ),
         "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
         "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
-        "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi ),
-        "min_counts_per_gene" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_GENE+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_GENE)"; else echo NULL; fi ),
-        "min_counts_per_cell" = $( if [ ! -z ${VIASH_PAR_MIN_COUNTS_PER_CELL+x} ]; then echo "as.integer($VIASH_PAR_MIN_COUNTS_PER_CELL)"; else echo NULL; fi )
+        "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi )
       )
       
       # get meta parameters
@@ -461,8 +406,6 @@ functionality:
           pseudotime_order__input_mod2 = "viash_no_value"
           pseudotime_order__output_rna = "viash_no_value"
           pseudotime_order__output_mod2 = "viash_no_value"
-          pseudotime_order__min_counts_per_gene = "100"
-          pseudotime_order__min_counts_per_cell = "100"
           id = ""
           testScript = ""
           testResources = [  ]
@@ -525,30 +468,6 @@ functionality:
                 value = "${params.pseudotime_order__output_mod2}"
                 example = "output.h5ad"
                 description = "Normalized h5ad file."
-              }
-              min_counts_per_gene {
-                name = "min_counts_per_gene"
-                otype = "--"
-                required = false
-                type = "integer"
-                direction = "Input"
-                multiple = false
-                multiple_sep = ":"
-                value = "${params.pseudotime_order__min_counts_per_gene}"
-                dflt = "100"
-                description = "Minimum counts per gene."
-              }
-              min_counts_per_cell {
-                name = "min_counts_per_cell"
-                otype = "--"
-                required = false
-                type = "integer"
-                direction = "Input"
-                multiple = false
-                multiple_sep = ":"
-                value = "${params.pseudotime_order__min_counts_per_cell}"
-                dflt = "100"
-                description = "Minimum counts per cell."
               }
             }
           }
@@ -910,7 +829,7 @@ functionality:
       }
 
     dest: "main.nf"
-  description: "Perform quality control of the cells and features in a dataset.\n"
+  description: "Add pseudotime ordering to dataset if none are provided.\n"
   tests: []
   info: {}
 platform:
@@ -927,5 +846,5 @@ info:
   output: "target/nextflow/common_process_dataset/pseudotime_order"
   executable: "target/nextflow/common_process_dataset/pseudotime_order/pseudotime_order"
   viash_version: "0.5.3dev"
-  git_commit: "16a07758c7f08359659b55464622e34b20bccdc2"
+  git_commit: "69ac78b4d715225de67760882d70ad5e378c28b1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
