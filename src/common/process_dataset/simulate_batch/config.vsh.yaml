@@ -1,9 +1,9 @@
 functionality:
-  name: "quality_control"
+  name: "simulate_batch"
   namespace: "common_process_dataset"
   version: "dev"
   description: |
-    Perform quality control of the cells and features in a dataset.
+    Simulate batch effects if no batch effects 
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -32,27 +32,17 @@ functionality:
       required: true
       direction: output
       description: Normalized h5ad file.
-    - name: "--min_counts_per_gene"
+    - name: "--num_batches"
       type: integer
-      default: 100
-      description: "Minimum counts per gene."
-    - name: "--min_counts_per_cell"
-      type: integer
-      default: 100
-      description: "Minimum counts per cell."
-    - name: "--keep_genes"
-      type: "file"
-      example: "all_genes_tirosh.txt"
-      description: File with genes to keep during filtering.
-      required: false
+      default: 2
+      description: Number of batches to simulate when dataset doesn't contain any batches.
+    - name: "--batch_sd"
+      type: double
+      default: 0.4
+      description: Noise generator for generating the batch effects.
   resources:
     - type: r_script
       path: script.R
-  tests:
-    - type: r_script
-      path: test.R
-    - path: ../../../../resources_test
-    - path: ../../resources
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
