@@ -1,5 +1,5 @@
 functionality:
-  name: calculate_cor
+  name: correlation
   namespace: predict_modality_metrics
   version: dev
   description: Calculating basic metrics for the predict modality task.
@@ -29,8 +29,8 @@ functionality:
     - type: r_script
       path: script.R
   tests:
-    - type: r_script
-      path: test.R
+    - type: python_script
+      path: ../../unit_tests/test_metric.py
     - path: ../../../../resources_test
 platforms:
   - type: docker
