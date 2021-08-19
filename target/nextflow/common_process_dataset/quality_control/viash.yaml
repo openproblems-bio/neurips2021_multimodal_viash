@@ -546,7 +546,7 @@ functionality:
           quality_control__keep_genes = "no_default_value_configured"
           id = ""
           testScript = "test.R"
-          testResources = [ "test.R", "../../../../resources_test", "../../resources" ]
+          testResources = [ "test.R", "../../../../resources_test" ]
           quality_control {
             name = "quality_control"
             container = "common_process_dataset_quality_control"
@@ -556,7 +556,7 @@ functionality:
             tests {
               isDefined = true
               testScript = "test.R"
-              testResources = [ "test.R", "../../../../resources_test", "../../resources" ]
+              testResources = [ "test.R", "../../../../resources_test" ]
             }
             arguments {
               input_rna {
@@ -1010,8 +1010,6 @@ functionality:
     is_executable: true
   - type: "file"
     path: "../../../../resources_test"
-  - type: "file"
-    path: "../../resources"
   info: {}
 platform:
   type: "nextflow"
@@ -1027,5 +1025,5 @@ info:
   output: "target/nextflow/common_process_dataset/quality_control"
   executable: "target/nextflow/common_process_dataset/quality_control/quality_control"
   viash_version: "0.5.3dev"
-  git_commit: "3f8e8d2d264c118f6bd095a718d4036d4fd6fbf6"
+  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
