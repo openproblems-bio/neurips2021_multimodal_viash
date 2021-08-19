@@ -13,7 +13,11 @@ cd "$REPO_ROOT"
 
 in_file=resources_test/common/test_resource
 out_file=resources_test/match_modality/test_resource
-mkdir -p `dirname $out_file`
+
+# remove previous output
+out_dir=`dirname $out_file`
+[ -d $out_dir ] && rm -r $out_dir
+mkdir -p $out_dir
 
 bin/viash run src/match_modality/datasets/censor_dataset/config.vsh.yaml -- \
   --input_mod1 ${in_file}.output_rna.h5ad \
@@ -33,13 +37,13 @@ bin/viash run src/match_modality/methods/baseline_dr_nn_knn/config.vsh.yaml -- \
   --input_test_mod2 ${out_file}.test_mod2.h5ad \
   --output ${out_file}.prediction.h5ad
 
-bin/viash run src/match_modality/metrics/calculate_auroc/config.vsh.yaml -- \
+bin/viash run src/match_modality/metrics/aupr/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.test_sol.h5ad \
   --output ${out_file}.scores.h5ad
 
 bin/viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/match_modality/metrics/calculate_auroc/metric_meta_calculate_auroc.tsv \
+  --metric_meta src/match_modality/metrics/aupr/metric_meta_aupr.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

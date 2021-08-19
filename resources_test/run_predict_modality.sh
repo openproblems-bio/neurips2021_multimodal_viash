@@ -14,9 +14,13 @@ cd "$REPO_ROOT"
 target_dir=target/docker
 in_file=resources_test/common/test_resource
 out_file=resources_test/predict_modality/test_resource
-mkdir -p `dirname $out_file`
 
-$target_dir/predict_modality_datasets/censor_dataset/censor_dataset \
+# remove previous output
+out_dir=`dirname $out_file`
+[ -d $out_dir ] && rm -r $out_dir
+mkdir -p $out_dir
+
+viash run src/predict_modality/datasets/censor_dataset/config.vsh.yaml -- \
   --input_mod1 ${in_file}.output_rna.h5ad \
   --input_mod2 ${in_file}.output_mod2.h5ad \
   --output_train_mod1 ${out_file}.train_mod1.h5ad \
@@ -24,19 +28,19 @@ $target_dir/predict_modality_datasets/censor_dataset/censor_dataset \
   --output_test_mod1 ${out_file}.test_mod1.h5ad \
   --output_test_mod2 ${out_file}.test_mod2.h5ad
   
-$target_dir/predict_modality_methods/baseline_randomforest/baseline_randomforest \
+viash run src/predict_modality/methods/baseline_randomforest/config.vsh.yaml -- \
   --input_train_mod1 ${out_file}.train_mod1.h5ad \
   --input_train_mod2 ${out_file}.train_mod2.h5ad \
   --input_test_mod1 ${out_file}.test_mod1.h5ad \
   --output ${out_file}.prediction.h5ad
   
-$target_dir/predict_modality_metrics/calculate_cor/calculate_cor \
+viash run src/predict_modality/metrics/correlation/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.test_mod2.h5ad \
   --output ${out_file}.scores.h5ad
 
-$target_dir/common/extract_scores/extract_scores \
+viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/predict_modality/metrics/calculate_cor/metric_meta_calculate_cor.tsv \
+  --metric_meta src/predict_modality/metrics/correlation/metric_meta_correlation.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

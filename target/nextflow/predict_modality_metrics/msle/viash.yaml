@@ -399,7 +399,7 @@ functionality:
           msle__output = "viash_no_value"
           id = ""
           testScript = "test_metric.py"
-          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_mse.tsv" ]
+          testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_msle.tsv" ]
           msle {
             name = "msle"
             container = "predict_modality_metrics_msle"
@@ -409,7 +409,7 @@ functionality:
             tests {
               isDefined = true
               testScript = "test_metric.py"
-              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_mse.tsv" ]
+              testResources = [ "../../unit_tests/test_metric.py", "../../../../resources_test", "metric_meta_msle.tsv" ]
             }
             arguments {
               input_prediction {
@@ -793,7 +793,7 @@ functionality:
   - type: "file"
     path: "../../../../resources_test"
   - type: "file"
-    path: "metric_meta_mse.tsv"
+    path: "metric_meta_msle.tsv"
     dest: "metric_meta.tsv"
   info: {}
 platform:
@@ -810,5 +810,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/msle"
   executable: "target/nextflow/predict_modality_metrics/msle/msle"
   viash_version: "0.5.3dev"
-  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
+  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -407,7 +407,7 @@ functionality:
       ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
       ###############################################################################
       new_obs = pd.DataFrame({
-          "cell_types": adata.obs.cell_types,
+          "cell_type": adata.obs.cell_types,
           "batch": "batch" + (adata.obs.batch_indices+1).astype(str)
       })
       uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
@@ -918,5 +918,5 @@ info:
   output: "target/nextflow/common_datasets/download_totalvi_spleen_lymph"
   executable: "target/nextflow/common_datasets/download_totalvi_spleen_lymph/download_totalvi_spleen_lymph"
   viash_version: "0.5.3dev"
-  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
+  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

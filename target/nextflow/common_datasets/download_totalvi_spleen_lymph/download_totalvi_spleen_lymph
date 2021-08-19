@@ -344,7 +344,7 @@ h5ad_temp.close()
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
 new_obs = pd.DataFrame({
-    "cell_types": adata.obs.cell_types,
+    "cell_type": adata.obs.cell_types,
     "batch": "batch" + (adata.obs.batch_indices+1).astype(str)
 })
 uns = { "dataset_id" : par["id"], "organism" : par["organism"] }

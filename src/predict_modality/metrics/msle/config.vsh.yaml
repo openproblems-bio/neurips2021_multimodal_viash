@@ -32,7 +32,7 @@ functionality:
     - type: python_script
       path: ../../unit_tests/test_metric.py
     - path: ../../../../resources_test
-    - path: metric_meta_mse.tsv
+    - path: metric_meta_msle.tsv
       dest: metric_meta.tsv
 platforms:
   - type: docker

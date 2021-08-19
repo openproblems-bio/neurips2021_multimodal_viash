@@ -2,7 +2,7 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
     input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.ti_cons.tsv",
+    output="resources_test/joint_embedding/test_resource.ti_cons.h5ad",
     debug=True
 )
 ## VIASH END
@@ -36,22 +36,22 @@ adata_solution = sc.read(input_solution)
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
-adt_atac_trajectory = 'ATAC_trajectory'
+adt_atac_trajectory = 'pseudotime_order_ATAC' if 'pseudotime_order_ATAC' in adata_solution.obs else 'pseudotime_order_ADT'
 
 print('Compute scores')
 obs_keys = adata_solution.obs_keys()
 
-if 'RNA_trajectory' in obs_keys:
+if 'pseudotime_order_GEX' in obs_keys:
     score_rna = trajectory_conservation(
         adata_pre=adata_solution,
         adata_post=adata,
         label_key='cell_type',
-        pseudotime_key='RNA_trajectory'
+        pseudotime_key='pseudotime_order_GEX'
     )
 else:
     score_rna = np.nan
 
-if 'ADT_trajectory' in obs_keys or 'ATAC_trajectory' in obs_keys:
+if adt_atac_trajectory in obs_keys:
     score_adt_atac = trajectory_conservation(
         adata_pre=adata_solution,
         adata_post=adata,

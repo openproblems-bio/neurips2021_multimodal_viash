@@ -1,2 +1,2 @@
 dataset_id	method_id	mean_pearson	mean_spearman	score_mean_pearson	score_mean_spearman
-test_resource_PM_gex2adt	baseline_randomforest	0.31386694018496475	0.32722131681772065	0.6569334700924824	0.6636106584088604
+test_resource_PM_gex2adt	baseline_randomforest	0.34304832442507727	0.34546054092955625	0.6715241622125386	0.6727302704647782

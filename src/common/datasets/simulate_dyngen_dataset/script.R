@@ -215,7 +215,7 @@ if (par$store_protein) {
   # sample 50 genes
   if (ncol(counts_protein) > par$num_proteins) {
     sample_genes <- sample.int(ncol(counts_protein), par$num_proteins)
-    counts_protein <- counts_protein[,sample_genes, , drop = FALSE]
+    counts_protein <- counts_protein[, sample_genes, , drop = FALSE]
     var_protein <- var_protein[sample_genes, , drop = FALSE]
   }
 
@@ -244,7 +244,7 @@ if (par$store_chromatin) {
   regsc <- Matrix::sparseMatrix(
     i = as.integer(mat$cell_id),
     j = as.integer(mat$edge),
-    x = pmax(mat$strength, 0)*100
+    x = pmax(mat$strength, 0) * 100
   )
   rownames(regsc) <- dataset$cell_ids
   colnames(regsc) <- paste0("region_", seq_len(ncol(regsc)))

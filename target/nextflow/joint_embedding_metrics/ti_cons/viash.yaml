@@ -375,22 +375,22 @@ functionality:
       print('Transfer obs annotations')
       adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
       adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
-      adt_atac_trajectory = 'ATAC_trajectory'
+      adt_atac_trajectory = 'pseudotime_order_ATAC' if 'pseudotime_order_ATAC' in adata_solution.obs else 'pseudotime_order_ADT'
       
       print('Compute scores')
       obs_keys = adata_solution.obs_keys()
       
-      if 'RNA_trajectory' in obs_keys:
+      if 'pseudotime_order_GEX' in obs_keys:
           score_rna = trajectory_conservation(
               adata_pre=adata_solution,
               adata_post=adata,
               label_key='cell_type',
-              pseudotime_key='RNA_trajectory'
+              pseudotime_key='pseudotime_order_GEX'
           )
       else:
           score_rna = np.nan
       
-      if 'ADT_trajectory' in obs_keys or 'ATAC_trajectory' in obs_keys:
+      if adt_atac_trajectory in obs_keys:
           score_adt_atac = trajectory_conservation(
               adata_pre=adata_solution,
               adata_post=adata,
@@ -864,5 +864,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ti_cons"
   executable: "target/nextflow/joint_embedding_metrics/ti_cons/ti_cons"
   viash_version: "0.5.3dev"
-  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
+  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

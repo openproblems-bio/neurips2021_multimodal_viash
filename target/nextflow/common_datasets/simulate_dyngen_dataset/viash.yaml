@@ -849,7 +849,7 @@ functionality:
         # sample 50 genes
         if (ncol(counts_protein) > par\$num_proteins) {
           sample_genes <- sample.int(ncol(counts_protein), par\$num_proteins)
-          counts_protein <- counts_protein[,sample_genes, , drop = FALSE]
+          counts_protein <- counts_protein[, sample_genes, , drop = FALSE]
           var_protein <- var_protein[sample_genes, , drop = FALSE]
         }
       
@@ -878,7 +878,7 @@ functionality:
         regsc <- Matrix::sparseMatrix(
           i = as.integer(mat\$cell_id),
           j = as.integer(mat\$edge),
-          x = pmax(mat\$strength, 0)*100
+          x = pmax(mat\$strength, 0) * 100
         )
         rownames(regsc) <- dataset\$cell_ids
         colnames(regsc) <- paste0("region_", seq_len(ncol(regsc)))
@@ -1537,5 +1537,5 @@ info:
   output: "target/nextflow/common_datasets/simulate_dyngen_dataset"
   executable: "target/nextflow/common_datasets/simulate_dyngen_dataset/simulate_dyngen_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
+  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

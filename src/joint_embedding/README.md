@@ -23,9 +23,9 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They b
   * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
   * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
-  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. Required for trajectory conservation score.
-  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. Required for trajectory conservation score.
-  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. Required for trajectory conservation score.
+  * `.obs['pseudotime_order_GEX']`: Pseudotime values for `"GEX"` features. Required for trajectory conservation score.
+  * `.obs['pseudotime_order_ATAC']`: Pseudotime values for `"ATAC"` features. Required for trajectory conservation score.
+  * `.obs['pseudotime_order_ADT']`: Pseudotime values for `"ADT"` features. Required for trajectory conservation score.
   * `.var['gene_ids']`: Additional gene Ids (optional).
   * `.var['feature_types']`: Modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
@@ -54,9 +54,9 @@ The `output_solution` file contains metadata on the cell profiles, which will be
   * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
   * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
-  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features (optional).
-  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features (optional).
-  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features (optional).
+  * `.obs['pseudotime_order_GEX']`: Pseudotime values for `"GEX"` features (optional).
+  * `.obs['pseudotime_order_ATAC']`: Pseudotime values for `"ATAC"` features (optional).
+  * `.obs['pseudotime_order_ADT']`: Pseudotime values for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the `"GEX"` features.
 
@@ -110,9 +110,9 @@ The `input_solution` file has the following attributes.
   * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features).
   * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). Required if `var_names` are not gene symbols.
-  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features (optional).
-  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features (optional).
-  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features (optional).
+  * `.obs['pseudotime_order_GEX']`: Pseudotime values for `"GEX"` features (optional).
+  * `.obs['pseudotime_order_ATAC']`: Pseudotime values for `"ATAC"` features (optional).
+  * `.obs['pseudotime_order_ADT']`: Pseudotime values for `"ADT"` features (optional).
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 

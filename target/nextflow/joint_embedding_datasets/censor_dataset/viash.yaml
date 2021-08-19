@@ -420,12 +420,13 @@ functionality:
       
       cat("Create solution object\\n")
       out_solution <- anndata::AnnData(
-        X = NULL,
         var = bind_rows(
           ad1_raw\$var %>% select(one_of("gene_ids"), feature_types),
           ad2_raw\$var %>% select(one_of("gene_ids"), feature_types)
         ),
-        obs = ad1_raw\$obs %>% select(cell_type, one_of("batch")),
+        obs = ad1_raw\$obs %>% select(
+          one_of("batch", "cell_type", "pseudotime_order_GEX", "pseudotime_order_ATAC", "pseudotime_order_ADT", "S_score", "G2M_score")
+        ),
         uns = common_uns
       )
       
@@ -940,5 +941,5 @@ info:
   output: "target/nextflow/joint_embedding_datasets/censor_dataset"
   executable: "target/nextflow/joint_embedding_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "ef4e5645a47137ddd2e9cdc0204e9ae5c7f32d08"
+  git_commit: "67732418eb0ce0352e26c76d56bc5ea17218bb8f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
