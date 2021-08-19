@@ -24,7 +24,7 @@ bin/viash run src/common/datasets/simulate_dyngen_dataset/config.vsh.yaml -- \
   --seed 1 \
   --output_rna "${out_file}.tmp.output_rna.h5ad" \
   --output_mod2 "${out_file}.tmp.output_mod2.h5ad" \
-  --plot "${out_file}.plot.pdf"
+  --plot "${out_file}.tmp.plot.pdf"
 
 # stringent filtering to reduce the file size of test data
 bin/viash run src/common/process_dataset/quality_control/config.vsh.yaml -- \
