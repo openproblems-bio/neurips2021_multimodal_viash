@@ -19,7 +19,7 @@ bin/viash run src/common/datasets/download_totalvi_spleen_lymph/config.vsh.yaml 
   --input "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad" \
   --output_rna "${out_file}.tmp.output_rna.h5ad" \
   --output_mod2 "${out_file}.tmp.output_mod2.h5ad" \
-  --organism human
+  --organism mouse
 
 # stringent filtering to reduce the file size of test data
 bin/viash run src/common/process_dataset/quality_control/config.vsh.yaml -- \
@@ -41,5 +41,12 @@ bin/viash run src/common/process_dataset/split_traintest/config.vsh.yaml -- \
 bin/viash run src/common/process_dataset/pseudotime_order/config.vsh.yaml -- \
   --input_rna "${out_file}.tmp3.output_rna.h5ad" \
   --input_mod2 "${out_file}.tmp3.output_mod2.h5ad" \
+  --output_rna "${out_file}.tmp4.output_rna.h5ad" \
+  --output_mod2 "${out_file}.tmp4.output_mod2.h5ad"
+
+# simulate batch if it's missing
+bin/viash run src/common/process_dataset/simulate_batch/config.vsh.yaml -- \
+  --input_rna "${out_file}.tmp4.output_rna.h5ad" \
+  --input_mod2 "${out_file}.tmp4.output_mod2.h5ad" \
   --output_rna "${out_file}.output_rna.h5ad" \
   --output_mod2 "${out_file}.output_mod2.h5ad"
