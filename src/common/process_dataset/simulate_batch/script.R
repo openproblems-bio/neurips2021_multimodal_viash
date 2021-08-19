@@ -1,6 +1,8 @@
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE, quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
 
 ## VIASH START
 par <- list(

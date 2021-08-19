@@ -172,6 +172,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process quality_control_process {
+  label 'midmem'
+  label 'midime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

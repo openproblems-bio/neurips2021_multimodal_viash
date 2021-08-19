@@ -172,6 +172,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process simulate_batch_process {
+  label 'midmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

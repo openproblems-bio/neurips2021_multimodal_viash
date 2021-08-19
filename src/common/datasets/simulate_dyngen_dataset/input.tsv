@@ -1,7 +1,7 @@
 id	num_cells	num_genes	num_simulations	store_chromatin	store_protein	num_threads	seed
-dyngen_atac_1	1000	1000	100	TRUE	FALSE	10	1
-dyngen_atac_2	1000	1000	100	TRUE	FALSE	10	2
-dyngen_atac_3	1000	1000	100	TRUE	FALSE	10	3
-dyngen_citeseq_1	1000	1000	100	FALSE	TRUE	10	1
-dyngen_citeseq_2	1000	1000	100	FALSE	TRUE	10	2
-dyngen_citeseq_3	1000	1000	100	FALSE	TRUE	10	3
+dyngen_atac_1	1000	1000	100	TRUE	FALSE	8	1
+dyngen_atac_2	1000	1000	100	TRUE	FALSE	8	2
+dyngen_atac_3	1000	1000	100	TRUE	FALSE	8	3
+dyngen_citeseq_1	1000	1000	100	FALSE	TRUE	8	1
+dyngen_citeseq_2	1000	1000	100	FALSE	TRUE	8	2
+dyngen_citeseq_3	1000	1000	100	FALSE	TRUE	8	3

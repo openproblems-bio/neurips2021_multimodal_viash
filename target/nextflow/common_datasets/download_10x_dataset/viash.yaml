@@ -454,7 +454,8 @@ functionality:
   - type: "file"
     text: |
         docker.enabled = true
-        docker.runOptions = "-i -v ${baseDir}:${baseDir}"
+        def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
+        docker.runOptions = "-i -v ${baseDir}:${baseDir} -v $viash_temp:$viash_temp"
         process.container = "dataintuitive/viash"
         params {
           download_10x_dataset__id = "viash_no_value"
@@ -718,6 +719,9 @@ functionality:
       }
       
       process download_10x_dataset_process {
+        label 'midmem'
+        label 'lowtime'
+        label 'lowcpu'
         maxForks 1
         tag "${id}"
         echo { (params.debug == true) ? true : false }
@@ -913,7 +917,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
+  labels:
+  - "midmem"
+  - "lowtime"
+  - "lowcpu"
   directive_max_forks: 1
 platforms: []
 info:
@@ -922,5 +929,5 @@ info:
   output: "target/nextflow/common_datasets/download_10x_dataset"
   executable: "target/nextflow/common_datasets/download_10x_dataset/download_10x_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "6a1f74b05b3ead70643a803a3bc514d5e5486380"
+  git_commit: "8440f2c1b30f92e9d06c650dfa2e05b396aced69"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

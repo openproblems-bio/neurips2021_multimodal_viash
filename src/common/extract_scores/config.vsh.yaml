@@ -56,3 +56,4 @@ platforms:
   - type: nextflow
     publish: true
     per_id: false
+    labels: [ lowmem, lowtime, lowcpu ]

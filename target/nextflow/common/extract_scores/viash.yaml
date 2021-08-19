@@ -569,7 +569,8 @@ functionality:
   - type: "file"
     text: |
         docker.enabled = true
-        docker.runOptions = "-i -v ${baseDir}:${baseDir}"
+        def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
+        docker.runOptions = "-i -v ${baseDir}:${baseDir} -v $viash_temp:$viash_temp"
         process.container = "dataintuitive/viash"
         params {
           extract_scores__input = "viash_no_value"
@@ -846,6 +847,9 @@ functionality:
       }
       
       process extract_scores_process {
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -1038,7 +1042,10 @@ platform:
   publish: true
   per_id: false
   separate_multiple_outputs: true
-  labels: []
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/common/extract_scores/config.vsh.yaml"
@@ -1046,5 +1053,5 @@ info:
   output: "target/nextflow/common/extract_scores"
   executable: "target/nextflow/common/extract_scores/extract_scores"
   viash_version: "0.5.3dev"
-  git_commit: "6a1f74b05b3ead70643a803a3bc514d5e5486380"
+  git_commit: "8440f2c1b30f92e9d06c650dfa2e05b396aced69"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

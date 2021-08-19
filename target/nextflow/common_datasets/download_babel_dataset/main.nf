@@ -172,6 +172,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_babel_datasets_process {
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

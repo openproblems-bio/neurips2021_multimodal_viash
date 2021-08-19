@@ -97,4 +97,4 @@ platforms:
         cran: 
           - dynwrap
   - type: nextflow
-    directive_cpus: 8
+    labels: [ highmem, hightime, midcpu ]
