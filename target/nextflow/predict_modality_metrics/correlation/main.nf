@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component calculate_auroc")
+      println("[ERROR] option --${it.name} not specified in component correlation")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "calculate_auroc." + it.name + "." + extOrName
+          ? "correlation." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,9 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process calculate_auroc_process {
-  time '45m'
-  memory '20 GB'
+process correlation_process {
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -184,7 +182,7 @@ process calculate_auroc_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.calculate_auroc.tests.testScript} | tee $output
+      ./${params.correlation.tests.testScript} | tee $output
       """
     else
       """
@@ -197,14 +195,14 @@ process calculate_auroc_process {
       """
 }
 
-workflow calculate_auroc {
+workflow correlation {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "calculate_auroc"
+  def key = "correlation"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -249,7 +247,7 @@ workflow calculate_auroc {
       )
     }
 
-  result_ = calculate_auroc_process(id_input_output_function_cli_params_)
+  result_ = correlation_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -277,7 +275,7 @@ workflow calculate_auroc {
 
 workflow {
   def id = params.id
-  def fname = "calculate_auroc"
+  def fname = "correlation"
 
   def _params = params
 
@@ -289,14 +287,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.calculate_auroc
+  def inputFiles = params.correlation
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = calculate_auroc(ch_)
+  result = correlation(ch_)
   result.view{ it[1] }
 }
 
@@ -309,17 +307,17 @@ workflow test {
 
   main:
   params.test = true
-  params.calculate_auroc.output = "calculate_auroc.log"
+  params.correlation.output = "correlation.log"
 
   Channel.from(rootDir) \
-    | filter { params.calculate_auroc.tests.isDefined } \
+    | filter { params.correlation.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.calculate_auroc.tests.testResources.collect{ file( p + it ) },
+        params.correlation.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | calculate_auroc
+    | correlation
 
   emit:
-  calculate_auroc.out
+  correlation.out
 }

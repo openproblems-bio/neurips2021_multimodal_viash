@@ -4,8 +4,8 @@ import anndata as ad
 import pandas as pd
 
 par = {
-  "input_prediction": "resources_test/joint_embedding/test_resource.prediction.h5ad",
-  "input_solution": "resources_test/joint_embedding/test_resource.solution.h5ad",
+  "input_prediction": "resources_test/predict_modality/test_resource.prediction.h5ad",
+  "input_solution": "resources_test/predict_modality/test_resource.test_mod2.h5ad",
   "output": "output.h5ad"
 }
 meta_path = resources_dir + '/metric_meta.tsv'

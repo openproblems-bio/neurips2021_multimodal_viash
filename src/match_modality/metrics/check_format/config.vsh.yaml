@@ -29,9 +29,11 @@ functionality:
     - type: r_script
       path: script.R
   tests:
-    - type: r_script
-      path: test.R
+    - type: python_script
+      path: ../../unit_tests/test_metric.py
     - path: ../../../../resources_test
+    - path: metric_meta_check_format.tsv
+      dest: metric_meta.tsv
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12

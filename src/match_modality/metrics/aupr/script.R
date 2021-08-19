@@ -112,8 +112,7 @@ metrics <- tibble(
 # calculate area under the curves
 area_under <- tibble(
   auroc = pracma::trapz(1 - metrics$spec, metrics$tpr),
-  aupr = abs(pracma::trapz(metrics$tpr, metrics$prec)),
-  F1 = ifelse(auroc + aupr != 0, 2 * auroc * aupr / (auroc + aupr), 0)
+  aupr = abs(pracma::trapz(metrics$tpr, metrics$prec))
 )
 
 # GENIE3bis::plot_curves(list(area_under = area_under, metrics = metrics))

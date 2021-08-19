@@ -9,7 +9,7 @@ include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseli
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"              params(params)
-include  { calculate_auroc }             from "$targetDir/${task}_metrics/calculate_auroc/main.nf"             params(params)
+include  { aupr }             from "$targetDir/${task}_metrics/aupr/main.nf"             params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                       params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
@@ -80,7 +80,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (calculate_auroc & check_format)
+    | (aupr & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

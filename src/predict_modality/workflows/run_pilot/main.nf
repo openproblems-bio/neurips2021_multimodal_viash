@@ -11,7 +11,7 @@ include  { baseline_babel }              from "$targetDir/${task}_methods/baseli
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"             params(params)
-include  { calculate_cor }               from "$targetDir/${task}_metrics/calculate_cor/main.nf"              params(params)
+include  { correlation }               from "$targetDir/${task}_metrics/correlation/main.nf"              params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"               params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                      params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                       params(params)
@@ -90,7 +90,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (calculate_cor & check_format)
+    | (correlation & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

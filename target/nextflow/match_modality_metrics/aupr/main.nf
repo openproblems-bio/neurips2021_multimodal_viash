@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component calculate_cor")
+      println("[ERROR] option --${it.name} not specified in component aupr")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "calculate_cor." + it.name + "." + extOrName
+          ? "aupr." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,9 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process calculate_cor_process {
+process aupr_process {
+  time '45m'
+  memory '20 GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -182,7 +184,7 @@ process calculate_cor_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.calculate_cor.tests.testScript} | tee $output
+      ./${params.aupr.tests.testScript} | tee $output
       """
     else
       """
@@ -195,14 +197,14 @@ process calculate_cor_process {
       """
 }
 
-workflow calculate_cor {
+workflow aupr {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "calculate_cor"
+  def key = "aupr"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -247,7 +249,7 @@ workflow calculate_cor {
       )
     }
 
-  result_ = calculate_cor_process(id_input_output_function_cli_params_)
+  result_ = aupr_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -275,7 +277,7 @@ workflow calculate_cor {
 
 workflow {
   def id = params.id
-  def fname = "calculate_cor"
+  def fname = "aupr"
 
   def _params = params
 
@@ -287,14 +289,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.calculate_cor
+  def inputFiles = params.aupr
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = calculate_cor(ch_)
+  result = aupr(ch_)
   result.view{ it[1] }
 }
 
@@ -307,17 +309,17 @@ workflow test {
 
   main:
   params.test = true
-  params.calculate_cor.output = "calculate_cor.log"
+  params.aupr.output = "aupr.log"
 
   Channel.from(rootDir) \
-    | filter { params.calculate_cor.tests.isDefined } \
+    | filter { params.aupr.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.calculate_cor.tests.testResources.collect{ file( p + it ) },
+        params.aupr.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | calculate_cor
+    | aupr
 
   emit:
-  calculate_cor.out
+  aupr.out
 }
