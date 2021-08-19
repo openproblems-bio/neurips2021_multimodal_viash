@@ -64,5 +64,3 @@ adata_adt.X = sparse.csr_matrix(adata_adt.X)
 print("Saving output")
 adata_rna.write_h5ad(par['output_rna'], compression = "gzip")
 adata_adt.write_h5ad(par['output_mod2'], compression = "gzip")
-
-

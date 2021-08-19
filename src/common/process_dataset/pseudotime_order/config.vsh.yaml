@@ -3,7 +3,7 @@ functionality:
   namespace: "common_process_dataset"
   version: "dev"
   description: |
-    Perform quality control of the cells and features in a dataset.
+    Add pseudotime ordering to dataset if none are provided.
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -32,14 +32,6 @@ functionality:
       required: true
       direction: output
       description: Normalized h5ad file.
-    - name: "--min_counts_per_gene"
-      type: integer
-      default: 100
-      description: "Minimum counts per gene."
-    - name: "--min_counts_per_cell"
-      type: integer
-      default: 100
-      description: "Minimum counts per cell."
   resources:
     - type: r_script
       path: script.R
