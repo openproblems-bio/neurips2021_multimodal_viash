@@ -14,6 +14,10 @@ cd "$REPO_ROOT"
 out_file=resources_test/common/test_resource
 mkdir -p `dirname $out_file`
 
+# remove previous output
+rm $out_file*
+
+# download raw dataset
 bin/viash run src/common/datasets/download_totalvi_spleen_lymph/config.vsh.yaml -- \
   --id test_resource \
   --input "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad" \

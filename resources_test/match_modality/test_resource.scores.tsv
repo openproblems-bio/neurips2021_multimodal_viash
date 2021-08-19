@@ -1,2 +1,2 @@
-dataset_id	method_id	aupr	auroc	F1
-test_resource_MM	baseline_dr_nn_knn	0.013794314830981591	0.482957186386443	0.02682251976117819
+dataset_id	method_id	aupr	auroc
+test_resource_MM	baseline_dr_nn_knn	0.023647282188477448	0.6371300934772535
