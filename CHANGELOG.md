@@ -8,9 +8,12 @@
 
 Task 1, Predict Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
+* Testing: Added reusable unit test¹ for metrics.
+* Metric: Added MSE and MSLE metrics.
 
 Task 2, Match Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
+* Testing: Added reusable unit test¹ for metrics.
 
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test¹ for method components and starter kits.
