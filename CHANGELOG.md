@@ -14,6 +14,7 @@ Task 1, Predict Modality:
 Task 2, Match Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
 * Testing: Added reusable unit test¹ for metrics.
+* Metric: Added a match probability metric.
 
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test¹ for method components and starter kits.

@@ -14,17 +14,12 @@ cd "$REPO_ROOT"
 out_file=resources_test/common/test_resource
 mkdir -p `dirname $out_file`
 
-bin/viash run src/common/datasets/simulate_dyngen_dataset/config.vsh.yaml -- \
+bin/viash run src/common/datasets/download_totalvi_spleen_lymph/config.vsh.yaml -- \
   --id test_resource \
-  --num_cells 200 \
-  --num_genes 150 \
-  --num_simulations 20 \
-  --store_protein \
-  --num_threads 10 \
-  --seed 1 \
+  --input "https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/spleen_lymph_111.h5ad" \
   --output_rna "${out_file}.tmp.output_rna.h5ad" \
   --output_mod2 "${out_file}.tmp.output_mod2.h5ad" \
-  --plot "${out_file}.tmp.plot.pdf"
+  --organism human
 
 # stringent filtering to reduce the file size of test data
 bin/viash run src/common/process_dataset/quality_control/config.vsh.yaml -- \
