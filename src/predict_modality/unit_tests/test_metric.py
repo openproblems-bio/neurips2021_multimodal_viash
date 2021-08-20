@@ -3,17 +3,7 @@ import subprocess
 import anndata as ad
 import pandas as pd
 
-## VIASH START
-# This code block will be replaced by viash at runtime.
-meta = { 'functionality_name': 'foo' }
-meta_path = "src/predict_modality/metrics/check_format/metric_meta_check_format.tsv"
-## VIASH END
-
-method_id = meta['functionality_name']
-command = "./" + method_id
-
-# define some filenames
-testpar = {
+par = {
   "input_prediction": "resources_test/predict_modality/test_resource.prediction.h5ad",
   "input_solution": "resources_test/predict_modality/test_resource.test_mod2.h5ad",
   "output": "output.h5ad"
@@ -22,19 +12,19 @@ meta_path = resources_dir + '/metric_meta.tsv'
 
 print("> Running method")
 out = subprocess.check_output([
-  command,
-  "--input_prediction", testpar['input_prediction'],
-  "--input_solution", testpar['input_solution'],
-  "--output", testpar['output']
+  "./" + meta['functionality_name'],
+  "--input_prediction", par['input_prediction'],
+  "--input_solution", par['input_solution'],
+  "--output", par['output']
 ]).decode("utf-8")
 
 print("> Checking whether output files were created")
-assert path.exists(testpar['output'])
+assert path.exists(par['output'])
 
 print("> Reading h5ad files")
-input_prediction = ad.read_h5ad(testpar['input_prediction'])
-input_solution = ad.read_h5ad(testpar['input_solution'])
-output = ad.read_h5ad(testpar['output'])
+input_prediction = ad.read_h5ad(par['input_prediction'])
+input_solution = ad.read_h5ad(par['input_solution'])
+output = ad.read_h5ad(par['output'])
 
 metric_meta = pd.read_csv(
   meta_path, 

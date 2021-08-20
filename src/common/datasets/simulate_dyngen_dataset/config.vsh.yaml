@@ -97,4 +97,4 @@ platforms:
         cran: 
           - dynwrap
   - type: nextflow
-    labels: [ vhighmem, hightime, vhighcpu ]
+    labels: [ highmem, hightime, midcpu ]
