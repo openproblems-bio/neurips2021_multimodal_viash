@@ -52,5 +52,4 @@ platforms:
       - type: r
         packages: [ lmds ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "10 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

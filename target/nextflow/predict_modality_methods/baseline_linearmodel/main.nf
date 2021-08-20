@@ -158,8 +158,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process baseline_linearmodel_process {
-  time '10m'
-  memory '10 GB'
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

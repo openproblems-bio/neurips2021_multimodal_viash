@@ -13,8 +13,7 @@ bin/viash_build -m release -t $TAG --num_threads 4 \
   --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
 
 # when building for a not-release  
-bin/viash_build --num_threads 4 \
-  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
+bin/viash_build --num_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
   
 
 # run unit tests (when done right, these should all pass)

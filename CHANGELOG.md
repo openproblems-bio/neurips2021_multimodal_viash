@@ -1,12 +1,19 @@
 # neurips2021_multimodal_viash 0.6.0
 
-## MINOR CHANGES
+## NEW FEATURES
 
-* Common / Dataset loader: dyngen always simulates a linear trajectory. 
-  The component now also outputs a pseudotime (`.obs["pseudotime"]`) and cell cycle 
-  scores (`.obs["S_score"]` and `.obs["G2M_score"]`).
-* Common / Dataset processor: Added a component for computing pseudotime scores
+Common:
+
+* Dataset processor: Added a component for computing pseudotime scores
   if none are provided.
+
+* Dataset processor: Added a component for simulating batch effects if 
+  dataset doesn't consist of multiple batches.
+
+* NextFlow: Added resource labels to better specify a components resource requirements.
+  - CPU: { lowcpu: 2, midcpu: 4, highcpu: 15, vhighcpu: 30 }
+  - Memory: { lowmem: 10 GB, midmem: 20 GB, highmem: 55 GB, vhighmem: 110 GB }
+  - Time: { lowtime: 10m, midtime: 20m, hightime: 60m }
 
 Task 1, Predict Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
@@ -21,6 +28,14 @@ Task 2, Match Modality:
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test¹ for method components and starter kits.
 * Testing: Added reusable unit test¹ for metrics.
+* Metric: Added Cell Cycle Conservation, Trajectory Conservation and Graph Connectivity metrics.
+
+
+## MINOR CHANGES
+
+Common:
+* Dataset loader: dyngen always simulates a linear trajectory. 
+  The component now also outputs pseudotime and cell cycle information.
 
 ## NOTES
 

@@ -403,12 +403,12 @@ common_uns <- list(dataset_id = new_dataset_id)
 if (!is.null(par\$max_mod1_columns) && par\$max_mod1_columns < ncol(ad1_raw)) {
   cat("Sampling mod1 columns\\n")
   ad1_ix <- sample.int(ncol(ad1_raw), par\$max_mod1_columns)
-  ad1_raw <- ad1_raw[, ad1_ix, drop = FALSE]
+  ad1_raw <- ad1_raw[, ad1_ix]
 }
 if (!is.null(par\$max_mod2_columns) && par\$max_mod2_columns < ncol(ad2_raw)) {
   cat("Sampling mod2 columns\\n")
   ad2_ix <- sample.int(ncol(ad2_raw), par\$max_mod2_columns)
-  ad2_raw <- ad2_raw[, ad2_ix, drop = FALSE]
+  ad2_raw <- ad2_raw[, ad2_ix]
 }
 
 cat("Creating train objects\\n")

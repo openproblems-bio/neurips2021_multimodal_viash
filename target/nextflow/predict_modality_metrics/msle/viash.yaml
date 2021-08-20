@@ -338,6 +338,7 @@ functionality:
       
       cat("Reading prediction file\\n")
       ad_pred <- anndata::read_h5ad(par\$input_prediction)
+      # ad_pred\$X <- as(ad_pred\$X * 0 + 1, "CsparseMatrix")
       
       cat("Check prediction format\\n")
       expect_equal(
@@ -351,28 +352,29 @@ functionality:
       
       cat("Computing MSE and MSLE metrics\\n")
       # Wrangle data
-      tv <- ad_sol\$X
-      pv <- ad_pred\$X
-      
-      # compute logs
-      ltv <- tv
-      ltv@x <- log(ltv@x + 1)
-      
-      # take into account there might be negative values in there
-      lpv <- pv
-      lpv@x <- log(abs(lpv@x) + 1) * sign(lpv@x)
-      
-      # compute metrics
-      mse <- mean((tv - pv)^2)
-      msle <- mean((ltv - lpv)^2)
+      scores <- 
+        full_join(
+          summary(ad_sol\$X) %>% rename(solx = x),
+          summary(ad_pred\$X) %>% rename(predx = x),
+          by = c("i", "j")
+        ) %>%
+        select(-i, -j) %>%
+        mutate(
+          solx = ifelse(is.na(solx), 0, solx),
+          predx = ifelse(is.na(predx), 0, predx),
+        ) %>%
+        summarise(
+          mse = mean((solx - predx)^2),
+          msle = mean((log(solx + 1) - log(abs(predx) + 1) * sign(predx))^2)
+        )
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
         uns = list(
           dataset_id = ad_pred\$uns\$dataset_id,
           method_id = ad_pred\$uns\$method_id,
-          metric_ids = c("mse", "msle"),
-          metric_values = c(mse, msle)
+          metric_ids = names(scores),
+          metric_values = as.vector(as.matrix(scores))
         )
       )
       
@@ -616,6 +618,9 @@ functionality:
       }
       
       process msle_process {
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -803,7 +808,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/predict_modality/metrics/msle/config.vsh.yaml"
@@ -811,5 +819,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/msle"
   executable: "target/nextflow/predict_modality_metrics/msle/msle"
   viash_version: "0.5.3dev"
-  git_commit: "10eb572703f936a6b6d646d8fc3560f497764378"
+  git_commit: "45e584151df90215b156befaf624d3f20ab88f4e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

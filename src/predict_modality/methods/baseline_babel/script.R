@@ -12,31 +12,34 @@ babel_location <- "/babel/bin/"
 conda_bin <- "/opt/conda/bin/conda"
 
 ## VIASH START
+# par <- list(
+#   input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
+#   input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
+#   input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
+#   output = "output.h5ad"
+# )
 par <- list(
-  input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
-  input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
+  input_train_mod1 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_train_mod1.h5ad",
+  input_train_mod2 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_train_mod2.h5ad",
+  input_test_mod1 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_test_mod1.h5ad",
   output = "output.h5ad"
 )
 conda_bin <- "conda"
 babel_location <- "../babel/bin/"
 ## VIASH END
 
-
-cat("Reading h5ad files\n")
+cat(">> Reading h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
 input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
-input_train_sol <- anndata::read_h5ad(par$input_train_sol)
 input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
-input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
-
-cat(">> Reading h5ad files\n")
 if (is.null(input_train_mod1$var$gene_ids)) input_train_mod1$var$gene_ids <- colnames(input_train_mod1)
 if (is.null(input_train_mod2$var$gene_ids)) input_train_mod2$var$gene_ids <- colnames(input_train_mod2)
 if (is.null(input_test_mod1$var$gene_ids)) input_test_mod1$var$gene_ids <- colnames(input_test_mod1)
-if (is.null(input_test_mod2$var$gene_ids)) input_test_mod2$var$gene_ids <- colnames(input_test_mod2)
 
-mod1 <- unique(input_test_mod1$var$feature_types)
+mod1 <- as.character(unique(input_train_mod1$var$feature_types))
+mod2 <- as.character(unique(input_train_mod2$var$feature_types))
+expect_equal(mod1, "GEX", info = "babel only runs on GEX→ATAC")
+expect_equal(mod2, "ATAC", info = "babel only runs on GEX→ATAC")
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(input_train_mod1$X, input_train_mod2$X)
@@ -100,6 +103,9 @@ babel_train_cmd <- paste0(
   "--data ", dir_data, "train_input.h5 ",
   "--outdir ", dir_model
 )
+# stringent filtering causes babel to almost always fail
+# reason: https://github.com/wukevin/babel/blob/main/babel/sc_data_loaders.py#L168-L190
+
 out1 <- system(babel_train_cmd)
 
 # check whether training succeeded

@@ -69,3 +69,4 @@ platforms:
         packages: [ GA ]
   - type: nextflow
     publish: true
+    labels: [ lowtime, lowcpu ]

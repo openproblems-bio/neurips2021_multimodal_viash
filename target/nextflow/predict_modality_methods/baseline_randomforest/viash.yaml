@@ -743,8 +743,9 @@ functionality:
       }
       
       process baseline_randomforest_process {
-        time '10m'
-        memory '10 GB'
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -929,9 +930,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
-  directive_time: "10m"
-  directive_memory: "10 GB"
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/predict_modality/methods/baseline_randomforest/config.vsh.yaml"
@@ -939,5 +941,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_randomforest"
   executable: "target/nextflow/predict_modality_methods/baseline_randomforest/baseline_randomforest"
   viash_version: "0.5.3dev"
-  git_commit: "10eb572703f936a6b6d646d8fc3560f497764378"
+  git_commit: "45e584151df90215b156befaf624d3f20ab88f4e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -1,7 +1,16 @@
 library(assertthat, quietly = TRUE)
 requireNamespace("anndata", quietly = TRUE)
 
-par <- list(
+## VIASH START
+# This code block will be replaced by viash at runtime.
+meta <- list(functionality_name = "foo")
+## VIASH END
+
+method_id <- meta[["functionality_name"]]
+command <- paste0("./", method_id)
+
+# define some filenames
+testpar <- list(
   input_train_mod1 = "resources_test/match_modality/test_resource.train_mod1.h5ad",
   input_train_mod2 = "resources_test/match_modality/test_resource.train_mod2.h5ad",
   input_train_sol = "resources_test/match_modality/test_resource.train_sol.h5ad",
@@ -15,33 +24,29 @@ cat("> Running method\n")
 out <- processx::run(
   command = paste0("./", meta[["functionality_name"]]),
   args = c(
-    "--input_train_mod1", par$input_train_mod1,
-    "--input_train_mod2", par$input_train_mod2,
-    "--input_train_sol", par$input_train_sol,
-    "--input_test_mod1", par$input_test_mod1,
-    "--input_test_mod2", par$input_test_mod2,
-    "--output", par$output
+    "--input_train_mod1", testpar$input_train_mod1,
+    "--input_train_mod2", testpar$input_train_mod2,
+    "--input_train_sol", testpar$input_train_sol,
+    "--input_test_mod1", testpar$input_test_mod1,
+    "--input_test_mod2", testpar$input_test_mod2,
+    "--output", testpar$output
   ),
   stderr_to_stdout = TRUE
 )
 
 cat("> Checking whether output files were created\n")
-assert_that(file.exists(par$output))
+assert_that(file.exists(testpar$output))
 
 cat("> Reading h5ad files\n")
-ad_sol <- anndata::read_h5ad(par$input_test_sol)
-ad_pred <- anndata::read_h5ad(par$output)
+ad_sol <- anndata::read_h5ad(testpar$input_test_sol)
+ad_pred <- anndata::read_h5ad(testpar$output)
 
 cat("> Checking dataset id\n")
 dataset_id <- ad_pred$uns[["dataset_id"]]
 assert_that(dataset_id == ad_sol$uns[["dataset_id"]])
 
 cat("> Checking method id\n")
-method_id <- ad_pred$uns[["method_id"]]
-assert_that(
-  is.character(method_id),
-  method_id == meta[["functionality_name"]]
-)
+assert_that(ad_pred$uns[["method_id"]] == method_id)
 
 cat("> Checking X\n")
 assert_that(

@@ -158,6 +158,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process msle_process {
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

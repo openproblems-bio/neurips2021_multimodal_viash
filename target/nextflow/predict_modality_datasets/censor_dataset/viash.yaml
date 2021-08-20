@@ -504,12 +504,12 @@ functionality:
       if (!is.null(par\$max_mod1_columns) && par\$max_mod1_columns < ncol(ad1_raw)) {
         cat("Sampling mod1 columns\\n")
         ad1_ix <- sample.int(ncol(ad1_raw), par\$max_mod1_columns)
-        ad1_raw <- ad1_raw[, ad1_ix, drop = FALSE]
+        ad1_raw <- ad1_raw[, ad1_ix]
       }
       if (!is.null(par\$max_mod2_columns) && par\$max_mod2_columns < ncol(ad2_raw)) {
         cat("Sampling mod2 columns\\n")
         ad2_ix <- sample.int(ncol(ad2_raw), par\$max_mod2_columns)
-        ad2_raw <- ad2_raw[, ad2_ix, drop = FALSE]
+        ad2_raw <- ad2_raw[, ad2_ix]
       }
       
       cat("Creating train objects\\n")
@@ -900,6 +900,8 @@ functionality:
       }
       
       process censor_dataset_process {
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -1105,7 +1107,9 @@ platform:
   namespace_separator: "_"
   publish: true
   separate_multiple_outputs: true
-  labels: []
+  labels:
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/predict_modality/datasets/censor_dataset/config.vsh.yaml"
@@ -1113,5 +1117,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "10eb572703f936a6b6d646d8fc3560f497764378"
+  git_commit: "45e584151df90215b156befaf624d3f20ab88f4e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

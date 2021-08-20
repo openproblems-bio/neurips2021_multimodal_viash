@@ -376,21 +376,18 @@ functionality:
       
       ## VIASH END
       
-      
-      cat("Reading h5ad files\\n")
+      cat(">> Reading h5ad files\\n")
       input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
       input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2)
-      input_train_sol <- anndata::read_h5ad(par\$input_train_sol)
       input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
-      input_test_mod2 <- anndata::read_h5ad(par\$input_test_mod2)
-      
-      cat(">> Reading h5ad files\\n")
       if (is.null(input_train_mod1\$var\$gene_ids)) input_train_mod1\$var\$gene_ids <- colnames(input_train_mod1)
       if (is.null(input_train_mod2\$var\$gene_ids)) input_train_mod2\$var\$gene_ids <- colnames(input_train_mod2)
       if (is.null(input_test_mod1\$var\$gene_ids)) input_test_mod1\$var\$gene_ids <- colnames(input_test_mod1)
-      if (is.null(input_test_mod2\$var\$gene_ids)) input_test_mod2\$var\$gene_ids <- colnames(input_test_mod2)
       
-      mod1 <- unique(input_test_mod1\$var\$feature_types)
+      mod1 <- as.character(unique(input_train_mod1\$var\$feature_types))
+      mod2 <- as.character(unique(input_train_mod2\$var\$feature_types))
+      expect_equal(mod1, "GEX", info = "babel only runs on GEX→ATAC")
+      expect_equal(mod2, "ATAC", info = "babel only runs on GEX→ATAC")
       
       # multiome_matrix for export to Babel's input format
       multiome_matrix <- cbind(input_train_mod1\$X, input_train_mod2\$X)
@@ -454,6 +451,9 @@ functionality:
         "--data ", dir_data, "train_input.h5 ",
         "--outdir ", dir_model
       )
+      # stringent filtering causes babel to almost always fail
+      # reason: https://github.com/wukevin/babel/blob/main/babel/sc_data_loaders.py#L168-L190
+      
       out1 <- system(babel_train_cmd)
       
       # check whether training succeeded
@@ -752,8 +752,9 @@ functionality:
       }
       
       process baseline_babel_process {
-        time '10m'
-        memory '20 GB'
+        label 'midmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -933,9 +934,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
-  directive_time: "10m"
-  directive_memory: "20 GB"
+  labels:
+  - "midmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/predict_modality/methods/baseline_babel/config.vsh.yaml"
@@ -943,5 +945,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_babel"
   executable: "target/nextflow/predict_modality_methods/baseline_babel/baseline_babel"
   viash_version: "0.5.3dev"
-  git_commit: "10eb572703f936a6b6d646d8fc3560f497764378"
+  git_commit: "45e584151df90215b156befaf624d3f20ab88f4e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
