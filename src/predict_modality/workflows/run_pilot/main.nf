@@ -10,6 +10,7 @@ include  { baseline_knearestneighbors }  from "$targetDir/${task}_methods/baseli
 include  { baseline_babel }              from "$targetDir/${task}_methods/baseline_babel/main.nf"             params(params)
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
+include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"               params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"             params(params)
 include  { correlation }                 from "$targetDir/${task}_metrics/correlation/main.nf"                params(params)
 include  { msle }                        from "$targetDir/${task}_metrics/msle/main.nf"                       params(params)
@@ -64,13 +65,17 @@ workflow pilot_wf {
     | dummy_constant
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_constant", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d2 = solution
+  def d2 = inputs 
+    | dummy_random
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_dummy_random", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d3 = solution
     | map { id, input -> [ id, input, params ] }  
     | dummy_solution
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, d0, d1, d2)
+  def predictions = b0.mix(b1, b2, b3, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
