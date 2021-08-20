@@ -100,7 +100,7 @@ model_init <- initialise_model(
     compute_cellwise_grn = par$store_chromatin
   ),
   num_cores = par$num_threads,
-  verbose = FALSE,
+  verbose = TRUE,
   download_cache_dir = par$cache_dir
 ) %>%
   generate_tf_network() %>%

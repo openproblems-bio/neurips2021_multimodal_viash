@@ -10,15 +10,11 @@ git merge origin/main
 
 # build target folder and docker containers
 bin/viash_build -m release -t $TAG --num_threads 4 \
-  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false' \
-  --config_mod '.platforms[.type == "nextflow"].directive_memory := "10GB"' \
-  --config_mod '.platforms[.type == "nextflow"].directive_time := "10 m"'
+  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
 
 # when building for a not-release  
 bin/viash_build --num_threads 4 \
-  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false' \
-  --config_mod '.platforms[.type == "nextflow"].directive_memory := "10GB"' \
-  --config_mod '.platforms[.type == "nextflow"].directive_time := "10 m"'
+  --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
   
 
 # run unit tests (when done right, these should all pass)

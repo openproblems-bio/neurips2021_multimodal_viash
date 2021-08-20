@@ -61,3 +61,4 @@ platforms:
           - anndata
   - type: nextflow
     directive_max_forks: 1
+    labels: [ midmem, lowtime, lowcpu ]
