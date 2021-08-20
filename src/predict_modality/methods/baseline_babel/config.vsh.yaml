@@ -56,4 +56,4 @@ platforms:
       - type: r
         bioc: [ DropletUtils ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]
