@@ -42,3 +42,4 @@ platforms:
         github: 
           - dynverse/dynutils@devel
   - type: nextflow
+    labels: [ lowmem, lowtime, lowcpu ]
