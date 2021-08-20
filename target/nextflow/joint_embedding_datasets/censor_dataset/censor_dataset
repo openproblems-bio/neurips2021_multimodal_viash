@@ -353,10 +353,8 @@ out_mod2 <- anndata::AnnData(
 
 cat("Create solution object\\n")
 out_solution <- anndata::AnnData(
-  var = bind_rows(
-    ad1_raw\$var %>% select(one_of("gene_ids"), feature_types),
-    ad2_raw\$var %>% select(one_of("gene_ids"), feature_types)
-  ),
+  X = ad1_raw\$X,
+  var = ad1_raw\$var %>% select(one_of("gene_ids"), feature_types),
   obs = ad1_raw\$obs %>% select(
     one_of("batch", "cell_type", "pseudotime_order_GEX", "pseudotime_order_ATAC", "pseudotime_order_ADT", "S_score", "G2M_score")
   ),

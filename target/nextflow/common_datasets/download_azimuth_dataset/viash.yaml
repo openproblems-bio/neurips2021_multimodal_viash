@@ -1012,5 +1012,5 @@ info:
   output: "target/nextflow/common_datasets/download_azimuth_dataset"
   executable: "target/nextflow/common_datasets/download_azimuth_dataset/download_azimuth_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "8440f2c1b30f92e9d06c650dfa2e05b396aced69"
+  git_commit: "cc0329f2e9ec60975248fdb9ed7ecc321feaf985"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

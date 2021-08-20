@@ -186,9 +186,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process simulate_dyngen_dataset_process {
-  label 'highmem'
+  label 'vhighmem'
   label 'hightime'
-  label 'midcpu'
+  label 'vhighcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

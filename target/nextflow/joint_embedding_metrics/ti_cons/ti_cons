@@ -325,6 +325,10 @@ adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
 adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 adt_atac_trajectory = 'pseudotime_order_ATAC' if 'pseudotime_order_ATAC' in adata_solution.obs else 'pseudotime_order_ADT'
 
+print('Preprocessing')
+adata.obsm['X_emb'] = adata.X
+sc.pp.neighbors(adata, use_rep='X_emb')
+
 print('Compute scores')
 obs_keys = adata_solution.obs_keys()
 

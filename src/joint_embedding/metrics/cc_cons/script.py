@@ -33,10 +33,6 @@ dataset_id = adata.uns['dataset_id']
 print("Read solution anndata")
 adata_solution = sc.read(input_solution)
 organism = adata_solution.uns['organism']
-if debug:
-    print(adata_solution.X)
-    print(adata_solution.var)
-    print(adata.var)
 
 print('Transfer obs annotations')
 adata.obs['batch'] = adata_solution.obs['batch'][adata.obs_names]
