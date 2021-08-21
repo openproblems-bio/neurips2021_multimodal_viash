@@ -313,6 +313,12 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 
 ## VIASH END
 
+input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2, backed = TRUE)
+if (input_train_mod2\$var\$feature_types[[1]] != "ATAC") {
+  cat("Error: babel only runs on GEX to ATAC datasets\\n")
+  quit(save = "no", status = 42)
+}
+
 cat(">> Reading h5ad files\\n")
 input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
 input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2)
@@ -323,8 +329,6 @@ if (is.null(input_test_mod1\$var\$gene_ids)) input_test_mod1\$var\$gene_ids <- c
 
 mod1 <- as.character(unique(input_train_mod1\$var\$feature_types))
 mod2 <- as.character(unique(input_train_mod2\$var\$feature_types))
-expect_equal(mod1, "GEX", info = "babel only runs on GEX→ATAC")
-expect_equal(mod2, "ATAC", info = "babel only runs on GEX→ATAC")
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(input_train_mod1\$X, input_train_mod2\$X)
@@ -386,9 +390,10 @@ babel_train_cmd <- paste0(
   conda_bin, " run -n babel ",
   "python ", babel_location, "train_model.py ",
   "--data ", dir_data, "train_input.h5 ",
-  "--outdir ", dir_model
+  "--outdir ", dir_model, " ",
+  "--nofilter"
 )
-# stringent filtering causes babel to almost always fail
+# stringent filtering causes babel to sometimes fail
 # reason: https://github.com/wukevin/babel/blob/main/babel/sc_data_loaders.py#L168-L190
 
 out1 <- system(babel_train_cmd)
@@ -402,7 +407,8 @@ babel_pred_cmd <- paste0(
   "python ", babel_location, "predict_model.py ",
   "--checkpoint ", dir_model, " ",
   "--data ", dir_data, "test_input.h5 ",
-  "--outdir ", dir_pred
+  "--outdir ", dir_pred, " ",
+  "--nofilter"
 )
 out2 <- system(babel_pred_cmd)
 
