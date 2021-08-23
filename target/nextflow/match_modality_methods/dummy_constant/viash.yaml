@@ -706,8 +706,9 @@ functionality:
       }
       
       process dummy_constant_process {
-        time '10m'
-        memory '20 GB'
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -893,9 +894,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
-  directive_time: "10m"
-  directive_memory: "20 GB"
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/match_modality/methods/dummy_constant/config.vsh.yaml"
@@ -903,5 +905,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_constant"
   executable: "target/nextflow/match_modality_methods/dummy_constant/dummy_constant"
   viash_version: "0.5.3dev"
-  git_commit: "c4104497e0af7b5e80b33c91f28e09ed7544d6b3"
+  git_commit: "18de094a081549a05e0e3336ab4292228f2a83b4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

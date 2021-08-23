@@ -14,6 +14,7 @@ par <- list(
   output_test_mod1 = "output_test_mod1.h5ad",
   output_test_mod2 = "output_test_mod2.h5ad",
   seed = 1L,
+  max_mod1_columns = NULL,
   max_mod2_columns = 5000L
 )
 ## VIASH END
@@ -26,14 +27,27 @@ ad2_mod <- unique(ad2_raw$var[["feature_types"]])
 new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
+# copied from scUtils/variance.R
+colVars_spm <- function( spm ) {
+  stopifnot( methods::is( spm, "dgCMatrix" ) )
+  ans <- sapply( base::seq.int(spm@Dim[2]), function(j) {
+    if( spm@p[j+1] == spm@p[j] ) { return(0) } # all entries are 0: var is 0
+    mean <- base::sum( spm@x[ (spm@p[j]+1):spm@p[j+1] ] ) / spm@Dim[1]
+    sum( ( spm@x[ (spm@p[j]+1):spm@p[j+1] ] - mean )^2 ) + mean^2 * ( spm@Dim[1] - ( spm@p[j+1] - spm@p[j] ) ) 
+  })
+  ans / ( spm@Dim[1] - 1 )
+}
+
 if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_raw)) {
   cat("Sampling mod1 columns\n")
-  ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns)
+  ad1_var <- colVars_spm(ad1_raw$X)
+  ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns, prob = ad1_var)
   ad1_raw <- ad1_raw[, ad1_ix]
 }
 if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_raw)) {
   cat("Sampling mod2 columns\n")
-  ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns)
+  ad2_var <- colVars_spm(ad2_raw$X)
+  ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns, prob = ad2_var)
   ad2_raw <- ad2_raw[, ad2_ix]
 }
 

@@ -158,8 +158,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process baseline_dr_nn_knn_process {
-  time '10m'
-  memory '20 GB'
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

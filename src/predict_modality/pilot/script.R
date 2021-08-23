@@ -13,11 +13,18 @@ df %>% group_by(method_id) %>% summarise_if(is.numeric, mean)
 ggplot(df) +
   geom_point(aes(mean_spearman, msle, colour = method_id)) +
   facet_wrap(~dataset_group) +
-  theme_classic() +
-  scale_colour_brewer(palette = "Set2")
+  theme_bw() +
+  scale_colour_brewer(palette = "Set1")
 
 ggplot(df) +
   geom_point(aes(mean_spearman, msle, colour = dataset_group)) +
   facet_wrap(~method_id) +
   theme_bw() +
   scale_colour_brewer(palette = "Set2")
+
+
+bind_rows(df, df %>% mutate(dataset_group = "overall")) %>%
+  group_by(method_id, dataset_group) %>%
+  filter(correct_format > 0) %>%
+  summarise_if(is.numeric, mean) %>%
+  ungroup()

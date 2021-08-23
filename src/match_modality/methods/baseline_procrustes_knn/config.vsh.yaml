@@ -58,5 +58,4 @@ platforms:
       - type: python
         pip: [ anndata, scipy, sklearn ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

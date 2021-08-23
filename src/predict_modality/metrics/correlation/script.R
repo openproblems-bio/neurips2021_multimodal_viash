@@ -7,8 +7,8 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = c("resources_test/predict_modality/test_resource.test_mod2.h5ad"),
-  input_prediction = c("resources_test/predict_modality/test_resource.prediction.h5ad"),
+  input_solution = "resources_test/predict_modality/test_resource.test_mod2.h5ad",
+  input_prediction = "resources_test/predict_modality/test_resource.prediction.h5ad",
   output = "test_resource.scores.h5ad"
 )
 ## VIASH END
@@ -35,16 +35,19 @@ tv <- ad_sol$X
 pv <- ad_pred$X
 
 # Compute metrics
-pearson_mat <- dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE)
-spearman_mat <- dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE)
+pearson_vec <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))
+spearman_vec <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))
 
-mean_pearson <- mean(diag(pearson_mat))
-mean_spearman <- mean(diag(spearman_mat))
+pearson_vec[!is.finite(pearson_vec)] <- 0
+spearman_vec[!is.finite(spearman_vec)] <- 0
+
+mean_pearson <- mean(pearson_vec)
+mean_spearman <- mean(spearman_vec)
 score_mean_pearson <- mean_pearson / 2 + .5
 score_mean_spearman <- mean_spearman / 2 + .5
 
-metric_ids <- c("mean_pearson", "mean_spearman", "score_mean_pearson", "score_mean_spearman")
-metric_values <- c(mean_pearson, mean_spearman, score_mean_pearson, score_mean_spearman)
+metric_ids <- c("mean_pearson", "mean_spearman")
+metric_values <- c(mean_pearson, mean_spearman)
 
 cat("Create output object\n")
 out <- anndata::AnnData(

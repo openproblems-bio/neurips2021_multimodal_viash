@@ -1,5 +1,3 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
 mean_pearson	-1	1	true
 mean_spearman	-1	1	true
-score_mean_pearson	0	1	true
-score_mean_spearman	0	1	true
