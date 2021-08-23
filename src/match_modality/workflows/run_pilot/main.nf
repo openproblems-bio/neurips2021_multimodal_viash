@@ -4,12 +4,15 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "match_modality"
 
+include  { baseline_babel_knn }          from "$targetDir/${task}_methods/baseline_babel_knn/main.nf"          params(params)
 include  { baseline_dr_nn_knn }          from "$targetDir/${task}_methods/baseline_dr_nn_knn/main.nf"          params(params)
 include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseline_procrustes_knn/main.nf"     params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"              params(params)
-include  { aupr }             from "$targetDir/${task}_metrics/aupr/main.nf"             params(params)
+include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                 params(params)
+include  { aupr }                        from "$targetDir/${task}_metrics/aupr/main.nf"                        params(params)
+include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { extract_scores }              from "$targetDir/common/extract_scores/main.nf"                       params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
@@ -44,6 +47,10 @@ workflow pilot_wf {
     | baseline_procrustes_knn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_procrustes_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b2 = inputs 
+    | baseline_babel_knn
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_constant
@@ -53,13 +60,17 @@ workflow pilot_wf {
     | dummy_random
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_random", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d2 = solution
+  def d2 = inputs 
+    | dummy_zeros
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
+  def d3 = solution
     | map { id, input -> [ id, input, params ] } 
     | dummy_solution
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, d0, d1, d2)
+  def predictions = b0.mix(b1, b2, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
@@ -80,7 +91,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (aupr & check_format)
+    | (aupr & match_probability & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
