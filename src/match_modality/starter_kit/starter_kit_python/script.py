@@ -98,7 +98,10 @@ ind_i = np.tile(np.arange(input_test_mod1.n_obs), (n_neighbors, 1)).T.flatten()
 ind_j = indices.flatten()
 ind_dist = distances.flatten()
 ind_x = 2 * max(ind_dist) - ind_dist
-pairing_matrix = scipy.sparse.csr_matrix((ind_x, (ind_i, ind_j)))
+pairing_matrix = scipy.sparse.csr_matrix(
+    (ind_x, (ind_i, ind_j)),
+    dims=(input_test_mod1.n_obs, input_test_mod2.n_obs)
+)
 
 logging.info('write prediction output')
 out = ad.AnnData(
