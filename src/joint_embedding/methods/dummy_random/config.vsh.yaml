@@ -43,4 +43,4 @@ platforms:
       - type: python
         pip: [ anndata, numpy ]
   - type: nextflow
-    directive_time: 10m
+    labels: [ lowmem, lowtime, lowcpu ]
