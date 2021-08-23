@@ -1107,5 +1107,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_python"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_python/python_starter_kit"
   viash_version: "0.5.3dev"
-  git_commit: "a385be7212c5ebf77ce0e66419543945206df47f"
+  git_commit: "134ef274f167ba7089a11b910124f8d56c6a2e6e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
