@@ -158,7 +158,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process baseline_randomforest_process {
-  label 'lowmem'
+  label 'midmem'
   label 'lowtime'
   label 'lowcpu'
   tag "${id}"

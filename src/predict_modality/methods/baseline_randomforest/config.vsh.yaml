@@ -52,4 +52,4 @@ platforms:
       - type: r
         packages: [ ranger, lmds ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]

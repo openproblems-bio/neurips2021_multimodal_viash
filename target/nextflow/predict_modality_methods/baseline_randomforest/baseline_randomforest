@@ -362,21 +362,26 @@ dr_test <- dr[-ix, , drop = FALSE]
 
 cat("Predicting for each column in modality 2\\n")
 preds <- lapply(seq_len(ncol(responses_train)), function(i) {
-  y <- responses_train[,i]
-  if (length(unique(y)) > 1) {
-    rf <- ranger::ranger(
-      data = data.frame(YTRAIN = y, dr_train),
-      dependent.variable.name = "YTRAIN",
-      num.threads = 1
-    )
-    setNames(stats::predict(rf, dr_test)\$predictions, rownames(dr_test))
-  } else {
-    setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
-  }
+  y <- responses_train[, i]
+  pred <-
+   if (length(unique(y)) > 1) {
+      rf <- ranger::ranger(
+        data = data.frame(YTRAIN = y, dr_train),
+        dependent.variable.name = "YTRAIN",
+        num.threads = NULL # set to null for auto parallellisation
+      )
+      stats::predict(rf, dr_test)\$predictions
+    } else {
+      rep(unique(y), nrow(dr_test))
+    }
+  pred %>% 
+    round() %>% 
+    Matrix(sparse = TRUE) %>% 
+    Matrix::drop0()
 })
 
 cat("Creating outputs object\\n")
-prediction <- Matrix::Matrix(do.call(cbind, preds), sparse = TRUE)
+prediction <- do.call(cbind, preds)
 rownames(prediction) <- rownames(dr_test)
 colnames(prediction) <- colnames(ad2)
 
