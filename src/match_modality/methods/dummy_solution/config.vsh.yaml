@@ -31,5 +31,4 @@ platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

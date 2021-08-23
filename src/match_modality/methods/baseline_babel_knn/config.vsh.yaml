@@ -69,5 +69,4 @@ platforms:
         cran: [ lmds, FNN ]
         bioc: [ DropletUtils ]
   - type: nextflow
-    directive_time: 45m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]
