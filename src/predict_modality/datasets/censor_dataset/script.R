@@ -14,6 +14,7 @@ par <- list(
   output_test_mod1 = "output_test_mod1.h5ad",
   output_test_mod2 = "output_test_mod2.h5ad",
   seed = 1L,
+  max_mod1_columns = NULL,
   max_mod2_columns = 5000L
 )
 ## VIASH END
@@ -28,12 +29,14 @@ common_uns <- list(dataset_id = new_dataset_id)
 
 if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_raw)) {
   cat("Sampling mod1 columns\n")
-  ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns)
+  ad1_var <- apply(ad1_raw$X, 2, var)
+  ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns, prob = ad1_var)
   ad1_raw <- ad1_raw[, ad1_ix]
 }
 if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_raw)) {
   cat("Sampling mod2 columns\n")
-  ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns)
+  ad2_var <- apply(ad2_raw$X, 2, var)
+  ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns, prob = ad2_var)
   ad2_raw <- ad2_raw[, ad2_ix]
 }
 
