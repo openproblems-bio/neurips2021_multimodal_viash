@@ -674,6 +674,9 @@ functionality:
       }
       
       process ti_cons_process {
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -861,7 +864,10 @@ platform:
   registry: "openproblems"
   namespace_separator: "_"
   separate_multiple_outputs: true
-  labels: []
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/joint_embedding/metrics/ti_cons/config.vsh.yaml"
@@ -869,5 +875,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ti_cons"
   executable: "target/nextflow/joint_embedding_metrics/ti_cons/ti_cons"
   viash_version: "0.5.3dev"
-  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
+  git_commit: "a385be7212c5ebf77ce0e66419543945206df47f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

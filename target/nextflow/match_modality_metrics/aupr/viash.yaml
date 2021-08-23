@@ -391,7 +391,7 @@ functionality:
       values <- pred_summ\$x
       are_true <- pred_summ\$gold
       num_positive_interactions <- nrow(sol_summ)
-      num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
+      num_possible_interactions <- (nrow(ad_sol)*1.0) * nrow(ad_sol)
       extend_by <- 10000
       
       ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
@@ -908,5 +908,5 @@ info:
   output: "target/nextflow/match_modality_metrics/aupr"
   executable: "target/nextflow/match_modality_metrics/aupr/aupr"
   viash_version: "0.5.3dev"
-  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
+  git_commit: "a385be7212c5ebf77ce0e66419543945206df47f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

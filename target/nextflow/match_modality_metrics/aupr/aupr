@@ -335,7 +335,7 @@ cat("Calculate area under the curve\\n")
 values <- pred_summ\$x
 are_true <- pred_summ\$gold
 num_positive_interactions <- nrow(sol_summ)
-num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
+num_possible_interactions <- (nrow(ad_sol)*1.0) * nrow(ad_sol)
 extend_by <- 10000
 
 ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)

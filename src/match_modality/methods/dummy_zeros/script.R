@@ -24,9 +24,11 @@ input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1, backed = TRUE)
 input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2, backed = TRUE)
 
 knn_mat <- Matrix::Matrix(
-  data = numeric(0),
+  data = 0,
   nrow = nrow(input_test_mod1),
-  ncol = nrow(input_test_mod2)
+  ncol = nrow(input_test_mod2),
+  sparse = TRUE,
+  doDiag = FALSE
 )
 
 cat("Creating output anndata\n")

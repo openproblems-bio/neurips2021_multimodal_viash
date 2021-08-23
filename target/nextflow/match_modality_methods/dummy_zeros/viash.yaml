@@ -430,9 +430,11 @@ functionality:
       input_test_mod2 <- anndata::read_h5ad(par\$input_test_mod2, backed = TRUE)
       
       knn_mat <- Matrix::Matrix(
-        data = numeric(0),
+        data = 0,
         nrow = nrow(input_test_mod1),
-        ncol = nrow(input_test_mod2)
+        ncol = nrow(input_test_mod2),
+        sparse = TRUE,
+        doDiag = FALSE
       )
       
       cat("Creating output anndata\\n")
@@ -921,5 +923,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_zeros"
   executable: "target/nextflow/match_modality_methods/dummy_zeros/dummy_zeros"
   viash_version: "0.5.3dev"
-  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
+  git_commit: "a385be7212c5ebf77ce0e66419543945206df47f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

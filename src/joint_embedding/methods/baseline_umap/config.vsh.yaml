@@ -55,5 +55,4 @@ platforms:
       - type: r
         packages: [ uwot, irlba ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

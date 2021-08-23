@@ -158,6 +158,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process graph_conn_process {
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

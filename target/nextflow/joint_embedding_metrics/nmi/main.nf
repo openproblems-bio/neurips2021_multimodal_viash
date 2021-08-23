@@ -158,7 +158,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process nmi_process {
-  time '45m'
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

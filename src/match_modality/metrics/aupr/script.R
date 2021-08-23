@@ -13,8 +13,8 @@ requireNamespace("pracma", quietly = TRUE)
 #   output = "resources_test/match_modality/test_resource.scores.h5ad"
 # )
 par <- list(
-  input_solution = list.files("work/f5/9ca16cf20b3bc2c72ba1b84e9be8af", pattern = "*.test_sol.h5ad", full.names = TRUE),
-  input_prediction = list.files("work/f5/9ca16cf20b3bc2c72ba1b84e9be8af", pattern = "*.output.h5ad", full.names = TRUE),
+  input_solution = list.files("work/3b/3ea487497a1f91d39070866f9b6d2c/", pattern = "*.test_sol.h5ad", full.names = TRUE),
+  input_prediction = list.files("work/3b/3ea487497a1f91d39070866f9b6d2c/", pattern = "*.output.h5ad", full.names = TRUE),
   output = "debug.h5ad"
 )
 ## VIASH END
@@ -58,7 +58,7 @@ cat("Calculate area under the curve\n")
 values <- pred_summ$x
 are_true <- pred_summ$gold
 num_positive_interactions <- nrow(sol_summ)
-num_possible_interactions <- nrow(ad_sol) * nrow(ad_sol)
+num_possible_interactions <- (nrow(ad_sol)*1.0) * nrow(ad_sol)
 extend_by <- 10000
 
 ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
