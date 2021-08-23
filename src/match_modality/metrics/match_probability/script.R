@@ -34,9 +34,15 @@ X_sol <- ad_sol$X
 X_pred <- as(ad_pred$X, "CsparseMatrix")
 dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
 
-cat("Calculating the ")
-X_pred_normrow <- Matrix::Matrix(diag(1 / Matrix::rowSums(X_pred)), sparse = TRUE) %*% X_pred
-X_pred_normcol <- X_pred %*% Matrix::Matrix(diag(1 / Matrix::colSums(X_pred)), sparse = TRUE)
+cat("Calculating the match modality score")
+X_pred_normrow <- X_pred
+normrow_factor <- 1 / Matrix::rowSums(X_pred)
+X_pred_normrow@x <- X_pred_normrow@x * normrow_factor[X_pred@i+1]
+
+X_pred_normcol <- X_pred
+normcol_factor <- 1 / Matrix::colSums(X_pred)
+normcol_fac <- unlist(lapply(seq_len(nrow(X_pred)), function(i) rep(normcol_factor[[i]], X_pred@p[[i+1]] - X_pred@p[[i]])))
+X_pred_normcol@x <- X_pred_normcol@x * normcol_fac
 
 match_probability_mod1 <- sum(X_pred_normrow * X_sol) / sum(X_sol)
 match_probability_mod2 <- sum(X_pred_normcol * X_sol) / sum(X_sol)
