@@ -260,8 +260,6 @@ function clean_up {
 trap clean_up EXIT
 cat > "\$tempscript" << 'VIASHMAIN'
 cat("Load dependencies\\n")
-options(tidyverse.quiet = TRUE)
-library(tidyverse)
 library(testthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
@@ -316,8 +314,6 @@ spearman_vec[!is.finite(spearman_vec)] <- 0
 
 mean_pearson <- mean(pearson_vec)
 mean_spearman <- mean(spearman_vec)
-score_mean_pearson <- mean_pearson / 2 + .5
-score_mean_spearman <- mean_spearman / 2 + .5
 
 metric_ids <- c("mean_pearson", "mean_spearman")
 metric_values <- c(mean_pearson, mean_spearman)

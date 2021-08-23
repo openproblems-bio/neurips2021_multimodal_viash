@@ -478,7 +478,12 @@ functionality:
         j = as.vector(knn_out\$nn.index),
         x = max(knn_out\$nn.dist) * 2 - as.vector(knn_out\$nn.dist)
       )
-      knn_mat <- Matrix::sparseMatrix(i = df\$i, j = df\$j, x = df\$x)
+      knn_mat <- Matrix::sparseMatrix(
+        i = df\$i,
+        j = df\$j,
+        x = df\$x,
+        dims = list(nrow(dr_x1_test), nrow(dr_x2_test))
+      )
       
       cat("Creating output anndata\\n")
       out <- anndata::AnnData(
@@ -966,5 +971,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_dr_nn_knn"
   executable: "target/nextflow/match_modality_methods/baseline_dr_nn_knn/baseline_dr_nn_knn"
   viash_version: "0.5.3dev"
-  git_commit: "18de094a081549a05e0e3336ab4292228f2a83b4"
+  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

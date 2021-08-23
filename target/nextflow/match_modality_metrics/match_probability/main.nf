@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component aupr")
+      println("[ERROR] option --${it.name} not specified in component match_probability")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "aupr." + it.name + "." + extOrName
+          ? "match_probability." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process aupr_process {
+process match_probability_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process aupr_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.aupr.tests.testScript} | tee $output
+      ./${params.match_probability.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process aupr_process {
       """
 }
 
-workflow aupr {
+workflow match_probability {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "aupr"
+  def key = "match_probability"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow aupr {
       )
     }
 
-  result_ = aupr_process(id_input_output_function_cli_params_)
+  result_ = match_probability_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow aupr {
 
 workflow {
   def id = params.id
-  def fname = "aupr"
+  def fname = "match_probability"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.aupr
+  def inputFiles = params.match_probability
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = aupr(ch_)
+  result = match_probability(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.aupr.output = "aupr.log"
+  params.match_probability.output = "match_probability.log"
 
   Channel.from(rootDir) \
-    | filter { params.aupr.tests.isDefined } \
+    | filter { params.match_probability.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.aupr.tests.testResources.collect{ file( p + it ) },
+        params.match_probability.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | aupr
+    | match_probability
 
   emit:
-  aupr.out
+  match_probability.out
 }

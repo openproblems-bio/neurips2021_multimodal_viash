@@ -4,7 +4,6 @@ library(tidyverse)
 library(testthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
-requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
 par <- list(

@@ -38,6 +38,13 @@ Common:
 * Dataset loader: dyngen always simulates a linear trajectory. 
   The component now also outputs pseudotime and cell cycle information.
 
+## BUG FIXES
+
+Task 2, Match Modality:
+* Methods: Set dimensionality of sparse matrices to match expected dimensionality.
+* Dummy methods: Set dimensionality of sparse matrices to match expected dimensionality.
+* Starter kits: Set dimensionality of sparse matrices to match expected dimensionality.
+
 ## NOTES
 
 ¹ Requires viash 0.5.3.

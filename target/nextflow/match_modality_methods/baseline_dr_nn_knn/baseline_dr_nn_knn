@@ -401,7 +401,12 @@ df <- tibble(
   j = as.vector(knn_out\$nn.index),
   x = max(knn_out\$nn.dist) * 2 - as.vector(knn_out\$nn.dist)
 )
-knn_mat <- Matrix::sparseMatrix(i = df\$i, j = df\$j, x = df\$x)
+knn_mat <- Matrix::sparseMatrix(
+  i = df\$i,
+  j = df\$j,
+  x = df\$x,
+  dims = list(nrow(dr_x1_test), nrow(dr_x2_test))
+)
 
 cat("Creating output anndata\\n")
 out <- anndata::AnnData(

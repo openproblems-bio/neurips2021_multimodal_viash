@@ -307,8 +307,6 @@ functionality:
       trap clean_up EXIT
       cat > "\$tempscript" << 'VIASHMAIN'
       cat("Load dependencies\\n")
-      options(tidyverse.quiet = TRUE)
-      library(tidyverse)
       library(testthat, quietly = TRUE, warn.conflicts = FALSE)
       library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
       requireNamespace("anndata", quietly = TRUE)
@@ -363,8 +361,6 @@ functionality:
       
       mean_pearson <- mean(pearson_vec)
       mean_spearman <- mean(spearman_vec)
-      score_mean_pearson <- mean_pearson / 2 + .5
-      score_mean_spearman <- mean_spearman / 2 + .5
       
       metric_ids <- c("mean_pearson", "mean_spearman")
       metric_values <- c(mean_pearson, mean_spearman)
@@ -820,5 +816,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/correlation"
   executable: "target/nextflow/predict_modality_metrics/correlation/correlation"
   viash_version: "0.5.3dev"
-  git_commit: "18de094a081549a05e0e3336ab4292228f2a83b4"
+  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

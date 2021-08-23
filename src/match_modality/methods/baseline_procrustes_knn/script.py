@@ -13,12 +13,12 @@ from sklearn.neighbors import NearestNeighbors
 # replaced with the parameters as specified in your config.vsh.yaml.
 
 par = {
-    "input_train_mod1": "sample_data/test_resource.train_mod1.h5ad",
-    "input_train_mod2": "sample_data/test_resource.train_mod2.h5ad",
-    "input_train_sol": "sample_data/test_resource.train_sol.h5ad",
-    "input_test_mod1": "sample_data/test_resource.test_mod1.h5ad",
-    "input_test_mod2": "sample_data/test_resource.test_mod2.h5ad",
-    "output": "sample_data/test_resource.prediction.h5ad",
+    "input_train_mod1": "resources_test/match_modality/test_resource.train_mod1.h5ad",
+    "input_train_mod2": "resources_test/match_modality/test_resource.train_mod2.h5ad",
+    "input_train_sol": "resources_test/match_modality/test_resource.train_sol.h5ad",
+    "input_test_mod1": "resources_test/match_modality/test_resource.test_mod1.h5ad",
+    "input_test_mod2": "resources_test/match_modality/test_resource.test_mod2.h5ad",
+    "output": "resources_test/match_modality/test_resource.prediction.h5ad",
     "n_svd": 100,
 }
 ## VIASH END
@@ -88,7 +88,10 @@ ind_i = np.tile(np.arange(mod1te.n_obs), (n_neighbors, 1)).T.flatten()
 ind_j = indices.flatten()
 ind_dist = distances.flatten()
 ind_x = 2 * max(ind_dist) - ind_dist
-pairing_matrix = scipy.sparse.csr_matrix((ind_x, (ind_i, ind_j)))
+pairing_matrix = scipy.sparse.csr_matrix(
+    (ind_x, (ind_i, ind_j)),
+    shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
+)
 
 print("Write prediction output")
 prediction = ad.AnnData(

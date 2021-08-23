@@ -512,7 +512,10 @@ functionality:
       ind_j = indices.flatten()
       ind_dist = distances.flatten()
       ind_x = 2 * max(ind_dist) - ind_dist
-      pairing_matrix = scipy.sparse.csr_matrix((ind_x, (ind_i, ind_j)))
+      pairing_matrix = scipy.sparse.csr_matrix(
+          (ind_x, (ind_i, ind_j)),
+          shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
+      )
       
       print("Write prediction output")
       prediction = ad.AnnData(
@@ -1011,5 +1014,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_procrustes_knn"
   executable: "target/nextflow/match_modality_methods/baseline_procrustes_knn/baseline_procrustes_knn"
   viash_version: "0.5.3dev"
-  git_commit: "18de094a081549a05e0e3336ab4292228f2a83b4"
+  git_commit: "d756048ab7ea882d3465f83d5af026d07b523c3e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

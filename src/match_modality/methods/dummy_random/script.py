@@ -24,7 +24,10 @@ indices = np.random.randint(input_test_mod1.n_obs**2, size=num_values)
 mat_x = np.random.rand(num_values)
 mat_i = indices % input_test_mod1.n_obs
 mat_j = (indices / input_test_mod1.n_obs).astype(int)
-pairing_matrix = scipy.sparse.csr_matrix((mat_x, (mat_i, mat_j)))
+pairing_matrix = scipy.sparse.csr_matrix(
+    (mat_x, (mat_i, mat_j)),
+    shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
+)
 
 # Write out prediction
 prediction = ad.AnnData(

@@ -1,6 +1,4 @@
 cat("Load dependencies\n")
-options(tidyverse.quiet = TRUE)
-library(tidyverse)
 library(testthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
@@ -9,6 +7,11 @@ requireNamespace("anndata", quietly = TRUE)
 par <- list(
   input_solution = "resources_test/predict_modality/test_resource.test_mod2.h5ad",
   input_prediction = "resources_test/predict_modality/test_resource.prediction.h5ad",
+  output = "test_resource.scores.h5ad"
+)
+par <- list(
+  input_solution = "work/40/ef654fcb79dac281fc9d856eb773e6/totalvi_10x_pbmc_10k_rna.censor_dataset.output_test_mod2.h5ad",
+  input_prediction = "work/40/ef654fcb79dac281fc9d856eb773e6/totalvi_10x_pbmc_10k_rna.dummy_random.output.h5ad",
   output = "test_resource.scores.h5ad"
 )
 ## VIASH END
@@ -43,8 +46,6 @@ spearman_vec[!is.finite(spearman_vec)] <- 0
 
 mean_pearson <- mean(pearson_vec)
 mean_spearman <- mean(spearman_vec)
-score_mean_pearson <- mean_pearson / 2 + .5
-score_mean_spearman <- mean_spearman / 2 + .5
 
 metric_ids <- c("mean_pearson", "mean_spearman")
 metric_values <- c(mean_pearson, mean_spearman)
