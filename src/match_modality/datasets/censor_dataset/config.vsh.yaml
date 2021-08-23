@@ -72,4 +72,4 @@ platforms:
         packages: [ anndata, pandas, numpy ]
   - type: nextflow
     publish: true
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]
