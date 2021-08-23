@@ -1,0 +1,80 @@
+functionality:
+  name: visualization
+  namespace: joint_embedding
+
+  # metadata for your method
+  description: Visualize joint embedding
+  authors:
+    - name: Michaela Mueller
+      email: mumichae@in.tum.de
+      roles: [ author, maintainer ]
+      props: { github: mumichae, orcid: "0000-0002-1401-1785" }
+
+  # parameters
+  arguments:
+    # required inputs
+    - name: "--input_prediction"
+      type: "file"
+      example: "prediction.h5ad"
+      description: Predicted joint embedding.
+      required: true
+    - name: "--input_solution"
+      type: "file"
+      example: "solution.h5ad"
+      description: Ground truth dataset.
+      required: true
+    # required outputs
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "umap.png"
+      description: UMAP visualisation of joint embedding.
+      required: true
+    # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
+    - name: '--n_top_genes'
+      type: 'integer'
+      default: 2000
+      description: Number of genes to keep for highly variable gene selection.
+
+  # files your script needs
+  resources:
+    - type: python_script
+      path: script.py
+  
+  # resources for unit testing your component
+  tests:
+    - type: python_script
+      path: test.py
+    - path: sample_data
+
+# target platforms
+platforms:
+
+  # By specifying 'docker' platform, viash will build a standalone
+  # executable which uses docker in the back end to run your method.
+  - type: docker
+    # you need to specify a base image that contains at least bash and python
+    image: dataintuitive/randpy:py3.8
+    # You can specify additional dependencies with 'setup'.
+    # See https://viash.io/docs/reference_config/platform-docker/#setup-list
+    # for more information on how to add more dependencies.
+    setup:
+      # - type: apt
+      #   packages:
+      #     - bash
+      # - type: python
+      #   packages:
+      #     - scanpy
+      - type: python
+        packages:
+          - anndata
+          - umap-learn
+          - scanpy
+
+  # By specifying a 'nextflow', viash will also build a viash module
+  # which uses the docker container built above to also be able to
+  # run your method as part of a nextflow pipeline.
+  - type: nextflow
+    publish: true
+    directive_time: 5m
+    directive_memory: 10 GB
