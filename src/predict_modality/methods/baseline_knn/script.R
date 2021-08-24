@@ -56,7 +56,7 @@ out <- anndata::AnnData(
   X = prediction,
   uns = list(
     dataset_id = ad1_train$uns[["dataset_id"]],
-    method_id = "baseline_knearestneighbors"
+    method_id = "baseline_knn"
   )
 )
 
