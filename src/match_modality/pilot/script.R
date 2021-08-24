@@ -11,7 +11,7 @@ df %>% group_by(method_id) %>% filter(correct_format > 0) %>% summarise_if(is.nu
 df %>% group_by(method_id) %>% summarise_if(is.numeric, mean)
 
 ggplot(df %>% filter(method_id != "dummy_solution")) +
-  geom_point(aes(aupr, (match_probability_mod1 + match_probability_mod2)/2, colour = method_id)) +
+  geom_point(aes(aupr, match_probability, colour = method_id)) +
   theme_bw() +
   scale_colour_brewer(palette = "Set1")
 
