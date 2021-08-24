@@ -52,4 +52,4 @@ platforms:
       - type: python
         pip: [ anndata, scanpy ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowcpu ]
