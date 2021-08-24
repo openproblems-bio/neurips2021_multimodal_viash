@@ -6,7 +6,7 @@ task = "predict_modality"
 
 include  { baseline_randomforest }       from "$targetDir/${task}_methods/baseline_randomforest/main.nf"      params(params)
 include  { baseline_linearmodel }        from "$targetDir/${task}_methods/baseline_linearmodel/main.nf"       params(params)
-include  { baseline_knn }  from "$targetDir/${task}_methods/baseline_knn/main.nf" params(params)
+include  { baseline_knn }                from "$targetDir/${task}_methods/baseline_knn/main.nf"               params(params)
 include  { baseline_babel }              from "$targetDir/${task}_methods/baseline_babel/main.nf"             params(params)
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
