@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component baseline_knearestneighbors")
+      println("[ERROR] option --${it.name} not specified in component baseline_knn")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "baseline_knearestneighbors." + it.name + "." + extOrName
+          ? "baseline_knn." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process baseline_knearestneighbors_process {
+process baseline_knn_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process baseline_knearestneighbors_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.baseline_knearestneighbors.tests.testScript} | tee $output
+      ./${params.baseline_knn.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process baseline_knearestneighbors_process {
       """
 }
 
-workflow baseline_knearestneighbors {
+workflow baseline_knn {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "baseline_knearestneighbors"
+  def key = "baseline_knn"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow baseline_knearestneighbors {
       )
     }
 
-  result_ = baseline_knearestneighbors_process(id_input_output_function_cli_params_)
+  result_ = baseline_knn_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow baseline_knearestneighbors {
 
 workflow {
   def id = params.id
-  def fname = "baseline_knearestneighbors"
+  def fname = "baseline_knn"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.baseline_knearestneighbors
+  def inputFiles = params.baseline_knn
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = baseline_knearestneighbors(ch_)
+  result = baseline_knn(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.baseline_knearestneighbors.output = "baseline_knearestneighbors.log"
+  params.baseline_knn.output = "baseline_knn.log"
 
   Channel.from(rootDir) \
-    | filter { params.baseline_knearestneighbors.tests.isDefined } \
+    | filter { params.baseline_knn.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.baseline_knearestneighbors.tests.testResources.collect{ file( p + it ) },
+        params.baseline_knn.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | baseline_knearestneighbors
+    | baseline_knn
 
   emit:
-  baseline_knearestneighbors.out
+  baseline_knn.out
 }

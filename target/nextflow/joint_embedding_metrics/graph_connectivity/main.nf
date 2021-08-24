@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component graph_conn")
+      println("[ERROR] option --${it.name} not specified in component graph_connectivity")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "graph_conn." + it.name + "." + extOrName
+          ? "graph_connectivity." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process graph_conn_process {
+process graph_connectivity_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process graph_conn_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.graph_conn.tests.testScript} | tee $output
+      ./${params.graph_connectivity.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process graph_conn_process {
       """
 }
 
-workflow graph_conn {
+workflow graph_connectivity {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "graph_conn"
+  def key = "graph_connectivity"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow graph_conn {
       )
     }
 
-  result_ = graph_conn_process(id_input_output_function_cli_params_)
+  result_ = graph_connectivity_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow graph_conn {
 
 workflow {
   def id = params.id
-  def fname = "graph_conn"
+  def fname = "graph_connectivity"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.graph_conn
+  def inputFiles = params.graph_connectivity
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = graph_conn(ch_)
+  result = graph_connectivity(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.graph_conn.output = "graph_conn.log"
+  params.graph_connectivity.output = "graph_connectivity.log"
 
   Channel.from(rootDir) \
-    | filter { params.graph_conn.tests.isDefined } \
+    | filter { params.graph_connectivity.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.graph_conn.tests.testResources.collect{ file( p + it ) },
+        params.graph_connectivity.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | graph_conn
+    | graph_connectivity
 
   emit:
-  graph_conn.out
+  graph_connectivity.out
 }

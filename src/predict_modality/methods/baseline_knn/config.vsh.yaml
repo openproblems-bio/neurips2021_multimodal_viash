@@ -1,5 +1,5 @@
 functionality:
-  name: baseline_knearestneighbors
+  name: baseline_knn
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against.

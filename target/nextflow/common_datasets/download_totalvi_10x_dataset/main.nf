@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component download_totalvi_10x_datasets")
+      println("[ERROR] option --${it.name} not specified in component download_totalvi_10x_dataset")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "download_totalvi_10x_datasets." + it.name + "." + extOrName
+          ? "download_totalvi_10x_dataset." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -171,7 +171,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process download_totalvi_10x_datasets_process {
+process download_totalvi_10x_dataset_process {
   label 'midmem'
   label 'lowtime'
   label 'lowcpu'
@@ -202,7 +202,7 @@ process download_totalvi_10x_datasets_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.download_totalvi_10x_datasets.tests.testScript} | tee $output
+      ./${params.download_totalvi_10x_dataset.tests.testScript} | tee $output
       """
     else
       """
@@ -217,14 +217,14 @@ process download_totalvi_10x_datasets_process {
       """
 }
 
-workflow download_totalvi_10x_datasets {
+workflow download_totalvi_10x_dataset {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "download_totalvi_10x_datasets"
+  def key = "download_totalvi_10x_dataset"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -269,7 +269,7 @@ workflow download_totalvi_10x_datasets {
       )
     }
 
-  result_ = download_totalvi_10x_datasets_process(id_input_output_function_cli_params_)
+  result_ = download_totalvi_10x_dataset_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -297,7 +297,7 @@ workflow download_totalvi_10x_datasets {
 
 workflow {
   def id = params.id
-  def fname = "download_totalvi_10x_datasets"
+  def fname = "download_totalvi_10x_dataset"
 
   def _params = params
 
@@ -309,14 +309,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.download_totalvi_10x_datasets
+  def inputFiles = params.download_totalvi_10x_dataset
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = download_totalvi_10x_datasets(ch_)
+  result = download_totalvi_10x_dataset(ch_)
 
   result \
     | filterOutput_rna \
@@ -338,17 +338,17 @@ workflow test {
 
   main:
   params.test = true
-  params.download_totalvi_10x_datasets.output = "download_totalvi_10x_datasets.log"
+  params.download_totalvi_10x_dataset.output = "download_totalvi_10x_dataset.log"
 
   Channel.from(rootDir) \
-    | filter { params.download_totalvi_10x_datasets.tests.isDefined } \
+    | filter { params.download_totalvi_10x_dataset.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.download_totalvi_10x_datasets.tests.testResources.collect{ file( p + it ) },
+        params.download_totalvi_10x_dataset.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | download_totalvi_10x_datasets
+    | download_totalvi_10x_dataset
 
   emit:
-  download_totalvi_10x_datasets.out
+  download_totalvi_10x_dataset.out
 }
