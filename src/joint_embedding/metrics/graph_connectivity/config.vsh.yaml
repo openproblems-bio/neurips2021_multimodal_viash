@@ -1,5 +1,5 @@
 functionality:
-  name: graph_conn
+  name: graph_connectivity
   namespace: joint_embedding_metrics
   version: dev
   description: Graph connectivity
