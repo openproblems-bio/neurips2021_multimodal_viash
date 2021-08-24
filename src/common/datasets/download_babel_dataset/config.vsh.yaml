@@ -1,5 +1,5 @@
 functionality:
-  name: download_babel_datasets
+  name: download_babel_dataset
   namespace: common_datasets
   version: dev
   description: Download Babel GM12878 cell line ATAC-RNA multiome datasets
