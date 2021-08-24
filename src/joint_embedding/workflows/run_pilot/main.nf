@@ -12,7 +12,7 @@ include  { dummy_random }               from "$targetDir/${task}_methods/dummy_r
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
 include  { rf_oob }                     from "$targetDir/${task}_metrics/rf_oob/main.nf"                       params(params)
-include  { latent_mixings }             from "$targetDir/${task}_metrics/latent_mixings/main.nf"               params(params)
+include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
 include  { asw_label }                  from "$targetDir/${task}_metrics/asw_label/main.nf"                    params(params)
@@ -98,7 +98,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (rf_oob & latent_mixings & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons && graph_connectivity & check_format)
+    | (rf_oob & latent_mixing & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
