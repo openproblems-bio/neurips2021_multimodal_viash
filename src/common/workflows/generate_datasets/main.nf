@@ -126,8 +126,8 @@ workflow babel {
  */
 workflow generate_datasets {
     main:
-    output_ = (dyngen & public_10x & azimuth & totalvi_spleen_lymph & totalvi_10x & babel)
-      | mix
+    output_ = 
+      (dyngen & public_10x & azimuth & totalvi_spleen_lymph & totalvi_10x & babel) | mix
       | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG0", it[0], it[1] ] }
       | quality_control
