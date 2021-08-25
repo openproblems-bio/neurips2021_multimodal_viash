@@ -10,6 +10,9 @@ Common:
 * Dataset processor: Added a component for simulating batch effects if 
   dataset doesn't consist of multiple batches.
 
+* Dataset processor: Added a component for generating cell type labels if 
+  if none are provided.
+
 * NextFlow: Added resource labels to better specify a components resource requirements.
   - CPU: { lowcpu: 2, midcpu: 4, highcpu: 15, vhighcpu: 30 }
   - Memory: { lowmem: 10 GB, midmem: 20 GB, highmem: 55 GB, vhighmem: 110 GB }
