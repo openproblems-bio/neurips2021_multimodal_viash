@@ -26,7 +26,7 @@ input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2, backed = TRUE)
 knn_df <-
   expand.grid(
     i = seq_len(nrow(input_test_mod1)),
-    j = seq_len(min(nrow(input_test_mod2), 100))
+    j = seq_len(min(nrow(input_test_mod2), 1000))
   )
 knn_mat <- 
   Matrix::sparseMatrix(

@@ -50,8 +50,8 @@ pred_summ <- summary(X_pred) %>%
   mutate(gold = ifelse(is.na(gold), 0, gold))
 
 expect_true(
-  nrow(pred_summ) <= 100 * nrow(sol_summ),
-  info = "Number of non-zero values for the prediction should be less or equal to 100 times the number of cells in the dataset."
+  nrow(pred_summ) <= 1000 * nrow(sol_summ),
+  info = "Number of non-zero values for the prediction should be less or equal to 1000 times the number of cells in the dataset."
 )
 
 cat("Calculate area under the curve\n")

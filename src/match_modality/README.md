@@ -67,11 +67,11 @@ The `output_train_sol` and `output_test_sol` files contain sparse matrices of wh
 
 This component should output only *one* h5ad file, `--output`, containing the predicted pairings of the two input datasets.
 
-  * `X`: The sparse pairing matrix. Dimensions N×N with at most 100×N non-zero values, where N is the number of cells in the test set.
+  * `X`: The sparse pairing matrix. Dimensions N×N with at most 1000×N non-zero values, where N is the number of cells in the test set.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 
-If `input_test_mod1` has dimensions N×P and `input_test_mod2` has dimensions N×Q, the pairing matrix must be a sparse N×N matrix containing **at most 100×N non-zero values**. Predictions with more than 100×N non-zero values will be rejected by the metric component.
+If `input_test_mod1` has dimensions N×P and `input_test_mod2` has dimensions N×Q, the pairing matrix must be a sparse N×N matrix containing **at most 1000×N non-zero values**. Predictions with more than 1000×N non-zero values will be rejected by the metric component.
 
 ### Metric component
 
@@ -85,7 +85,7 @@ This component should output two h5ad files, `--input_prediction` and `--input_s
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
 
-If the test set contains N cells, the sparse pairing matrices should have a dimensionality of N×N with at most 100×N non-zero values.
+If the test set contains N cells, the sparse pairing matrices should have a dimensionality of N×N with at most 1000×N non-zero values.
 
 #### Output data formats
 
