@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component dummy_constant")
+      println("[ERROR] option --${it.name} not specified in component dummy_meanpergene")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "dummy_constant." + it.name + "." + extOrName
+          ? "dummy_meanpergene." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process dummy_constant_process {
+process dummy_meanpergene_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process dummy_constant_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.dummy_constant.tests.testScript} | tee $output
+      ./${params.dummy_meanpergene.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process dummy_constant_process {
       """
 }
 
-workflow dummy_constant {
+workflow dummy_meanpergene {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "dummy_constant"
+  def key = "dummy_meanpergene"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow dummy_constant {
       )
     }
 
-  result_ = dummy_constant_process(id_input_output_function_cli_params_)
+  result_ = dummy_meanpergene_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow dummy_constant {
 
 workflow {
   def id = params.id
-  def fname = "dummy_constant"
+  def fname = "dummy_meanpergene"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.dummy_constant
+  def inputFiles = params.dummy_meanpergene
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = dummy_constant(ch_)
+  result = dummy_meanpergene(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.dummy_constant.output = "dummy_constant.log"
+  params.dummy_meanpergene.output = "dummy_meanpergene.log"
 
   Channel.from(rootDir) \
-    | filter { params.dummy_constant.tests.isDefined } \
+    | filter { params.dummy_meanpergene.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.dummy_constant.tests.testResources.collect{ file( p + it ) },
+        params.dummy_meanpergene.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | dummy_constant
+    | dummy_meanpergene
 
   emit:
-  dummy_constant.out
+  dummy_meanpergene.out
 }

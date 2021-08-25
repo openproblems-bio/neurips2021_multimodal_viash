@@ -1,0 +1,54 @@
+Aug-24 13:50:31.825 [main] DEBUG nextflow.cli.Launcher - $> nextflow run . -main-script src/predict_modality/workflows/run_pilot/main.nf -entry pilot_wf --publishDir output/pilot/predict_modality/ -resume
+Aug-24 13:50:31.971 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.04.1
+Aug-24 13:50:32.005 [main] INFO  nextflow.cli.CmdRun - Launching `src/predict_modality/workflows/run_pilot/main.nf` [stoic_hilbert] - revision: 8cfcb444f5
+Aug-24 13:50:32.023 [main] DEBUG nextflow.config.ConfigBuilder - Found config base: /home/ec2-user/ssd/neurips2021_multimodal_viash/src/predict_modality/workflows/run_pilot/nextflow.config
+Aug-24 13:50:32.024 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/ec2-user/ssd/neurips2021_multimodal_viash/nextflow.config
+Aug-24 13:50:32.025 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/ec2-user/ssd/neurips2021_multimodal_viash/src/predict_modality/workflows/run_pilot/nextflow.config
+Aug-24 13:50:32.025 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/ec2-user/ssd/neurips2021_multimodal_viash/nextflow.config
+Aug-24 13:50:32.058 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Aug-24 13:50:34.754 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Aug-24 13:50:34.828 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/home/ec2-user/.nextflow/plugins
+Aug-24 13:50:34.830 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Aug-24 13:50:34.834 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins local root: .nextflow/plr/empty
+Aug-24 13:50:34.844 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Aug-24 13:50:34.846 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Aug-24 13:50:34.851 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Aug-24 13:50:34.864 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Aug-24 13:50:34.927 [main] DEBUG nextflow.Session - Session uuid: b1bea446-69cf-49e6-8ce2-2fd06d18afc8
+Aug-24 13:50:34.927 [main] DEBUG nextflow.Session - Run name: stoic_hilbert
+Aug-24 13:50:34.928 [main] DEBUG nextflow.Session - Executor pool size: 64
+Aug-24 13:50:34.961 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.04.1 build 5556
+  Created: 14-05-2021 15:20 UTC 
+  System: Linux 4.14.238-182.422.amzn2.x86_64
+  Runtime: Groovy 3.0.7 on OpenJDK 64-Bit Server VM 1.8.0_302-b08
+  Encoding: UTF-8 (UTF-8)
+  Process: 38421@ip-172-31-43-211.us-west-2.compute.internal [172.31.43.211]
+  CPUs: 64 - Mem: 499.5 GB (369.7 GB) - Swap: 0 (0)
+Aug-24 13:50:35.060 [main] DEBUG nextflow.Session - Work-dir: /home/ec2-user/ssd/neurips2021_multimodal_viash/work [ext2/ext3]
+Aug-24 13:50:35.060 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/ec2-user/ssd/neurips2021_multimodal_viash/src/predict_modality/workflows/run_pilot/bin
+Aug-24 13:50:35.076 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Aug-24 13:50:35.091 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Aug-24 13:50:35.243 [main] ERROR nextflow.cli.Launcher - Unable to acquire lock on session with ID b1bea446-69cf-49e6-8ce2-2fd06d18afc8
+
+Common reasons of this error are:
+ - You are trying to resume the execution of an already running pipeline
+ - A previous execution was abruptly interrupted leaving the session open
+
+You can check what process is holding the lock file by using the following command:
+ - lsof /home/ec2-user/ssd/neurips2021_multimodal_viash/.nextflow/cache/b1bea446-69cf-49e6-8ce2-2fd06d18afc8/db/LOCK
+java.io.IOException: Unable to acquire lock on session with ID b1bea446-69cf-49e6-8ce2-2fd06d18afc8
+
+Common reasons of this error are:
+ - You are trying to resume the execution of an already running pipeline
+ - A previous execution was abruptly interrupted leaving the session open
+
+You can check what process is holding the lock file by using the following command:
+ - lsof /home/ec2-user/ssd/neurips2021_multimodal_viash/.nextflow/cache/b1bea446-69cf-49e6-8ce2-2fd06d18afc8/db/LOCK
+	at nextflow.CacheDB.openDb(CacheDB.groovy:110)
+	at nextflow.CacheDB.open(CacheDB.groovy:129)
+	at nextflow.Session.init(Session.groovy:378)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:112)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:302)
+	at nextflow.cli.Launcher.run(Launcher.groovy:475)
+	at nextflow.cli.Launcher.main(Launcher.groovy:657)

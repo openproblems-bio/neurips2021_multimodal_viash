@@ -1,5 +1,5 @@
 functionality:
-  name: dummy_constant
+  name: dummy_meanpergene
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against. Predicts the mean training vector

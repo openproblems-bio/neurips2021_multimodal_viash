@@ -1,0 +1,41 @@
+Launching `src/match_modality/workflows/run_pilot/main.nf` [mighty_waddington] - revision: fdee918c26
+executor >  local (45)
+executor >  local (47)
+executor >  local (47)
+executor >  local (48)
+executor >  local (49)
+[1d/88a1c5] process > pilot_wf:baseline_dr_nn_knn:baseline_dr_nn_knn_process (10x_pbmc_granulocyte_sorted_10k) [ 88%] 22 of 25, cached: 22
+executor >  local (56)
+executor >  local (61)
+executor >  local (61)
+executor >  local (62)
+executor >  local (63)
+executor >  local (63)
+executor >  local (79)
+executor >  local (135)
+[30/3922c2] process > pilot_wf:baseline_dr_nn_knn:baseline_dr_nn_knn_process (azimuth_ref)                         [100%] 25 of 25, cached: 22, failed: 1 ✔
+[4d/162e6b] process > pilot_wf:baseline_procrustes_knn:baseline_procrustes_knn_process (babel_GM12878)             [100%] 25 of 25, cached: 24 ✔
+[de/3c65b8] process > pilot_wf:baseline_babel_knn:baseline_babel_knn_process (azimuth_ref)                         [100%] 25 of 25, failed: 25 ✔
+[3b/11400e] process > pilot_wf:baseline_dr_knnr_knn:baseline_dr_knnr_knn_process (azimuth_ref)                     [100%] 25 of 25, cached: 21, failed: 1 ✔
+[8c/102532] process > pilot_wf:baseline_dr_nn_ga:baseline_dr_nn_ga_process (10x_pbmc_granulocyte_sorted_10k)       [100%] 25 of 25, cached: 14, failed: 7 ✔
+[e7/7e82a7] process > pilot_wf:dummy_constant:dummy_constant_process (babel_GM12878)                               [100%] 25 of 25, cached: 23 ✔
+[be/0fc2c7] process > pilot_wf:dummy_random:dummy_random_process (babel_GM12878)                                   [100%] 25 of 25, cached: 24 ✔
+[02/6a475a] process > pilot_wf:dummy_zeros:dummy_zeros_process (babel_GM12878)                                     [100%] 25 of 25, cached: 24 ✔
+[41/697e9f] process > pilot_wf:dummy_solution:dummy_solution_process (babel_GM12878)                               [100%] 25 of 25, cached: 24 ✔
+[d0/043821] process > pilot_wf:get_id_predictions (191)                                                            [100%] 191 of 191, cached: 176 ✔
+[df/b5cf92] process > pilot_wf:get_id_solutions (4)                                                                [100%] 25 of 25 ✔
+[ad/0f7b11] process > pilot_wf:bind_tsv_rows:bind_tsv_rows_process (meta)                                          [100%] 1 of 1, cached: 1 ✔
+[53/3718c2] process > pilot_wf:aupr:aupr_process (babel_GM12878_baseline_procrustes_knn)                           [100%] 191 of 191, cached: 176 ✔
+[88/07d324] process > pilot_wf:match_probability:match_probability_process (babel_GM12878_baseline_procrustes_knn) [100%] 191 of 191, cached: 176 ✔
+[76/7dbec7] process > pilot_wf:check_format:check_format_process (babel_GM12878_baseline_procrustes_knn)           [100%] 191 of 191, cached: 176 ✔
+[b1/b6e522] process > pilot_wf:extract_scores:extract_scores_process (output)                                      [100%] 1 of 1 ✔
+[8c/102532] NOTE: Process `pilot_wf:baseline_dr_nn_ga:baseline_dr_nn_ga_process (10x_pbmc_granulocyte_sorted_10k)` failed -- Error is ignored
+Completed at: 24-Aug-2021 17:18:50
+Duration    : 6h 37m 12s
+CPU hours   : 379.7 (4.7% cached, 86.5% failed)
+Succeeded   : 101
+Cached      : 881
+Ignored     : 34
+Failed      : 34
+
+

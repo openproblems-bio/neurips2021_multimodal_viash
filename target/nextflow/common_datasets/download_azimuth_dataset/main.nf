@@ -172,7 +172,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_azimuth_dataset_process {
-  label 'midmem'
+  label 'highmem'
   label 'midtime'
   label 'midcpu'
   tag "${id}"

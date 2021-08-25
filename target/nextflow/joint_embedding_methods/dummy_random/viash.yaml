@@ -812,5 +812,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_random"
   executable: "target/nextflow/joint_embedding_methods/dummy_random/dummy_random"
   viash_version: "0.5.3dev"
-  git_commit: "f0efa95fb05e5fcd61f9450c28a1b5423950136e"
+  git_commit: "6506a25df0d0dbc49cb2bbeba4fca4fa45f4a2f6"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

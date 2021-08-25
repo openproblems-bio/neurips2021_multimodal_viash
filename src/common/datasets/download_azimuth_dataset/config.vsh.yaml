@@ -60,4 +60,4 @@ platforms:
       - type: python
         pip: [ anndata, scanpy, scipy ]
   - type: nextflow
-    labels: [ midmem, midtime, midcpu ]
+    labels: [ highmem, midtime, midcpu ]
