@@ -48,6 +48,7 @@ assert ad_pred.uns['method_id'] == method_id
 
 print("> Checking X")
 assert issparse(ad_pred.X)
+assert ad_pred.X.nonzero()[0].size <= 100 * ad_sol.n_obs
 assert ad_pred.n_obs == ad_sol.n_obs
 assert ad_pred.n_vars == ad_sol.n_vars
 assert all(ad_pred.obs_names == ad_sol.obs_names)
