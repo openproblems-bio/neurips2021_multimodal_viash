@@ -1,6 +1,7 @@
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE, quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
+requireNamespace("SCORPIUS", quietly = TRUE)
 
 ## VIASH START
 par <- list(

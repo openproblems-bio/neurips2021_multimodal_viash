@@ -648,7 +648,6 @@ functionality:
       
       process cluster_celltype_process {
         label 'lowmem'
-        label 'lowtime'
         label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
@@ -840,7 +839,6 @@ platform:
   separate_multiple_outputs: true
   labels:
   - "lowmem"
-  - "lowtime"
   - "lowcpu"
 platforms: []
 info:
@@ -849,5 +847,5 @@ info:
   output: "target/nextflow/common_process_dataset/cluster_celltype"
   executable: "target/nextflow/common_process_dataset/cluster_celltype/cluster_celltype"
   viash_version: "0.5.3dev"
-  git_commit: "6506a25df0d0dbc49cb2bbeba4fca4fa45f4a2f6"
+  git_commit: "bdd9c012f711aabd00b49c640eabc80ddd2caee2"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

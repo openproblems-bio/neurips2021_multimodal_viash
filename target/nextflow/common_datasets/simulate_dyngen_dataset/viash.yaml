@@ -22,6 +22,26 @@ functionality:
     multiple: false
     multiple_sep: ":"
   - type: "file"
+    name: "--reference_rna"
+    alternatives: []
+    description: "A reference RNA dataset."
+    example: "input_rna_reference.h5ad"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "file"
+    name: "--reference_mod2"
+    alternatives: []
+    description: "A reference mod2 dataset."
+    example: "input_mod2_reference.h5ad"
+    must_exist: false
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "file"
     name: "--output_rna"
     alternatives: []
     description: "Output h5ad RNA file."
@@ -109,15 +129,6 @@ functionality:
     - "-protein"
     description: "Whether or not to store protein count information."
     direction: "Input"
-  - type: "integer"
-    name: "--num_proteins"
-    alternatives: []
-    description: "The number of proteins to sample."
-    default: 50
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
   - type: "integer"
     name: "--num_threads"
     alternatives: []
@@ -305,6 +316,20 @@ functionality:
         echo ""
       
       
+        echo "   --reference_rna"
+        echo "        type: file"
+        echo "        example: input_rna_reference.h5ad"
+        echo "        A reference RNA dataset."
+        echo ""
+      
+      
+        echo "   --reference_mod2"
+        echo "        type: file"
+        echo "        example: input_mod2_reference.h5ad"
+        echo "        A reference mod2 dataset."
+        echo ""
+      
+      
         echo "   --output_rna"
         echo "        type: file, required parameter, output"
         echo "        example: output_rna.h5ad"
@@ -373,13 +398,6 @@ functionality:
         echo ""
       
       
-        echo "   --num_proteins"
-        echo "        type: integer"
-        echo "        default: 50"
-        echo "        The number of proteins to sample."
-        echo ""
-      
-      
         echo "   --num_threads"
         echo "        type: integer"
         echo "        default: 1"
@@ -435,6 +453,22 @@ functionality:
                   ;;
               --id=*)
                   VIASH_PAR_ID=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --reference_rna)
+                  VIASH_PAR_REFERENCE_RNA="$2"
+                  shift 2
+                  ;;
+              --reference_rna=*)
+                  VIASH_PAR_REFERENCE_RNA=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --reference_mod2)
+                  VIASH_PAR_REFERENCE_MOD2="$2"
+                  shift 2
+                  ;;
+              --reference_mod2=*)
+                  VIASH_PAR_REFERENCE_MOD2=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
               --output_rna)
@@ -521,14 +555,6 @@ functionality:
                   VIASH_PAR_STORE_PROTEIN=true
                   shift 1
                   ;;
-              --num_proteins)
-                  VIASH_PAR_NUM_PROTEINS="$2"
-                  shift 2
-                  ;;
-              --num_proteins=*)
-                  VIASH_PAR_NUM_PROTEINS=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
               --num_threads)
                   VIASH_PAR_NUM_THREADS="$2"
                   shift 2
@@ -604,9 +630,6 @@ functionality:
       if [ -z "$VIASH_PAR_STORE_PROTEIN" ]; then
         VIASH_PAR_STORE_PROTEIN="false"
       fi
-      if [ -z "$VIASH_PAR_NUM_PROTEINS" ]; then
-        VIASH_PAR_NUM_PROTEINS="50"
-      fi
       if [ -z "$VIASH_PAR_NUM_THREADS" ]; then
         VIASH_PAR_NUM_THREADS="1"
       fi
@@ -632,6 +655,8 @@ functionality:
       # get parameters from cli
       par <- list(
         "id" = $( if [ ! -z ${VIASH_PAR_ID+x} ]; then echo "'$VIASH_PAR_ID'"; else echo NULL; fi ),
+        "reference_rna" = $( if [ ! -z ${VIASH_PAR_REFERENCE_RNA+x} ]; then echo "'$VIASH_PAR_REFERENCE_RNA'"; else echo NULL; fi ),
+        "reference_mod2" = $( if [ ! -z ${VIASH_PAR_REFERENCE_MOD2+x} ]; then echo "'$VIASH_PAR_REFERENCE_MOD2'"; else echo NULL; fi ),
         "output_rna" = $( if [ ! -z ${VIASH_PAR_OUTPUT_RNA+x} ]; then echo "'$VIASH_PAR_OUTPUT_RNA'"; else echo NULL; fi ),
         "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi ),
         "plot" = $( if [ ! -z ${VIASH_PAR_PLOT+x} ]; then echo "'$VIASH_PAR_PLOT'"; else echo NULL; fi ),
@@ -642,7 +667,6 @@ functionality:
         "ssa_tau" = $( if [ ! -z ${VIASH_PAR_SSA_TAU+x} ]; then echo "as.numeric($VIASH_PAR_SSA_TAU)"; else echo NULL; fi ),
         "store_chromatin" = $( if [ ! -z ${VIASH_PAR_STORE_CHROMATIN+x} ]; then echo "as.logical(toupper('$VIASH_PAR_STORE_CHROMATIN'))"; else echo NULL; fi ),
         "store_protein" = $( if [ ! -z ${VIASH_PAR_STORE_PROTEIN+x} ]; then echo "as.logical(toupper('$VIASH_PAR_STORE_PROTEIN'))"; else echo NULL; fi ),
-        "num_proteins" = $( if [ ! -z ${VIASH_PAR_NUM_PROTEINS+x} ]; then echo "as.integer($VIASH_PAR_NUM_PROTEINS)"; else echo NULL; fi ),
         "num_threads" = $( if [ ! -z ${VIASH_PAR_NUM_THREADS+x} ]; then echo "as.integer($VIASH_PAR_NUM_THREADS)"; else echo NULL; fi ),
         "seed" = $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "as.integer($VIASH_PAR_SEED)"; else echo NULL; fi ),
         "cache_dir" = $( if [ ! -z ${VIASH_PAR_CACHE_DIR+x} ]; then echo "'$VIASH_PAR_CACHE_DIR'"; else echo NULL; fi )
@@ -663,10 +687,31 @@ functionality:
         set.seed(par\$seed)
       }
       if (par\$store_protein == par\$store_chromatin) {
-        cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\\n")
+        stop("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\\n")
       }
       
-      # start from given backbone and a cyclic backbone
+      # Read reference datasets
+      ref_rna <-
+        if (!is.null(par\$reference_rna)) {
+          anndata::read_h5ad(par\$reference_rna)
+        } else {
+          NULL
+        }
+      ref_mod2 <-
+        if (!is.null(par\$reference_mod2)) {
+          ad <- anndata::read_h5ad(par\$reference_mod2)
+          if (par\$store_protein && unique(ad\$var[["feature_types"]]) != "ADT") {
+            stop("If --store_protein, reference_mod2 should be an ADT dataset")
+          }
+          if (par\$store_chromatin && unique(ad\$var[["feature_types"]]) != "ATAC") {
+            stop("If --store_chromatin, reference_mod2 should be an ATAC dataset")
+          }
+          ad
+        } else {
+          NULL
+        }
+      
+      # start from linear
       backbone_init <- bblego(
         bblego_start("A", type = "simple"),
         bblego_linear("A", "B", num_modules = 10),
@@ -675,7 +720,7 @@ functionality:
         bblego_end("D")
       )
       
-      
+      # add a simple cycle to it
       module_info <- bind_rows(
         backbone_init\$module_info %>% select(-color),
         tribble(
@@ -687,7 +732,6 @@ functionality:
           "CC5", 0, TRUE, 1
         )
       )
-      
       module_network <- bind_rows(
         backbone_init\$module_network,
         tribble(
@@ -700,13 +744,13 @@ functionality:
           "CC5", "CC1", -1L, 100, 2
         )
       )
-      
       backbone <- backbone(
         module_info = module_info,
         module_network = module_network,
         expression_patterns = backbone_init\$expression_patterns
       )
       
+      # compute simulation times
       burn_time <- simtime_from_backbone(backbone, burn = TRUE) * 4
       total_time <- simtime_from_backbone(backbone, burn = FALSE) / 3
       
@@ -732,6 +776,9 @@ functionality:
             num_simulations = round(0.66*par\$num_simulations)
           ),
           compute_cellwise_grn = par\$store_chromatin
+        ),
+        experiment_params = experiment_snapshot(
+          realcount = if (!is.null(ref_rna)) ref_rna\$X else NULL,
         ),
         num_cores = par\$num_threads,
         verbose = TRUE,
@@ -842,13 +889,20 @@ functionality:
       if (par\$store_protein) {
         cat("Processing Antibody data\\n")
         # construct AbSeq-like data from protein counts
-        # TODO: use real AbSeq data to map distributions
-        counts_protein <- dataset\$counts_protein
+        counts_protein_sim <- dataset\$counts_protein
         var_protein <- var %>% mutate(feature_types = "ADT")
       
+        # map counts using reference dataset
+        counts_protein <-
+          if (!is.null(ref_mod2)) {
+            dyngen:::.simulate_counts_from_realcounts(counts_protein_sim, ref_mod2\$X)
+          } else {
+            counts_protein_sim
+          }
+      
         # sample 50 genes
-        if (ncol(counts_protein) > par\$num_proteins) {
-          sample_genes <- sample.int(ncol(counts_protein), par\$num_proteins)
+        if (!is.null(ref_mod2) && ncol(counts_protein) > ncol(ref_mod2)) {
+          sample_genes <- sample.int(ncol(counts_protein), ncol(ref_mod2))
           counts_protein <- counts_protein[, sample_genes, , drop = FALSE]
           var_protein <- var_protein[sample_genes, , drop = FALSE]
         }
@@ -887,8 +941,16 @@ functionality:
           feature_types = rep("ATAC", ncol(regsc))
         )
       
+        # map counts using reference dataset
+        counts_atac <-
+          if (!is.null(ref_mod2)) {
+            dyngen:::.simulate_counts_from_realcounts(regsc, ref_mod2\$X)
+          } else {
+            regsc
+          }
+      
         ad_mod2 <- anndata::AnnData(
-          X = regsc,
+          X = counts_atac,
           obs = obs,
           var = var_atac,
           obsm = list(
@@ -928,6 +990,8 @@ functionality:
         process.container = "dataintuitive/viash"
         params {
           simulate_dyngen_dataset__id = "viash_no_value"
+          simulate_dyngen_dataset__reference_rna = "no_default_value_configured"
+          simulate_dyngen_dataset__reference_mod2 = "no_default_value_configured"
           simulate_dyngen_dataset__output_rna = "viash_no_value"
           simulate_dyngen_dataset__output_mod2 = "viash_no_value"
           simulate_dyngen_dataset__plot = "viash_no_value"
@@ -938,7 +1002,6 @@ functionality:
           simulate_dyngen_dataset__ssa_tau = "0.008333"
           simulate_dyngen_dataset__store_chromatin = "no_default_value_configured"
           simulate_dyngen_dataset__store_protein = "no_default_value_configured"
-          simulate_dyngen_dataset__num_proteins = "50"
           simulate_dyngen_dataset__num_threads = "1"
           simulate_dyngen_dataset__seed = "no_default_value_configured"
           simulate_dyngen_dataset__cache_dir = "no_default_value_configured"
@@ -968,6 +1031,30 @@ functionality:
                 value = "${params.simulate_dyngen_dataset__id}"
                 example = "dyngen_dataset"
                 description = "The id of the output dataset id"
+              }
+              reference_rna {
+                name = "reference_rna"
+                otype = "--"
+                required = false
+                type = "file"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.simulate_dyngen_dataset__reference_rna}"
+                example = "input_rna_reference.h5ad"
+                description = "A reference RNA dataset."
+              }
+              reference_mod2 {
+                name = "reference_mod2"
+                otype = "--"
+                required = false
+                type = "file"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.simulate_dyngen_dataset__reference_mod2}"
+                example = "input_mod2_reference.h5ad"
+                description = "A reference mod2 dataset."
               }
               output_rna {
                 name = "output_rna"
@@ -1086,18 +1173,6 @@ functionality:
                 multiple_sep = ":"
                 value = "${params.simulate_dyngen_dataset__store_protein}"
                 description = "Whether or not to store protein count information."
-              }
-              num_proteins {
-                name = "num_proteins"
-                otype = "--"
-                required = false
-                type = "integer"
-                direction = "Input"
-                multiple = false
-                multiple_sep = ":"
-                value = "${params.simulate_dyngen_dataset__num_proteins}"
-                dflt = "50"
-                description = "The number of proteins to sample."
               }
               num_threads {
                 name = "num_threads"
@@ -1542,5 +1617,5 @@ info:
   output: "target/nextflow/common_datasets/simulate_dyngen_dataset"
   executable: "target/nextflow/common_datasets/simulate_dyngen_dataset/simulate_dyngen_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "6506a25df0d0dbc49cb2bbeba4fca4fa45f4a2f6"
+  git_commit: "bdd9c012f711aabd00b49c640eabc80ddd2caee2"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

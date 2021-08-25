@@ -45,4 +45,4 @@ platforms:
           - lmds
           - mclust
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ lowmem, lowcpu ]

@@ -36,7 +36,7 @@ keep_genes <- unlist(lapply(par$keep_genes, readr::read_lines))
 cat("Filtering genes and cells\n")
 fil_rna_genes <- colSums(mat_rna) >= par$min_counts_per_gene | colnames(mat_rna) %in% keep_genes
 fil_mod2_genes <- colSums(mat_mod2) >= par$min_counts_per_gene | colnames(mat_mod2) %in% keep_genes
-fil_cells <- rowSums(mat_rna) + rowSums(mat_mod2) >= par$min_counts_per_cell
+fil_cells <- rowSums(mat_rna) >= par$min_counts_per_cell & rowSums(mat_mod2) >= par$min_counts_per_cell
 
 obs <- obs[fil_cells, , drop = FALSE]
 var_rna <- var_rna[fil_rna_genes, , drop = FALSE]

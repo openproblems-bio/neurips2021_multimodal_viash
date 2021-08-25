@@ -173,7 +173,6 @@ def overrideIO(_params, inputs, outputs) {
 
 process pseudotime_order_process {
   label 'lowmem'
-  label 'lowtime'
   label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
