@@ -9,7 +9,7 @@ include  { baseline_linearmodel }        from "$targetDir/${task}_methods/baseli
 include  { baseline_knn }                from "$targetDir/${task}_methods/baseline_knn/main.nf"               params(params)
 include  { baseline_babel }              from "$targetDir/${task}_methods/baseline_babel/main.nf"             params(params)
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
-include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"             params(params)
+include  { dummy_meanpergene }              from "$targetDir/${task}_methods/dummy_meanpergene/main.nf"             params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"               params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"             params(params)
 include  { correlation }                 from "$targetDir/${task}_metrics/correlation/main.nf"                params(params)
@@ -62,9 +62,9 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
   def d1 = inputs 
-    | dummy_constant
+    | dummy_meanpergene
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_dummy_constant", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_dummy_meanpergene", [ input_prediction: pred, input_solution: sol ], params ]}
   def d2 = inputs 
     | dummy_random
     | join(solution)

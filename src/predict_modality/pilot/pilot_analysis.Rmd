@@ -37,7 +37,8 @@ df <-
     method_group = gsub("_.*", "", method_id),
     format_check = (correct_format + finished) / 2,
     logp1_mse = log10(mse+1),
-    logp1_msle = log10(msle+1)
+    logp1_msle = log10(msle+1),
+    method_id = ifelse(method_id == "dummy_constant", "dummy_meanpergene", method_id)
   )
 write_tsv(df, "output/pilot/predict_modality/scores.tsv")
 ```

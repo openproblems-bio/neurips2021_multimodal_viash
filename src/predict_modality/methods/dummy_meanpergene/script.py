@@ -28,7 +28,7 @@ out = anndata.AnnData(
     var=input_train_mod2.var,
     uns={
         "dataset_id": input_test_mod1.uns["dataset_id"],
-        "method_id": "dummy_constant",
+        "method_id": "dummy_meanpergene",
     }
 )
 out.write_h5ad(par["output"])
