@@ -1,7 +1,7 @@
-id	num_cells	num_genes	num_simulations	store_chromatin	store_protein	num_threads	seed
-dyngen_atac_1	1000	1000	100	TRUE	FALSE	8	1
-dyngen_atac_2	1000	1000	100	TRUE	FALSE	8	2
-dyngen_atac_3	1000	1000	100	TRUE	FALSE	8	3
-dyngen_citeseq_1	1000	1000	100	FALSE	TRUE	8	1
-dyngen_citeseq_2	1000	1000	100	FALSE	TRUE	8	2
-dyngen_citeseq_3	1000	1000	100	FALSE	TRUE	8	3
+id	num_cells	num_genes	num_simulations	store_chromatin	store_protein	num_threads	seed	reference_rna	reference_mod2
+dyngen_atac_1	1000	1000	100	TRUE	FALSE	30	1	output/public_datasets/common/babel_GM12878/babel_GM12878.split_traintest.output_rna.h5ad	output/public_datasets/common/babel_GM12878/babel_GM12878.split_traintest.output_mod2.h5ad
+dyngen_atac_2	1000	1000	100	TRUE	FALSE	30	2	output/public_datasets/common/10x_e18_mouse_brain_fresh_5k/10x_e18_mouse_brain_fresh_5k.split_traintest.output_rna.h5ad	output/public_datasets/common/10x_e18_mouse_brain_fresh_5k/10x_e18_mouse_brain_fresh_5k.split_traintest.output_mod2.h5ad
+dyngen_atac_3	1000	1000	100	TRUE	FALSE	30	3	output/public_datasets/common/10x_human_brain_3k/10x_human_brain_3k.split_traintest.output_rna.h5ad	output/public_datasets/common/10x_human_brain_3k/10x_human_brain_3k.split_traintest.output_mod2.h5ad
+dyngen_citeseq_1	1000	1000	100	FALSE	TRUE	30	1	output/public_datasets/common/totalvi_spleen_lymph_111/totalvi_spleen_lymph_111.split_traintest.output_rna.h5ad	output/public_datasets/common/totalvi_spleen_lymph_111/totalvi_spleen_lymph_111.split_traintest.output_mod2.h5ad
+dyngen_citeseq_2	1000	1000	100	FALSE	TRUE	30	2	output/public_datasets/common/totalvi_spleen_lymph_206/totalvi_spleen_lymph_206.split_traintest.output_rna.h5ad	output/public_datasets/common/totalvi_spleen_lymph_206/totalvi_spleen_lymph_206.split_traintest.output_mod2.h5ad
+dyngen_citeseq_3	1000	1000	100	FALSE	TRUE	30	3	output/public_datasets/common/azimuth_ref/azimuth_ref.split_traintest.output_rna.h5ad	output/public_datasets/common/azimuth_ref/azimuth_ref.split_traintest.output_mod2.h5ad

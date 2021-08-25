@@ -8,6 +8,10 @@ requireNamespace("anndata", quietly = TRUE)
 ## VIASH START
 par <- list(
   id = "test",
+  # reference_rna = "output/public_datasets/common/azimuth_ref/azimuth_ref.split_traintest.output_rna.h5ad",
+  # reference_mod2 = "output/public_datasets/common/azimuth_ref/azimuth_ref.split_traintest.output_mod2.h5ad",
+  reference_rna = "output/public_datasets/common/10x_human_brain_3k/10x_human_brain_3k.split_traintest.output_rna.h5ad",
+  reference_mod2 = "output/public_datasets/common/10x_human_brain_3k/10x_human_brain_3k.split_traintest.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
   num_cells = 300,
@@ -17,8 +21,10 @@ par <- list(
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
-  store_chromatin = FALSE,
-  store_protein = TRUE,
+  # store_chromatin = FALSE,
+  # store_protein = TRUE,
+  store_chromatin = TRUE,
+  store_protein = FALSE,
   num_proteins = 50,
   cache_dir = tools::R_user_dir("dyngen", "data"),
   seed = 1
@@ -29,10 +35,31 @@ if (!is.null(par$seed)) {
   set.seed(par$seed)
 }
 if (par$store_protein == par$store_chromatin) {
-  cat("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
+  stop("Warning: Strictly pass one of --store_protein and --store_chromatin, not neither or both.\n")
 }
 
-# start from given backbone and a cyclic backbone
+# Read reference datasets
+ref_rna <-
+  if (!is.null(par$reference_rna)) {
+    anndata::read_h5ad(par$reference_rna)
+  } else {
+    NULL
+  }
+ref_mod2 <-
+  if (!is.null(par$reference_mod2)) {
+    ad <- anndata::read_h5ad(par$reference_mod2)
+    if (par$store_protein && unique(ad$var[["feature_types"]]) != "ADT") {
+      stop("If --store_protein, reference_mod2 should be an ADT dataset")
+    }
+    if (par$store_chromatin && unique(ad$var[["feature_types"]]) != "ATAC") {
+      stop("If --store_chromatin, reference_mod2 should be an ATAC dataset")
+    }
+    ad
+  } else {
+    NULL
+  }
+
+# start from linear
 backbone_init <- bblego(
   bblego_start("A", type = "simple"),
   bblego_linear("A", "B", num_modules = 10),
@@ -41,7 +68,7 @@ backbone_init <- bblego(
   bblego_end("D")
 )
 
-
+# add a simple cycle to it
 module_info <- bind_rows(
   backbone_init$module_info %>% select(-color),
   tribble(
@@ -53,7 +80,6 @@ module_info <- bind_rows(
     "CC5", 0, TRUE, 1
   )
 )
-
 module_network <- bind_rows(
   backbone_init$module_network,
   tribble(
@@ -66,13 +92,13 @@ module_network <- bind_rows(
     "CC5", "CC1", -1L, 100, 2
   )
 )
-
 backbone <- backbone(
   module_info = module_info,
   module_network = module_network,
   expression_patterns = backbone_init$expression_patterns
 )
 
+# compute simulation times
 burn_time <- simtime_from_backbone(backbone, burn = TRUE) * 4
 total_time <- simtime_from_backbone(backbone, burn = FALSE) / 3
 
@@ -98,6 +124,9 @@ model_init <- initialise_model(
       num_simulations = round(0.66*par$num_simulations)
     ),
     compute_cellwise_grn = par$store_chromatin
+  ),
+  experiment_params = experiment_snapshot(
+    realcount = if (!is.null(ref_rna)) ref_rna$X else NULL,
   ),
   num_cores = par$num_threads,
   verbose = TRUE,
@@ -208,13 +237,20 @@ ad_mod1 <- anndata::AnnData(
 if (par$store_protein) {
   cat("Processing Antibody data\n")
   # construct AbSeq-like data from protein counts
-  # TODO: use real AbSeq data to map distributions
-  counts_protein <- dataset$counts_protein
+  counts_protein_sim <- dataset$counts_protein
   var_protein <- var %>% mutate(feature_types = "ADT")
 
+  # map counts using reference dataset
+  counts_protein <-
+    if (!is.null(ref_mod2)) {
+      dyngen:::.simulate_counts_from_realcounts(counts_protein_sim, ref_mod2$X)
+    } else {
+      counts_protein_sim
+    }
+
   # sample 50 genes
-  if (ncol(counts_protein) > par$num_proteins) {
-    sample_genes <- sample.int(ncol(counts_protein), par$num_proteins)
+  if (!is.null(ref_mod2) && ncol(counts_protein) > ncol(ref_mod2)) {
+    sample_genes <- sample.int(ncol(counts_protein), ncol(ref_mod2))
     counts_protein <- counts_protein[, sample_genes, , drop = FALSE]
     var_protein <- var_protein[sample_genes, , drop = FALSE]
   }
@@ -253,8 +289,16 @@ if (par$store_chromatin) {
     feature_types = rep("ATAC", ncol(regsc))
   )
 
+  # map counts using reference dataset
+  counts_atac <-
+    if (!is.null(ref_mod2)) {
+      dyngen:::.simulate_counts_from_realcounts(regsc, ref_mod2$X)
+    } else {
+      regsc
+    }
+
   ad_mod2 <- anndata::AnnData(
-    X = regsc,
+    X = counts_atac,
     obs = obs,
     var = var_atac,
     obsm = list(
