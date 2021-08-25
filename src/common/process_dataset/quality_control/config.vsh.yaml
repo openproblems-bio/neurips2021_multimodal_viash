@@ -61,4 +61,4 @@ platforms:
         cran: 
           - anndata
   - type: nextflow
-    labels: [ midmem, midime, lowcpu ]
+    labels: [ midmem, lowcpu ]
