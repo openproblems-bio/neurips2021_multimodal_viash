@@ -925,5 +925,5 @@ info:
   output: "target/nextflow/common_datasets/download_totalvi_spleen_lymph"
   executable: "target/nextflow/common_datasets/download_totalvi_spleen_lymph/download_totalvi_spleen_lymph"
   viash_version: "0.5.3dev"
-  git_commit: "609377929181155f25c58850e3956090d9082a44"
+  git_commit: "905daca9bffa8a3dfff2b56b6af47aa6c4e68403"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
