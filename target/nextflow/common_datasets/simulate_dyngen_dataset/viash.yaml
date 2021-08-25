@@ -816,10 +816,8 @@ functionality:
         ),
         duplicate_gold_standard = FALSE
       )
-      dataset <- as_dyno(model) %>% 
-        dynwrap::simplify_trajectory()
+      dataset <- as_dyno(model)
       
-      milestone_labels <- c("sA" = "start", "sEndD" = "end")
       # check whether output dataset looks nice
       # and whether batch effect is present
       # plot_summary(model)
@@ -839,23 +837,18 @@ functionality:
       })
       
       # ggplot(phase_scores) + geom_point(aes(S_score, G2M_score))
-      cat("Process trajectory percentages")
-      trajectory_topology <-
-        dataset\$milestone_network %>%
-        transmute(
-          from = milestone_labels[from],
-          to = milestone_labels[to],
-          length
-        )
-      trajectory_percentages <- 
-        dataset\$milestone_percentages %>%
-        mutate(
-          milestone_id = milestone_labels[milestone_id]
-        ) %>%
-        reshape2::acast(cell_id~milestone_id, value.var = "percentage") %>%
-        Matrix::Matrix(sparse = TRUE)
+      cat("Process trajectory pseudotimes\\n")
+      pseudotime <- dataset %>%
+        dynwrap::add_root(root_milestone_id = "sA") %>%
+        dynwrap::calculate_pseudotime() %>%
+        enframe("cell_id", "pseudotime_order_GEX")
       
-      trajectory_percentages <- trajectory_percentages[dataset\$cell_ids, unname(milestone_labels)]
+      if (par\$store_protein) {
+        pseudotime\$pseudotime_order_ADT <- pseudotime\$pseudotime_order_GEX
+      }
+      if (par\$store_chromatin) {
+        pseudotime\$pseudotime_order_ATAC <- pseudotime\$pseudotime_order_GEX
+      }
       
       cat("Create RNA dataset\\n")
       celltypes <- dataset\$milestone_percentages %>%
@@ -866,6 +859,7 @@ functionality:
       obs <- dataset\$cell_info %>%
         left_join(celltypes, by = "cell_id") %>%
         left_join(phase_scores, by = "cell_id") %>%
+        left_join(pseudotime, by = "cell_id") %>%
         rename(batch = model) %>%
         column_to_rownames("cell_id")
       
@@ -877,12 +871,8 @@ functionality:
         X = dataset\$counts,
         obs = obs,
         var = var %>% mutate(feature_types = "GEX"),
-        obsm = list(
-          trajectory_percentages = trajectory_percentages
-        ),
         uns = list(
-          dataset_id = par\$id,
-          trajectory_topology = trajectory_topology
+          dataset_id = par\$id
         )
       )
       
@@ -911,12 +901,8 @@ functionality:
           X = counts_protein,
           obs = obs,
           var = var_protein,
-          obsm = list(
-            trajectory_percentages = trajectory_percentages
-          ),
           uns = list(
-            dataset_id = par\$id,
-            trajectory_topology = trajectory_topology
+            dataset_id = par\$id
           )
         )
       }
@@ -953,9 +939,6 @@ functionality:
           X = counts_atac,
           obs = obs,
           var = var_atac,
-          obsm = list(
-            trajectory_percentages = trajectory_percentages
-          ),
           uns = list(
             dataset_id = par\$id,
             organism = "synthetic"
@@ -964,7 +947,9 @@ functionality:
       }
       
       cat("Write h5ad files\\n")
+      print(ad_mod1)
       ad_mod1\$write_h5ad(par\$output_rna, compression = "gzip")
+      print(ad_mod2)
       ad_mod2\$write_h5ad(par\$output_mod2, compression = "gzip")
       
       if (!is.null(par\$plot)) {
@@ -1617,5 +1602,5 @@ info:
   output: "target/nextflow/common_datasets/simulate_dyngen_dataset"
   executable: "target/nextflow/common_datasets/simulate_dyngen_dataset/simulate_dyngen_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "bdd9c012f711aabd00b49c640eabc80ddd2caee2"
+  git_commit: "609377929181155f25c58850e3956090d9082a44"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

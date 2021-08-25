@@ -16,8 +16,8 @@ par <- list(
   output_mod2 = "output_mod2.h5ad",
   num_cells = 300,
   num_genes = 120,
-  num_simulations = 50,
-  num_threads = 10,
+  num_simulations = 10,
+  num_threads = 20,
   plot = "plot.pdf",
   ssa_tau = 30 / 3600,
   census_interval = 1,
@@ -25,7 +25,6 @@ par <- list(
   # store_protein = TRUE,
   store_chromatin = TRUE,
   store_protein = FALSE,
-  num_proteins = 50,
   cache_dir = tools::R_user_dir("dyngen", "data"),
   seed = 1
 )
@@ -164,10 +163,8 @@ model <- combine_models(
   ),
   duplicate_gold_standard = FALSE
 )
-dataset <- as_dyno(model) %>% 
-  dynwrap::simplify_trajectory()
+dataset <- as_dyno(model)
 
-milestone_labels <- c("sA" = "start", "sEndD" = "end")
 # check whether output dataset looks nice
 # and whether batch effect is present
 # plot_summary(model)
@@ -187,23 +184,18 @@ phase_scores <- map_df(unique(dataset$cell_info$model), function(mod) {
 })
 
 # ggplot(phase_scores) + geom_point(aes(S_score, G2M_score))
-cat("Process trajectory percentages")
-trajectory_topology <-
-  dataset$milestone_network %>%
-  transmute(
-    from = milestone_labels[from],
-    to = milestone_labels[to],
-    length
-  )
-trajectory_percentages <- 
-  dataset$milestone_percentages %>%
-  mutate(
-    milestone_id = milestone_labels[milestone_id]
-  ) %>%
-  reshape2::acast(cell_id~milestone_id, value.var = "percentage") %>%
-  Matrix::Matrix(sparse = TRUE)
+cat("Process trajectory pseudotimes\n")
+pseudotime <- dataset %>%
+  dynwrap::add_root(root_milestone_id = "sA") %>%
+  dynwrap::calculate_pseudotime() %>%
+  enframe("cell_id", "pseudotime_order_GEX")
 
-trajectory_percentages <- trajectory_percentages[dataset$cell_ids, unname(milestone_labels)]
+if (par$store_protein) {
+  pseudotime$pseudotime_order_ADT <- pseudotime$pseudotime_order_GEX
+}
+if (par$store_chromatin) {
+  pseudotime$pseudotime_order_ATAC <- pseudotime$pseudotime_order_GEX
+}
 
 cat("Create RNA dataset\n")
 celltypes <- dataset$milestone_percentages %>%
@@ -214,6 +206,7 @@ celltypes <- dataset$milestone_percentages %>%
 obs <- dataset$cell_info %>%
   left_join(celltypes, by = "cell_id") %>%
   left_join(phase_scores, by = "cell_id") %>%
+  left_join(pseudotime, by = "cell_id") %>%
   rename(batch = model) %>%
   column_to_rownames("cell_id")
 
@@ -225,12 +218,8 @@ ad_mod1 <- anndata::AnnData(
   X = dataset$counts,
   obs = obs,
   var = var %>% mutate(feature_types = "GEX"),
-  obsm = list(
-    trajectory_percentages = trajectory_percentages
-  ),
   uns = list(
-    dataset_id = par$id,
-    trajectory_topology = trajectory_topology
+    dataset_id = par$id
   )
 )
 
@@ -259,12 +248,8 @@ if (par$store_protein) {
     X = counts_protein,
     obs = obs,
     var = var_protein,
-    obsm = list(
-      trajectory_percentages = trajectory_percentages
-    ),
     uns = list(
-      dataset_id = par$id,
-      trajectory_topology = trajectory_topology
+      dataset_id = par$id
     )
   )
 }
@@ -301,9 +286,6 @@ if (par$store_chromatin) {
     X = counts_atac,
     obs = obs,
     var = var_atac,
-    obsm = list(
-      trajectory_percentages = trajectory_percentages
-    ),
     uns = list(
       dataset_id = par$id,
       organism = "synthetic"
@@ -312,7 +294,9 @@ if (par$store_chromatin) {
 }
 
 cat("Write h5ad files\n")
+print(ad_mod1)
 ad_mod1$write_h5ad(par$output_rna, compression = "gzip")
+print(ad_mod2)
 ad_mod2$write_h5ad(par$output_mod2, compression = "gzip")
 
 if (!is.null(par$plot)) {

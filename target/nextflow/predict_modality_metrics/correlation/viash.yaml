@@ -352,18 +352,31 @@ functionality:
       tv <- ad_sol\$X
       pv <- ad_pred\$X
       
+      # log transform values
+      tv@x <- log(tv@x + 1)
+      pv@x <- log(abs(pv@x) + 1) * sign(pv@x)
+      
       # Compute metrics
-      pearson_vec <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))
-      spearman_vec <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))
+      pearson_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 1, diag = TRUE, drop0 = TRUE))
+      spearman_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 1, diag = TRUE, drop0 = TRUE))
       
-      pearson_vec[!is.finite(pearson_vec)] <- 0
-      spearman_vec[!is.finite(spearman_vec)] <- 0
+      pearson_vec_1[!is.finite(pearson_vec_1)] <- 0
+      spearman_vec_1[!is.finite(spearman_vec_1)] <- 0
       
-      mean_pearson <- mean(pearson_vec)
-      mean_spearman <- mean(spearman_vec)
+      mean_pearson_per_cell <- mean(pearson_vec_1)
+      mean_spearman_per_cell <- mean(spearman_vec_1)
       
-      metric_ids <- c("mean_pearson", "mean_spearman")
-      metric_values <- c(mean_pearson, mean_spearman)
+      pearson_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))
+      spearman_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))
+      
+      pearson_vec_2[!is.finite(pearson_vec_2)] <- 0
+      spearman_vec_2[!is.finite(spearman_vec_2)] <- 0
+      
+      mean_pearson_per_gene <- mean(pearson_vec_2)
+      mean_spearman_per_gene <- mean(spearman_vec_2)
+      
+      metric_ids <- c("mean_pearson_per_cell", "mean_spearman_per_cell", "mean_pearson_per_gene", "mean_spearman_per_gene")
+      metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_per_gene, mean_spearman_per_gene)
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
@@ -816,5 +829,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/correlation"
   executable: "target/nextflow/predict_modality_metrics/correlation/correlation"
   viash_version: "0.5.3dev"
-  git_commit: "bdd9c012f711aabd00b49c640eabc80ddd2caee2"
+  git_commit: "609377929181155f25c58850e3956090d9082a44"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
