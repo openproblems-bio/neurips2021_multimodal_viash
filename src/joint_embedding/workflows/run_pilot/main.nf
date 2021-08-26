@@ -6,6 +6,7 @@ task = "joint_embedding"
 
 include  { baseline_lmds }              from "$targetDir/${task}_methods/baseline_lmds/main.nf"                params(params)
 include  { baseline_pca }               from "$targetDir/${task}_methods/baseline_pca/main.nf"                 params(params)
+include  { baseline_mnn }               from "$targetDir/${task}_methods/baseline_mnn/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
 include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
@@ -62,6 +63,10 @@ workflow pilot_wf {
     | baseline_totalvi
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b4 = inputs 
+    | baseline_mnn
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_mnn", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_random
@@ -77,7 +82,7 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, d0, d1, d2)
+  def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
