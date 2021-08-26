@@ -726,5 +726,5 @@ info:
   output: "target/nextflow/common/bind_tsv_rows"
   executable: "target/nextflow/common/bind_tsv_rows/bind_tsv_rows"
   viash_version: "0.5.3dev"
-  git_commit: "3d5bae70792ee91a51c44df3c25585b37a5aa465"
+  git_commit: "85b904d2eed9bbfd3f32e2a1d1fe884ab26c3371"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
