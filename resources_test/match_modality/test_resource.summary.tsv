@@ -1,2 +1,2 @@
-method_id	aupr	auroc
-baseline_dr_nn_knn	0.023647282188477448	0.6371300934772535
+method_id	celltype_aupr	celltype_auroc	pairing_aupr	pairing_auroc
+baseline_dr_nn_knn	0.1260763793623596	0.5422724621943189	0.01701679963395364	0.5017494706398793
