@@ -64,9 +64,6 @@ functionality:
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
-    setup:
-      - type: r
-        packages: [ GA ]
   - type: nextflow
     publish: true
-    labels: [ lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]

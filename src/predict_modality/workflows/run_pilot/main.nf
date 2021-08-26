@@ -52,10 +52,10 @@ workflow pilot_wf {
     | baseline_knn
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_baseline_knn", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b3 = inputs 
-    | baseline_babel
-    | join(solution)
-    | map { id, pred, params, sol -> [ id + "_baseline_babel", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b3 = inputs 
+  //   | baseline_babel
+  //   | join(solution)
+  //   | map { id, pred, params, sol -> [ id + "_baseline_babel", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_zeros
@@ -75,7 +75,7 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, d0, d1, d2, d3)
+  def predictions = b0.mix(b1, b2, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
