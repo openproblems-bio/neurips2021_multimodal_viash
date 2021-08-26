@@ -6,12 +6,13 @@ task = "joint_embedding"
 
 include  { baseline_lmds }              from "$targetDir/${task}_methods/baseline_lmds/main.nf"                params(params)
 include  { baseline_pca }               from "$targetDir/${task}_methods/baseline_pca/main.nf"                 params(params)
+include  { baseline_mnn }               from "$targetDir/${task}_methods/baseline_mnn/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
 include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
-include  { rf_oob }                     from "$targetDir/${task}_metrics/rf_oob/main.nf"                       params(params)
+include  { rfoob }                     from "$targetDir/${task}_metrics/rfoob/main.nf"                       params(params)
 include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
@@ -62,6 +63,10 @@ workflow pilot_wf {
     | baseline_totalvi
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b4 = inputs 
+    | baseline_mnn
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_mnn", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_random
@@ -77,7 +82,7 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, d0, d1, d2)
+  def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
@@ -98,7 +103,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (rf_oob & latent_mixing & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
+    | (rfoob & latent_mixing & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

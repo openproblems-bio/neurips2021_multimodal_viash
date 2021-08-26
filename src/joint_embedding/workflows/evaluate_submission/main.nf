@@ -4,7 +4,7 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "joint_embedding"
 
-include  { rf_oob }           from "$targetDir/${task}_metrics/rf_oob/main.nf"             params(params)
+include  { rfoob }           from "$targetDir/${task}_metrics/rfoob/main.nf"             params(params)
 include  { latent_mixing }  from "$targetDir/${task}_metrics/latent_mixings/main.nf"    params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
@@ -37,7 +37,7 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | (rf_oob & latent_mixing & ari & asw_batch & asw_label & nmi & check_format)
+    | (rfoob & latent_mixing & ari & asw_batch & asw_label & nmi & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

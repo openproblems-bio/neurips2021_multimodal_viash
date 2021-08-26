@@ -40,14 +40,17 @@ test_mod2 = mod2[test_ix, :][test_mod2_ix, :]
 
 print("Creating mod1 outputs")
 desired_var1_cols = [x for x in ["gene_ids", "feature_types"] if x in mod1.var.columns]
+desired_obs_cols = [x for x in ["batch"] if x in mod1.obs.columns]
 out_train_mod1 = ad.AnnData(
     X=train_mod1.X,
+    obs=train_mod1.obs[desired_obs_cols],
     var=mod1.var[desired_var1_cols],
     uns={ "dataset_id": new_dataset_id },
 )
 out_train_mod1.X.sort_indices()
 out_test_mod1 = ad.AnnData(
     X=test_mod1.X,
+    obs=test_mod1.obs[desired_obs_cols],
     var=mod1.var[desired_var1_cols],
     uns={ "dataset_id": new_dataset_id },
 )
@@ -70,21 +73,21 @@ out_test_mod2.X.sort_indices()
 
 print("Creating solution outputs")
 out_train_sol_mat = scipy.sparse.csr_matrix(
-  (np.ones(train_mod1.n_obs), (train_mod1_ix, train_mod2_ix))
+  (np.ones(train_mod1.n_obs), (train_mod1_ix, np.argsort(train_mod2_ix)))
 )
 out_train_sol = ad.AnnData(
     X=out_train_sol_mat,
     obs=train_mod1.obs,
-    uns={ "dataset_id": new_dataset_id },
+    uns={ "dataset_id": new_dataset_id, "pairing_ix": train_mod2_ix },
     dtype="float32",
 )
 out_test_sol_mat = scipy.sparse.csr_matrix(
-  (np.ones(test_mod1.n_obs), (test_mod1_ix, test_mod2_ix))
+  (np.ones(test_mod1.n_obs), (test_mod1_ix, np.argsort(test_mod2_ix)))
 )
 out_test_sol = ad.AnnData(
     X=out_test_sol_mat,
     obs=test_mod1.obs,
-    uns={ "dataset_id": new_dataset_id },
+    uns={ "dataset_id": new_dataset_id, "pairing_ix": test_mod2_ix},
     dtype="float32"
 )
 

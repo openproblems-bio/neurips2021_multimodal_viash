@@ -7,7 +7,7 @@ task = "match_modality"
 include  { baseline_babel_knn }          from "$targetDir/${task}_methods/baseline_babel_knn/main.nf"          params(params)
 include  { baseline_dr_nn_knn }          from "$targetDir/${task}_methods/baseline_dr_nn_knn/main.nf"          params(params)
 include  { baseline_dr_knnr_knn }        from "$targetDir/${task}_methods/baseline_dr_knnr_knn/main.nf"        params(params)
-include  { baseline_dr_nn_ga }           from "$targetDir/${task}_methods/baseline_dr_nn_ga/main.nf"           params(params)
+include  { baseline_mnn_nn_ga }          from "$targetDir/${task}_methods/baseline_mnn_nn_ga/main.nf"          params(params)
 include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseline_procrustes_knn/main.nf"     params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
@@ -25,7 +25,7 @@ workflow pilot_wf {
 
   // get input files for methods
   def inputs = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath("output/*_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
       | filter { !it[1].name.contains("output_test_sol") }
       | groupTuple
@@ -36,7 +36,7 @@ workflow pilot_wf {
   
   // get solutions
   def solution = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath("output/*_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
       | filter { it[1].name.contains("output_test_sol") }
 
@@ -49,18 +49,18 @@ workflow pilot_wf {
     | baseline_procrustes_knn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_procrustes_knn", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b2 = inputs 
-    | baseline_babel_knn
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b2 = inputs 
+  //   | baseline_babel_knn
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
   def b3 = inputs 
     | baseline_dr_knnr_knn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_dr_knnr_knn", [ input_prediction: pred, input_solution: sol ], params ]}
   def b4 = inputs 
-    | baseline_dr_nn_ga
+    | baseline_mnn_nn_ga
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_dr_nn_ga", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_baseline_mnn_nn_ga", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_constant
@@ -80,7 +80,8 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2, d3)
+  // def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2, d3)
+  def predictions = b0.mix(b1, b3, b4, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions

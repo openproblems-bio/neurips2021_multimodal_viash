@@ -916,5 +916,5 @@ info:
   output: "target/nextflow/common_datasets/download_babel_dataset"
   executable: "target/nextflow/common_datasets/download_babel_dataset/download_babel_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "b6708205d2ef5b1ee88463134cd31b1df6c7c322"
+  git_commit: "5a72071c402f56e5d3a4d7b430fd9108cee1fc7d"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component rf_oob")
+      println("[ERROR] option --${it.name} not specified in component baseline_mnn")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "rf_oob." + it.name + "." + extOrName
+          ? "baseline_mnn." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process rf_oob_process {
+process baseline_mnn_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process rf_oob_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.rf_oob.tests.testScript} | tee $output
+      ./${params.baseline_mnn.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process rf_oob_process {
       """
 }
 
-workflow rf_oob {
+workflow baseline_mnn {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "rf_oob"
+  def key = "baseline_mnn"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow rf_oob {
       )
     }
 
-  result_ = rf_oob_process(id_input_output_function_cli_params_)
+  result_ = baseline_mnn_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow rf_oob {
 
 workflow {
   def id = params.id
-  def fname = "rf_oob"
+  def fname = "baseline_mnn"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.rf_oob
+  def inputFiles = params.baseline_mnn
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = rf_oob(ch_)
+  result = baseline_mnn(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.rf_oob.output = "rf_oob.log"
+  params.baseline_mnn.output = "baseline_mnn.log"
 
   Channel.from(rootDir) \
-    | filter { params.rf_oob.tests.isDefined } \
+    | filter { params.baseline_mnn.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.rf_oob.tests.testResources.collect{ file( p + it ) },
+        params.baseline_mnn.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | rf_oob
+    | baseline_mnn
 
   emit:
-  rf_oob.out
+  baseline_mnn.out
 }
