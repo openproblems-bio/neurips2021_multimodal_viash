@@ -32,13 +32,13 @@ viash run src/joint_embedding/methods/baseline_lmds/config.vsh.yaml -- \
   --input_mod2 ${out_file}.mod2.h5ad \
   --output ${out_file}.prediction.h5ad
   
-viash run src/joint_embedding/metrics/rf_oob/config.vsh.yaml -- \
+viash run src/joint_embedding/metrics/rfoob/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.solution.h5ad \
   --output ${out_file}.scores.h5ad
 
 viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/joint_embedding/metrics/rf_oob/metric_meta_rf_oob.tsv \
+  --metric_meta src/joint_embedding/metrics/rfoob/metric_meta_rfoob.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

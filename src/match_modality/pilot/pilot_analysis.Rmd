@@ -47,7 +47,7 @@ summ <- df %>%
   mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
   group_by(method_id) %>%
   summarise_if(is.numeric, mean) %>% 
-  arrange(desc(aupr)) %>% 
+  arrange(desc(pairing_aupr)) %>% 
   select(-format_check)
 ```
 

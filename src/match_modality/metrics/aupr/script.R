@@ -131,8 +131,8 @@ au_match_out <- calculate_au(
   num_possible_interactions = (nrow(ad_sol) * 1.0) * nrow(ad_sol)
 )
 
-GENIE3bis::plot_curves(au_out)
-GENIE3bis::plot_curves(au_match_out)
+# GENIE3bis::plot_curves(au_out)
+# GENIE3bis::plot_curves(au_match_out)
 
 colnames(au_out$area_under) <- paste0("pairing_", colnames(au_out$area_under))
 colnames(au_match_out$area_under) <- paste0("celltype_", colnames(au_match_out$area_under))

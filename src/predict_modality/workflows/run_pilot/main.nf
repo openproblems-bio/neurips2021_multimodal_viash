@@ -24,7 +24,7 @@ workflow pilot_wf {
 
   // get input files for methods
   def inputs = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath("output/*_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
       | filter { !it[1].name.contains("output_test_mod2") }
       | groupTuple
@@ -35,7 +35,7 @@ workflow pilot_wf {
   
   // get solutions
   def solution = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath("output/*_datasets/$task/**.h5ad")
       | map { [ it.getParent().baseName, it ] }
       | filter { it[1].name.contains("output_test_mod2") }
 
