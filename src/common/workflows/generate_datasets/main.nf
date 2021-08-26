@@ -10,6 +10,7 @@ include  { download_totalvi_spleen_lymph }      from "$targetDir/common_datasets
 // include  { download_totalvi_10x_dataset }       from "$targetDir/common_datasets/download_totalvi_10x_dataset/main.nf"        params(params)
 include  { download_babel_dataset }             from "$targetDir/common_datasets/download_babel_dataset/main.nf"              params(params)
 include  { quality_control }                    from "$targetDir/common_process_dataset/quality_control/main.nf"              params(params)
+include  { normalize }                          from "$targetDir/common_process_dataset/normalize/main.nf"                    params(params)
 include  { split_traintest }                    from "$targetDir/common_process_dataset/split_traintest/main.nf"              params(params)
 include  { simulate_batch }                     from "$targetDir/common_process_dataset/simulate_batch/main.nf"               params(params)
 include  { pseudotime_order }                   from "$targetDir/common_process_dataset/pseudotime_order/main.nf"             params(params)
@@ -135,6 +136,9 @@ workflow generate_real_datasets {
       | quality_control
       | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG1", it[0], it[1] ] }
+      | normalize
+      | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
+      // | view { ["DEBUG1", it[0], it[1] ] }
       | pseudotime_order
       | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG1", it[0], it[1] ] }
@@ -157,6 +161,9 @@ workflow generate_dyngen_datasets {
       | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG0", it[0], it[1] ] }
       | quality_control
+      | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
+      // | view { ["DEBUG1", it[0], it[1] ] }
+      | normalize
       | map { id, data, prms -> [ id, [ input_rna: data.output_rna, input_mod2: data.output_mod2 ], prms ]}
       // | view { ["DEBUG1", it[0], it[1] ] }
       | pseudotime_order

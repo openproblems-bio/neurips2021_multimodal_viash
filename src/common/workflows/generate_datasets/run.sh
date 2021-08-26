@@ -18,6 +18,22 @@ bin/nextflow \
 bin/nextflow \
   run . \
   -main-script src/common/workflows/generate_datasets/main.nf \
+  -entry generate_real_datasets \
+  --publishDir output/public_datasets/common/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config
+
+bin/nextflow \
+  run . \
+  -main-script src/common/workflows/generate_datasets/main.nf \
+  -entry generate_real_datasets \
+  --publishDir output/public_datasets/common/ \
+  -resume \
+  -c src/common/workflows/resource_labels_vhighmem.config
+
+bin/nextflow \
+  run . \
+  -main-script src/common/workflows/generate_datasets/main.nf \
   -entry generate_dyngen_datasets \
   --publishDir output/public_datasets/common/ \
   -resume
