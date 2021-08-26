@@ -10,19 +10,22 @@ output_dir <- "output/public_datasets/common/openproblems_bmmc_multiome"
 
 dir.create(output_dir, recursive = TRUE)
 
-# process gex
+# read data
 ad1 <- read_h5ad("output/manual_formatting/atac/Multiome_gex_processed.h5ad")
+ad2 <- read_h5ad("output/manual_formatting/atac/Multiome_atac_processed.h5ad")
+
+# process gex
 ad1$uns[["dataset_id"]] <- "openproblems_bmmc_multiome"
 ad1$uns[["organism"]] <- "human"
 ad1$obs[["is_train"]] <- ad1$obs[["batch"]] != "s1d2"
-ad1$X <- as(ad1$X, "CsparseMatrix")
+ad1$X <- as(ad1$layers[["counts"]], "CsparseMatrix")
+ad1$layers <- NULL
 
 # process atac
-ad2 <- read_h5ad("output/manual_formatting/atac/Multiome_atac_processed_gact.h5ad")
 ad2$uns[["dataset_id"]] <- "openproblems_bmmc_multiome"
 ad2$uns[["organism"]] <- "human"
 ad2$obs[["is_train"]] <- ad2$obs[["batch"]] != "s1d2"
-ad2$X <- as(ad2$X, "CsparseMatrix")
+ad2$X@x <- (ad2$X@x > 0) + 0
 
 # copy over data
 ad1$obs[["pseudotime_order_ATAC"]] <- ad2$obs[["pseudotime_order_ATAC"]]

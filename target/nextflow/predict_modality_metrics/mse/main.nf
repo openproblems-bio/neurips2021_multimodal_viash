@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component msle")
+      println("[ERROR] option --${it.name} not specified in component mse")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "msle." + it.name + "." + extOrName
+          ? "mse." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,7 +157,7 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process msle_process {
+process mse_process {
   label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
@@ -188,7 +188,7 @@ process msle_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.msle.tests.testScript} | tee $output
+      ./${params.mse.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process msle_process {
       """
 }
 
-workflow msle {
+workflow mse {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "msle"
+  def key = "mse"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow msle {
       )
     }
 
-  result_ = msle_process(id_input_output_function_cli_params_)
+  result_ = mse_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow msle {
 
 workflow {
   def id = params.id
-  def fname = "msle"
+  def fname = "mse"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.msle
+  def inputFiles = params.mse
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = msle(ch_)
+  result = mse(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.msle.output = "msle.log"
+  params.mse.output = "mse.log"
 
   Channel.from(rootDir) \
-    | filter { params.msle.tests.isDefined } \
+    | filter { params.mse.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.msle.tests.testResources.collect{ file( p + it ) },
+        params.mse.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | msle
+    | mse
 
   emit:
-  msle.out
+  mse.out
 }

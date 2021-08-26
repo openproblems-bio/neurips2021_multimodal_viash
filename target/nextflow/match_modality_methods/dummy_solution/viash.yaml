@@ -729,5 +729,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_solution"
   executable: "target/nextflow/match_modality_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.3dev"
-  git_commit: "a27b8dd264b00e7ffb22a50864ed2bb3c0ba57ab"
+  git_commit: "3d5bae70792ee91a51c44df3c25585b37a5aa465"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
