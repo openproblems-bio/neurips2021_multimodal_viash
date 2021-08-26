@@ -32,6 +32,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds ]
+        packages: [ dyndimred ]
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

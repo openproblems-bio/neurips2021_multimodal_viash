@@ -303,14 +303,23 @@ functionality:
       ad_sol <- anndata::read_h5ad(par\$input_solution)
       
       ct <- ad_sol\$obs\$cell_type
+      pt1 <- ad_sol\$obs\$pseudotime_order_GEX
+      pt2 <- if (!is.null(ad_sol\$obs\$pseudotime_order_ADT)) ad_sol\$obs\$pseudotime_order_ADT else ad_sol\$obs\$pseudotime_order_ATAC
       
-      mat <- sapply(seq_len(100), function(i) {
-        match(ct, sample(unique(ct)))
-      })
+      mat <- cbind(
+        sapply(seq_len(100), function(i) {
+          match(ct, sample(unique(ct)))
+        }),
+        sapply(seq_len(20), function(i) {
+          ifelse(is.finite(pt1), pt1, runif(length(pt1)))
+        }),
+        sapply(seq_len(20), function(i) {
+          ifelse(is.finite(pt2), pt2, runif(length(pt2)))
+        })
+      )
       
       cat("Performing DR\\n")
-      dr <- lmds::lmds(mat, ndim = 10, distance_method = "pearson")
-      
+      dr <- dyndimred::dimred_knn_fr(mat, n_neighbors = round(mean(table(ct))))
       rownames(dr) <- rownames(ad_sol)
       colnames(dr) <- paste0("comp_", seq_len(ncol(dr)))
       
@@ -747,5 +756,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_solution"
   executable: "target/nextflow/joint_embedding_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.3dev"
-  git_commit: "7b030104ccbcea38165c841a394585264f12e3bd"
+  git_commit: "a27b8dd264b00e7ffb22a50864ed2bb3c0ba57ab"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
