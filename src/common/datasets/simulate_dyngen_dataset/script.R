@@ -219,7 +219,8 @@ ad_mod1 <- anndata::AnnData(
   obs = obs,
   var = var %>% mutate(feature_types = "GEX"),
   uns = list(
-    dataset_id = par$id
+    dataset_id = par$id,
+      organism = "synthetic"
   )
 )
 
@@ -249,7 +250,8 @@ if (par$store_protein) {
     obs = obs,
     var = var_protein,
     uns = list(
-      dataset_id = par$id
+      dataset_id = par$id,
+      organism = "synthetic"
     )
   )
 }
