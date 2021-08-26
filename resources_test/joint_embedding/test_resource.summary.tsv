@@ -1,2 +1,2 @@
-method_id	rf_oob_pct_correct
-baseline_lmds	0.701171875
+method_id	rfoob_batch_error	rfoob_celltype_accuracy	rfoob_pseudotimeadt_rsq	rfoob_pseudotimegex_rsq
+baseline_lmds	0.01953125	0.681640625	0.7726333362559368	0.8353428675981365
