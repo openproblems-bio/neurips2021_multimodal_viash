@@ -24,18 +24,24 @@ functionality:
       description: Ground truth dataset.
       required: true
     # required outputs
-    - name: "--output"
+    - name: "--output_umap"
       type: "file"
       direction: "output"
       example: "umap.png"
       description: UMAP visualisation of joint embedding.
+      required: true
+    - name: "--output_emb"
+      type: "file"
+      direction: "output"
+      example: "emb.png"
+      description: Scatterplot of first 2 dimensions of the joint embedding.
       required: true
 
   # files your script needs
   resources:
     - type: python_script
       path: script.py
-  
+
   # resources for unit testing your component
   tests:
     - type: python_script
