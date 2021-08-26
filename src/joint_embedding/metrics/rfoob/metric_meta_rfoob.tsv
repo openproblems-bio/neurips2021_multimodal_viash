@@ -1,0 +1,5 @@
+metric_id	metric_min	metric_max	metric_higherisbetter
+rfoob_celltype_accuracy	0	1	true
+rfoob_pseudotimegex_rsq	0	1	true
+rfoob_pseudotimeadt_rsq	0	1	true
+rfoob_batch_error	0	1	true

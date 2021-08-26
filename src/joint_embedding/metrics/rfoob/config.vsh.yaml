@@ -1,5 +1,5 @@
 functionality:
-  name: rf_oob
+  name: rfoob
   namespace: joint_embedding_metrics
   version: dev
   description: Calculating basic metrics for the joint embedding task.
@@ -33,7 +33,7 @@ functionality:
     - type: python_script
       path: ../../unit_tests/test_metric.py
     - path: ../../../../resources_test
-    - path: metric_meta_rf_oob.tsv
+    - path: metric_meta_rfoob.tsv
       dest: metric_meta.tsv
 platforms:
   - type: docker

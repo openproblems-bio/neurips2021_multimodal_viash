@@ -32,18 +32,32 @@ expect_true(
 
 cat("Calculating metrics\n")
 df <- data.frame(ad_pred$X, SOLUTION_CELL_TYPE = ad_sol$obs[["cell_type"]])
-rf <- ranger::ranger(SOLUTION_CELL_TYPE ~ ., df)
+rf1 <- ranger::ranger(SOLUTION_CELL_TYPE ~ ., df)
 
-rf_oob_pct_correct <- 1 - rf$prediction.error
+df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs$pseudotime_order_GEX)
+rf2 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
 
+colname <- colnames(ad_sol$obs)[grepl("pseudotime_order_A.*", colnames(ad_sol$obs))]
+df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs[[colname]])
+rf3 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
+
+df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs$batch)
+rf4 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
+
+metric_values <- c(
+  rfoob_celltype_accuracy = 1 - rf1$prediction.error,
+  rfoob_pseudotimegex_rsq = rf2$r.squared,
+  rfoob_pseudotimeadt_rsq = rf3$r.squared,
+  rfoob_batch_error = rf4$prediction.error,
+)
 
 cat("Create output object\n")
 out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
-    metric_ids = list("rf_oob_pct_correct"),
-    metric_values = list(rf_oob_pct_correct)
+    metric_ids = names(metric_values),
+    metric_values = metric_values
   )
 )
 
