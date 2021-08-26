@@ -48,7 +48,7 @@ metric_values <- c(
   rfoob_celltype_accuracy = 1 - rf1$prediction.error,
   rfoob_pseudotimegex_rsq = rf2$r.squared,
   rfoob_pseudotimeadt_rsq = rf3$r.squared,
-  rfoob_batch_error = rf4$prediction.error,
+  rfoob_batch_error = rf4$prediction.error
 )
 
 cat("Create output object\n")
