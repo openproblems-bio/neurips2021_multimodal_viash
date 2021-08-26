@@ -25,7 +25,7 @@ Read in the results data.
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
-    "output/pilot/predict_modality/output.extract_scores.output.tsv",
+    "output/pilot/joint_embedding/output.extract_scores.output.tsv",
     col_types = c(.default = "c")
   ) %>%
   # manually convert to floats afterwards
@@ -33,12 +33,8 @@ df <-
   # extract meta info
   mutate(
     dataset_loader = gsub("_.*", "", dataset_id),
-    dataset_group = gsub(".*_", "", dataset_id),
     method_group = gsub("_.*", "", method_id),
-    format_check = (correct_format + finished) / 2,
-    logp1_mse = log10(mse+1),
-    logp1_msle = log10(msle+1),
-    method_id = ifelse(method_id == "dummy_constant", "dummy_meanpergene", method_id)
+    format_check = (correct_format + finished) / 2
   )
 write_tsv(df, "output/pilot/predict_modality/scores.tsv")
 ```
@@ -50,7 +46,6 @@ summ <- df %>%
   mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
   group_by(method_id) %>%
   summarise_if(is.numeric, mean) %>% 
-  arrange(desc(mean_spearman_per_cell / msle)) %>% 
   select(-format_check)
 ```
 
@@ -118,26 +113,3 @@ patchwork::wrap_plots(
   theme_bw() +
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
 ```
-
-\newpage
-Colour by modality group.
-
-```{r swarm3, echo=FALSE}
-patchwork::wrap_plots(
-  ggplot(dfg) +
-    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_group), groupOnX = TRUE, size = 1) +
-    facet_wrap(~metric_id, scales = "free_y") +
-    scale_colour_brewer(palette = "Set3") +
-    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
-  ggplot(dfg) +
-    geom_boxplot(aes(method_id, value, colour = dataset_group)) +
-    facet_wrap(~metric_id, scales = "free_y") +
-    scale_colour_brewer(palette = "Set3") +
-    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
-  ncol = 1
-  # guides = "collect"
-) &
-  theme_bw() +
-  theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
-```
-
