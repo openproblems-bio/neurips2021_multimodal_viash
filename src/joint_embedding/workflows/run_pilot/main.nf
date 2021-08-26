@@ -12,7 +12,7 @@ include  { baseline_totalvi }           from "$targetDir/${task}_methods/baselin
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
-include  { rfoob }                     from "$targetDir/${task}_metrics/rfoob/main.nf"                       params(params)
+include  { rfoob }                      from "$targetDir/${task}_metrics/rfoob/main.nf"                        params(params)
 include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
