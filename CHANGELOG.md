@@ -36,6 +36,11 @@ Task 3, Joint Embedding:
 * Metric: Added Cell Cycle Conservation, Trajectory Conservation and Graph Connectivity metrics.
 
 
+## MAJOR CHANGES
+
+Common:
+* Extract scores: Return table in long instead of wide format.
+
 ## MINOR CHANGES
 
 Common:
