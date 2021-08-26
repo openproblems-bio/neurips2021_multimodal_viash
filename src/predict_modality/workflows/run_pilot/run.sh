@@ -18,3 +18,19 @@ bin/nextflow \
   -entry pilot_wf \
   --publishDir output/pilot/predict_modality/ \
   -resume
+
+bin/nextflow \
+  run . \
+  -main-script src/predict_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/predict_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config
+
+bin/nextflow \
+  run . \
+  -main-script src/predict_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/predict_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_vhighmem.config

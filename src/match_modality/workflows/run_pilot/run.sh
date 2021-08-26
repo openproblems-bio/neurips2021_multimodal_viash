@@ -18,3 +18,19 @@ bin/nextflow \
   -entry pilot_wf \
   --publishDir output/pilot/match_modality/ \
   -resume
+
+bin/nextflow \
+  run . \
+  -main-script src/match_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/match_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config
+
+bin/nextflow \
+  run . \
+  -main-script src/match_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/match_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_vhighmem.config
