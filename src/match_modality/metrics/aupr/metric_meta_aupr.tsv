@@ -1,3 +1,5 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
-auroc	0	1	true
-aupr	0	1	true
+pairing_auroc	0	1	true
+pairing_aupr	0	1	true
+celltype_auroc	0	1	true
+celltype_aupr	0	1	true
