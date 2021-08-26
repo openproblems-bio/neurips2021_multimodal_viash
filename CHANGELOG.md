@@ -41,6 +41,9 @@ Task 3, Joint Embedding:
 Common:
 * Extract scores: Return table in long instead of wide format.
 
+Task 1, Predict Modality:
+* Censoring: The expression matrices passed to methods are log-transformed and normalised (if size factors were computed).
+
 ## MINOR CHANGES
 
 Common:

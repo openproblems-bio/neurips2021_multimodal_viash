@@ -27,6 +27,31 @@ ad2_mod <- unique(ad2_raw$var[["feature_types"]])
 new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
+cat("Transforming RNA data\n")
+ad1_X <- as(ad1_raw$X, "CsparseMatrix")
+size_factors <- 
+  if (!is.null(ad1_raw$obs[["size_factors"]])) {
+    ad1_raw$obs[["size_factors"]]
+  } else {
+    rep(1, nrow(ad1_raw))
+  }
+ad1_X@x <- log(ad1_X@x / size_factors[ad1_X@i + 1] + 1)
+ad1_raw$layers <- list(counts = ad1_raw$X)
+ad1_raw$X <- ad1_X
+
+if (ad2_mod == "ADT") {
+  cat("Transforming ADT data\n")
+  ad2_X <- as(ad2_raw$X, "CsparseMatrix")
+  ad2_X@x <- log(ad2_X@x + 1)
+  ad2_raw$layers <- list(counts = ad2_raw$X)
+  ad2_raw$X <- ad2_X
+} else if (ad2_mod == "ATAC") {
+  cat("Transforming ATAC data\n")
+  ad2_X <- as(ad2_raw$X, "CsparseMatrix")
+  ad2_X@x <- (ad2_X@x > 0) + 0
+  ad2_raw$X <- ad2_X
+}
+
 # copied from scUtils/variance.R
 colVars_spm <- function( spm ) {
   stopifnot( methods::is( spm, "dgCMatrix" ) )
@@ -58,11 +83,13 @@ is_train <- ad1_raw$obs[["is_train"]]
 
 out_train_mod1 <- anndata::AnnData(
   X = ad1_raw$X[is_train, , drop = FALSE],
+  layers = list(counts = ad1_raw$layers$counts[is_train, , drop = FALSE]),
   var = ad1_var,
   uns = common_uns
 )
 out_train_mod2 <- anndata::AnnData(
   X = ad2_raw$X[is_train, , drop = FALSE],
+  layers = list(counts = ad2_raw$layers$counts[is_train, , drop = FALSE]),
   var = ad2_var,
   uns = common_uns
 )
@@ -70,11 +97,13 @@ out_train_mod2 <- anndata::AnnData(
 cat("Create test objects\n")
 out_test_mod1 <- anndata::AnnData(
   X = ad1_raw$X[!is_train, , drop = FALSE],
+  layers = list(counts = ad1_raw$layers$counts[!is_train, , drop = FALSE]),
   var = ad1_var,
   uns = common_uns
 )
 out_test_mod2 <- anndata::AnnData(
   X = ad2_raw$X[!is_train, , drop = FALSE],
+  layers = list(counts = ad2_raw$layers$counts[!is_train, , drop = FALSE]),
   var = ad2_var,
   uns = common_uns
 )

@@ -1,3 +1,2 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
 mse	0	+Inf	false
-msle	0	+Inf	false
