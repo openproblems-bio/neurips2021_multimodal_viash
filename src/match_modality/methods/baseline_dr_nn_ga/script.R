@@ -30,12 +30,12 @@ input_train_sol <- anndata::read_h5ad(par$input_train_sol)
 input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
 
-match_train <- apply(input_train_sol$X, 1, function(x) which(x > 0)) %>% unname
+match_train <- input_train_sol$uns$pairing_ix + 1
 
 cat("Running LMDS on input data\n")
 # merge input matrices
 mod1_X <- rbind(input_train_mod1$X, input_test_mod1$X)
-mod2_X <- rbind(input_train_mod2$X[match_train, , drop = FALSE], input_test_mod2$X)
+mod2_X <- rbind(input_train_mod2$X[order(match_train), , drop = FALSE], input_test_mod2$X)
 
 # perform DR
 dr_x1 <- lmds::lmds(mod1_X, ndim = 10, distance_method = "pearson")
