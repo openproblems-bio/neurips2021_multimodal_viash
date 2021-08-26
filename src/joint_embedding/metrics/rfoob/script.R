@@ -35,14 +35,16 @@ df <- data.frame(ad_pred$X, SOLUTION_CELL_TYPE = ad_sol$obs[["cell_type"]])
 rf1 <- ranger::ranger(SOLUTION_CELL_TYPE ~ ., df)
 
 df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs$pseudotime_order_GEX)
+df <- df[is.finite(df$SOLUTION_PSEUDOTIME_ORDER), , drop = FALSE]
 rf2 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
 
 colname <- colnames(ad_sol$obs)[grepl("pseudotime_order_A.*", colnames(ad_sol$obs))]
 df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs[[colname]])
+df <- df[is.finite(df$SOLUTION_PSEUDOTIME_ORDER), , drop = FALSE]
 rf3 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
 
-df <- data.frame(ad_pred$X, SOLUTION_PSEUDOTIME_ORDER = ad_sol$obs$batch)
-rf4 <- ranger::ranger(SOLUTION_PSEUDOTIME_ORDER ~ ., df)
+df <- data.frame(ad_pred$X, SOLUTION_BATCH = ad_sol$obs$batch)
+rf4 <- ranger::ranger(SOLUTION_BATCH ~ ., df)
 
 metric_values <- c(
   rfoob_celltype_accuracy = 1 - rf1$prediction.error,
