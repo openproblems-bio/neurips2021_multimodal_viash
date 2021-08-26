@@ -520,7 +520,7 @@ functionality:
       knn_out <- FNN::get.knnx(
         preds,
         dr_x2_test,
-        k = min(100, ceiling(par_frac * nrow(preds)))
+        k = min(1000, ceiling(par_frac * nrow(preds)))
       )
       
       cat("transform k nearest neighbors into a pairing matrix\\n")
@@ -1032,5 +1032,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_r"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_r/r_starter_kit"
   viash_version: "0.5.3dev"
-  git_commit: "20e7aebe6ff2ee51fe51c539af6a19de7e5db1ee"
+  git_commit: "b6708205d2ef5b1ee88463134cd31b1df6c7c322"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

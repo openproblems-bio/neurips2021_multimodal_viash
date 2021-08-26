@@ -51,7 +51,7 @@ assert_that(ad_pred$uns[["method_id"]] == method_id)
 cat("> Checking X\n")
 assert_that(
   is(ad_pred$X, "sparseMatrix"),
-  length(ad_pred$X@x) <= 100 * ad_sol$n_obs,
+  length(ad_pred$X@x) <= 1000 * ad_sol$n_obs,
   ad_pred$n_obs == ad_sol$n_obs,
   ad_pred$n_vars == ad_sol$n_vars,
   !is.null(ad_pred$obs_names),

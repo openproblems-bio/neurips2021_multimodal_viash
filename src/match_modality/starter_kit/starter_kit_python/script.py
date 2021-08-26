@@ -85,15 +85,15 @@ pred_test_mod2 = reg.predict(dr_test_mod1)
 
 
 logging.info('calculate k nearest neighbors between test_mod2 and predicted test_mod2')
-# To get the matching matrix, for each point in mod1_test, we take the 100 nearest neighbors of that
+# To get the matching matrix, for each point in mod1_test, we take the 1000 nearest neighbors of that
 # point in the transformed mod2_test dataset
-n_neighbors = min(100, input_test_mod1.n_obs)
+n_neighbors = min(1000, input_test_mod1.n_obs)
 nn = NearestNeighbors(n_neighbors=n_neighbors).fit(pred_test_mod2)
 distances, indices = nn.kneighbors(X=input_test_mod2.X)
 
 logging.info('transform k nearest neighbors into a pairing matrix')
 # Translate the neighborhood assignments to a pairing matrix that is (n_obs, n_obs)
-# NOTE: `pairing_matrix` must have NO MORE than 100*n_obs non-zero entries
+# NOTE: `pairing_matrix` must have NO MORE than 1000*n_obs non-zero entries
 ind_i = np.tile(np.arange(input_test_mod1.n_obs), (n_neighbors, 1)).T.flatten()
 ind_j = indices.flatten()
 ind_dist = distances.flatten()

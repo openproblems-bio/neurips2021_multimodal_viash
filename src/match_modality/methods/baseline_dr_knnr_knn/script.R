@@ -57,7 +57,7 @@ cat("Performing KNN between test mod2 DR and predicted test mod2\n")
 knn_out <- FNN::get.knnx(
   preds,
   dr_x2_test,
-  k = min(100, nrow(dr_x1_test))
+  k = min(1000, nrow(dr_x1_test))
 )
 
 cat("Creating output data structures\n")

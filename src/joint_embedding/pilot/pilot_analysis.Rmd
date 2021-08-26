@@ -1,0 +1,115 @@
+---
+title: "Pilot Analysis"
+output: pdf_document
+fontsize: 10pt
+geometry: margin=1cm
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=12)
+knitr::opts_knit$set(root.dir = '../../..')
+
+library(tidyverse)
+library(patchwork)
+library(kableExtra)
+```
+
+## Preprocess data
+
+Read in the results data.
+
+```{r tsv}
+# TODO: read in the method and dataset meta information and perform joins.
+df <- 
+  # read in all columns as strings because of infinite values in table
+  readr::read_tsv(
+    "output/pilot/joint_embedding/output.extract_scores.output.tsv",
+    col_types = c(.default = "c")
+  ) %>%
+  # manually convert to floats afterwards
+  mutate_at(vars(-one_of(c("method_id", "dataset_id"))), as.numeric) %>%
+  # extract meta info
+  mutate(
+    dataset_loader = gsub("_.*", "", dataset_id),
+    method_group = gsub("_.*", "", method_id),
+    format_check = (correct_format + finished) / 2
+  )
+write_tsv(df, "output/pilot/predict_modality/scores.tsv")
+```
+Calculate mean score per method. Infinite values are replaced by the highest 
+value in the results.
+```{r summtsv}
+replace_inf <- function(x) ifelse(is.infinite(x), max(x[is.finite(x)]), x)
+summ <- df %>% 
+  mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
+  group_by(method_id) %>%
+  summarise_if(is.numeric, mean) %>% 
+  select(-format_check)
+```
+
+```{r summtsvout, echo=FALSE}
+write_tsv(summ, "output/pilot/predict_modality/summary.tsv")
+summ %>% 
+  kbl("latex", digits = 2, booktabs = TRUE, align = "X") %>% 
+  kable_styling(full_width = TRUE, latex_options = "striped") %>% 
+  column_spec(1, width = "10em") %>% 
+  column_spec(which(colnames(summ) == "mse"), width = "5em") %>% 
+  row_spec(0, angle = 15)
+```
+
+\newpage
+## Visualise results
+```{r gather, echo=FALSE}
+# gather columns from wide to long format
+dfg <- df %>%
+  mutate(filter = finished > 0) %>%
+  select(-correct_format, -finished) %>%
+  # filter(method_id != "dummy_solution") %>%
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method"), -filter) %>%
+  filter(filter | metric_id %in% c("finished", "correct_format", "format_check"))
+```
+
+Colour by method.
+
+```{r swarm1, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = method_id), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = NULL, y = "Metric Value", colour = "Method"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = method_id)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = NULL, y = "Metric Value", colour = "Method"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
+```
+
+\newpage
+Colour by dataset source.
+
+```{r swarm2, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_loader), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set2") +
+    labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = dataset_loader)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set2") +
+    labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
+```

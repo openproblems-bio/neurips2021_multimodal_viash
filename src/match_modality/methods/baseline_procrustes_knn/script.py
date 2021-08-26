@@ -75,15 +75,15 @@ mod1.obsm["X_pro"], mod2.obsm["X_pro"], disparity = scipy.spatial.procrustes(
 logging.info("> Disparity value is: %0.3f" % disparity)
 
 logging.info("Perform nearest neighbors")
-# To get the matching matrix, for each point in mod1_test, we take the 100 nearest neighbors of that
+# To get the matching matrix, for each point in mod1_test, we take the 1000 nearest neighbors of that
 # point in the transformed mod2_test dataset
-n_neighbors = min(100, mod1te.n_obs)
+n_neighbors = min(1000, mod1te.n_obs)
 nn = NearestNeighbors(n_neighbors=n_neighbors).fit(mod1te.obsm["X_pro"])
 distances, indices = nn.kneighbors(X=mod2te.obsm["X_pro"])
 
 logging.info("Create pairing matrix")
 # Translate the neighborhood assignments to a pairing matrix that is (n_obs, n_obs)
-# NOTE: `pairing_matrix` must have NO MORE than 100*n_obs non-zero entries for fast metric computation
+# NOTE: `pairing_matrix` must have NO MORE than 1000*n_obs non-zero entries for fast metric computation
 ind_i = np.tile(np.arange(mod1te.n_obs), (n_neighbors, 1)).T.flatten()
 ind_j = indices.flatten()
 ind_dist = distances.flatten()

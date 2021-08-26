@@ -536,6 +536,7 @@ functionality:
       )
       out_train_sol = ad.AnnData(
           X=out_train_sol_mat,
+          obs=train_mod1.obs,
           uns={ "dataset_id": new_dataset_id },
           dtype="float32",
       )
@@ -544,6 +545,7 @@ functionality:
       )
       out_test_sol = ad.AnnData(
           X=out_test_sol_mat,
+          obs=test_mod1.obs,
           uns={ "dataset_id": new_dataset_id },
           dtype="float32"
       )
@@ -1157,5 +1159,5 @@ info:
   output: "target/nextflow/match_modality_datasets/censor_dataset"
   executable: "target/nextflow/match_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "20e7aebe6ff2ee51fe51c539af6a19de7e5db1ee"
+  git_commit: "b6708205d2ef5b1ee88463134cd31b1df6c7c322"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

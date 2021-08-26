@@ -50,7 +50,7 @@ summ <- df %>%
   mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
   group_by(method_id) %>%
   summarise_if(is.numeric, mean) %>% 
-  arrange(desc(mean_spearman / msle)) %>% 
+  arrange(desc(mean_spearman_per_cell / msle)) %>% 
   select(-format_check)
 ```
 

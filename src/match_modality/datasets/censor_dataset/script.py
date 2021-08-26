@@ -74,6 +74,7 @@ out_train_sol_mat = scipy.sparse.csr_matrix(
 )
 out_train_sol = ad.AnnData(
     X=out_train_sol_mat,
+    obs=train_mod1.obs,
     uns={ "dataset_id": new_dataset_id },
     dtype="float32",
 )
@@ -82,6 +83,7 @@ out_test_sol_mat = scipy.sparse.csr_matrix(
 )
 out_test_sol = ad.AnnData(
     X=out_test_sol_mat,
+    obs=test_mod1.obs,
     uns={ "dataset_id": new_dataset_id },
     dtype="float32"
 )

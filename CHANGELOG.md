@@ -28,6 +28,7 @@ Task 2, Match Modality:
 * Testing: Added reusable unit test¹ for method components and starter kits.
 * Testing: Added reusable unit test¹ for metrics.
 * Metric: Added a match probability metric.
+* Metric: Also compute AUROC and AUPR of whether cell type labels match.
 
 Task 3, Joint Embedding:
 * Testing: Added reusable unit test¹ for method components and starter kits.
@@ -47,6 +48,7 @@ Task 2, Match Modality:
 * Methods: Set dimensionality of sparse matrices to match expected dimensionality.
 * Dummy methods: Set dimensionality of sparse matrices to match expected dimensionality.
 * Starter kits: Set dimensionality of sparse matrices to match expected dimensionality.
+* Censor component: Fix solution object (forgot to include an np.argsort)
 
 ## NOTES
 

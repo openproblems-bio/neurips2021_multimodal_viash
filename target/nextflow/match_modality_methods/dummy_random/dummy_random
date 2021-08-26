@@ -344,7 +344,7 @@ input_test_mod1 = ad.read_h5ad(par["input_test_mod1"])
 input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 
 # determine number of values in array
-num_values = min(100, input_test_mod1.n_obs) * input_test_mod1.n_obs
+num_values = min(1000, input_test_mod1.n_obs) * input_test_mod1.n_obs
 indices = np.random.randint(input_test_mod1.n_obs**2, size=num_values)
 
 mat_x = np.random.rand(num_values)

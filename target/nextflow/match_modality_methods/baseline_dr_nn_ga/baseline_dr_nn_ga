@@ -488,7 +488,7 @@ final_dr <- lmds::lmds(
   ndim = par\$n_dims,
   distance_method = par\$distance_method
 )
-knn_out <- FNN::get.knn(final_dr, k = min(99, length(ord)-1))
+knn_out <- FNN::get.knn(final_dr, k = min(999, length(ord)-1))
 knn_index <- cbind(seq_along(ord), knn_out\$nn.index)
 knn_dist <- cbind(rep(0, length(ord)), knn_out\$nn.dist)
 

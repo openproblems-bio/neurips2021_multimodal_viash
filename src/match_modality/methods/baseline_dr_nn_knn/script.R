@@ -62,7 +62,7 @@ par_frac <- 1
 knn_out <- FNN::get.knnx(
   preds,
   dr_x2_test,
-  k = min(100, ceiling(par_frac * nrow(preds)))
+  k = min(1000, ceiling(par_frac * nrow(preds)))
 )
 
 cat("Creating output data structures\n")
