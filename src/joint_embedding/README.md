@@ -79,7 +79,7 @@ This component expects two h5ad files, `--input_mod1` and `--input_mod2`, contai
 
 This component should output *one* h5ad file, `--output`, containing an embedding of the cells.
 
-  * `.X`: Embedding matrix of the cells.
+  * `.X`: Dense embedding matrix of the cells.
   * `.uns['dataset_id']`: Name of the dataset.
   * `.uns['method_id']`: Name of the prediction method.
   * `.obs_names`: Ids for the cells.
@@ -96,7 +96,7 @@ This component expects two h5ad files, `--input_prediction` and `--input_solutio
 
 The `input_prediction` file has the following attributes:
 
-  * `.X`: Embedding matrix of the cells (at most 100 columns).
+  * `.X`: Dense embedding matrix of the cells (at most 100 columns).
   * `.uns['dataset_id']`: Name of the dataset.
   * `.uns['method_id']`: Name of the prediction method.
   * `.obs_names`: Ids for the cells.

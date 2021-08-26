@@ -1,4 +1,5 @@
 library(testthat, quietly = TRUE)
+library(Matrix, quietly = TRUE)
 requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
@@ -42,5 +43,6 @@ expect_gte(output$n_vars, 1)
 expect_lte(output$n_vars, 100)
 expect_false(is.null(output$obs_names))
 expect_equal(output$obs_names, input_mod1$obs_names)
+expect_false(is(output$X, "sparseMatrix"))
 
 cat("> Test succeeded!\n")

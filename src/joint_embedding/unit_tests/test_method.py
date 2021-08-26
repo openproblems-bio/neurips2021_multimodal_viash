@@ -1,6 +1,7 @@
 from os import path
 import subprocess
 import anndata as ad
+import scipy
 
 ## VIASH START
 # This code block will be replaced by viash at runtime.
@@ -39,5 +40,6 @@ assert output.n_obs == input_mod1.n_obs
 assert output.n_vars >= 1
 assert output.n_vars <= 100
 assert all(output.obs_names == input_mod1.obs_names)
+assert not scipy.sparse.issparse(output.X)
 
 print("> Test succeeded!")
