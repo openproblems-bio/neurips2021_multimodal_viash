@@ -30,11 +30,6 @@ functionality:
       example: "umap.png"
       description: UMAP visualisation of joint embedding.
       required: true
-    # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
-    - name: '--n_top_genes'
-      type: 'integer'
-      default: 2000
-      description: Number of genes to keep for highly variable gene selection.
 
   # files your script needs
   resources:
