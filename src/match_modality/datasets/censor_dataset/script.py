@@ -40,7 +40,7 @@ test_mod2 = mod2[test_ix, :][test_mod2_ix, :]
 
 print("Creating mod1 outputs")
 desired_var1_cols = [x for x in ["gene_ids", "feature_types"] if x in mod1.var.columns]
-desired_obs_cols = [x for x in ["batch", "library_size"] if x in mod1.obs.columns]
+desired_obs_cols = [x for x in ["batch", "size_factors"] if x in mod1.obs.columns]
 out_train_mod1 = ad.AnnData(
     X=train_mod1.X,
     obs=train_mod1.obs[desired_obs_cols],

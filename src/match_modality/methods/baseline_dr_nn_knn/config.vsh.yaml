@@ -3,6 +3,8 @@ functionality:
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing match modality methods against.
+  info:
+    type: baseline
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
