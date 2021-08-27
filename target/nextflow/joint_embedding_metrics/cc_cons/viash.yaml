@@ -861,5 +861,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/cc_cons"
   executable: "target/nextflow/joint_embedding_metrics/cc_cons/cc_cons"
   viash_version: "0.5.3dev"
-  git_commit: "3415ea9e208e0cfdf63643e0a5403cdba99dcd82"
+  git_commit: "7828856da6a4054c8a577e7cfe25332039360e0b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
