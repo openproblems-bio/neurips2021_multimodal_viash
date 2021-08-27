@@ -2,9 +2,10 @@ functionality:
   name: dummy_solution
   namespace: joint_embedding_methods
   version: dev
-  description: A dummy method which returns an embedding based on the solution
+  description: Generate an embedding from the solution object.
   info:
     type: positive_control
+    label: SolutionEmbedding
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

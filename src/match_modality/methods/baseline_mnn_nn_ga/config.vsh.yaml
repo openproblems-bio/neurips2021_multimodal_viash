@@ -2,9 +2,10 @@ functionality:
   name: baseline_mnn_nn_ga
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing match modality methods against.
+  description: Perform DR with MNN, predict embedding with Keras NN, and match cells with a GA to minimise pairwise distances.
   info:
     type: baseline
+    label: MNN+NN+GA
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

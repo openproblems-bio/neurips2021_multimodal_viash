@@ -2,9 +2,10 @@ functionality:
   name: baseline_umap
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: UMAP dimensionality reduction on the Euclidean distance.
   info:
     type: baseline
+    label: UMAP
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

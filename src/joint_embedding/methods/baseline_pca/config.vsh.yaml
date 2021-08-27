@@ -2,9 +2,10 @@ functionality:
   name: baseline_pca
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: PCA dimensionality reduction.
   info:
     type: baseline
+    label: "PCA"
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

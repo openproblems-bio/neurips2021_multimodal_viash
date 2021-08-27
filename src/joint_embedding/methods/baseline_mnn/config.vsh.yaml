@@ -2,9 +2,10 @@ functionality:
   name: baseline_mnn
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: Mutual nearest neighbors correction followed by PCA.
   info:
-    type: sota
+    type: baseline
+    label: "MNN"
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

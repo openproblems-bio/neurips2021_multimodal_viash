@@ -2,9 +2,11 @@ functionality:
   name: baseline_totalvi
   namespace: joint_embedding_methods
   version: dev
-  description: totalVI for comparing joint embedding methods against.
+  description: "totalVI: joint probabilistic modeling with Total Variational Inference"
   info:
     type: sota
+    label: totalVI
+    doi: 10.1038/s41592-020-01050-x
   usage: |
     baseline_totalvi \
       --input_mod1 spleen_lymph_111.mod1.h5ad \

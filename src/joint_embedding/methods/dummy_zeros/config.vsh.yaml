@@ -2,9 +2,10 @@ functionality:
   name: dummy_zeros
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: Generate an embedding containing only zero values.
   info:
     type: negative_control
+    label: Zeros
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com

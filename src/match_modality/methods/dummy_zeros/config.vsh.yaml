@@ -2,9 +2,10 @@ functionality:
   name: dummy_zeros
   namespace: match_modality_methods
   version: dev
-  description: A dummy method for comparing match modality methods against.
+  description: Generates a pairing matrix with all zero weights.
   info:
     type: negative_control
+    label: Zeros
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

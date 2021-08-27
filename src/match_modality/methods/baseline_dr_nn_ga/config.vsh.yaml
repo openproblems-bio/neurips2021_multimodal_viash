@@ -2,9 +2,10 @@ functionality:
   name: baseline_dr_nn_ga
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing match modality methods against.
+  description: Perform LMDS+Pearson DR, predict embedding with Keras NN, and match cells with a GA to minimise pairwise distances.
   info:
     type: baseline
+    label: LMDS+NN+GA
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
