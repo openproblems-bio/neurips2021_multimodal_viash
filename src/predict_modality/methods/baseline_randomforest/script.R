@@ -47,13 +47,11 @@ preds <- lapply(seq_len(ncol(responses_train)), function(i) {
     } else {
       rep(unique(y), nrow(dr_test))
     }
-  pred %>% 
-    Matrix(sparse = TRUE) %>% 
-    Matrix::drop0()
+  pred
 })
 
 cat("Creating outputs object\n")
-prediction <- do.call(cbind, preds)
+prediction <- Matrix::Matrix(do.call(cbind, preds), sparse = TRUE)
 rownames(prediction) <- rownames(dr_test)
 colnames(prediction) <- colnames(ad2)
 
