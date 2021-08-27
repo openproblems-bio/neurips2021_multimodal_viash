@@ -43,11 +43,11 @@ functionality:
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 50
       description: Number of principal components to use.
     - name: "--n_neighbors"
       type: "integer"
-      default: 5
+      default: 50
       description: Number of neighbors to use.
       
   # files your script needs
