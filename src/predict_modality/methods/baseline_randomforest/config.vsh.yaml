@@ -35,7 +35,7 @@ functionality:
       required: true
     - name: "--distance_method"
       type: "string"
-      default: "spearman"
+      default: "pearson"
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
