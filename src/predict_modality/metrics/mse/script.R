@@ -29,17 +29,7 @@ expect_true(
   info = "Dataset and prediction anndata objects should have the same shape / dimensions."
 )
 
-colVars_spm <- function( spm ) {
-  stopifnot( methods::is( spm, "dgCMatrix" ) )
-  ans <- sapply( base::seq.int(spm@Dim[2]), function(j) {
-    if( spm@p[j+1] == spm@p[j] ) { return(0) } # all entries are 0: var is 0
-    mean <- base::sum( spm@x[ (spm@p[j]+1):spm@p[j+1] ] ) / spm@Dim[1]
-    sum( ( spm@x[ (spm@p[j]+1):spm@p[j+1] ] - mean )^2 ) + mean^2 * ( spm@Dim[1] - ( spm@p[j+1] - spm@p[j] ) ) 
-  })
-  ans / ( spm@Dim[1] - 1 )
-}
-
-cat("Computing MSE and MSLE metrics\n")
+cat("Computing MSE metrics\n")
 # Wrangle data
 scores <- 
   full_join(

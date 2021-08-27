@@ -349,17 +349,7 @@ functionality:
         info = "Dataset and prediction anndata objects should have the same shape / dimensions."
       )
       
-      colVars_spm <- function( spm ) {
-        stopifnot( methods::is( spm, "dgCMatrix" ) )
-        ans <- sapply( base::seq.int(spm@Dim[2]), function(j) {
-          if( spm@p[j+1] == spm@p[j] ) { return(0) } # all entries are 0: var is 0
-          mean <- base::sum( spm@x[ (spm@p[j]+1):spm@p[j+1] ] ) / spm@Dim[1]
-          sum( ( spm@x[ (spm@p[j]+1):spm@p[j+1] ] - mean )^2 ) + mean^2 * ( spm@Dim[1] - ( spm@p[j+1] - spm@p[j] ) ) 
-        })
-        ans / ( spm@Dim[1] - 1 )
-      }
-      
-      cat("Computing MSE and MSLE metrics\\n")
+      cat("Computing MSE metrics\\n")
       # Wrangle data
       scores <- 
         full_join(
@@ -827,5 +817,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/mse"
   executable: "target/nextflow/predict_modality_metrics/mse/mse"
   viash_version: "0.5.3dev"
-  git_commit: "3d89fb262cace0055611fe123630754e6f6ed656"
+  git_commit: "d6aa7de9e6893c1cb6730a90750c88ae8154cab2"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -1,2 +1,5 @@
-dataset_id	method_id	celltype_aupr	celltype_auroc	pairing_aupr	pairing_auroc
-test_resource_MM	baseline_dr_nn_knn	0.1260763793623596	0.5422724621943189	0.01701679963395364	0.5017494706398793
+dataset_id	method_id	metric_id	value
+test_resource_MM	baseline_dr_nn_knn	pairing_auroc	0.5129754795686949
+test_resource_MM	baseline_dr_nn_knn	pairing_aupr	0.01093254927085141
+test_resource_MM	baseline_dr_nn_knn	celltype_auroc	0.6079160285685248
+test_resource_MM	baseline_dr_nn_knn	celltype_aupr	0.24219612009892444

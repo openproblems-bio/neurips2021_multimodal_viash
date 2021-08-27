@@ -364,9 +364,9 @@ preds <- lapply(seq_len(ncol(responses_train)), function(i) {
   y <- responses_train[,i]
   if (length(unique(y)) > 1) {
     lm <- lm(YTRAIN~., data.frame(dr_train, YTRAIN=y))
-    stats::predict(lm, data.frame(dr_test))
+    unname(stats::predict(lm, data.frame(dr_test)))
   } else {
-    setNames(rep(unique(y), nrow(dr_test)), rownames(dr_test))
+    rep(unique(y), nrow(dr_test))
   }
 })
 

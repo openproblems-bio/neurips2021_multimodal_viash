@@ -47,11 +47,11 @@ functionality:
       description: Number of dimensions to use.
     - name: "--n_ga_pop"
       type: "integer"
-      default: 50
+      default: 300
       description: Population size of genetic algorithm.
     - name: "--n_ga_iter"
       type: "integer"
-      default: 100
+      default: 1000
       description: Number of GA iterations to perform.
     - name: "--output"
       type: "file"

@@ -11,7 +11,8 @@ par <- list(
   input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
   input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
   output = "output.h5ad",
-  n_pcs = 4L
+  n_pcs = 4L,
+  distance_method = "pearson"
 )
 ## VIASH END
 
@@ -46,14 +47,11 @@ preds <- lapply(seq_len(ncol(responses_train)), function(i) {
     } else {
       rep(unique(y), nrow(dr_test))
     }
-  pred %>% 
-    round() %>% 
-    Matrix(sparse = TRUE) %>% 
-    Matrix::drop0()
+  pred
 })
 
 cat("Creating outputs object\n")
-prediction <- do.call(cbind, preds)
+prediction <- Matrix::Matrix(do.call(cbind, preds), sparse = TRUE)
 rownames(prediction) <- rownames(dr_test)
 colnames(prediction) <- colnames(ad2)
 

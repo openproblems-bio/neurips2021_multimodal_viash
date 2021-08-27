@@ -85,7 +85,7 @@ functionality:
     name: "--n_ga_pop"
     alternatives: []
     description: "Population size of genetic algorithm."
-    default: 50
+    default: 300
     required: false
     direction: "Input"
     multiple: false
@@ -94,7 +94,7 @@ functionality:
     name: "--n_ga_iter"
     alternatives: []
     description: "Number of GA iterations to perform."
-    default: 100
+    default: 1000
     required: false
     direction: "Input"
     multiple: false
@@ -312,14 +312,14 @@ functionality:
       
         echo "   --n_ga_pop"
         echo "        type: integer"
-        echo "        default: 50"
+        echo "        default: 300"
         echo "        Population size of genetic algorithm."
         echo ""
       
       
         echo "   --n_ga_iter"
         echo "        type: integer"
-        echo "        default: 100"
+        echo "        default: 1000"
         echo "        Number of GA iterations to perform."
         echo ""
       
@@ -486,10 +486,10 @@ functionality:
         VIASH_PAR_N_DIMS="10"
       fi
       if [ -z "$VIASH_PAR_N_GA_POP" ]; then
-        VIASH_PAR_N_GA_POP="50"
+        VIASH_PAR_N_GA_POP="300"
       fi
       if [ -z "$VIASH_PAR_N_GA_ITER" ]; then
-        VIASH_PAR_N_GA_ITER="100"
+        VIASH_PAR_N_GA_ITER="1000"
       fi
       
       
@@ -621,9 +621,18 @@ functionality:
         popSize = par\$n_ga_pop,
         maxiter = par\$n_ga_iter,
         parallel = FALSE,
-        monitor = GA:::gaMonitor
+        monitor = GA:::gaMonitor,
+        keepBest = TRUE
       )
-      ord <- ga_out@solution[1,]
+      # ord <- ga_out@solution[1,]
+      
+      
+      bestSol <- do.call(rbind, ga_out@bestSol)
+      df <- reshape2::melt(bestSol, varnames = c("iter", "i"), value.name = "j") %>%
+        group_by(i, j) %>%
+        summarise(value = n(), .groups = "drop") %>%
+        arrange(desc(value)) %>%
+        head(input_test_mod1\$n_obs * 1000)
       
       # # visual checks
       # ord <- order(match_test)
@@ -634,32 +643,33 @@ functionality:
       #   geom_point(aes(x.comp_1, x.comp_2, colour = cell_type, shape = "pred"), size = 3) +
       #   theme_bw()
       
-      final_dr <- lmds::lmds(
-        cbind(input_test_mod1\$X, input_test_mod2\$X[ord, , drop = FALSE]),
-        ndim = par\$n_dims,
-        distance_method = par\$distance_method
-      )
-      # ggplot() + 
-      #   geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(final_dr, type = "real", input_test_sol\$obs), size = 3) +
-      #   theme_bw()
-      knn_out <- FNN::get.knn(final_dr, k = min(999, length(ord)-1))
-      knn_index <- cbind(seq_along(ord), knn_out\$nn.index)
-      knn_dist <- cbind(rep(0, length(ord)), knn_out\$nn.dist)
+      # final_dr <- lmds::lmds(
+      #   cbind(input_test_mod1\$X, input_test_mod2\$X[ord, , drop = FALSE]),
+      #   ndim = par\$n_dims,
+      #   distance_method = par\$distance_method
+      # )
+      # # ggplot() + 
+      # #   geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(final_dr, type = "real", input_test_sol\$obs), size = 3) +
+      # #   theme_bw()
+      # knn_out <- FNN::get.knn(final_dr, k = min(999, length(ord)-1))
+      # knn_index <- cbind(seq_along(ord), knn_out\$nn.index)
+      # knn_dist <- cbind(rep(0, length(ord)), knn_out\$nn.dist)
       
-      cat("Creating output data structures\\n")
-      df <- tibble(
-        i = as.vector(row(knn_index)),
-        j = as.vector(knn_index),
-        x = as.vector(knn_dist)
-      ) %>% mutate(
-        j = order(ord)[j],
-        # rescale to get weights from distances
-        y = max(x) * 2 - x
-      )
+      # cat("Creating output data structures\\n")
+      # df <- tibble(
+      #   i = as.vector(row(knn_index)),
+      #   j = as.vector(knn_index),
+      #   x = as.vector(knn_dist)
+      # ) %>% mutate(
+      #   j = order(ord)[j],
+      #   # rescale to get weights from distances
+      #   y = max(x) * 2 - x
+      # )
       knn_mat <- Matrix::sparseMatrix(
         i = df\$i,
         j = df\$j,
-        x = df\$y,
+        # x = df\$y,
+        x = df\$value,
         dims = list(nrow(dr_x1_test), nrow(dr_x2_test))
       )
       
@@ -698,8 +708,8 @@ functionality:
           baseline_mnn_nn_ga__input_test_mod2 = "viash_no_value"
           baseline_mnn_nn_ga__distance_method = "spearman"
           baseline_mnn_nn_ga__n_dims = "10"
-          baseline_mnn_nn_ga__n_ga_pop = "50"
-          baseline_mnn_nn_ga__n_ga_iter = "100"
+          baseline_mnn_nn_ga__n_ga_pop = "300"
+          baseline_mnn_nn_ga__n_ga_iter = "1000"
           baseline_mnn_nn_ga__output = "viash_no_value"
           id = ""
           testScript = "test_method.R"
@@ -809,7 +819,7 @@ functionality:
                 multiple = false
                 multiple_sep = ":"
                 value = "${params.baseline_mnn_nn_ga__n_ga_pop}"
-                dflt = "50"
+                dflt = "300"
                 description = "Population size of genetic algorithm."
               }
               n_ga_iter {
@@ -821,7 +831,7 @@ functionality:
                 multiple = false
                 multiple_sep = ":"
                 value = "${params.baseline_mnn_nn_ga__n_ga_iter}"
-                dflt = "100"
+                dflt = "1000"
                 description = "Number of GA iterations to perform."
               }
               output {
@@ -1204,5 +1214,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_mnn_nn_ga"
   executable: "target/nextflow/match_modality_methods/baseline_mnn_nn_ga/baseline_mnn_nn_ga"
   viash_version: "0.5.3dev"
-  git_commit: "3d89fb262cace0055611fe123630754e6f6ed656"
+  git_commit: "d6aa7de9e6893c1cb6730a90750c88ae8154cab2"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
