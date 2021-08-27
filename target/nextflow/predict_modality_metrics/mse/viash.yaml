@@ -827,5 +827,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/mse"
   executable: "target/nextflow/predict_modality_metrics/mse/mse"
   viash_version: "0.5.3dev"
-  git_commit: "ace66b926af0ad9cd3c6f212271c2585e97ec1f9"
+  git_commit: "efe3ab289c718a3685a9c7e55277c581b73c5f2c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
