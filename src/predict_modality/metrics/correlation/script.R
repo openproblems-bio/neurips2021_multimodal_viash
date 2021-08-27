@@ -32,10 +32,6 @@ cat("Computing correlation metrics\n")
 tv <- ad_sol$X
 pv <- ad_pred$X
 
-# log transform values
-tv@x <- log(tv@x + 1)
-pv@x <- log(abs(pv@x) + 1) * sign(pv@x)
-
 # Compute metrics
 pearson_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 1, diag = TRUE, drop0 = TRUE))
 spearman_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 1, diag = TRUE, drop0 = TRUE))

@@ -45,9 +45,8 @@ platforms:
         bioc:
           - scran
           - SingleCellExperiment
-      - type: python
-        packages:
-          - scanpy
-          - leidenalg
+      - type: r
+        cran: 
+          - lmds
   - type: nextflow
     labels: [ midmem, lowcpu ]
