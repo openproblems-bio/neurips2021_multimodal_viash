@@ -80,16 +80,20 @@ cat("Creating train objects\n")
 ad1_var <- ad1_raw$var %>% select(one_of("gene_ids"), feature_types)
 ad2_var <- ad2_raw$var %>% select(one_of("gene_ids"), feature_types)
 is_train <- ad1_raw$obs[["is_train"]]
+train_obs <- ad1_raw$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
+test_obs <- ad1_raw$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
 
 out_train_mod1 <- anndata::AnnData(
   X = ad1_raw$X[is_train, , drop = FALSE],
   layers = list(counts = ad1_raw$layers$counts[is_train, , drop = FALSE]),
+  obs = train_obs,
   var = ad1_var,
   uns = common_uns
 )
 out_train_mod2 <- anndata::AnnData(
   X = ad2_raw$X[is_train, , drop = FALSE],
   layers = list(counts = ad2_raw$layers$counts[is_train, , drop = FALSE]),
+  obs = train_obs,
   var = ad2_var,
   uns = common_uns
 )
@@ -98,12 +102,14 @@ cat("Create test objects\n")
 out_test_mod1 <- anndata::AnnData(
   X = ad1_raw$X[!is_train, , drop = FALSE],
   layers = list(counts = ad1_raw$layers$counts[!is_train, , drop = FALSE]),
+  obs = test_obs,
   var = ad1_var,
   uns = common_uns
 )
 out_test_mod2 <- anndata::AnnData(
   X = ad2_raw$X[!is_train, , drop = FALSE],
   layers = list(counts = ad2_raw$layers$counts[!is_train, , drop = FALSE]),
+  obs = test_obs,
   var = ad2_var,
   uns = common_uns
 )
