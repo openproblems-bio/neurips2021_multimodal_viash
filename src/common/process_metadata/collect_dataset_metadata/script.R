@@ -31,9 +31,11 @@ dataset_metadata_h5ad <-
 
 combined <- 
   dataset_metadata_tsv %>% 
-  left_join(dataset_metadata_h5ad %>% filter(modality == "GEX") %>% rename(num_features_gex = num_features), by = "dataset_id") %>%
-  left_join(dataset_metadata_h5ad %>% filter(modality != "GEX") %>% select(dataset_id, num_features_mod2 = num_features), by = "dataset_id") %>%
-  filter(!is.na(num_cells))
+  full_join(dataset_metadata_h5ad %>% filter(modality == "GEX") %>% rename(num_features_mod1 = num_features, mod1_modality = modality), by = "dataset_id") %>%
+  full_join(dataset_metadata_h5ad %>% filter(modality != "GEX") %>% select(dataset_id, num_features_mod2 = num_features, mod2_modality = modality), by = "dataset_id") %>%
+  filter(!is.na(num_cells)) %>%
+  mutate(source = gsub("_.*", "", dataset_id)) %>%
+  select(source, dataset_id, geo_id, everything())
 
 cat("Writing output file\n")
 write_tsv(combined, par$output)
