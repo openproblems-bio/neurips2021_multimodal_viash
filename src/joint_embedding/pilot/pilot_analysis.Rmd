@@ -28,15 +28,19 @@ df <-
     "output/pilot/joint_embedding/output.extract_scores.output.tsv",
     col_types = c(.default = "c")
   ) %>%
-  # manually convert to floats afterwards
-  mutate_at(vars(-one_of(c("method_id", "dataset_id"))), as.numeric) %>%
-  # extract meta info
   mutate(
+    # manually convert to floats afterwards
+    value = as.numeric(value),
+    # extract meta info
     dataset_loader = gsub("_.*", "", dataset_id),
-    method_group = gsub("_.*", "", method_id),
+    dataset_group = gsub(".*_", "", dataset_id),
+    method_group = gsub("_.*", "", method_id)
+  ) %>% 
+  spread(metric_id, value) %>% 
+  mutate(
     format_check = (correct_format + finished) / 2
   )
-write_tsv(df, "output/pilot/predict_modality/scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "output/pilot/joint_embedding/scores.tsv")
 ```
 Calculate mean score per method. Infinite values are replaced by the highest 
 value in the results.
@@ -50,7 +54,7 @@ summ <- df %>%
 ```
 
 ```{r summtsvout, echo=FALSE}
-write_tsv(summ, "output/pilot/predict_modality/summary.tsv")
+write_tsv(summ, "output/pilot/joint_embedding/summary.tsv")
 summ %>% 
   kbl("latex", digits = 2, booktabs = TRUE, align = "X") %>% 
   kable_styling(full_width = TRUE, latex_options = "striped") %>% 

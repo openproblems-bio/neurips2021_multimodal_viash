@@ -28,19 +28,20 @@ df <-
     "output/pilot/predict_modality/output.extract_scores.output.tsv",
     col_types = c(.default = "c")
   ) %>%
-  # manually convert to floats afterwards
-  mutate_at(vars(-one_of(c("method_id", "dataset_id"))), as.numeric) %>%
-  # extract meta info
   mutate(
+    # manually convert to floats afterwards
+    value = as.numeric(value),
+    # extract meta info
     dataset_loader = gsub("_.*", "", dataset_id),
     dataset_group = gsub(".*_", "", dataset_id),
-    method_group = gsub("_.*", "", method_id),
+    method_group = gsub("_.*", "", method_id)
+  ) %>% 
+  spread(metric_id, value) %>% 
+  mutate(
     format_check = (correct_format + finished) / 2,
-    logp1_mse = log10(mse+1),
-    logp1_msle = log10(msle+1),
-    method_id = ifelse(method_id == "dummy_constant", "dummy_meanpergene", method_id)
+    logp1_mse = log10(mse+1)
   )
-write_tsv(df, "output/pilot/predict_modality/scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "output/pilot/predict_modality/scores.tsv")
 ```
 Calculate mean score per method. Infinite values are replaced by the highest 
 value in the results.
@@ -50,7 +51,6 @@ summ <- df %>%
   mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
   group_by(method_id) %>%
   summarise_if(is.numeric, mean) %>% 
-  arrange(desc(mean_spearman_per_cell / msle)) %>% 
   select(-format_check)
 ```
 

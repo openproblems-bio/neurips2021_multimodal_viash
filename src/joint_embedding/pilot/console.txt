@@ -1,0 +1,37 @@
+N E X T F L O W  ~  version 21.04.1
+Launching `src/joint_embedding/workflows/run_pilot/main.nf` [silly_euclid] - revision: 4c81d6bf9e
+[7f/9e1fbf] process > pilot_wf:baseline_lmds:baseline_lmds_process (azimuth_ref)                        [100%] 23 of 23, cached: 8, failed: 1 ✔
+[15/769952] process > pilot_wf:baseline_pca:baseline_pca_process (azimuth_ref)                          [100%] 23 of 23, cached: 7, failed: 11 ✔
+[72/adc114] process > pilot_wf:baseline_umap:baseline_umap_process (azimuth_ref)                        [100%] 23 of 23, cached: 7, failed: 12 ✔
+[06/2da779] process > pilot_wf:baseline_totalvi:baseline_totalvi_process (azimuth_ref)                  [100%] 23 of 23, failed: 23 ✔
+[12/3568a8] process > pilot_wf:baseline_mnn:baseline_mnn_process (azimuth_ref)                          [100%] 23 of 23, cached: 7, failed: 4 ✔
+[57/2c2d61] process > pilot_wf:dummy_random:dummy_random_process (azimuth_ref)                          [100%] 23 of 23, cached: 11 ✔
+[2c/e53a48] process > pilot_wf:dummy_zeros:dummy_zeros_process (azimuth_ref)                            [100%] 23 of 23, cached: 13 ✔
+[17/588721] process > pilot_wf:dummy_solution:dummy_solution_process (azimuth_ref)                      [100%] 23 of 23, cached: 7, failed: 13 ✔
+[a3/af854c] process > pilot_wf:get_id_predictions (120)                                                 [100%] 120 of 120, cached: 45 ✔
+[6a/3a6cee] process > pilot_wf:get_id_solutions (2)                                                     [100%] 23 of 23, cached: 23 ✔
+[04/5b2a4b] process > pilot_wf:bind_tsv_rows:bind_tsv_rows_process (meta)                               [100%] 1 of 1, cached: 1 ✔
+[ad/941e09] process > pilot_wf:rfoob:rfoob_process (azimuth_ref_dummy_random)                           [100%] 120 of 120, failed: 7 ✔
+[79/07059f] process > pilot_wf:latent_mixing:latent_mixing_process (azimuth_ref_dummy_random)           [100%] 120 of 120, failed: 5 ✔
+[b3/664472] process > pilot_wf:ari:ari_process (azimuth_ref_dummy_random)                               [100%] 120 of 120, failed: 2 ✔
+[5a/7a8c13] process > pilot_wf:asw_batch:asw_batch_process (azimuth_ref_dummy_random)                   [100%] 120 of 120 ✔
+[9b/4f3239] process > pilot_wf:asw_label:asw_label_process (azimuth_ref_dummy_random)                   [100%] 120 of 120, failed: 1 ✔
+[a2/775f00] process > pilot_wf:nmi:nmi_process (azimuth_ref_dummy_random)                               [100%] 120 of 120, failed: 2 ✔
+[68/345c42] process > pilot_wf:cc_cons:cc_cons_process (azimuth_ref_dummy_random)                       [100%] 120 of 120, failed: 5 ✔
+[9c/a9c2d4] process > pilot_wf:ti_cons:ti_cons_process (azimuth_ref_dummy_random)                       [100%] 120 of 120, failed: 3 ✔
+[d6/22d1ce] process > pilot_wf:graph_connectivity:graph_connectivity_process (azimuth_ref_dummy_random) [100%] 120 of 120 ✔
+[74/eeceb8] process > pilot_wf:check_format:check_format_process (azimuth_ref_dummy_random)             [100%] 120 of 120 ✔
+[84/96d85d] process > pilot_wf:extract_scores:extract_scores_process (output)                           [100%] 1 of 1 ✔
+
+
+
+
+
+Completed at: 27-Aug-2021 05:03:08
+Duration    : 1h 12m 50s
+CPU hours   : 72.7 (1.7% cached, 33.8% failed)
+Succeeded   : 1'311
+Cached      : 129
+Ignored     : 89
+Failed      : 89
+

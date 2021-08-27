@@ -1,49 +1,24 @@
-N E X T F L O W  ~  version 21.04.1
-Launching `src/predict_modality/workflows/run_pilot/main.nf` [pensive_spence] - revision: 8cfcb444f5
-executor >  local (22)
-executor >  local (22)
-executor >  local (36)
-executor >  local (36)
-executor >  local (37)
-executor >  local (41)
-executor >  local (41)
-executor >  local (51)
-executor >  local (51)
-executor >  local (52)
-executor >  local (54)
-executor >  local (54)
-executor >  local (55)
-executor >  local (56)
-[aa/9021ac] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (10x_pbmc_granulocyte_sorted_10k_mod2) [ 92%] 46 of 50, cached: 40, failed: 4
-executor >  local (56)
-[aa/9021ac] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (10x_pbmc_granulocyte_sorted_10k_mod2) [ 92%] 46 of 50, cached: 40, failed: 4
-executor >  local (57)
-[85/248808] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (babel_GM12878_mod2)  [ 92%] 46 of 50, cached: 40, failed: 4
-executor >  local (57)
-[85/248808] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (babel_GM12878_mod2)  [ 92%] 46 of 50, cached: 40, failed: 4
-executor >  local (78)
-[5f/d3a3a8] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (azimuth_ref_mod2)       [100%] 50 of 50, cached: 40, failed: 7 ✔
-[72/8e5592] process > pilot_wf:baseline_linearmodel:baseline_linearmodel_process (azimuth_ref_rna)          [100%] 50 of 50, cached: 50 ✔
-[d2/5b5538] process > pilot_wf:baseline_knn:baseline_knn_process (10x_pbmc_granulocyte_sorted_3k_rna)       [100%] 50 of 50, cached: 49 ✔
-[61/d29463] process > pilot_wf:baseline_babel:baseline_babel_process (azimuth_ref_rna)                      [100%] 50 of 50, failed: 50 ✔
-[0f/555545] process > pilot_wf:dummy_zeros:dummy_zeros_process (azimuth_ref_rna)                            [100%] 50 of 50, cached: 50 ✔
-[0b/1f23a8] process > pilot_wf:dummy_constant:dummy_constant_process (azimuth_ref_rna)                      [100%] 50 of 50, cached: 50 ✔
-[17/f6474d] process > pilot_wf:dummy_random:dummy_random_process (azimuth_ref_rna)                          [100%] 50 of 50, cached: 50 ✔
-[28/db9235] process > pilot_wf:dummy_solution:dummy_solution_process (azimuth_ref_mod2)                     [100%] 50 of 50, cached: 50 ✔
-[ee/1eae91] process > pilot_wf:get_id_predictions (343)                                                     [100%] 343 of 343, cached: 339 ✔
-[5b/3af54f] process > pilot_wf:get_id_solutions (40)                                                        [100%] 50 of 50, cached: 50 ✔
-[fe/bf5376] process > pilot_wf:bind_tsv_rows:bind_tsv_rows_process (meta)                                   [100%] 1 of 1, cached: 1 ✔
-[93/af0029] process > pilot_wf:correlation:correlation_process (babel_GM12878_mod2_baseline_randomforest)   [100%] 343 of 343, cached: 339 ✔
-[09/c89d8b] process > pilot_wf:msle:msle_process (babel_GM12878_mod2_baseline_randomforest)                 [100%] 343 of 343, cached: 339 ✔
-[97/ea0250] process > pilot_wf:check_format:check_format_process (babel_GM12878_mod2_baseline_randomforest) [100%] 343 of 343, cached: 339 ✔
-[47/e6fcb3] process > pilot_wf:extract_scores:extract_scores_process (output)                               [100%] 1 of 1 ✔
-[5f/d3a3a8] NOTE: Process `pilot_wf:baseline_randomforest:baseline_randomforest_process (azimuth_ref_mod2)` failed -- Error is ignored
-Completed at: 25-Aug-2021 06:03:13
-Duration    : 8h 48m 26s
-CPU hours   : 726.1 (32.7% cached, 62.1% failed)
-Succeeded   : 21
-Cached      : 1'746
-Ignored     : 57
-Failed      : 57
+Launching `src/predict_modality/workflows/run_pilot/main.nf` [magical_hilbert] - revision: ce6cb123e6
+executor >  local (1502)
+[f1/07a282] process > pilot_wf:baseline_randomforest:baseline_randomforest_process (10x_lymph_node_lymphoma_14k_rna)  [100%] 46 of 46, failed: 28 ✔
+[59/20ee88] process > pilot_wf:baseline_linearmodel:baseline_linearmodel_process (azimuth_ref_mod2)                   [100%] 46 of 46, failed: 9 ✔
+[41/dc532b] process > pilot_wf:baseline_knn:baseline_knn_process (azimuth_ref_mod2)                                   [100%] 46 of 46, failed: 2 ✔
+[a9/357c70] process > pilot_wf:dummy_zeros:dummy_zeros_process (azimuth_ref_rna)                                      [100%] 46 of 46 ✔
+[37/3266fa] process > pilot_wf:dummy_meanpergene:dummy_meanpergene_process (azimuth_ref_rna)                          [100%] 46 of 46 ✔
+[e0/f84e2e] process > pilot_wf:dummy_random:dummy_random_process (azimuth_ref_rna)                                    [100%] 46 of 46 ✔
+[fb/83774a] process > pilot_wf:dummy_solution:dummy_solution_process (10x_pbmc_10k_protein_v3_mod2)                   [100%] 46 of 46 ✔
+[a4/26e236] process > pilot_wf:get_id_predictions (283)                                                               [100%] 283 of 283 ✔
+[ed/297a7e] process > pilot_wf:get_id_solutions (46)                                                                  [100%] 46 of 46 ✔
+[f5/c01611] process > pilot_wf:bind_tsv_rows:bind_tsv_rows_process (meta)                                             [100%] 1 of 1 ✔
+[b7/1bb692] process > pilot_wf:correlation:correlation_process (10x_lymph_node_lymphoma_14k_rna_baseline_linearmodel) [100%] 283 of 283, failed: 8 ✔
+[0a/e6690f] process > pilot_wf:mse:mse_process (azimuth_ref_mod2_dummy_random)                                        [100%] 283 of 283, failed: 1 ✔
+[07/e0d342] process > pilot_wf:check_format:check_format_process (10x_pbmc_granulocyte_sorted_10k_mod2_baseline_knn)  [100%] 283 of 283 ✔
+[5b/48f190] process > pilot_wf:extract_scores:extract_scores_process (output)                                         [100%] 1 of 1 ✔
+Completed at: 27-Aug-2021 04:08:45
+Duration    : 27m 51s
+CPU hours   : 27.6 (44.8% failed)
+Succeeded   : 1'454
+Ignored     : 48
+Failed      : 48
 
 
