@@ -5,7 +5,7 @@ functionality:
   description: Generate a random embedding from a normal distribution.
   info:
     type: negative_control
-    label: NormalRandom
+    label: Normal Dist.
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com
