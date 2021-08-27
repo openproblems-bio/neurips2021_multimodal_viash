@@ -446,6 +446,12 @@ functionality:
       
         ad_rna\$obs[["batch"]] <- batch_names[batch_ix]
         ad_mod2\$obs[["batch"]] <- batch_names[batch_ix]
+      
+        ad_rna\$uns[["batch_type"]] <- "simulated"
+        ad_mod2\$uns[["batch_type"]] <- "simulated"
+      } else {
+        ad_rna\$uns[["batch_type"]] <- "real"
+        ad_mod2\$uns[["batch_type"]] <- "real"
       }
       
       # dr <- SCORPIUS::reduce_dimensionality(ad_rna\$X)
@@ -947,5 +953,5 @@ info:
   output: "target/nextflow/common_process_dataset/simulate_batch"
   executable: "target/nextflow/common_process_dataset/simulate_batch/simulate_batch"
   viash_version: "0.5.3dev"
-  git_commit: "e9ffd08e6fd761a557cadb4ff6bc2a220a748c4a"
+  git_commit: "ace66b926af0ad9cd3c6f212271c2585e97ec1f9"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

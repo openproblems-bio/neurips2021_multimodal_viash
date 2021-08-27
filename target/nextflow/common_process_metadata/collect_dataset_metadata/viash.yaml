@@ -352,19 +352,26 @@ functionality:
       
       dataset_metadata_h5ad <- 
         map_df(par\$input_h5ads, function(x) {
+          cat("Reading ", x, "\\n", sep = "")
           ad <- anndata::read_h5ad(x, backed = TRUE)
+          num_batches <-
+            if (ad\$uns[["organism"]] == "synthetic" || ad\$uns[["batch_type"]] == "real") {
+              length(unique(ad\$obs\$batch))
+            } else {
+              1
+            }
           tibble(
             dataset_id = ad\$uns\$dataset_id,
             organism = ad\$uns\$organism,
             num_cells = nrow(ad),
             num_features = ncol(ad),
             modality = unique(ad\$var\$feature_types),
-            num_batches = length(unique(ad\$obs\$batch)),
+            num_batches = num_batches,
             num_cell_types = length(unique(ad\$obs\$cell_type))
           )
         })
       
-      combined <- 
+      combined <-
         dataset_metadata_tsv %>% 
         full_join(dataset_metadata_h5ad %>% filter(modality == "GEX") %>% rename(num_features_mod1 = num_features, mod1_modality = modality), by = "dataset_id") %>%
         full_join(dataset_metadata_h5ad %>% filter(modality != "GEX") %>% select(dataset_id, num_features_mod2 = num_features, mod2_modality = modality), by = "dataset_id") %>%
@@ -799,5 +806,5 @@ info:
   output: "target/nextflow/common_process_metadata/collect_dataset_metadata"
   executable: "target/nextflow/common_process_metadata/collect_dataset_metadata/collect_dataset_metadata"
   viash_version: "0.5.3dev"
-  git_commit: "e9ffd08e6fd761a557cadb4ff6bc2a220a748c4a"
+  git_commit: "ace66b926af0ad9cd3c6f212271c2585e97ec1f9"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

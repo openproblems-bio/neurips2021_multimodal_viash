@@ -53,6 +53,12 @@ if (!("batch" %in% colnames(ad_rna$obs) && "batch" %in% colnames(ad_mod2$obs))) 
 
   ad_rna$obs[["batch"]] <- batch_names[batch_ix]
   ad_mod2$obs[["batch"]] <- batch_names[batch_ix]
+
+  ad_rna$uns[["batch_type"]] <- "simulated"
+  ad_mod2$uns[["batch_type"]] <- "simulated"
+} else {
+  ad_rna$uns[["batch_type"]] <- "real"
+  ad_mod2$uns[["batch_type"]] <- "real"
 }
 
 # dr <- SCORPIUS::reduce_dimensionality(ad_rna$X)
