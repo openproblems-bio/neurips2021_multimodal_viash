@@ -2,9 +2,10 @@ functionality:
   name: dummy_random
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing modality matching methods against. Outputs a random matrix with a single non-zero per row.
+  description: Generates random pairings weights drawn from a uniform distribution.
   info:
     type: negative_control
+    label: RandomUniform
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com

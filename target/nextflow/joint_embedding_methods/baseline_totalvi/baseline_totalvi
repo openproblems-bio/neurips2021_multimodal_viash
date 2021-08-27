@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="baseline_totalvi"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "baseline_totalvi main_build"
-  echo "totalVI for comparing joint embedding methods against."
+  echo "totalVI: joint probabilistic modeling with Total Variational Inference"
   echo
   echo "Usage: baseline_totalvi \\"
   echo "Usage:   --input_mod1 spleen_lymph_111.mod1.h5ad \\"

@@ -144,7 +144,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_zeros"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_zeros main_build"
-  echo "A baseline method for comparing modality prediction methods against. Predicts mean training value for mod2 for all test points."
+  echo "Returns a prediction consisting of all zeros."
   echo
   echo "Options:"
 

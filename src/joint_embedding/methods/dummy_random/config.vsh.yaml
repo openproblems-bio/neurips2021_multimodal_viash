@@ -2,9 +2,10 @@ functionality:
   name: dummy_random
   namespace: joint_embedding_methods
   version: dev
-  description: A dummy method for comparing joint embedding methods against. Embeds with gaussian distributued values.
+  description: Generate a random embedding from a normal distribution.
   info:
     type: negative_control
+    label: NormalRandom
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com

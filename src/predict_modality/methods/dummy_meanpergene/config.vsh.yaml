@@ -2,9 +2,10 @@ functionality:
   name: dummy_meanpergene
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against. Predicts the mean training vector.
+  description: Returns the mean expression value per gene.
   info:
     type: negative_control
+    label: Mean per gene
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com

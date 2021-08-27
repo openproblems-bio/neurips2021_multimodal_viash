@@ -2,9 +2,10 @@ functionality:
   name: dummy_solution
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against.
+  description: Returns the ground-truth solution.
   info:
     type: positive_control
+    label: Solution
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

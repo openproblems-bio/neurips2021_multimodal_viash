@@ -144,7 +144,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_random"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_random main_build"
-  echo "A dummy method for comparing joint embedding methods against. Embeds with gaussian distributued values."
+  echo "Generate a random embedding from a normal distribution."
   echo
   echo "Options:"
 

@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_zeros"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_zeros main_build"
-  echo "A dummy method for comparing match modality methods against."
+  echo "Generates a pairing matrix with all zero weights."
   echo
   echo "Options:"
 

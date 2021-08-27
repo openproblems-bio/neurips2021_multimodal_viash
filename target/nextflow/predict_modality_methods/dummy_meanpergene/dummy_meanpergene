@@ -144,7 +144,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_meanpergene"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_meanpergene main_build"
-  echo "A baseline method for comparing modality prediction methods against. Predicts the mean training vector."
+  echo "Returns the mean expression value per gene."
   echo
   echo "Options:"
 

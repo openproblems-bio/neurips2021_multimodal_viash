@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="baseline_dr_nn_ga"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "baseline_dr_nn_ga main_build"
-  echo "A baseline method for comparing match modality methods against."
+  echo "Perform LMDS+Pearson DR, predict embedding with Keras NN, and match cells with a GA to minimise pairwise distances."
   echo
   echo "Options:"
 

@@ -27,7 +27,7 @@ meta_method <- map_df(method_paths, function(x) {
   
   df <- tibble(
     task = gsub("_methods", "", yaml_obj$functionality$namespace),
-    name = yaml_obj$functionality$name,
+    method_id = yaml_obj$functionality$name,
     description = yaml_obj$functionality$description,
     maintainer = authors_df %>% filter(grepl("maintainer", roles)) %>% pull(name),
     authors = list(authors_df),
@@ -37,11 +37,11 @@ meta_method <- map_df(method_paths, function(x) {
 
   info <- yaml_obj$functionality$info
   if (length(info) > 0) {
-    df[names(info)] <- unlist(info)
+    df[names(info)] <- info
   }
 
   df
-})
+}) %>% select(task, method_id, label, everything())
 
 cat("Writing output file\n")
 write_tsv(meta_method %>% select(-authors), par$output)

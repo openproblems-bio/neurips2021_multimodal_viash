@@ -2,9 +2,10 @@ functionality:
   name: dummy_constant
   namespace: match_modality_methods
   version: dev
-  description: A dummy method for comparing match modality methods against.
+  description: Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.
   info:
     type: negative_control
+    label: Constant
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

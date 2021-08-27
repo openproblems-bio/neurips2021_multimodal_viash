@@ -2,9 +2,11 @@ functionality:
   name: baseline_babel_knn
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing match modality methods against.
+  description: Predict test expression with BABEL and match cells with KNN.
   info:
     type: sota
+    label: Babel+KNN
+    doi: "10.1073/pnas.2023070118"
   authors:
     - name: Alejandro Granados
       email: alejandro.granados@czbiohub.org

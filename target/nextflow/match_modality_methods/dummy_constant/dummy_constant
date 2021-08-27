@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_constant"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_constant main_build"
-  echo "A dummy method for comparing match modality methods against."
+  echo "Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles."
   echo
   echo "Options:"
 

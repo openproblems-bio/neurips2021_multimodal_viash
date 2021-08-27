@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="baseline_babel_knn"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "baseline_babel_knn main_build"
-  echo "A baseline method for comparing match modality methods against."
+  echo "Predict test expression with BABEL and match cells with KNN."
   echo
   echo "Options:"
 

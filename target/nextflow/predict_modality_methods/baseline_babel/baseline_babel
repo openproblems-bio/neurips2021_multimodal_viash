@@ -144,7 +144,7 @@ VIASH_META_FUNCTIONALITY_NAME="baseline_babel"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "baseline_babel main_build"
-  echo "A baseline method for comparing modality prediction methods against."
+  echo "Learn a deep-learning model with BABEL."
   echo
   echo "Options:"
 

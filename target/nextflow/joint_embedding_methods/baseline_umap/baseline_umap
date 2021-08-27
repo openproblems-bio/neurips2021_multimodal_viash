@@ -143,7 +143,7 @@ VIASH_META_FUNCTIONALITY_NAME="baseline_umap"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "baseline_umap main_build"
-  echo "A baseline method for comparing joint embedding methods against."
+  echo "UMAP dimensionality reduction on the Euclidean distance."
   echo
   echo "Options:"
 
