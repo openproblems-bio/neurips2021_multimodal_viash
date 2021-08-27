@@ -31,6 +31,10 @@ df <-
   mutate(
     # manually convert to floats afterwards
     value = as.numeric(value),
+    # workaround for numerical division by almost-zero
+    value = ifelse(grepl("pearson|spearman", metric_id) & value > 2, 0, value),
+    # zap small values
+    value = ifelse(grepl("pearson|spearman", metric_id) & value > 1, 1, value),
     # extract meta info
     dataset_loader = gsub("_.*", "", dataset_id),
     dataset_group = gsub(".*_", "", dataset_id),
@@ -39,7 +43,7 @@ df <-
   spread(metric_id, value) %>% 
   mutate(
     format_check = (correct_format + finished) / 2,
-    logp1_mse = log10(mse+1)
+    logp1_mse = log(mse+1)
   )
 write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "results/pilot_predict_modality_scores.tsv")
 ```
