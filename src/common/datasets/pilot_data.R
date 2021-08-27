@@ -17,6 +17,7 @@ ad2 <- read_h5ad("output/manual_formatting/atac/Multiome_atac_processed.h5ad")
 # process gex
 ad1$uns[["dataset_id"]] <- "openproblems_bmmc_multiome"
 ad1$uns[["organism"]] <- "human"
+ad1$uns[["batch_type"]] <- "real"
 ad1$obs[["is_train"]] <- ad1$obs[["batch"]] != "s1d2"
 ad1$X <- as(ad1$layers[["counts"]], "CsparseMatrix")
 ad1$layers <- NULL
@@ -24,6 +25,7 @@ ad1$layers <- NULL
 # process atac
 ad2$uns[["dataset_id"]] <- "openproblems_bmmc_multiome"
 ad2$uns[["organism"]] <- "human"
+ad2$uns[["batch_type"]] <- "real"
 ad2$obs[["is_train"]] <- ad2$obs[["batch"]] != "s1d2"
 ad2$X@x <- (ad2$X@x > 0) + 0
 
