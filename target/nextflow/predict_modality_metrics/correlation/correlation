@@ -309,8 +309,8 @@ pv <- ad_pred\$X
 pearson_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 1, diag = TRUE, drop0 = TRUE))
 spearman_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 1, diag = TRUE, drop0 = TRUE))
 
-pearson_vec_1[!is.finite(pearson_vec_1)] <- 0
-spearman_vec_1[!is.finite(spearman_vec_1)] <- 0
+pearson_vec_1[!is.finite(pearson_vec_1) | pearson_vec_1 > 10] <- 0
+spearman_vec_1[!is.finite(spearman_vec_1) | spearman_vec_1 > 10] <- 0
 
 mean_pearson_per_cell <- mean(pearson_vec_1)
 mean_spearman_per_cell <- mean(spearman_vec_1)
@@ -318,8 +318,8 @@ mean_spearman_per_cell <- mean(spearman_vec_1)
 pearson_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))
 spearman_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))
 
-pearson_vec_2[!is.finite(pearson_vec_2)] <- 0
-spearman_vec_2[!is.finite(spearman_vec_2)] <- 0
+pearson_vec_2[!is.finite(pearson_vec_2) | pearson_vec_2 > 10] <- 0
+spearman_vec_2[!is.finite(spearman_vec_2) | spearman_vec_2 > 10] <- 0
 
 mean_pearson_per_gene <- mean(pearson_vec_2)
 mean_spearman_per_gene <- mean(spearman_vec_2)
@@ -329,6 +329,8 @@ metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_p
 
 cat("Create output object\\n")
 out <- anndata::AnnData(
+  obs = data.frame(row.names = rownames(ad_sol), pearson = pearson_vec_1, spearman = spearman_vec_1),
+  var = data.frame(row.names = colnames(ad_sol), pearson = pearson_vec_2, spearman = spearman_vec_2),
   uns = list(
     dataset_id = ad_pred\$uns\$dataset_id,
     method_id = ad_pred\$uns\$method_id,
