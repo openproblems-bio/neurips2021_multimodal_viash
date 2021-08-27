@@ -3,6 +3,8 @@ functionality:
   namespace: joint_embedding_methods
   version: dev
   description: A dummy method which returns an embedding based on the solution
+  info:
+    type: positive_control
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

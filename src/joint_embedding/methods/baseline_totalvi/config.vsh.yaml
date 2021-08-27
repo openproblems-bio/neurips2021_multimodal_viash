@@ -3,6 +3,8 @@ functionality:
   namespace: joint_embedding_methods
   version: dev
   description: totalVI for comparing joint embedding methods against.
+  info:
+    type: sota
   usage: |
     baseline_totalvi \
       --input_mod1 spleen_lymph_111.mod1.h5ad \

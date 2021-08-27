@@ -3,6 +3,8 @@ functionality:
   namespace: predict_modality_methods
   version: dev
   description: A baseline method for comparing modality prediction methods against.
+  info:
+    type: positive_control
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

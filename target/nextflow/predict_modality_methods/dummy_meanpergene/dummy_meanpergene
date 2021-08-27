@@ -13,6 +13,7 @@
 #
 # Component authors:
 # * Alex Tong <alexandertongdev@gmail.com> (author, maintainer) {github: atong01}
+# * Robrecht Cannoodt <rcannood@gmail.com> (author) {github: rcannood, orcid: 0000-0003-3641-729X}
 
 set -e
 
@@ -143,7 +144,7 @@ VIASH_META_FUNCTIONALITY_NAME="dummy_meanpergene"
 # ViashHelp: Display helpful explanation about this executable
 function ViashHelp {
   echo "dummy_meanpergene main_build"
-  echo "A baseline method for comparing modality prediction methods against. Predicts the mean training vector"
+  echo "A baseline method for comparing modality prediction methods against. Predicts the mean training vector."
   echo
   echo "Options:"
 

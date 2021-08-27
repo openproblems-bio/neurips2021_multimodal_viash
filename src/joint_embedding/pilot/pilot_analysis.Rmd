@@ -58,8 +58,7 @@ write_tsv(summ, "output/pilot/joint_embedding/summary.tsv")
 summ %>% 
   kbl("latex", digits = 2, booktabs = TRUE, align = "X") %>% 
   kable_styling(full_width = TRUE, latex_options = "striped") %>% 
-  column_spec(1, width = "10em") %>% 
-  column_spec(which(colnames(summ) == "mse"), width = "5em") %>% 
+  column_spec(1, width = "7em") %>% 
   row_spec(0, angle = 15)
 ```
 

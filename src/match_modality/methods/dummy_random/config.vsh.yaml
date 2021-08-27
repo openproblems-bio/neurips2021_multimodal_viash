@@ -3,6 +3,8 @@ functionality:
   namespace: match_modality_methods
   version: dev
   description: A baseline method for comparing modality matching methods against. Outputs a random matrix with a single non-zero per row.
+  info:
+    type: negative_control
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com

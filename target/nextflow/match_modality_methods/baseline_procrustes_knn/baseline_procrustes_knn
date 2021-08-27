@@ -13,6 +13,7 @@
 #
 # Component authors:
 # * Alex Tong <alexandertongdev@gmail.com> (author, maintainer) {github: atong01}
+# * Robrecht Cannoodt <rcannood@gmail.com> (contributor) {github: rcannood, orcid: 0000-0003-3641-729X}
 
 set -e
 

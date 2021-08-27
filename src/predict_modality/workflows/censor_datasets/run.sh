@@ -14,3 +14,11 @@ bin/nextflow \
   --datasets 'output/public_datasets/common/**.h5ad' \
   --publishDir output/public_datasets/predict_modality/ \
   -resume
+
+bin/nextflow \
+  run . \
+  -main-script src/predict_modality/workflows/censor_datasets/main.nf \
+  --datasets 'output/public_datasets/common/**.h5ad' \
+  --publishDir output/public_datasets/predict_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config

@@ -27,7 +27,7 @@ cat("Creating mod1 object\n")
 out_mod1 <- anndata::AnnData(
   X = ad1_raw$X,
   var = ad1_raw$var %>% select(one_of("gene_ids"), feature_types),
-  obs = ad1_raw$obs %>% select(one_of("batch", "library_size")),
+  obs = ad1_raw$obs %>% select(one_of("batch", "size_factors")),
   uns = common_uns
 )
 

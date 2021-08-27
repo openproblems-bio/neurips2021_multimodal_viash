@@ -1,0 +1,30 @@
+functionality:
+  name: "collect_metric_metadata"
+  namespace: "common_process_metadata"
+  version: "dev"
+  description: "Combine tsv files by binding the rows."
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input"
+      type: "file"
+      multiple: true
+      required: true
+      example: "input.tsv"
+      description: "Metric metadata tsvs"
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.tsv"
+      required: true
+      description: "Output tsv"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0" # contains a few bioconductor and the 'anndata' package
+  - type: nextflow
