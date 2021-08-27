@@ -1144,5 +1144,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_babel_knn"
   executable: "target/nextflow/match_modality_methods/baseline_babel_knn/baseline_babel_knn"
   viash_version: "0.5.3dev"
-  git_commit: "4f6ebe4972c2fa8cc0c238e390adb17c22cd2fb6"
+  git_commit: "e9ffd08e6fd761a557cadb4ff6bc2a220a748c4a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

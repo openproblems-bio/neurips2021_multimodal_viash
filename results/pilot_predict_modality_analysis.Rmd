@@ -9,7 +9,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=12)
-knitr::opts_knit$set(root.dir = '../../..')
+knitr::opts_knit$set(root.dir = '..')
 
 library(tidyverse)
 library(patchwork)
@@ -25,7 +25,7 @@ Read in the results data.
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
-    "output/pilot/match_modality/output.extract_scores.output.tsv",
+    "output/pilot/predict_modality/output.extract_scores.output.tsv",
     col_types = c(.default = "c")
   ) %>%
   mutate(
@@ -39,30 +39,27 @@ df <-
   spread(metric_id, value) %>% 
   mutate(
     format_check = (correct_format + finished) / 2,
-    match_probability = (match_probability_mod1 + match_probability_mod2)/2
+    logp1_mse = log10(mse+1)
   )
-write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "output/pilot/match_modality/scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "results/pilot_predict_modality_scores.tsv")
 ```
+
 Calculate mean score per method. Infinite values are replaced by the highest 
 value in the results.
 ```{r summtsv}
 replace_inf <- function(x) ifelse(is.infinite(x), max(x[is.finite(x)]), x)
 summ <- df %>% 
-  mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
-  group_by(method_id) %>%
-  summarise_if(is.numeric, mean) %>% 
-  arrange(desc(pairing_aupr)) %>% 
-  select(-format_check)
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")) %>% 
+  mutate(value = replace_inf(value)) %>% # replace infinite values with the max
+  group_by(method_id, metric_id) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    var = var(value)
+  )
+write_tsv(summ, "results/pilot_predict_modality_summary.tsv")
 ```
 
-```{r summtsvout, echo=FALSE}
-write_tsv(summ, "output/pilot/match_modality/summary.tsv")
-summ %>% 
-  kbl("latex", digits = 4, booktabs = TRUE, align = "X") %>% 
-  kable_styling(full_width = TRUE, latex_options = "striped") %>% 
-  column_spec(1, width = "10em") %>% 
-  row_spec(0, angle = 15)
-```
 
 \newpage
 ## Visualise results
@@ -71,12 +68,12 @@ summ %>%
 dfg <- df %>%
   mutate(filter = finished > 0) %>%
   select(-correct_format, -finished) %>%
-  filter(method_id != "dummy_solution") %>%
+  # filter(method_id != "dummy_solution") %>%
   gather(metric_id, value, -starts_with("dataset_"), -starts_with("method"), -filter) %>%
   filter(filter | metric_id %in% c("finished", "correct_format", "format_check"))
 ```
 
-Colour by method (dummy_solution not shown).
+Colour by method.
 
 ```{r swarm1, echo=FALSE}
 patchwork::wrap_plots(
@@ -98,7 +95,7 @@ patchwork::wrap_plots(
 ```
 
 \newpage
-Colour by dataset source (dummy_solution not shown).
+Colour by dataset source.
 
 ```{r swarm2, echo=FALSE}
 patchwork::wrap_plots(
@@ -112,6 +109,28 @@ patchwork::wrap_plots(
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set2") +
     labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
+```
+
+\newpage
+Colour by modality group.
+
+```{r swarm3, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_group), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set3") +
+    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = dataset_group)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set3") +
+    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
   ncol = 1
   # guides = "collect"
 ) &

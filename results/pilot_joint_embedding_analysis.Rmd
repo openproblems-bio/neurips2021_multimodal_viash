@@ -9,7 +9,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=12)
-knitr::opts_knit$set(root.dir = '../../..')
+knitr::opts_knit$set(root.dir = '..')
 
 library(tidyverse)
 library(patchwork)
@@ -40,26 +40,23 @@ df <-
   mutate(
     format_check = (correct_format + finished) / 2
   )
-write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "output/pilot/joint_embedding/scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "results/pilot_joint_embedding_scores.tsv")
 ```
+
 Calculate mean score per method. Infinite values are replaced by the highest 
 value in the results.
 ```{r summtsv}
 replace_inf <- function(x) ifelse(is.infinite(x), max(x[is.finite(x)]), x)
 summ <- df %>% 
-  mutate_if(is.numeric, replace_inf) %>% # replace infinite values with the max
-  group_by(method_id) %>%
-  summarise_if(is.numeric, mean) %>% 
-  select(-format_check)
-```
-
-```{r summtsvout, echo=FALSE}
-write_tsv(summ, "output/pilot/joint_embedding/summary.tsv")
-summ %>% 
-  kbl("latex", digits = 2, booktabs = TRUE, align = "X") %>% 
-  kable_styling(full_width = TRUE, latex_options = "striped") %>% 
-  column_spec(1, width = "7em") %>% 
-  row_spec(0, angle = 15)
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")) %>% 
+  mutate(value = replace_inf(value)) %>% # replace infinite values with the max
+  group_by(method_id, metric_id) %>%
+  summarise(
+    mean = mean(value),
+    sd = sd(value),
+    var = var(value)
+  )
+write_tsv(summ, "results/pilot_joint_embedding_summary.tsv")
 ```
 
 \newpage
