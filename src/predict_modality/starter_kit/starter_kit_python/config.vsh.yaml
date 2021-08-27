@@ -43,11 +43,11 @@ functionality:
       description: The distance metric to use. Possible values include `euclidean` and `minkowski`.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 50
       description: Number of components to use for dimensionality reduction.
     - name: "--n_neighbors"
       type: "integer"
-      default: 5
+      default: 100
       description: Number of neighbors to use.
       
   # files your script needs
