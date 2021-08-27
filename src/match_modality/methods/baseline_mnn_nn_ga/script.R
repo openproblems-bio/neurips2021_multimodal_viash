@@ -10,7 +10,8 @@ requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
 # path <- "resources_test/match_modality/test_resource."
-path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
+# path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
+path <- "debug/debug."
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_train_mod2 = paste0(path, "train_mod2.h5ad"),
@@ -113,9 +114,18 @@ ga_out <- GA::ga(
   popSize = par$n_ga_pop,
   maxiter = par$n_ga_iter,
   parallel = FALSE,
-  monitor = GA:::gaMonitor
+  monitor = GA:::gaMonitor,
+  keepBest = TRUE
 )
-ord <- ga_out@solution[1,]
+# ord <- ga_out@solution[1,]
+
+
+bestSol <- do.call(rbind, ga_out@bestSol)
+df <- reshape2::melt(bestSol, varnames = c("iter", "i"), value.name = "j") %>%
+  group_by(i, j) %>%
+  summarise(value = n(), .groups = "drop") %>%
+  arrange(desc(value)) %>%
+  head(input_test_mod1$n_obs * 1000)
 
 # # visual checks
 # ord <- order(match_test)
@@ -126,32 +136,33 @@ ord <- ga_out@solution[1,]
 #   geom_point(aes(x.comp_1, x.comp_2, colour = cell_type, shape = "pred"), size = 3) +
 #   theme_bw()
 
-final_dr <- lmds::lmds(
-  cbind(input_test_mod1$X, input_test_mod2$X[ord, , drop = FALSE]),
-  ndim = par$n_dims,
-  distance_method = par$distance_method
-)
-# ggplot() + 
-#   geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(final_dr, type = "real", input_test_sol$obs), size = 3) +
-#   theme_bw()
-knn_out <- FNN::get.knn(final_dr, k = min(999, length(ord)-1))
-knn_index <- cbind(seq_along(ord), knn_out$nn.index)
-knn_dist <- cbind(rep(0, length(ord)), knn_out$nn.dist)
+# final_dr <- lmds::lmds(
+#   cbind(input_test_mod1$X, input_test_mod2$X[ord, , drop = FALSE]),
+#   ndim = par$n_dims,
+#   distance_method = par$distance_method
+# )
+# # ggplot() + 
+# #   geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(final_dr, type = "real", input_test_sol$obs), size = 3) +
+# #   theme_bw()
+# knn_out <- FNN::get.knn(final_dr, k = min(999, length(ord)-1))
+# knn_index <- cbind(seq_along(ord), knn_out$nn.index)
+# knn_dist <- cbind(rep(0, length(ord)), knn_out$nn.dist)
 
-cat("Creating output data structures\n")
-df <- tibble(
-  i = as.vector(row(knn_index)),
-  j = as.vector(knn_index),
-  x = as.vector(knn_dist)
-) %>% mutate(
-  j = order(ord)[j],
-  # rescale to get weights from distances
-  y = max(x) * 2 - x
-)
+# cat("Creating output data structures\n")
+# df <- tibble(
+#   i = as.vector(row(knn_index)),
+#   j = as.vector(knn_index),
+#   x = as.vector(knn_dist)
+# ) %>% mutate(
+#   j = order(ord)[j],
+#   # rescale to get weights from distances
+#   y = max(x) * 2 - x
+# )
 knn_mat <- Matrix::sparseMatrix(
   i = df$i,
   j = df$j,
-  x = df$y,
+  # x = df$y,
+  x = df$value,
   dims = list(nrow(dr_x1_test), nrow(dr_x2_test))
 )
 
