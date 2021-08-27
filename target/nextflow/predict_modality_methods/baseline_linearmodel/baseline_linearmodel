@@ -184,7 +184,7 @@ function ViashHelp {
 
   echo "   --n_pcs"
   echo "        type: integer"
-  echo "        default: 4"
+  echo "        default: 50"
   echo "        Number of principal components to use."
   echo ""
 
@@ -301,7 +301,7 @@ if [ -z "$VIASH_PAR_DISTANCE_METHOD" ]; then
   VIASH_PAR_DISTANCE_METHOD="spearman"
 fi
 if [ -z "$VIASH_PAR_N_PCS" ]; then
-  VIASH_PAR_N_PCS="4"
+  VIASH_PAR_N_PCS="50"
 fi
 
 
