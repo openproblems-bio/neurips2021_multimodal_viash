@@ -57,7 +57,7 @@ dataset_id	method_id	dataset_loader	dataset_group	method_group	metric_id	value
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	celltype_aupr	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	celltype_aupr	0.14033286889025476
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	celltype_aupr	0.1405015774507774
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_aupr	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_aupr	0.1412365668657003
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	celltype_aupr	0.14234935474814847
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	celltype_aupr	0.13921544709592126
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	celltype_aupr	0.14038254194019828
@@ -73,7 +73,7 @@ dataset_id	method_id	dataset_loader	dataset_group	method_group	metric_id	value
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	celltype_aupr	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	celltype_aupr	0.15213755529839545
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	celltype_aupr	0.1526508884417126
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_aupr	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_aupr	0.15197031112620607
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	celltype_aupr	0.15152752915309975
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	celltype_aupr	0.15267051086266292
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	celltype_aupr	0.15246681022836128
@@ -153,7 +153,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	celltype_aupr	0.2470933851940
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	celltype_aupr	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	celltype_aupr	0.1445096396782901
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	celltype_aupr	0.14437595253548352
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	celltype_aupr	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	celltype_aupr	0.1441461099020671
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	celltype_aupr	0.1444020256967633
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	celltype_aupr	0.14319169693771983
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	celltype_aupr	0.14394454087960185
@@ -161,7 +161,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	celltype_aupr
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	celltype_aupr	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	celltype_aupr	0.1422585067775799
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	celltype_aupr	0.14345185088313883
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	celltype_aupr	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	celltype_aupr	0.14286156718299026
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	celltype_aupr	0.14090977980958996
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	celltype_aupr	0.14058543655119138
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	celltype_aupr	0.14250572070886847
@@ -233,7 +233,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	c
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	celltype_auroc	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	celltype_auroc	0.4998930586807546
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	celltype_auroc	0.500226389591262
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_auroc	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_auroc	0.5017022141219059
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	celltype_auroc	0.5037113936341484
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	celltype_auroc	0.49779791145192576
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	celltype_auroc	0.5000777198692958
@@ -249,7 +249,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	c
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	celltype_auroc	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	celltype_auroc	0.4995721301420417
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	celltype_auroc	0.5004000170811196
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_auroc	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	celltype_auroc	0.4992753999285924
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	celltype_auroc	0.4984547737331013
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	celltype_auroc	0.5004363352672954
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	celltype_auroc	0.5001214483017975
@@ -329,7 +329,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	celltype_auroc	0.506503940622
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	celltype_auroc	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	celltype_auroc	0.5010737850971054
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	celltype_auroc	0.500860632131662
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	celltype_auroc	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	celltype_auroc	0.5005003028782085
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	celltype_auroc	0.500881636471604
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	celltype_auroc	0.49871010122660664
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	celltype_auroc	0.5001421268243575
@@ -337,7 +337,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	celltype_auro
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	celltype_auroc	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	celltype_auroc	0.49953353804085054
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	celltype_auroc	0.5015712917338533
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	celltype_auroc	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	celltype_auroc	0.5005413321705419
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	celltype_auroc	0.4971006552768813
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	celltype_auroc	0.4965268650666985
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	celltype_auroc	0.4999979328349582
@@ -585,7 +585,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	c
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	finished	1
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	finished	1
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	finished	1
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	finished	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	finished	1
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	finished	1
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	finished	1
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	finished	1
@@ -601,7 +601,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	c
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	finished	1
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	finished	1
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	finished	1
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	finished	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	finished	1
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	finished	1
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	finished	1
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	finished	1
@@ -681,7 +681,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	finished	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	finished	1
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	finished	1
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	finished	1
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	finished	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	finished	1
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	finished	1
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	finished	1
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	finished	1
@@ -689,7 +689,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	finished	1
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	finished	1
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	finished	1
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	finished	1
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	finished	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	finished	1
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	finished	1
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	finished	1
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	finished	1
@@ -761,7 +761,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	f
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	match_probability_mod1	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability_mod1	1.616263645143209e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability_mod1	1.6392871715704128e-4
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod1	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod1	1.6257154145299138e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability_mod1	1.649632898630345e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability_mod1	1.584786053882726e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	match_probability_mod1	1.6858368478079927e-4
@@ -777,7 +777,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	f
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	match_probability_mod1	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability_mod1	1.3930545886150722e-4
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability_mod1	1.4064177821414875e-4
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod1	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod1	1.3777360461346134e-4
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability_mod1	1.4137439247253065e-4
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability_mod1	1.417836381681554e-4
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	match_probability_mod1	1.3626014058272686e-4
@@ -857,7 +857,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	match_probability_mod1	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	match_probability_mod1	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	match_probability_mod1	1.4777232040935558e-4
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	match_probability_mod1	1.546418241394514e-4
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability_mod1	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability_mod1	1.4417099110139756e-4
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	match_probability_mod1	1.4776655612397656e-4
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	match_probability_mod1	1.483679525222552e-4
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	match_probability_mod1	1.4784056726954486e-4
@@ -865,7 +865,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	match_probabi
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	match_probability_mod1	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	match_probability_mod1	1.3251703160856135e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	match_probability_mod1	1.3053703555364587e-4
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability_mod1	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability_mod1	1.3259925022737732e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	match_probability_mod1	1.3351367315971957e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	match_probability_mod1	1.3220518244315177e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	match_probability_mod1	1.2945594778736468e-4
@@ -937,7 +937,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	m
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	match_probability_mod2	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability_mod2	1.595231535882358e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability_mod2	1.220872452553161e-4
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod2	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod2	1.6782311223346872e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability_mod2	1.5784908685531024e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability_mod2	2.5115468365811818e-5
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	match_probability_mod2	1.682954794906884e-4
@@ -953,7 +953,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	m
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	match_probability_mod2	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability_mod2	1.2740073989047873e-4
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability_mod2	1.1837075037667264e-4
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod2	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability_mod2	1.367468031310917e-4
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability_mod2	1.4495731091498847e-4
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability_mod2	2.0102600052198412e-5
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	match_probability_mod2	1.3663263162116775e-4
@@ -1033,7 +1033,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	match_probability_mod2	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	match_probability_mod2	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	match_probability_mod2	1.5022472211527143e-4
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	match_probability_mod2	1.5595952157110404e-4
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability_mod2	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability_mod2	1.408541862638829e-4
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	match_probability_mod2	1.4503862245969517e-4
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	match_probability_mod2	2.2013049335646168e-5
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	match_probability_mod2	1.4734192063430116e-4
@@ -1041,7 +1041,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	match_probabi
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	match_probability_mod2	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	match_probability_mod2	1.3680194938341594e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	match_probability_mod2	1.3295845036533758e-4
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability_mod2	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability_mod2	1.2872344473650223e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	match_probability_mod2	1.381947645711763e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	match_probability_mod2	1.7478210264827045e-5
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	match_probability_mod2	1.298565139396385e-4
@@ -1113,7 +1113,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	m
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	pairing_aupr	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	pairing_aupr	1.5994999690605027e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	pairing_aupr	1.607145879418681e-4
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_aupr	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_aupr	1.5925303173247585e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	pairing_aupr	1.5971782135437707e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	pairing_aupr	1.5939444745782794e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	pairing_aupr	1.6137571360985703e-4
@@ -1129,7 +1129,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	m
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	pairing_aupr	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	pairing_aupr	1.4068957337087795e-4
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	pairing_aupr	1.4163234798303392e-4
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_aupr	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_aupr	1.4060290320827562e-4
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	pairing_aupr	1.4121968887081948e-4
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	pairing_aupr	1.4251694129541193e-4
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	pairing_aupr	1.4086098205012831e-4
@@ -1209,7 +1209,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	pairing_aupr	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	pairing_aupr	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	pairing_aupr	1.4866401818380837e-4
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	pairing_aupr	1.5053972681045025e-4
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	pairing_aupr	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	pairing_aupr	1.4782323557227528e-4
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	pairing_aupr	1.488746199171942e-4
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	pairing_aupr	1.4888439619653582e-4
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	pairing_aupr	1.4856559644016443e-4
@@ -1217,7 +1217,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	pairing_aupr	
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	pairing_aupr	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	pairing_aupr	1.3263072168712142e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	pairing_aupr	1.3196967670126014e-4
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	pairing_aupr	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	pairing_aupr	1.326518052522374e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	pairing_aupr	1.321299940215681e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	pairing_aupr	1.3183950960637958e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	pairing_aupr	1.3177679151610278e-4
@@ -1289,7 +1289,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	p
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	pairing_auroc	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	pairing_auroc	0.501328261801973
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	pairing_auroc	0.5025239546703233
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_auroc	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_auroc	0.5020212114795868
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	pairing_auroc	0.5031156565528363
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	pairing_auroc	0.5001374232997478
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	pairing_auroc	0.503340086339449
@@ -1305,7 +1305,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	p
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	pairing_auroc	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	pairing_auroc	0.49865650237188675
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	pairing_auroc	0.49957147218083264
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_auroc	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	pairing_auroc	0.4979977796174353
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	pairing_auroc	0.49960655643735663
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	pairing_auroc	0.5001836891933635
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	pairing_auroc	0.5001820850957301
@@ -1385,7 +1385,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	pairing_auroc	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	pairing_auroc	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	pairing_auroc	0.49989066990383435
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	pairing_auroc	0.5032173829786188
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	pairing_auroc	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	pairing_auroc	0.4981281517975731
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	pairing_auroc	0.4998747410463693
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	pairing_auroc	0.5001052313273249
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	pairing_auroc	0.5005547695654968
@@ -1393,7 +1393,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	pairing_auroc
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	pairing_auroc	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	pairing_auroc	0.5002537540240155
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	pairing_auroc	0.49909718470007647
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	pairing_auroc	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	pairing_auroc	0.5003887646162184
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	pairing_auroc	0.5004957126038789
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	pairing_auroc	0.4999353191560658
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	pairing_auroc	0.49974684147309745
@@ -1465,7 +1465,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	p
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	format_check	0.5
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	format_check	0.5
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	format_check	0.5
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	format_check	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	format_check	0.5
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	format_check	0.5
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	format_check	0.5
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	format_check	0.5
@@ -1481,7 +1481,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	p
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	format_check	0.5
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	format_check	0.5
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	format_check	0.5
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	format_check	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	format_check	0.5
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	format_check	0.5
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	format_check	0.5
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	format_check	0.5
@@ -1561,7 +1561,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	format_check	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	format_check	0.5
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	format_check	0.5
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	format_check	0.5
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	format_check	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	format_check	0.5
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	format_check	0.5
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	format_check	0.5
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	format_check	0.5
@@ -1569,7 +1569,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	format_check	
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	format_check	0.5
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	format_check	0.5
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	format_check	0.5
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	format_check	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	format_check	0.5
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	format_check	0.5
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	format_check	0.5
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	format_check	0.5
@@ -1641,7 +1641,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	f
 10x_pbmc_10k_protein_v3_MM	dummy_zeros	10x	MM	dummy	match_probability	0
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability	1.6057475905127835e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability	1.430079812061787e-4
-10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability	0
+10x_pbmc_granulocyte_sorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability	1.6519732684323006e-4
 10x_pbmc_granulocyte_sorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability	1.6140618835917237e-4
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability	9.179703687704221e-5
 10x_pbmc_granulocyte_sorted_10k_MM	dummy_random	10x	MM	dummy	match_probability	1.6843958213574384e-4
@@ -1657,7 +1657,7 @@ totalvispleenlymph_spleen_lymph_206_MM	dummy_zeros	totalvispleenlymph	MM	dummy	f
 10x_pbmc_granulocyte_sorted_3k_MM	dummy_zeros	10x	MM	dummy	match_probability	0
 10x_pbmc_unsorted_10k_MM	baseline_dr_knnr_knn	10x	MM	baseline	match_probability	1.3335309937599296e-4
 10x_pbmc_unsorted_10k_MM	baseline_dr_nn_knn	10x	MM	baseline	match_probability	1.295062642954107e-4
-10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability	0
+10x_pbmc_unsorted_10k_MM	baseline_mnn_nn_ga	10x	MM	baseline	match_probability	1.3726020387227653e-4
 10x_pbmc_unsorted_10k_MM	baseline_procrustes_knn	10x	MM	baseline	match_probability	1.4316585169375957e-4
 10x_pbmc_unsorted_10k_MM	dummy_constant	10x	MM	dummy	match_probability	8.094311911017691e-5
 10x_pbmc_unsorted_10k_MM	dummy_random	10x	MM	dummy	match_probability	1.3644638610194732e-4
@@ -1737,7 +1737,7 @@ dyngen_citeseq_3_MM	dummy_solution	dyngen	MM	dummy	match_probability	1
 dyngen_citeseq_3_MM	dummy_zeros	dyngen	MM	dummy	match_probability	0
 openproblems_bmmc_multiome_MM	baseline_dr_knnr_knn	openproblems	MM	baseline	match_probability	1.489985212623135e-4
 openproblems_bmmc_multiome_MM	baseline_dr_nn_knn	openproblems	MM	baseline	match_probability	1.5530067285527771e-4
-openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability	0
+openproblems_bmmc_multiome_MM	baseline_mnn_nn_ga	openproblems	MM	baseline	match_probability	1.4251258868264023e-4
 openproblems_bmmc_multiome_MM	baseline_procrustes_knn	openproblems	MM	baseline	match_probability	1.4640258929183588e-4
 openproblems_bmmc_multiome_MM	dummy_constant	openproblems	MM	dummy	match_probability	8.519050092895068e-5
 openproblems_bmmc_multiome_MM	dummy_random	openproblems	MM	dummy	match_probability	1.47591243951923e-4
@@ -1745,7 +1745,7 @@ openproblems_bmmc_multiome_MM	dummy_solution	openproblems	MM	dummy	match_probabi
 openproblems_bmmc_multiome_MM	dummy_zeros	openproblems	MM	dummy	match_probability	0
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_knnr_knn	totalvispleenlymph	MM	baseline	match_probability	1.3465949049598863e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_dr_nn_knn	totalvispleenlymph	MM	baseline	match_probability	1.317477429594917e-4
-totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability	0
+totalvispleenlymph_spleen_lymph_111_MM	baseline_mnn_nn_ga	totalvispleenlymph	MM	baseline	match_probability	1.3066134748193978e-4
 totalvispleenlymph_spleen_lymph_111_MM	baseline_procrustes_knn	totalvispleenlymph	MM	baseline	match_probability	1.3585421886544793e-4
 totalvispleenlymph_spleen_lymph_111_MM	dummy_constant	totalvispleenlymph	MM	dummy	match_probability	7.484169635398942e-5
 totalvispleenlymph_spleen_lymph_111_MM	dummy_random	totalvispleenlymph	MM	dummy	match_probability	1.296562308635016e-4
