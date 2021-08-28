@@ -1,5 +1,5 @@
 ---
-title: "Pilot Analysis"
+title: "Match Modality - Pilot Analysis"
 output: pdf_document
 fontsize: 10pt
 geometry: margin=1cm
@@ -14,14 +14,18 @@ knitr::opts_knit$set(root.dir = '..')
 library(tidyverse)
 library(patchwork)
 library(kableExtra)
+task <- "match_modality"
 ```
 
-## Preprocess data
 
-Read in the results data.
+```{r tsv, include=FALSE}
+meta_ds <- read_tsv("results/meta_datasets.tsv")
+colnames(meta_ds) <- ifelse(!grepl("dataset_", colnames(meta_ds)), paste0("dataset_", colnames(meta_ds)), colnames(meta_ds))
+meta_ms <- read_tsv("results/meta_methods.tsv") %>% filter(task == !!task)
+colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method_", colnames(meta_ms)), colnames(meta_ms))
+meta_metrics <- read_tsv("results/meta_metrics.tsv") %>% filter(task == !!task)
+colnames(meta_metrics) <- ifelse(!grepl("metric_", colnames(meta_metrics)), paste0("metric_", colnames(meta_metrics)), colnames(meta_metrics))
 
-```{r tsv}
-# TODO: read in the method and dataset meta information and perform joins.
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
@@ -32,21 +36,19 @@ df <-
     # manually convert to floats afterwards
     value = as.numeric(value),
     # extract meta info
-    dataset_loader = gsub("_.*", "", dataset_id),
-    dataset_group = gsub(".*_", "", dataset_id),
-    method_group = gsub("_.*", "", method_id)
+    dataset_id_orig = gsub("_MM$", "", dataset_id)
   ) %>% 
+  left_join(meta_ds, by = c("dataset_id_orig" = "dataset_id")) %>%
+  left_join(meta_ms, by = "method_id") %>%
   spread(metric_id, value) %>% 
   mutate(
-    format_check = (correct_format + finished) / 2,
-    match_probability = (match_probability_mod1 + match_probability_mod2)/2
+    format_check = (correct_format + finished) / 2
   )
 write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "results/pilot_match_modality_scores.tsv")
 ```
 
-Calculate mean score per method. Infinite values are replaced by the highest 
-value in the results.
-```{r summtsv}
+
+```{r summtsv, include=FALSE}
 replace_inf <- function(x) ifelse(is.infinite(x), max(x[is.finite(x)]), x)
 summ <- df %>% 
   gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")) %>% 
@@ -56,7 +58,8 @@ summ <- df %>%
     mean = mean(value),
     sd = sd(value),
     var = var(value)
-  )
+  ) %>% 
+  left_join(meta_ms, by = "method_id")
 write_tsv(summ, "results/pilot_match_modality_summary.tsv")
 ```
 
@@ -67,21 +70,22 @@ write_tsv(summ, "results/pilot_match_modality_summary.tsv")
 dfg <- df %>%
   mutate(filter = finished > 0) %>%
   select(-correct_format, -finished) %>%
-  filter(method_id != "dummy_solution") %>%
   gather(metric_id, value, -starts_with("dataset_"), -starts_with("method"), -filter) %>%
   filter(filter | metric_id %in% c("finished", "correct_format", "format_check"))
+
+dfg_nosol <- dfg %>% filter(method_id != "dummy_solution")
 ```
 
 Colour by method (dummy_solution not shown).
 
 ```{r swarm1, echo=FALSE}
 patchwork::wrap_plots(
-  ggplot(dfg) +
+  ggplot(dfg_nosol) +
     ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = method_id), groupOnX = TRUE, size = 1) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set1") +
     labs(x = NULL, y = "Metric Value", colour = "Method"),
-  ggplot(dfg) +
+  ggplot(dfg_nosol) +
     geom_boxplot(aes(method_id, value, colour = method_id)) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set1") +
@@ -98,13 +102,13 @@ Colour by dataset source (dummy_solution not shown).
 
 ```{r swarm2, echo=FALSE}
 patchwork::wrap_plots(
-  ggplot(dfg) +
-    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_loader), groupOnX = TRUE, size = 1) +
+  ggplot(dfg_nosol) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_source), groupOnX = TRUE, size = 1) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set2") +
     labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
-  ggplot(dfg) +
-    geom_boxplot(aes(method_id, value, colour = dataset_loader)) +
+  ggplot(dfg_nosol) +
+    geom_boxplot(aes(method_id, value, colour = dataset_source)) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set2") +
     labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
@@ -113,5 +117,16 @@ patchwork::wrap_plots(
 ) &
   theme_bw() +
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
+```
+
+
+\newpage
+Comparing most interesting metrics.
+
+```{r bar, fig.width=10, fig.height=4}
+ggplot(dfg %>% filter(metric_id %in% c("match_probability_mod1", "match_probability_mod2", "pairing_aupr"))) + 
+  geom_histogram(aes(value, fill = method_type)) + 
+  facet_grid(method_type~metric_id, scales = "free_x") +
+  theme_bw()
 ```
 
