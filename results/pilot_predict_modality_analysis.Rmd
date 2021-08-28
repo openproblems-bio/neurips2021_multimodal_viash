@@ -1,5 +1,5 @@
 ---
-title: "Pilot Analysis"
+title: "Predict Modality - Pilot Analysis"
 output: pdf_document
 fontsize: 10pt
 geometry: margin=1cm
@@ -14,14 +14,18 @@ knitr::opts_knit$set(root.dir = '..')
 library(tidyverse)
 library(patchwork)
 library(kableExtra)
+task <- "predict_modality"
 ```
 
-## Preprocess data
 
-Read in the results data.
+```{r tsv, include=FALSE}
+meta_ds <- read_tsv("results/meta_datasets.tsv")
+colnames(meta_ds) <- ifelse(!grepl("dataset_", colnames(meta_ds)), paste0("dataset_", colnames(meta_ds)), colnames(meta_ds))
+meta_ms <- read_tsv("results/meta_methods.tsv") %>% filter(task == !!task)
+colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method_", colnames(meta_ms)), colnames(meta_ms))
+meta_metrics <- read_tsv("results/meta_metrics.tsv") %>% filter(task == !!task)
+colnames(meta_metrics) <- ifelse(!grepl("metric_", colnames(meta_metrics)), paste0("metric_", colnames(meta_metrics)), colnames(meta_metrics))
 
-```{r tsv}
-# TODO: read in the method and dataset meta information and perform joins.
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
@@ -35,32 +39,33 @@ df <-
     value = ifelse(grepl("pearson|spearman", metric_id) & value > 2, 0, value),
     # zap small values
     value = ifelse(grepl("pearson|spearman", metric_id) & value > 1, 1, value),
-    # extract meta info
-    dataset_loader = gsub("_.*", "", dataset_id),
-    dataset_group = gsub(".*_", "", dataset_id),
-    method_group = gsub("_.*", "", method_id)
+    dataset_id_orig = gsub("_PM_[^_]*$", "", dataset_id),
+    dataset_mods = gsub(".*_", "", dataset_id)
   ) %>% 
+  left_join(meta_ds, by = c("dataset_id_orig" = "dataset_id")) %>%
+  left_join(meta_ms, by = "method_id") %>%
+  # left_join(meta_metrics, by = "metric_id") %>%
   spread(metric_id, value) %>% 
   mutate(
     format_check = (correct_format + finished) / 2,
     logp1_mse = log(mse+1)
   )
-write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")), "results/pilot_predict_modality_scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_")), "results/pilot_predict_modality_scores.tsv")
 ```
 
-Calculate mean score per method. Infinite values are replaced by the highest 
-value in the results.
-```{r summtsv}
+```{r summtsv, include=FALSE}
 replace_inf <- function(x) ifelse(is.infinite(x), max(x[is.finite(x)]), x)
 summ <- df %>% 
-  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")) %>% 
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_")) %>% 
   mutate(value = replace_inf(value)) %>% # replace infinite values with the max
   group_by(method_id, metric_id) %>%
   summarise(
     mean = mean(value),
     sd = sd(value),
-    var = var(value)
-  )
+    var = var(value),
+    .groups = "drop"
+  ) %>% 
+  left_join(meta_ms, by = "method_id")
 write_tsv(summ, "results/pilot_predict_modality_summary.tsv")
 ```
 
@@ -104,12 +109,12 @@ Colour by dataset source.
 ```{r swarm2, echo=FALSE}
 patchwork::wrap_plots(
   ggplot(dfg) +
-    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_loader), groupOnX = TRUE, size = 1) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_source), groupOnX = TRUE, size = 1) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set2") +
     labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
   ggplot(dfg) +
-    geom_boxplot(aes(method_id, value, colour = dataset_loader)) +
+    geom_boxplot(aes(method_id, value, colour = dataset_source)) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set2") +
     labs(x = NULL, y = "Metric Value", colour = "Dataset\nsource"),
@@ -126,12 +131,12 @@ Colour by modality group.
 ```{r swarm3, echo=FALSE}
 patchwork::wrap_plots(
   ggplot(dfg) +
-    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_group), groupOnX = TRUE, size = 1) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_mods), groupOnX = TRUE, size = 1) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set3") +
     labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
   ggplot(dfg) +
-    geom_boxplot(aes(method_id, value, colour = dataset_group)) +
+    geom_boxplot(aes(method_id, value, colour = dataset_mods)) +
     facet_wrap(~metric_id, scales = "free_y") +
     scale_colour_brewer(palette = "Set3") +
     labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
@@ -142,3 +147,28 @@ patchwork::wrap_plots(
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 15, hjust = 1))
 ```
 
+\newpage
+Comparing most interesting metrics.
+```{r scatter1, fig.width=10, fig.height=8}
+patchwork::wrap_plots(
+  ggplot(df, aes(mean_pearson_per_cell, logp1_mse)) + geom_point(aes(colour = dataset_source)) + facet_wrap(~method_type),
+  ggplot(df, aes(logp1_mse, mean_pearson_per_gene)) + geom_point(aes(colour = dataset_source)) + facet_wrap(~method_type),
+  ggplot(df, aes(mean_pearson_per_cell, mean_pearson_per_gene)) + geom_point(aes(colour = dataset_source)) + facet_wrap(~method_type),
+  ncol = 1
+) & theme_bw() & scale_colour_brewer(palette = "Set2")
+```
+```{r scatter2, fig.width=10, fig.height=6}
+patchwork::wrap_plots(
+  ggplot(df, aes(mean_pearson_per_cell, logp1_mse)) + geom_point(aes(colour = method_type)) + facet_wrap(~dataset_source, nrow = 1),
+  ggplot(df, aes(logp1_mse, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)) + facet_wrap(~dataset_source, nrow = 1),
+  ggplot(df, aes(mean_pearson_per_cell, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)) + facet_wrap(~dataset_source, nrow = 1),
+  ncol = 1
+) & theme_bw() & scale_colour_brewer(palette = "Set2")
+```
+
+```{r bar, fig.width=10, fig.height=4}
+ggplot(dfg %>% filter(metric_id %in% c("mean_pearson_per_cell", "mean_pearson_per_gene", "logp1_mse"))) + 
+  geom_histogram(aes(value, fill = method_type)) + 
+  facet_grid(method_type~metric_id, scales = "free_x") +
+  theme_bw()
+```
