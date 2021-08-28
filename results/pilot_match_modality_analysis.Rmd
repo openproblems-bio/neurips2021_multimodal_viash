@@ -130,3 +130,11 @@ ggplot(dfg %>% filter(metric_id %in% c("match_probability_mod1", "match_probabil
   theme_bw()
 ```
 
+Omitting the positive control results:
+```{r bar2, fig.width=10, fig.height=4}
+ggplot(dfg %>% filter(metric_id %in% c("match_probability_mod1", "match_probability_mod2", "pairing_aupr"), method_type != "positive_control")) + 
+  geom_histogram(aes(value, fill = method_type)) + 
+  facet_grid(method_type~metric_id, scales = "free_x") +
+  theme_bw()
+```
+
