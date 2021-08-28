@@ -120,6 +120,23 @@ patchwork::wrap_plots(
 \newpage
 Comparing most interesting metrics.
 
+```{r bar0, fig.width=10, fig.height=4}
+# unique(dfg$metric_id)
+patchwork::wrap_plots(
+  ggplot(dfg %>% filter(metric_id %in% c("ari", "nmi", "asw_label", "ti_cons_mean", "cc_cons", "asw_batch", "graph_conn"))) + 
+    geom_histogram(aes(value, fill = method_type)) + 
+    facet_grid(method_type~metric_id, scales = "free_x") +
+    labs(title = "Metrics included in paper") +
+    theme_bw(),
+  ggplot(dfg %>% filter(!metric_id %in% c("format_check", "ari", "nmi", "asw_label", "ti_cons_mean", "cc_cons", "asw_batch", "graph_conn", "ti_cons_ADT_ATAC", "ti_cons_RNA"))) + 
+    geom_histogram(aes(value, fill = method_type)) + 
+    facet_grid(method_type~metric_id, scales = "free_x") +
+    labs(title = "Metrics not included in paper") +
+    theme_bw(),
+  ncol = 1
+)
+```
+
 ```{r bar, fig.width=10, fig.height=4}
 ggplot(dfg %>% filter(metric_id <= "latent_mixing")) + 
   geom_histogram(aes(value, fill = method_type)) + 
