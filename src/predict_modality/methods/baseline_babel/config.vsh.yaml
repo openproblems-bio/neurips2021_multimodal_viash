@@ -59,5 +59,8 @@ platforms:
           - cd /babel && /opt/conda/bin/conda env create -f environment.yml
       - type: r
         bioc: [ DropletUtils ]
+      - type: docker
+        env: 
+          - PATH=/opt/conda/bin/:$PATH
   - type: nextflow
     labels: [ midmem, lowtime, lowcpu ]
