@@ -17,22 +17,30 @@ A component which partially censors a multimodal dataset, using the `.obs['is_tr
 
 This component expects two h5ad files, `--input_mod1` and `--input_mod2`. They both contain the attributes below. If the `feature_types` of one file is `"GEX"`, then that of the other must be either `"ATAC"` or `"ADT"`.
 
-  * `.X`: Sparse profile matrix.
-  * `.uns['dataset_id']`: The name of the dataset.
+  * `.X`: Sparse count matrix.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
+  * `.obs['is_train']`: Whether or not the cell is a train or a test cell.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
-  * `.obs['batch']`: A batch identifier for the sets of cells (optional). If available, it will use the batches to derive a train/test split.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
+  * `.uns['organism']`: The organism of the sample. Must be one of "human", "mouse" or "synthetic".
+  * `.uns['dataset_id']`: Name of the dataset.
+
+For ATAC data, the expression matrix has been binarized.
 
 #### Output data formats
 
 This component outputs *four* h5ad files, namely `--output_train_mod1`, `--output_train_mod2`, `--output_test_mod1`, and `--output_test_mod2`. Each of these files contain the following attributes:
 
-  * `.X`: Sparse profile matrix.
-  * `.uns['dataset_id']`: The name of the dataset.
+  * `.X`: Sparse, log-transformed, normalised expression matrix.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
+  * `.uns['organism']`: The organism of the sample. Must be one of "human", "mouse" or "synthetic".
+  * `.uns['dataset_id']`: Name of the dataset.
 
 The dimensions of the four h5ad files are different;
 
@@ -54,20 +62,24 @@ for the test cells.
 
 This component expects three inputs, `--input_train_mod1`, `--input_train_mod2`, and `--input_test_mod1`. These should contain the attributes below. 
 
-  * `.X`: Sparse profile matrix.
-  * `.uns['dataset_id']`: The name of the dataset.
+  * `.X`: Sparse, log-transformed, normalised expression matrix.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
+  * `.uns['organism']`: The organism of the sample. Must be one of "human", "mouse" or "synthetic".
+  * `.uns['dataset_id']`: Name of the dataset.
+
+For ATAC data, the expression matrix has been binarized.
 
 #### Output data formats
 
 This component should output only *one* h5ad file, `--output`, containing the predicted profile values of modality 2 for the test cells. It has the following attributes:
 
-  * `.X`: Sparse profile matrix.
+  * `.X`: Sparse matrix of predicted expression values.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method.
-  * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
 
@@ -80,7 +92,7 @@ A component which compares the predicted profile data against the ground-truth p
 
 This component expects two h5ad files, `--input_prediction` and `--input_solution`. The former contains the predictions of the modality 2 profile data for the test cells, whereas the latter contains the ground-truth modality 2 profile data for the test cells. Both input files should have the following interface:
 
-  * `.X`: Sparse profile matrix.
+  * `.X`: Sparse expression matrix.
   * `.uns['dataset_id']`: The name of the dataset.
   * `.uns['method_id']`: The name of the prediction method (only for `input_prediction`).
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.

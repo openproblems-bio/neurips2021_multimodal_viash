@@ -18,12 +18,15 @@ A component which partially censors a multimodal dataset. First, it will use the
 
 It expects two h5ad files containing the paired single-cell profiles using two different modalities (e.g. RNA and ADT), `--input_mod1` and `--input_mod2`. They both contain the attributes below. If the `feature_types` of one file is `"GEX"`, then that of the other must be either `"ATAC"` or `"ADT"`.
 
-  * `.X`: Sparse profile matrix.
-  * `.uns['dataset_id']`: The name of the dataset.
-  * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
+  * `.X`: Sparse count matrix.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
   * `.obs['is_train']`: Whether or not the cell is a train or a test cell.
+  * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.obs_names`: Ids for the cells.
   * `.var_names`: Ids for the features.
+  * `.uns['dataset_id']`: The name of the dataset.
+  * `.uns['organism']`: The organism of the sample. Must be one of "human", "mouse" or "synthetic".
 
 #### Output data formats
 
@@ -31,14 +34,16 @@ This component outputs *six* h5ad files, namely `--output_train_mod1`, `--output
 
 The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
-  * `.X`: Sparse profile matrix.
+  * `.X`: Sparse count matrix.
   * `.uns['dataset_id']`: The name of the dataset.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
 
 The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
 
-  * `X`: The sparse pairing matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
+  * `X`: The sparse count matrix. A value of 1 in this matrix means this modality 1 profile (row) corresponds to a modality 2 profile (column).
   * `.obs_names`: Anonymized mod1 cell ids.
   * `.var_names`: Anonymized mod2 cell ids.
   * `.uns['dataset_id']`: The name of the dataset.
@@ -53,10 +58,13 @@ This component expects **five** h5ad files, `--input_train_mod1`, `--input_train
 
 The `*_mod1` and `*_mod2` h5ad files contain single-cell profiles for the two modalities for which the cell have been shuffled and anonymized. These files contain the following attributes:
 
-  * `.X`: Sparse profile matrix.
-  * `.uns['dataset_id']`: The name of the dataset.
+  * `.X`: Sparse count matrix.
+  * `.obs['batch']`: Batch id.
+  * `.obs['size_factors']`: The size factors computed by scran.
   * `.var['feature_types']`: The modality of this file, should be equal to `"GEX"`, `"ATAC"` or `"ADT"`.
   * `.var_names`: Ids for the features.
+  * `.uns['organism']`: The organism of the sample. Must be one of "human", "mouse" or "synthetic".
+  * `.uns['dataset_id']`: Name of the dataset.
 
 The `output_train_sol` and `output_test_sol` files contain sparse matrices of which mod1 profile is paired with which mod2 profile.
 
