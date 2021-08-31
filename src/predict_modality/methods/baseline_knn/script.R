@@ -5,34 +5,41 @@ requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
+path <- "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_"
 par <- list(
-  input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
-  input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
-  input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
+  input_train_mod1 = paste0(path, "train_mod1.h5ad"),
+  input_test_mod1 = paste0(path, "test_mod1.h5ad"),
+  input_train_mod2 = paste0(path, "train_mod2.h5ad"),
   output = "output.h5ad",
   n_pcs = 4L,
-  n_neighbors = 3
+  n_neighbors = 3,
+  distance_method = "pearson"
 )
 ## VIASH END
 
-cat("Reading h5ad files\n")
-ad1_train <- anndata::read_h5ad(par$input_train_mod1)
-ad1_test <- anndata::read_h5ad(par$input_test_mod1)
-ad2 <- anndata::read_h5ad(par$input_train_mod2)
+cat("Reading mod1 files\n")
+input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
+input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 
 cat("Performing DR on the mod1 values\n")
 # LMDS is more efficient than regular MDS because
 # it does not compure a square distance matrix.
 dr <- lmds::lmds(
-  rbind(ad1_train$X, ad1_test$X),
+  rbind(input_train_mod1$X, input_test_mod1$X),
   ndim = par$n_pcs,
   distance_method = par$distance_method
 )
 
-ix <- seq_len(nrow(ad1_train))
+rm(input_train_mod1)
+rm(input_test_mod1)
+
+cat("Reading mod2 files\n")
+input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
+
+ix <- seq_len(nrow(input_train_mod2))
 dr_train <- dr[ix, , drop = FALSE]
 dr_test <- dr[-ix, , drop = FALSE]
-responses_train <- ad2$X
+responses_train <- input_train_mod2$X
 
 cat("Predicting for each column in modality 2\n")
 preds <- apply(responses_train, 2, function(yi) {
@@ -49,13 +56,13 @@ cat("Creating outputs object\n")
 prediction <- Matrix::Matrix(
   preds,
   sparse = TRUE,
-  dimnames = list(rownames(dr_test), colnames(ad2))
+  dimnames = list(rownames(dr_test), colnames(input_train_mod2))
 )
 
 out <- anndata::AnnData(
   X = prediction,
   uns = list(
-    dataset_id = ad1_train$uns[["dataset_id"]],
+    dataset_id = input_train_mod2$uns[["dataset_id"]],
     method_id = "baseline_knn"
   )
 )
