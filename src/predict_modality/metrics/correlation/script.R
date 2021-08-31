@@ -9,6 +9,12 @@ par <- list(
   input_prediction = "resources_test/predict_modality/test_resource.prediction.h5ad",
   output = "test_resource.scores.h5ad"
 )
+par <- list(
+  input_solution = "work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2.censor_dataset.output_test_mod2.h5ad",
+  input_prediction = "work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2.dummy_meanpergene.output.h5ad",
+  output = "test_resource.scores.h5ad"
+)
+#/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2_dummy_meanpergene.correlation.output.h5ad
 ## VIASH END
 
 cat("Reading solution file\n")
@@ -27,17 +33,36 @@ expect_true(
   info = "Dataset and prediction anndata objects should have the same shape / dimensions."
 )
 
+# copied from scUtils/variance.R
+colVars_spm <- function( spm ) {
+  stopifnot( methods::is( spm, "dgCMatrix" ) )
+  ans <- sapply( base::seq.int(spm@Dim[2]), function(j) {
+    if( spm@p[j+1] == spm@p[j] ) { return(0) } # all entries are 0: var is 0
+    mean <- base::sum( spm@x[ (spm@p[j]+1):spm@p[j+1] ] ) / spm@Dim[1]
+    sum( ( spm@x[ (spm@p[j]+1):spm@p[j+1] ] - mean )^2 ) + mean^2 * ( spm@Dim[1] - ( spm@p[j+1] - spm@p[j] ) ) 
+  })
+  ans / ( spm@Dim[1] - 1 )
+}
+
 cat("Computing correlation metrics\n")
 # Wrangle data
 tv <- ad_sol$X
 pv <- ad_pred$X
 
+# precompute sds
+tv_sd2 <- colVars_spm(tv)
+pv_sd2 <- colVars_spm(pv)
+tv_sd1 <- colVars_spm(Matrix::t(tv))
+pv_sd1 <- colVars_spm(Matrix::t(pv))
+
 # Compute metrics
 pearson_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 1, diag = TRUE, drop0 = TRUE))
 spearman_vec_1 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 1, diag = TRUE, drop0 = TRUE))
 
-pearson_vec_1[!is.finite(pearson_vec_1) | pearson_vec_1 > 10] <- 0
-spearman_vec_1[!is.finite(spearman_vec_1) | spearman_vec_1 > 10] <- 0
+pearson_vec_1[tv_sd1 == 0 | pv_sd1 == 0] <- 0
+spearman_vec_1[tv_sd1 == 0 | pv_sd1 == 0] <- 0
+# pearson_vec_1[!is.finite(pearson_vec_1) | pearson_vec_1 > 10] <- 0
+# spearman_vec_1[!is.finite(spearman_vec_1) | spearman_vec_1 > 10] <- 0
 
 mean_pearson_per_cell <- mean(pearson_vec_1)
 mean_spearman_per_cell <- mean(spearman_vec_1)
@@ -45,8 +70,10 @@ mean_spearman_per_cell <- mean(spearman_vec_1)
 pearson_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "pearson", margin = 2, diag = TRUE, drop0 = TRUE))
 spearman_vec_2 <- diag(dynutils::calculate_similarity(tv, pv, method = "spearman", margin = 2, diag = TRUE, drop0 = TRUE))
 
-pearson_vec_2[!is.finite(pearson_vec_2) | pearson_vec_2 > 10] <- 0
-spearman_vec_2[!is.finite(spearman_vec_2) | spearman_vec_2 > 10] <- 0
+pearson_vec_2[tv_sd2 == 0 | pv_sd2 == 0] <- 0
+spearman_vec_2[tv_sd2 == 0 | pv_sd2 == 0] <- 0
+# pearson_vec_2[!is.finite(pearson_vec_2) | pearson_vec_2 > 10] <- 0
+# spearman_vec_2[!is.finite(spearman_vec_2) | spearman_vec_2 > 10] <- 0
 
 mean_pearson_per_gene <- mean(pearson_vec_2)
 mean_spearman_per_gene <- mean(spearman_vec_2)
