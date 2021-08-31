@@ -1162,5 +1162,5 @@ info:
   output: "target/nextflow/match_modality_datasets/censor_dataset"
   executable: "target/nextflow/match_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "8be3344c5824c7473a3a573bc2c3d6be21470d42"
+  git_commit: "6bd6de421215f71f1993c4690ac03133f69fcbc1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

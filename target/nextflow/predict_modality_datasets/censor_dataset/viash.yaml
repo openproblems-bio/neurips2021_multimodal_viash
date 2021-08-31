@@ -501,30 +501,40 @@ functionality:
       new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
       common_uns <- list(dataset_id = new_dataset_id)
       
-      cat("Transforming RNA data\\n")
-      ad1_X <- as(ad1_raw\$X, "CsparseMatrix")
-      size_factors <- 
-        if (!is.null(ad1_raw\$obs[["size_factors"]])) {
-          ad1_raw\$obs[["size_factors"]]
-        } else {
-          rep(1, nrow(ad1_raw))
-        }
-      ad1_X@x <- log(ad1_X@x / size_factors[ad1_X@i + 1] + 1)
-      ad1_raw\$layers <- list(counts = ad1_raw\$X)
-      ad1_raw\$X <- ad1_X
+      process_ad <- function(ad) {
+        mod <- unique(ad\$var[["feature_types"]])
       
-      if (ad2_mod == "ADT") {
-        cat("Transforming ADT data\\n")
-        ad2_X <- as(ad2_raw\$X, "CsparseMatrix")
-        ad2_X@x <- log(ad2_X@x + 1)
-        ad2_raw\$layers <- list(counts = ad2_raw\$X)
-        ad2_raw\$X <- ad2_X
-      } else if (ad2_mod == "ATAC") {
-        cat("Transforming ATAC data\\n")
-        ad2_X <- as(ad2_raw\$X, "CsparseMatrix")
-        ad2_X@x <- (ad2_X@x > 0) + 0
-        ad2_raw\$X <- ad2_X
+        if (mod == "GEX") {
+          cat("Applying precomputed size factors\\n")
+          ad_X <- as(ad\$X, "CsparseMatrix")
+          size_factors <-
+            if (!is.null(ad\$obs[["size_factors"]])) {
+              ad\$obs[["size_factors"]]
+            } else {
+              rep(1, nrow(ad))
+            }
+          ad_X@x <- log10(ad_X@x / size_factors[ad_X@i + 1] + 1)
+          ad\$layers <- list(counts = ad\$X)
+          ad\$X <- ad_X
+        } else if (mod == "ADT") {
+          cat("CLR normalizing ADT data\\n")
+          obj <- Seurat::CreateSeuratObject(counts = ad\$X, assay = "ADT")
+          obj <- Seurat::NormalizeData(obj, normalization.method = "CLR", margin = 2)
+          ad_X <- as(obj[["ADT"]]@data, "CsparseMatrix")
+          ad\$layers <- list(counts = ad\$X)
+          ad\$X <- ad_X
+        } else if (mod == "ATAC") {
+          cat("Binarizing ATAC data\\n")
+          ad_X <- as(ad\$X, "CsparseMatrix")
+          ad_X@x <- (ad_X@x > 0) + 0
+          ad\$X <- ad_X
+        }
+      
+        ad
       }
+      
+      ad1_raw <- process_ad(ad1_raw)
+      ad2_raw <- process_ad(ad2_raw)
       
       # copied from scUtils/variance.R
       colVars_spm <- function( spm ) {
@@ -1167,5 +1177,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3dev"
-  git_commit: "8be3344c5824c7473a3a573bc2c3d6be21470d42"
+  git_commit: "6bd6de421215f71f1993c4690ac03133f69fcbc1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

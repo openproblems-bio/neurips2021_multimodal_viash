@@ -7,12 +7,18 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
 par <- list(
-  input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
-  output_train_mod1 = "output_train_mod1.h5ad",
-  output_train_mod2 = "output_train_mod2.h5ad",
-  output_test_mod1 = "output_test_mod1.h5ad",
-  output_test_mod2 = "output_test_mod2.h5ad",
+  # input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
+  # input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
+  # output_train_mod1 = "output_train_mod1.h5ad",
+  # output_train_mod2 = "output_train_mod2.h5ad",
+  # output_test_mod1 = "output_test_mod1.h5ad",
+  # output_test_mod2 = "output_test_mod2.h5ad",
+  input_mod1 = "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting.output_mod2.h5ad",
+  input_mod2 = "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting.output_rna.h5ad",
+  output_train_mod1 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_train_mod1.h5ad",
+  output_train_mod2 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_train_mod2.h5ad",
+  output_test_mod1 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_test_mod1.h5ad",
+  output_test_mod2 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_test_mod2.h5ad",
   seed = 1L,
   max_mod1_columns = NULL,
   max_mod2_columns = 5000L
@@ -27,30 +33,40 @@ ad2_mod <- unique(ad2_raw$var[["feature_types"]])
 new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
-cat("Transforming RNA data\n")
-ad1_X <- as(ad1_raw$X, "CsparseMatrix")
-size_factors <- 
-  if (!is.null(ad1_raw$obs[["size_factors"]])) {
-    ad1_raw$obs[["size_factors"]]
-  } else {
-    rep(1, nrow(ad1_raw))
-  }
-ad1_X@x <- log(ad1_X@x / size_factors[ad1_X@i + 1] + 1)
-ad1_raw$layers <- list(counts = ad1_raw$X)
-ad1_raw$X <- ad1_X
+process_ad <- function(ad) {
+  mod <- unique(ad$var[["feature_types"]])
 
-if (ad2_mod == "ADT") {
-  cat("Transforming ADT data\n")
-  ad2_X <- as(ad2_raw$X, "CsparseMatrix")
-  ad2_X@x <- log(ad2_X@x + 1)
-  ad2_raw$layers <- list(counts = ad2_raw$X)
-  ad2_raw$X <- ad2_X
-} else if (ad2_mod == "ATAC") {
-  cat("Transforming ATAC data\n")
-  ad2_X <- as(ad2_raw$X, "CsparseMatrix")
-  ad2_X@x <- (ad2_X@x > 0) + 0
-  ad2_raw$X <- ad2_X
+  if (mod == "GEX") {
+    cat("Applying precomputed size factors\n")
+    ad_X <- as(ad$X, "CsparseMatrix")
+    size_factors <-
+      if (!is.null(ad$obs[["size_factors"]])) {
+        ad$obs[["size_factors"]]
+      } else {
+        rep(1, nrow(ad))
+      }
+    ad_X@x <- log10(ad_X@x / size_factors[ad_X@i + 1] + 1)
+    ad$layers <- list(counts = ad$X)
+    ad$X <- ad_X
+  } else if (mod == "ADT") {
+    cat("CLR normalizing ADT data\n")
+    obj <- Seurat::CreateSeuratObject(counts = ad$X, assay = "ADT")
+    obj <- Seurat::NormalizeData(obj, normalization.method = "CLR", margin = 2)
+    ad_X <- as(obj[["ADT"]]@data, "CsparseMatrix")
+    ad$layers <- list(counts = ad$X)
+    ad$X <- ad_X
+  } else if (mod == "ATAC") {
+    cat("Binarizing ATAC data\n")
+    ad_X <- as(ad$X, "CsparseMatrix")
+    ad_X@x <- (ad_X@x > 0) + 0
+    ad$X <- ad_X
+  }
+
+  ad
 }
+
+ad1_raw <- process_ad(ad1_raw)
+ad2_raw <- process_ad(ad2_raw)
 
 # copied from scUtils/variance.R
 colVars_spm <- function( spm ) {
