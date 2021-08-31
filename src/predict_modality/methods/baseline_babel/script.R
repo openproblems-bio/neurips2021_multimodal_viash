@@ -137,16 +137,16 @@ cat(">> Creating output object\n")
 pred_long <-
   summary(pred$X) %>%
   mutate(
-    i = match(rownames(pred), rownames(ad1_test))[i],
-    j = match(colnames(pred), colnames(ad2))[j]
+    i = match(rownames(pred), rownames(input_test_mod1))[i],
+    j = match(colnames(pred), colnames(input_train_mod2))[j]
   )
 pred_expanded <-
   Matrix::sparseMatrix(
     i = pred_long$i,
     j = pred_long$j,
     x = pred_long$x,
-    dims = c(nrow(ad1_test), ncol(ad2)),
-    dimnames = list(rownames(ad1_test), colnames(ad2))
+    dims = c(nrow(input_test_mod1), ncol(input_train_mod2)),
+    dimnames = list(rownames(input_test_mod1), colnames(input_train_mod2))
   ) %>%
   as("CsparseMatrix")
 
