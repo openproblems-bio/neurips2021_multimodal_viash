@@ -2,7 +2,7 @@
 
 # run prior to running this script:
 # bin/viash_build -q 'common'
-# bin/viash_build -q 'predict_modality' --max_threads 4
+# bin/viash_build -q 'joint_embedding' --max_threads 1
 
 # get the root of the directory
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -14,10 +14,9 @@ export NXF_VER=21.04.1
 
 bin/nextflow \
   run . \
-  -main-script src/predict_modality/workflows/run_pilot/main.nf \
+  -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/predict_modality/ \
+  --publishDir output/pilot/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
-  --datasets 'output/public_datasets/predict_modality/openproblems_**.h5ad'
-
+  --datasets 'output/public_datasets/joint_embedding/openproblems_**.h5ad'

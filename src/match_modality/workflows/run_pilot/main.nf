@@ -20,12 +20,14 @@ include  { extract_scores }              from "$targetDir/common/extract_scores/
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
+params.datasets = "output/public_datasets/$task/**.h5ad"
+
 workflow pilot_wf {
   main:
 
   // get input files for methods
   def inputs = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath(params.datasets)
       | map { [ it.getParent().baseName, it ] }
       | filter { !it[1].name.contains("output_test_sol") }
       | groupTuple
@@ -36,7 +38,7 @@ workflow pilot_wf {
   
   // get solutions
   def solution = 
-    Channel.fromPath("output/public_datasets/$task/**.h5ad")
+    Channel.fromPath(params.datasets)
       | map { [ it.getParent().baseName, it ] }
       | filter { it[1].name.contains("output_test_sol") }
 
