@@ -53,11 +53,7 @@ assert_that(
   is(ad_pred$X, "sparseMatrix"),
   length(ad_pred$X@x) <= 1000 * ad_sol$n_obs,
   ad_pred$n_obs == ad_sol$n_obs,
-  ad_pred$n_vars == ad_sol$n_vars,
-  !is.null(ad_pred$obs_names),
-  all(ad_pred$obs_names == ad_sol$obs_names),
-  !is.null(ad_pred$var_names),
-  all(ad_pred$var_names == ad_sol$var_names)
+  ad_pred$n_vars == ad_sol$n_vars
 )
 
 cat("> Test succeeded!\n")

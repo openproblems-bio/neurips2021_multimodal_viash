@@ -51,7 +51,5 @@ assert issparse(ad_pred.X)
 assert ad_pred.X.nonzero()[0].size <= 1000 * ad_sol.n_obs
 assert ad_pred.n_obs == ad_sol.n_obs
 assert ad_pred.n_vars == ad_sol.n_vars
-assert all(ad_pred.obs_names == ad_sol.obs_names)
-assert all(ad_pred.var_names == ad_sol.var_names)
 
 print("> Test succeeded!")
