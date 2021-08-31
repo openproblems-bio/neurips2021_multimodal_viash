@@ -64,6 +64,9 @@ functionality:
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        cran: [ Seurat ]
   - type: nextflow
     publish: true
     labels: [ midmem, lowtime, lowcpu ]
