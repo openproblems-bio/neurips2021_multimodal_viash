@@ -41,5 +41,7 @@ platforms:
       - type: r
         github: 
           - dynverse/dynutils@devel
+        cran:
+          - proxyC
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]
