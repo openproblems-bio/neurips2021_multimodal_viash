@@ -37,6 +37,8 @@ functionality:
   tests:
     - type: python_script
       path: ../../unit_tests/test_metric.py
+    - type: r_script
+      path: test_custom.R
     - path: ../../../../resources_test
     - path: metric_meta_aupr.tsv
       dest: metric_meta.tsv

@@ -7,10 +7,15 @@ requireNamespace("anndata", quietly = TRUE)
 requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
+# par <- list(
+#   input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
+#   input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
+#   output = "resources_test/match_modality/test_resource.scores.h5ad"
+# )
 par <- list(
-  input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
-  input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
-  output = "resources_test/match_modality/test_resource.scores.h5ad"
+  input_solution = "work/1a/dace8bb3408c2974df43c54943c0c4/dyngen_atac_1.censor_dataset.output_test_sol.h5ad",
+  input_prediction = "work/1a/dace8bb3408c2974df43c54943c0c4/dyngen_atac_1.dummy_random.output.h5ad",
+  output = "test.h5ad"
 )
 ## VIASH END
 
@@ -31,27 +36,28 @@ ad_pred <-
 expect_true(
   ad_sol$uns$dataset_id == ad_pred$uns$dataset_id
 )
-X_sol <- ad_sol$X
-X_pred <- as(ad_pred$X, "CsparseMatrix")
-dimnames(X_sol) <- dimnames(X_pred) <- list(NULL, NULL)
-
+X_sol_neighs <- ad_sol$layers[["neighbors"]][,order(ad_sol$uns$pairing_ix)]
+X_pred <- as(ad_pred$X, "CsparseMatrix")[,order(ad_sol$uns$pairing_ix)]
+dimnames(X_sol_neighs) <- dimnames(X_pred) <- list(NULL, NULL)
 cell_type <- ad_sol$obs$cell_type
 
 cat("Data wrangling\n")
-sol_summ <- summary(X_sol) %>%
+sol_summ_neighs <- summary(X_sol_neighs) %>%
   as_tibble() %>%
-  rename(gold = x) %>%
-  filter(gold != 0)
+  rename(neigh = x) %>%
+  filter(neigh != 0)
 pred_summ <- summary(X_pred) %>%
-  left_join(sol_summ, by = c("i", "j")) %>%
+  left_join(sol_summ_neighs, by = c("i", "j")) %>%
   as_tibble() %>%
   mutate(
-    gold = ifelse(is.na(gold), 0, gold),
-    label_match = (cell_type[i] == cell_type[ad_sol$uns$pairing_ix+1][j])+0
-  )
+    gold = i == j,
+    neigh = ifelse(is.na(neigh), 0, neigh),
+    label_match = (cell_type[i] == cell_type[j])+0
+  ) %>%
+  arrange(desc(x))
 
 expect_true(
-  nrow(pred_summ) <= 1000 * nrow(sol_summ),
+  nrow(pred_summ) <= 1000 * nrow(ad_sol),
   info = "Number of non-zero values for the prediction should be less or equal to 1000 times the number of cells in the dataset."
 )
 
@@ -82,6 +88,7 @@ calculate_au <- function(values, are_true, num_positive_interactions, num_possib
 
     num_selected <- c(num_selected, extra_num_selected)
     are_true <- c(are_true, rep(NA, extend_by))
+    values <- c(values, rep(NA, extend_by))
     tp <- c(tp, extra_tp)
     fp <- c(fp, extra_fp)
   }
@@ -89,6 +96,7 @@ calculate_au <- function(values, are_true, num_positive_interactions, num_possib
   # calculate extended statistics
   metrics <- tibble(
     num_selected = c(0, num_selected),
+    value = c(NA, values),
     are_true = c(NA, are_true),
     tp = c(0, tp),
     fp = c(0, fp),
@@ -119,26 +127,38 @@ cat("Calculate area under the curve\n")
 au_out <- calculate_au(
   values = pred_summ$x,
   are_true = pred_summ$gold,
-  num_positive_interactions = nrow(sol_summ),
-  num_possible_interactions = (nrow(ad_sol) * 1.0) * nrow(ad_sol)
+  num_positive_interactions = nrow(X_pred),
+  num_possible_interactions = (nrow(X_pred) * 1.0) * nrow(X_pred)
+)
+au_neigh_out <- calculate_au(
+  values = pred_summ$x,
+  are_true = pred_summ$neigh > 0,
+  num_positive_interactions = nrow(sol_summ_neighs),
+  num_possible_interactions = (nrow(X_pred) * 1.0) * nrow(X_pred)
 )
 
 label_numbers <- as.numeric(table(cell_type))
 au_match_out <- calculate_au(
-  values = pred_summ$gold,
+  values = pred_summ$x,
   are_true = pred_summ$label_match,
-  num_positive_interactions = sum((label_numbers - 1) * label_numbers),
-  num_possible_interactions = (nrow(ad_sol) * 1.0) * nrow(ad_sol)
+  num_positive_interactions = sum(label_numbers * label_numbers),
+  num_possible_interactions = (nrow(X_pred) * 1.0) * nrow(X_pred)
 )
 
 # GENIE3bis::plot_curves(au_out)
+# GENIE3bis::plot_curves(au_neigh_out)
 # GENIE3bis::plot_curves(au_match_out)
 
 colnames(au_out$area_under) <- paste0("pairing_", colnames(au_out$area_under))
+colnames(au_neigh_out$area_under) <- paste0("neighbor_", colnames(au_neigh_out$area_under))
 colnames(au_match_out$area_under) <- paste0("celltype_", colnames(au_match_out$area_under))
 
 cat("Create output object\n")
-out_values <- c(as.list(au_out$area_under), as.list(au_match_out$area_under))
+out_values <- c(
+  as.list(au_out$area_under),
+  as.list(au_neigh_out$area_under),
+  as.list(au_match_out$area_under)
+)
 
 out <- anndata::AnnData(
   X = NULL,
