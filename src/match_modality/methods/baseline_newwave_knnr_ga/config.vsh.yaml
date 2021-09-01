@@ -1,11 +1,11 @@
 functionality:
-  name: baseline_dr_nn_ga
+  name: baseline_newwave_knnr_ga
   namespace: match_modality_methods
   version: dev
-  description: Perform LMDS+Pearson DR, predict embedding with Keras NN, and match cells with a GA to minimise pairwise distances.
+  description: Perform DR with NewWave, predict embedding with KNN regression, and match cells with a GA to minimise pairwise distances.
   info:
     type: baseline
-    label: LMDS+NN+GA
+    label: MNN+NN+GA
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -37,21 +37,13 @@ functionality:
       example: "dataset_censored.h5ad"
       description: "The censored shuffled test mod2 profiles."
       required: true
-    - name: "--distance_method"
-      type: "string"
-      default: "spearman"
-      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
-    - name: "--n_dims"
-      type: "integer"
-      default: 10
-      description: Number of dimensions to use.
     - name: "--n_ga_pop"
       type: "integer"
-      default: 50
+      default: 300
       description: Population size of genetic algorithm.
     - name: "--n_ga_iter"
       type: "integer"
-      default: 100
+      default: 1000
       description: Number of GA iterations to perform.
     - name: "--output"
       type: "file"
@@ -71,8 +63,9 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds, dynutils, keras, GA ]
+        packages: [ lmds, dynutils, FNN, GA ]
+        bioc: [ SingleCellExperiment, NewWave ]
       - type: python
         packages: [ tensorflow ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, midtime, midcpu ]
