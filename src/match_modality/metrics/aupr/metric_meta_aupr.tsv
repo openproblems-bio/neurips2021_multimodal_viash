@@ -1,5 +1,7 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
 pairing_auroc	0	1	true
 pairing_aupr	0	1	true
+neighbor_auroc	0	1	true
+neighbor_aupr	0	1	true
 celltype_auroc	0	1	true
 celltype_aupr	0	1	true

@@ -1,11 +1,11 @@
 functionality:
-  name: baseline_dr_nn_knn
+  name: baseline_newwave_knnr_knn
   namespace: match_modality_methods
   version: dev
-  description: Perform LMDS+Pearson DR, predict embedding with Keras NN, and match cells with KNN.
+  description: Perform DR with NewWave, predict embedding with KNN regression, and match cells with a KNN.
   info:
     type: baseline
-    label: LMDS+NN+KNN
+    label: MNN+NN+GA
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -55,8 +55,9 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds, dynutils, keras ]
+        packages: [ lmds, dynutils, FNN ]
+        bioc: [ SingleCellExperiment, NewWave ]
       - type: python
         packages: [ tensorflow ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, midtime, midcpu ]

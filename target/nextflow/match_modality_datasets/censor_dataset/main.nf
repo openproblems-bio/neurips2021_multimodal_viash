@@ -228,9 +228,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process censor_dataset_process {
-  label 'midmem'
-  label 'lowtime'
-  label 'lowcpu'
+  label 'highmem'
+  label 'midtime'
+  label 'highcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

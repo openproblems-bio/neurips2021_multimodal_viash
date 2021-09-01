@@ -10,6 +10,10 @@ functionality:
       email: louise.deconinck@gmail.com
       roles: [ author, maintainer ]
       props: { github: LouiseDck, orcid: "" }
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ contributor ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
     - name: "--input_mod1"
       type: "file"
@@ -57,19 +61,23 @@ functionality:
       example: "dataset_solution.h5ad"
       description: "The pairing of test mod1&mod2 profiles."
       required: true
+    - name: "--knn"
+      type: "integer"
+      default: 20
+      description: The KNN cutoff for computing nearest neighbors on the mod1 and mod2 profiles.
+    - name: "--seed"
+      type: "integer"
+      default: 1
+      description: The seed.
   resources:
-    - type: python_script
-      path: script.py
-  tests:
-    - type: python_script
-      path: test.py
-    - path: ../../../../resources_test
+    - type: r_script
+      path: script.R
 platforms:
   - type: docker
-    image: "python:3.8"
-    setup: 
-      - type: python
-        packages: [ anndata, pandas, numpy ]
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        cran: [ proxyC, lmds ]
   - type: nextflow
     publish: true
-    labels: [ midmem, lowtime, lowcpu ]
+    labels: [ highmem, midtime, highcpu ]

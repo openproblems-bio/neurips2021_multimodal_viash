@@ -68,26 +68,15 @@ process_ad <- function(ad) {
 ad1_raw <- process_ad(ad1_raw)
 ad2_raw <- process_ad(ad2_raw)
 
-# copied from scUtils/variance.R
-colVars_spm <- function( spm ) {
-  stopifnot( methods::is( spm, "dgCMatrix" ) )
-  ans <- sapply( base::seq.int(spm@Dim[2]), function(j) {
-    if( spm@p[j+1] == spm@p[j] ) { return(0) } # all entries are 0: var is 0
-    mean <- base::sum( spm@x[ (spm@p[j]+1):spm@p[j+1] ] ) / spm@Dim[1]
-    sum( ( spm@x[ (spm@p[j]+1):spm@p[j+1] ] - mean )^2 ) + mean^2 * ( spm@Dim[1] - ( spm@p[j+1] - spm@p[j] ) ) 
-  })
-  ans / ( spm@Dim[1] - 1 )
-}
-
 if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_raw)) {
   cat("Sampling mod1 columns\n")
-  ad1_var <- colVars_spm(ad1_raw$X)
+  ad1_var <- proxyC::colSds(ad1_raw$X)^2
   ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns, prob = ad1_var)
   ad1_raw <- ad1_raw[, ad1_ix]
 }
 if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_raw)) {
   cat("Sampling mod2 columns\n")
-  ad2_var <- colVars_spm(ad2_raw$X)
+  ad2_var <- proxyC::colSds(ad2_raw$X)^2
   ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns, prob = ad2_var)
   ad2_raw <- ad2_raw[, ad2_ix]
 }
