@@ -1,0 +1,68 @@
+functionality:
+  name: baseline_linear_knn
+  namespace: match_modality_methods
+  version: dev
+  description: Perform DR with Linear Regression, and match cells with kNN
+  info:
+    type: baseline
+    label: LinearRegression+KNN
+  authors:
+    - name: Daniel Burkhardt
+      email: daniel.b.burkhardt@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: dburkhardt }
+  arguments:
+    - name: "--input_train_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
+      required: true
+    - name: "--input_train_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
+      required: true
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "The predicted pairing of test mod1&mod2 profiles."
+      required: true
+    - name: "--n_svd"
+      type: "integer"
+      default: 10
+      description: Number of SVD components to compress to
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 10
+      description: Number of neighbors for matching modalities
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, scipy, sklearn ]
+  - type: nextflow
+    labels: [ lowmem, lowtime, lowcpu ]
