@@ -9,6 +9,7 @@ include  { baseline_dr_knnr_knn }        from "$targetDir/${task}_methods/baseli
 include  { baseline_newwave_knnr_cbf }   from "$targetDir/${task}_methods/baseline_newwave_knnr_cbf/main.nf"   params(params)
 include  { baseline_newwave_knnr_knn }   from "$targetDir/${task}_methods/baseline_newwave_knnr_knn/main.nf"   params(params)
 include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseline_procrustes_knn/main.nf"     params(params)
+include  { baseline_linear_knn }         from "$targetDir/${task}_methods/baseline_linear_knn/main.nf"         params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"              params(params)
@@ -64,6 +65,10 @@ workflow pilot_wf {
     | baseline_babel_knn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b5 = inputs 
+    | baseline_linear_knn
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_linear_knn", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_constant
@@ -88,7 +93,7 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_semisolution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2, d3, d4)
+  def predictions = b0.mix(b1, b2, b3, b4, b5, d0, d1, d2, d3, d4)
 
   // fetch dataset ids in predictions and in solutions
   def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
