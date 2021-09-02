@@ -386,8 +386,8 @@ mod1 = ad.concat(
 )
 mod2 = ad.concat(
     {
-        "train": input_train_mod1,
-        "test": input_test_mod1
+        "train": input_train_mod2,
+        "test": input_test_mod2
     },
     index_unique="-",
     label="group"
