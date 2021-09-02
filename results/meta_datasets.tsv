@@ -20,4 +20,5 @@ dyngen	dyngen_atac_3	NA	synthetic	994	980	GEX	2	5	1135	ATAC
 dyngen	dyngen_citeseq_1	NA	synthetic	992	933	GEX	2	4	106	ADT
 dyngen	dyngen_citeseq_2	NA	synthetic	1000	974	GEX	2	4	204	ADT
 dyngen	dyngen_citeseq_3	NA	synthetic	1000	993	GEX	2	5	217	ADT
-openproblems	openproblems_bmmc_multiome	NA	human	28249	15189	GEX	5	22	119254	ATAC
+openproblems	openproblems_bmmc_cite	NA	human	10196	14910	GEX	2	44	134	ADT
+openproblems	openproblems_bmmc_multiome	NA	human	32469	15037	GEX	6	22	119014	ATAC

@@ -1,5 +1,3 @@
 method_id	metric_id	value
-baseline_dr_nn_knn	celltype_aupr	0.24219612009892444
-baseline_dr_nn_knn	celltype_auroc	0.6079160285685248
-baseline_dr_nn_knn	pairing_aupr	0.01093254927085141
-baseline_dr_nn_knn	pairing_auroc	0.5129754795686949
+baseline_newwave_knnr_cbf	pairing_aupr	0.03464555781292944
+baseline_newwave_knnr_cbf	pairing_auroc	0.6518554353592663
