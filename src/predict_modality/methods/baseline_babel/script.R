@@ -12,24 +12,24 @@ babel_location <- "/babel/bin/"
 conda_bin <- "/opt/conda/bin/conda"
 
 ## VIASH START
-# par <- list(
-#   input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
-#   input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
-#   input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
-#   output = "output.h5ad"
-# )
+# data_path <- "output/public_datasets/predict_modality/totalvispleenlymph_spleen_lymph_111_rna/totalvispleenlymph_spleen_lymph_111_rna.censor_dataset.output_"
+# data_path <- "output/public_datasets/predict_modality/babel_GM12878_rna/babel_GM12878_rna.censor_dataset.output_"
+data_path <- "output/public_datasets/predict_modality/dyngen_atac_1_rna/dyngen_atac_1_rna.censor_dataset.output_"
 par <- list(
-  input_train_mod1 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_train_mod1.h5ad",
-  input_train_mod2 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_train_mod2.h5ad",
-  input_test_mod1 = "output/public_datasets/predict_modality/totalvi_spleen_lymph_111_rna/totalvi_spleen_lymph_111_rna.censor_dataset.output_test_mod1.h5ad",
+  input_train_mod1 = paste0(data_path, "train_mod1.h5ad"),
+  input_train_mod2 = paste0(data_path, "train_mod2.h5ad"),
+  input_test_mod1 = paste0(data_path, "test_mod1.h5ad"),
   output = "output.h5ad"
 )
 conda_bin <- "conda"
 babel_location <- "../babel/bin/"
 ## VIASH END
 
-input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2, backed = TRUE)
-if (input_train_mod2$var$feature_types[[1]] != "ATAC") {
+# check modalities first, and exit if it is not ATAC
+mod1 <- anndata::read_h5ad(par$input_train_mod1, backed = TRUE)$var$feature_types[[1]]
+mod2 <- anndata::read_h5ad(par$input_train_mod2, backed = TRUE)$var$feature_types[[1]]
+
+if (mod2 != "ATAC") {
   cat("Error: babel only runs on GEX to ATAC datasets\n")
   quit(save = "no", status = 42)
 }
@@ -41,9 +41,6 @@ input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 if (is.null(input_train_mod1$var$gene_ids)) input_train_mod1$var$gene_ids <- colnames(input_train_mod1)
 if (is.null(input_train_mod2$var$gene_ids)) input_train_mod2$var$gene_ids <- colnames(input_train_mod2)
 if (is.null(input_test_mod1$var$gene_ids)) input_test_mod1$var$gene_ids <- colnames(input_test_mod1)
-
-mod1 <- as.character(unique(input_train_mod1$var$feature_types))
-mod2 <- as.character(unique(input_train_mod2$var$feature_types))
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(input_train_mod1$X, input_train_mod2$X)
@@ -101,15 +98,25 @@ DropletUtils::write10xCounts(
 
 
 cat(">> Babel: train model\n")
-babel_train_cmd <- paste0(
-  conda_bin, " run -n babel ",
-  "python ", babel_location, "train_model.py ",
-  "--data ", dir_data, "train_input.h5 ",
-  "--outdir ", dir_model, " ",
-  "--nofilter"
-)
-# stringent filtering causes babel to sometimes fail
-# reason: https://github.com/wukevin/babel/blob/main/babel/sc_data_loaders.py#L168-L190
+# bad attempt at getting the protein predictor to work
+babel_train_cmd <- 
+  # if (mod2 == "ATAC") { 
+    paste0(
+      conda_bin, " run -n babel ",
+      "python ", babel_location, "train_model.py ",
+      "--data ", dir_data, "train_input.h5 ",
+      "--outdir ", dir_model, " ",
+      "--nofilter"
+    )
+  # } else if (mod2 == "ADT") {
+  #   paste0(
+  #     conda_bin, " run -n babel ",
+  #     "python ", babel_location, "train_protein_predictor.py ",
+  #     "--rnaCounts ", dir_data, "train_input.h5 ",
+  #     "--outdir ", dir_model, " ",
+  #     "--nofilter"
+  #   )
+  # }
 
 out1 <- system(babel_train_cmd)
 
