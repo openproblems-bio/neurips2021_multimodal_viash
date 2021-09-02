@@ -860,5 +860,5 @@ info:
   output: "target/nextflow/joint_embedding/visualization"
   executable: "target/nextflow/joint_embedding/visualization/visualization"
   viash_version: "0.5.3"
-  git_commit: "ab10789e70c0cb65054ed6741f7449b356b274bf"
+  git_commit: "219119e93ad8c7d0f4cfc7e47b1b4aae145ffb1a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

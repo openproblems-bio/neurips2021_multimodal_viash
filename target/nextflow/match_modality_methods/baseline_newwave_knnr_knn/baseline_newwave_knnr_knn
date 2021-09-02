@@ -188,6 +188,26 @@ function ViashHelp {
   echo "        The predicted pairing of test mod1&mod2 profiles."
   echo ""
 
+
+  echo "   --newwave_maxiter"
+  echo "        type: integer"
+  echo "        default: 40"
+  echo "        Maximum number of NewWave iterations."
+  echo ""
+
+
+  echo "   --newwave_ngene"
+  echo "        type: integer"
+  echo "        default: 200"
+  echo "        Setting of the n_gene_par NewWave parameter."
+  echo ""
+
+
+  echo "   --newwave_ncell"
+  echo "        type: integer"
+  echo "        default: 200"
+  echo ""
+
 }
 
 # initialise array
@@ -267,6 +287,30 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
             shift 1
             ;;
+        --newwave_maxiter)
+            VIASH_PAR_NEWWAVE_MAXITER="$2"
+            shift 2
+            ;;
+        --newwave_maxiter=*)
+            VIASH_PAR_NEWWAVE_MAXITER=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --newwave_ngene)
+            VIASH_PAR_NEWWAVE_NGENE="$2"
+            shift 2
+            ;;
+        --newwave_ngene=*)
+            VIASH_PAR_NEWWAVE_NGENE=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
+        --newwave_ncell)
+            VIASH_PAR_NEWWAVE_NCELL="$2"
+            shift 2
+            ;;
+        --newwave_ncell=*)
+            VIASH_PAR_NEWWAVE_NCELL=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
             VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -305,7 +349,15 @@ if [ -z "$VIASH_PAR_OUTPUT" ]; then
   ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
-
+if [ -z "$VIASH_PAR_NEWWAVE_MAXITER" ]; then
+  VIASH_PAR_NEWWAVE_MAXITER="40"
+fi
+if [ -z "$VIASH_PAR_NEWWAVE_NGENE" ]; then
+  VIASH_PAR_NEWWAVE_NGENE="200"
+fi
+if [ -z "$VIASH_PAR_NEWWAVE_NCELL" ]; then
+  VIASH_PAR_NEWWAVE_NCELL="200"
+fi
 
 
 cat << VIASHEOF | bash
@@ -334,7 +386,10 @@ par <- list(
   "input_train_sol" = $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_SOL+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_SOL'"; else echo NULL; fi ),
   "input_test_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD1'"; else echo NULL; fi ),
   "input_test_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD2'"; else echo NULL; fi ),
-  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi )
+  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
+  "newwave_maxiter" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_MAXITER+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_MAXITER)"; else echo NULL; fi ),
+  "newwave_ngene" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_NGENE+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_NGENE)"; else echo NULL; fi ),
+  "newwave_ncell" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_NCELL+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_NCELL)"; else echo NULL; fi )
 )
 
 # get meta parameters
@@ -378,9 +433,9 @@ res1 <- NewWave::newWave(
   X = "~batch",
   verbose = TRUE,
   K = 10,
-  maxiter_optimize = 100,
-  n_gene_par = min(300, nrow(data1)),
-  n_cell_par = min(300, ncol(data1)),
+  maxiter_optimize = par\$newwave_maxiter,
+  n_gene_par = min(par\$newwave_ngene, nrow(data1)),
+  n_cell_par = min(par\$newwave_ncell, ncol(data1)),
   commondispersion = FALSE
 )
 dr_x1 <- SingleCellExperiment::reducedDim(res1)
@@ -397,9 +452,9 @@ res2 <- NewWave::newWave(
   X = "~batch",
   verbose = TRUE,
   K = 10,
-  maxiter_optimize = 100,
-  n_gene_par = min(300, nrow(data2)),
-  n_cell_par = min(300, ncol(data2)),
+  maxiter_optimize = par\$newwave_maxiter,
+  n_gene_par = min(par\$newwave_ngene, nrow(data2)),
+  n_cell_par = min(par\$newwave_ncell, ncol(data2)),
   commondispersion = FALSE
 )
 dr_x2 <- SingleCellExperiment::reducedDim(res2)

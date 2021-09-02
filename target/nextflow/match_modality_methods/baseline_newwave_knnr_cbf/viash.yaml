@@ -71,6 +71,33 @@ functionality:
     direction: "Input"
     multiple: false
     multiple_sep: ":"
+  - type: "integer"
+    name: "--newwave_maxiter"
+    alternatives: []
+    description: "Maximum number of NewWave iterations."
+    default: 40
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "integer"
+    name: "--newwave_ngene"
+    alternatives: []
+    description: "Setting of the n_gene_par NewWave parameter."
+    default: 200
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "integer"
+    name: "--newwave_ncell"
+    alternatives: []
+    description: "Setting of the n_cell_par NewWave parameter."
+    default: 200
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   - type: "file"
     name: "--output"
     alternatives: []
@@ -275,6 +302,27 @@ functionality:
         echo ""
       
       
+        echo "   --newwave_maxiter"
+        echo "        type: integer"
+        echo "        default: 40"
+        echo "        Maximum number of NewWave iterations."
+        echo ""
+      
+      
+        echo "   --newwave_ngene"
+        echo "        type: integer"
+        echo "        default: 200"
+        echo "        Setting of the n_gene_par NewWave parameter."
+        echo ""
+      
+      
+        echo "   --newwave_ncell"
+        echo "        type: integer"
+        echo "        default: 200"
+        echo "        Setting of the n_cell_par NewWave parameter."
+        echo ""
+      
+      
         echo "   --output"
         echo "        type: file, required parameter, output"
         echo "        example: output.h5ad"
@@ -360,6 +408,30 @@ functionality:
                   VIASH_PAR_N_POP=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --newwave_maxiter)
+                  VIASH_PAR_NEWWAVE_MAXITER="$2"
+                  shift 2
+                  ;;
+              --newwave_maxiter=*)
+                  VIASH_PAR_NEWWAVE_MAXITER=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --newwave_ngene)
+                  VIASH_PAR_NEWWAVE_NGENE="$2"
+                  shift 2
+                  ;;
+              --newwave_ngene=*)
+                  VIASH_PAR_NEWWAVE_NGENE=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --newwave_ncell)
+                  VIASH_PAR_NEWWAVE_NCELL="$2"
+                  shift 2
+                  ;;
+              --newwave_ncell=*)
+                  VIASH_PAR_NEWWAVE_NCELL=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               --output)
                   VIASH_PAR_OUTPUT="$2"
                   shift 2
@@ -409,6 +481,15 @@ functionality:
       if [ -z "$VIASH_PAR_N_POP" ]; then
         VIASH_PAR_N_POP="300"
       fi
+      if [ -z "$VIASH_PAR_NEWWAVE_MAXITER" ]; then
+        VIASH_PAR_NEWWAVE_MAXITER="40"
+      fi
+      if [ -z "$VIASH_PAR_NEWWAVE_NGENE" ]; then
+        VIASH_PAR_NEWWAVE_NGENE="200"
+      fi
+      if [ -z "$VIASH_PAR_NEWWAVE_NCELL" ]; then
+        VIASH_PAR_NEWWAVE_NCELL="200"
+      fi
       
       
       cat << VIASHEOF | bash
@@ -439,6 +520,9 @@ functionality:
         "input_test_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD1'"; else echo NULL; fi ),
         "input_test_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_TEST_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TEST_MOD2'"; else echo NULL; fi ),
         "n_pop" = $( if [ ! -z ${VIASH_PAR_N_POP+x} ]; then echo "as.integer($VIASH_PAR_N_POP)"; else echo NULL; fi ),
+        "newwave_maxiter" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_MAXITER+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_MAXITER)"; else echo NULL; fi ),
+        "newwave_ngene" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_NGENE+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_NGENE)"; else echo NULL; fi ),
+        "newwave_ncell" = $( if [ ! -z ${VIASH_PAR_NEWWAVE_NCELL+x} ]; then echo "as.integer($VIASH_PAR_NEWWAVE_NCELL)"; else echo NULL; fi ),
         "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi )
       )
       
@@ -485,9 +569,9 @@ functionality:
         X = "~batch",
         verbose = TRUE,
         K = 10,
-        maxiter_optimize = 100,
-        n_gene_par = min(300, nrow(data1)),
-        n_cell_par = min(300, ncol(data1)),
+        maxiter_optimize = par\$newwave_maxiter,
+        n_gene_par = min(par\$newwave_ngene, nrow(data1)),
+        n_cell_par = min(par\$newwave_ncell, ncol(data1)),
         commondispersion = FALSE
       )
       dr_x1 <- SingleCellExperiment::reducedDim(res1)
@@ -504,9 +588,9 @@ functionality:
         X = "~batch",
         verbose = TRUE,
         K = 10,
-        maxiter_optimize = 100,
-        n_gene_par = min(300, nrow(data2)),
-        n_cell_par = min(300, ncol(data2)),
+        maxiter_optimize = par\$newwave_maxiter,
+        n_gene_par = min(par\$newwave_ngene, nrow(data2)),
+        n_cell_par = min(par\$newwave_ncell, ncol(data2)),
         commondispersion = FALSE
       )
       dr_x2 <- SingleCellExperiment::reducedDim(res2)
@@ -648,6 +732,9 @@ functionality:
           baseline_newwave_knnr_cbf__input_test_mod1 = "viash_no_value"
           baseline_newwave_knnr_cbf__input_test_mod2 = "viash_no_value"
           baseline_newwave_knnr_cbf__n_pop = "300"
+          baseline_newwave_knnr_cbf__newwave_maxiter = "40"
+          baseline_newwave_knnr_cbf__newwave_ngene = "200"
+          baseline_newwave_knnr_cbf__newwave_ncell = "200"
           baseline_newwave_knnr_cbf__output = "viash_no_value"
           id = ""
           testScript = "test_method.R"
@@ -735,6 +822,42 @@ functionality:
                 value = "${params.baseline_newwave_knnr_cbf__n_pop}"
                 dflt = "300"
                 description = "Population size."
+              }
+              newwave_maxiter {
+                name = "newwave_maxiter"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave_knnr_cbf__newwave_maxiter}"
+                dflt = "40"
+                description = "Maximum number of NewWave iterations."
+              }
+              newwave_ngene {
+                name = "newwave_ngene"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave_knnr_cbf__newwave_ngene}"
+                dflt = "200"
+                description = "Setting of the n_gene_par NewWave parameter."
+              }
+              newwave_ncell {
+                name = "newwave_ncell"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave_knnr_cbf__newwave_ncell}"
+                dflt = "200"
+                description = "Setting of the n_cell_par NewWave parameter."
               }
               output {
                 name = "output"
@@ -1116,5 +1239,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_newwave_knnr_cbf"
   executable: "target/nextflow/match_modality_methods/baseline_newwave_knnr_cbf/baseline_newwave_knnr_cbf"
   viash_version: "0.5.3"
-  git_commit: "ab10789e70c0cb65054ed6741f7449b356b274bf"
+  git_commit: "219119e93ad8c7d0f4cfc7e47b1b4aae145ffb1a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

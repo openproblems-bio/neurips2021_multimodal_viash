@@ -41,6 +41,18 @@ functionality:
       type: "integer"
       default: 300
       description: Population size.
+    - name: "--newwave_maxiter"
+      type: "integer"
+      default: 40
+      description: Maximum number of NewWave iterations.
+    - name: "--newwave_ngene"
+      type: "integer"
+      default: 200
+      description: Setting of the n_gene_par NewWave parameter.
+    - name: "--newwave_ncell"
+      type: "integer"
+      default: 200
+      description: Setting of the n_cell_par NewWave parameter.
     - name: "--output"
       type: "file"
       direction: "output"
