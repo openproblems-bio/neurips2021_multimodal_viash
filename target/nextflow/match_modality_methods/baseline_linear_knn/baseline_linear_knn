@@ -434,13 +434,13 @@ mod2.obsm["X_pca"] = TruncatedSVD(n_svd).fit_transform(mod2.X)
 
 reg = LinearRegression()
 
-reg.fit(mod1tr.X, mod2tr.X)
-mod2te_pred = reg.predict(mod1te.X)
+reg.fit(mod1tr.obsm["X_pca"], mod2tr.obsm["X_pca"])
+mod2te_pred = reg.predict(mod1te.obsm["X_pca"])
 
 neighbors = NearestNeighbors(n_neighbors=np.min((mod2te.shape[0], par["n_neighbors"])), n_jobs=-1)
 neighbors = neighbors.fit(mod2te_pred)
 
-distances, indices = neighbors.kneighbors(mod2te.X)
+distances, indices = neighbors.kneighbors(mod2te.obsm["X_pca"])
 
 prediction = np.zeros((mod2te.shape[0], mod2te.shape[0]))
 for i, neighbors in enumerate(indices):
