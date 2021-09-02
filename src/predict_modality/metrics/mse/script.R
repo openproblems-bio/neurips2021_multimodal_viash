@@ -55,8 +55,8 @@ out <- anndata::AnnData(
   uns = list(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
-    metric_ids = list(names(scores)),
-    metric_values = list(as.vector(as.matrix(scores)))
+    metric_ids = names(scores),
+    metric_values = as.vector(as.matrix(scores))
   )
 )
 
