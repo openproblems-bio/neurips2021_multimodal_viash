@@ -5,7 +5,7 @@ functionality:
   description: Perform DR with NewWave, predict embedding with KNN regression, and match cells with a KNN.
   info:
     type: baseline
-    label: MNN+NN+GA
+    label: NewWave+KNNR+KNN
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
