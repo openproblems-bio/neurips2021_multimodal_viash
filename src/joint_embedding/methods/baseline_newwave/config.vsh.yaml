@@ -43,4 +43,4 @@ platforms:
       - type: r
         bioc: [ SingleCellExperiment, NewWave ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ highmem, midtime, highcpu ]

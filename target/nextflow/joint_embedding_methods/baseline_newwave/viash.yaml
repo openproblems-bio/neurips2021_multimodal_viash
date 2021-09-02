@@ -632,9 +632,9 @@ functionality:
       }
       
       process baseline_newwave_process {
-        label 'lowmem'
-        label 'lowtime'
-        label 'lowcpu'
+        label 'highmem'
+        label 'midtime'
+        label 'highcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -823,9 +823,9 @@ platform:
   namespace_separator: "_"
   separate_multiple_outputs: true
   labels:
-  - "lowmem"
-  - "lowtime"
-  - "lowcpu"
+  - "highmem"
+  - "midtime"
+  - "highcpu"
 platforms: []
 info:
   config: "src/joint_embedding/methods/baseline_newwave/config.vsh.yaml"
@@ -833,5 +833,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_newwave"
   executable: "target/nextflow/joint_embedding_methods/baseline_newwave/baseline_newwave"
   viash_version: "0.5.3"
-  git_commit: "204b91432a7929badae04ba0edb5108b842f79e6"
+  git_commit: "2d043cd1a6f611c4862d1f2f8e0a5990e1338ac8"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
