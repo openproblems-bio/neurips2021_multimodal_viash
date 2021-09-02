@@ -447,31 +447,37 @@ functionality:
         assays = list(counts = cbind(t(input_train_mod1\$X), t(input_test_mod1\$X))),
         colData = data.frame(batch = factor(batch1))
       )
+      # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
+      
+      # res1 <- zinbwave::zinbsurf(data1, K=10, X=~batch)
       res1 <- NewWave::newWave(
         data1,
         X = "~batch",
         verbose = TRUE,
         K = 10,
-        n_gene_disp = 100,
-        n_gene_par = 100,
-         n_cell_par = 100,
-         maxiter_optimize = 5
-        )
+        maxiter_optimize = 100,
+        n_gene_par = min(300, nrow(data1)),
+        n_cell_par = min(300, ncol(data1)),
+        commondispersion = FALSE
+      )
       dr_x1 <- SingleCellExperiment::reducedDim(res1)
       
       data2 <- SummarizedExperiment::SummarizedExperiment(
         assays = list(counts = cbind(t(input_train_mod2\$X[order(match_train), , drop = FALSE]), t(input_test_mod2\$X))),
         colData = data.frame(batch = factor(batch2))
       )
+      # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
+      
+      # res2 <- zinbwave::zinbsurf(data2, K=10, X=~batch)
       res2 <- NewWave::newWave(
         data2,
         X = "~batch",
         verbose = TRUE,
         K = 10,
-        n_gene_disp = 100,
-        n_gene_par = 100,
-        n_cell_par = 100,
-        maxiter_optimize = 5
+        maxiter_optimize = 100,
+        n_gene_par = min(300, nrow(data2)),
+        n_cell_par = min(300, ncol(data2)),
+        commondispersion = FALSE
       )
       dr_x2 <- SingleCellExperiment::reducedDim(res2)
       
@@ -812,9 +818,9 @@ functionality:
       }
       
       process baseline_newwave_knnr_knn_process {
-        label 'midmem'
+        label 'highmem'
         label 'midtime'
-        label 'midcpu'
+        label 'highcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -995,7 +1001,7 @@ functionality:
     path: "../../../../resources_test"
   info:
     type: "baseline"
-    label: "MNN+NN+GA"
+    label: "NewWave+KNNR+KNN"
 platform:
   type: "nextflow"
   id: "nextflow"
@@ -1003,9 +1009,9 @@ platform:
   namespace_separator: "_"
   separate_multiple_outputs: true
   labels:
-  - "midmem"
+  - "highmem"
   - "midtime"
-  - "midcpu"
+  - "highcpu"
 platforms: []
 info:
   config: "src/match_modality/methods/baseline_newwave_knnr_knn/config.vsh.yaml"
@@ -1013,5 +1019,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_newwave_knnr_knn"
   executable: "target/nextflow/match_modality_methods/baseline_newwave_knnr_knn/baseline_newwave_knnr_knn"
   viash_version: "0.5.3"
-  git_commit: "b853e2eb566a98ca2bc5e2338fd4cecc27192100"
+  git_commit: "a20536766f666fcb5ea8250e19816dd942f504c1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

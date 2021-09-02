@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component baseline_newwave_knnr_ga")
+      println("[ERROR] option --${it.name} not specified in component baseline_newwave_knnr_cbf")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "baseline_newwave_knnr_ga." + it.name + "." + extOrName
+          ? "baseline_newwave_knnr_cbf." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,10 +157,10 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process baseline_newwave_knnr_ga_process {
-  label 'midmem'
+process baseline_newwave_knnr_cbf_process {
+  label 'highmem'
   label 'midtime'
-  label 'midcpu'
+  label 'highcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -188,7 +188,7 @@ process baseline_newwave_knnr_ga_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.baseline_newwave_knnr_ga.tests.testScript} | tee $output
+      ./${params.baseline_newwave_knnr_cbf.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process baseline_newwave_knnr_ga_process {
       """
 }
 
-workflow baseline_newwave_knnr_ga {
+workflow baseline_newwave_knnr_cbf {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "baseline_newwave_knnr_ga"
+  def key = "baseline_newwave_knnr_cbf"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow baseline_newwave_knnr_ga {
       )
     }
 
-  result_ = baseline_newwave_knnr_ga_process(id_input_output_function_cli_params_)
+  result_ = baseline_newwave_knnr_cbf_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow baseline_newwave_knnr_ga {
 
 workflow {
   def id = params.id
-  def fname = "baseline_newwave_knnr_ga"
+  def fname = "baseline_newwave_knnr_cbf"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.baseline_newwave_knnr_ga
+  def inputFiles = params.baseline_newwave_knnr_cbf
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = baseline_newwave_knnr_ga(ch_)
+  result = baseline_newwave_knnr_cbf(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.baseline_newwave_knnr_ga.output = "baseline_newwave_knnr_ga.log"
+  params.baseline_newwave_knnr_cbf.output = "baseline_newwave_knnr_cbf.log"
 
   Channel.from(rootDir) \
-    | filter { params.baseline_newwave_knnr_ga.tests.isDefined } \
+    | filter { params.baseline_newwave_knnr_cbf.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.baseline_newwave_knnr_ga.tests.testResources.collect{ file( p + it ) },
+        params.baseline_newwave_knnr_cbf.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | baseline_newwave_knnr_ga
+    | baseline_newwave_knnr_cbf
 
   emit:
-  baseline_newwave_knnr_ga.out
+  baseline_newwave_knnr_cbf.out
 }

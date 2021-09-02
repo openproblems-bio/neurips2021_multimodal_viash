@@ -1,11 +1,11 @@
 functionality:
-  name: baseline_newwave_knnr_ga
+  name: baseline_newwave_knnr_cbf
   namespace: match_modality_methods
   version: dev
-  description: Perform DR with NewWave, predict embedding with KNN regression, and match cells with a GA to minimise pairwise distances.
+  description: Perform DR with NewWave, predict embedding with KNN regression, and matching cells with a consensus best fit algorithm.
   info:
     type: baseline
-    label: MNN+NN+GA
+    label: NewWave+KNNR+CBF
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -37,14 +37,10 @@ functionality:
       example: "dataset_censored.h5ad"
       description: "The censored shuffled test mod2 profiles."
       required: true
-    - name: "--n_ga_pop"
+    - name: "--n_pop"
       type: "integer"
       default: 300
-      description: Population size of genetic algorithm.
-    - name: "--n_ga_iter"
-      type: "integer"
-      default: 1000
-      description: Number of GA iterations to perform.
+      description: Population size.
     - name: "--output"
       type: "file"
       direction: "output"
@@ -63,9 +59,9 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds, dynutils, FNN, GA ]
+        packages: [ lmds, dynutils, FNN, pbapply ]
         bioc: [ SingleCellExperiment, NewWave ]
       - type: python
         packages: [ tensorflow ]
   - type: nextflow
-    labels: [ midmem, midtime, midcpu ]
+    labels: [ highmem, midtime, highcpu ]

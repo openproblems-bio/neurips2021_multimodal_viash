@@ -2,6 +2,7 @@ cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 requireNamespace("anndata", quietly = TRUE)
+requireNamespace("pbapply", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 requireNamespace("NewWave", quietly = TRUE)
 requireNamespace("FNN", quietly = TRUE)
@@ -10,7 +11,8 @@ requireNamespace("SingleCellExperiment", quietly = TRUE)
 ## VIASH START
 # path <- "resources_test/match_modality/test_resource."
 # path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
-path <- "output/public_datasets/match_modality/dyngen_atac_1/dyngen_atac_1.censor_dataset.output_"
+# path <- "output/public_datasets/match_modality/dyngen_atac_1/dyngen_atac_1.censor_dataset.output_"
+path <- "output/public_datasets/match_modality/dyngen_citeseq_3_manual/dyngen_citeseq_3_manual.censor_dataset.output_"
 # path <- "debug/debug."
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
@@ -19,17 +21,16 @@ par <- list(
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),
   input_test_mod2 = paste0(path, "test_mod2.h5ad"),
   output = "output.h5ad",
-  n_dims = 10L,
-  distance_method = "spearman",
-  n_ga_pop = 200L,
-  n_ga_iter = 500L
+  n_pop = 300L
 )
 meta <- list(functionality_name = "foo")
 
 # # read in solution data to check whether method is working
-input_test_sol <- anndata::read_h5ad(paste0(path, "test_sol.h5ad"))
-match_test <- input_test_sol$uns$pairing_ix + 1
+# input_test_sol <- anndata::read_h5ad(paste0(path, "test_sol.h5ad"))
+# match_test <- input_test_sol$uns$pairing_ix + 1
 ## VIASH END
+
+n_cores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
 
 method_id <- meta$functionality_name
 
@@ -87,15 +88,19 @@ res2 <- NewWave::newWave(
 )
 dr_x2 <- SingleCellExperiment::reducedDim(res2)
 
-colnames(dr_x1) <- colnames(dr_x2) <- paste0("comp_", seq_len(ncol(dr_x1)))
+colnames(dr_x1) <- paste0("comp_", seq_len(ncol(dr_x1)))
+colnames(dr_x2) <- paste0("comp_", seq_len(ncol(dr_x2)))
 
 # # visual checks
 # ct1 <- c(as.character(input_train_sol$obs$cell_type), as.character(input_test_sol$obs$cell_type))
 # ct2 <- c(as.character(input_train_sol$obs$cell_type), as.character(input_test_sol$obs$cell_type[match_test]))
-# qplot(dr_x1[,1], dr_x1[,2], colour = factor(batch1))
-# qplot(dr_x2[,1], dr_x2[,2], colour = factor(batch2))
-# qplot(dr_x1[,1], dr_x1[,2], colour = factor(ct1))
-# qplot(dr_x2[,1], dr_x2[,2], colour = factor(ct2))
+# patchwork::wrap_plots(
+#   qplot(dr_x1[,1], dr_x1[,2], colour = factor(batch1)),
+#   qplot(dr_x2[,1], dr_x2[,2], colour = factor(batch2)),
+#   qplot(dr_x1[,1], dr_x1[,2], colour = factor(ct1)),
+#   qplot(dr_x2[,1], dr_x2[,2], colour = factor(ct2))
+# )
+
 
 # split DR matrices
 train_ix <- seq_len(nrow(input_train_mod1))
@@ -104,8 +109,17 @@ dr_x1_test <- dr_x1[-train_ix, , drop = FALSE]
 dr_x2_train <- dr_x2[train_ix, , drop = FALSE]
 dr_x2_test <- dr_x2[-train_ix, , drop = FALSE]
 
-cat("Predicting for each column in modality 2\n")
-preds <- apply(dr_x2_train, 2, function(yi) {
+cat("Predicting mod1 DR of test cells\n")
+pred_mod1 <- apply(dr_x1_train, 2, function(yi) {
+  FNN::knn.reg(
+    train = dr_x2_train,
+    test = dr_x2_test,
+    y = yi,
+    k = min(15, nrow(dr_x1_test))
+  )$pred
+})
+cat("Predicting mod2 DR of test cells\n")
+pred_mod2 <- apply(dr_x2_train, 2, function(yi) {
   FNN::knn.reg(
     train = dr_x1_train,
     test = dr_x1_test,
@@ -115,24 +129,64 @@ preds <- apply(dr_x2_train, 2, function(yi) {
 })
 
 
-cat("Performing KNN between test mod2 DR and predicted test mod2\n")
-knn_out <- FNN::get.knnx(
-  preds,
-  dr_x2_test,
-  k = min(1000, nrow(preds))
-)
+# # visual checks
+# patchwork::wrap_plots(
+#   ggplot() +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type), data.frame(rbind(dr_x2, pred_mod2)), size = 3, colour = "gray") +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x2_train, type = "1train", input_train_sol$obs), size = 3) +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x2_test, type = "2test", input_test_sol$obs[match_test, ]), size = 3) +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(pred_mod2, type = "3pred", input_test_sol$obs), size = 3) +
+#     facet_wrap(~type) +
+#     theme_bw(),
+#   ggplot() +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type), data.frame(rbind(dr_x1, pred_mod1)), size = 3, colour = "gray") +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x1_train, type = "1train", input_train_sol$obs), size = 3) +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x1_test, type = "2test", input_test_sol$obs[match_test, ]), size = 3) +
+#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(pred_mod1, type = "3pred", input_test_sol$obs), size = 3) +
+#     facet_wrap(~type) +
+#     theme_bw(),
+#   ncol = 1
+# )
 
-cat("Creating output data structures\n")
-df <- tibble(
-  i = as.vector(row(knn_out$nn.index)),
-  j = as.vector(knn_out$nn.index),
-  x = 1000 - as.vector(col(knn_out$nn.index)) + 1
-  # x = max(knn_out$nn.dist) * 2 - as.vector(knn_out$nn.dist)
-)
+
+cat("Minimising distances between mod1 and mod2 pairs with GA\n")
+gen_vec <- function(z) {
+  int <- seq_len(nrow(pred_mod1))
+
+  i <- j <- c()
+  resti <- int
+  restj <- int
+
+  while (length(resti) > 0) {
+    ixi <- sample.int(length(resti), 1)
+    newi <- resti[[ixi]]
+    d1 <- proxy::dist(pred_mod1[restj, , drop = FALSE], dr_x1_test[newi, , drop = FALSE], method = "euclidean")
+    d2 <- proxy::dist(pred_mod2[restj, , drop = FALSE], dr_x2_test[newi, , drop = FALSE], method = "euclidean")
+    d12 <- d1 + d2
+    ixj <- which.min(d12[, 1])
+    newj <- restj[[ixj]]
+    resti <- resti[-ixi]
+    restj <- restj[-ixj]
+    i <- c(i, newi)
+    j <- c(j, newj)
+
+    #  tibble(i, j); tibble(resti, restj)
+  }
+
+  tibble::tibble(i, j)
+}
+
+outs <- pbapply::pblapply(seq_len(par$n_pop), cl = n_cores, gen_vec)
+df <- bind_rows(outs) %>%
+  group_by(i, j) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(n)) %>%
+  mutate(gold = i == j)
+
 knn_mat <- Matrix::sparseMatrix(
   i = df$i,
   j = df$j,
-  x = df$x,
+  x = df$n,
   dims = list(nrow(dr_x1_test), nrow(dr_x2_test))
 )
 

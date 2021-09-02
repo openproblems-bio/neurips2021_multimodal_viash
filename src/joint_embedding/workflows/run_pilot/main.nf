@@ -9,6 +9,7 @@ include  { baseline_pca }               from "$targetDir/${task}_methods/baselin
 include  { baseline_mnn }               from "$targetDir/${task}_methods/baseline_mnn/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
 include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
+include  { baseline_newwave }           from "$targetDir/${task}_methods/baseline_newwave/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
@@ -68,6 +69,10 @@ workflow pilot_wf {
     | baseline_mnn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_mnn", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b4 = inputs 
+    | baseline_newwave
+    | join(solution) 
+    | map { id, pred, params, sol -> [ id + "_baseline_newwave", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_random

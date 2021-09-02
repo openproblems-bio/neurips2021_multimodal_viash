@@ -6,7 +6,7 @@ task = "match_modality"
 
 include  { baseline_babel_knn }          from "$targetDir/${task}_methods/baseline_babel_knn/main.nf"          params(params)
 include  { baseline_dr_knnr_knn }        from "$targetDir/${task}_methods/baseline_dr_knnr_knn/main.nf"        params(params)
-include  { baseline_newwave_knnr_ga }    from "$targetDir/${task}_methods/baseline_newwave_knnr_ga/main.nf"    params(params)
+include  { baseline_newwave_knnr_cbf }    from "$targetDir/${task}_methods/baseline_newwave_knnr_cbf/main.nf"    params(params)
 include  { baseline_newwave_knnr_knn }   from "$targetDir/${task}_methods/baseline_newwave_knnr_knn/main.nf"   params(params)
 include  { baseline_procrustes_knn }     from "$targetDir/${task}_methods/baseline_procrustes_knn/main.nf"     params(params)
 include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_constant/main.nf"              params(params)
@@ -52,9 +52,9 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_dr_knnr_knn", [ input_prediction: pred, input_solution: sol ], params ]}
   def b2 = inputs 
-    | baseline_newwave_knnr_ga
+    | baseline_newwave_knnr_cbf
     | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_ga", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_cbf", [ input_prediction: pred, input_solution: sol ], params ]}
   def b3 = inputs 
     | baseline_newwave_knnr_knn
     | join(solution) 
