@@ -28,9 +28,15 @@ colnames(meta_metrics) <- ifelse(!grepl("metric_", colnames(meta_metrics)), past
 
 df <- 
   # read in all columns as strings because of infinite values in table
-  readr::read_tsv(
-    "output/pilot/match_modality/output.extract_scores.output.tsv",
-    col_types = c(.default = "c")
+  bind_rows(
+    readr::read_tsv(
+      "output/pilot/match_modality/output.extract_scores.output.tsv",
+      col_types = c(.default = "c")
+    )#,
+    # readr::read_tsv(
+    #   "output/pilot_old/match_modality/output.extract_scores.output.tsv",
+    #   col_types = c(.default = "c")
+    # ) %>% filter(!grepl("openproblems", dataset_id))
   ) %>%
   mutate(
     # manually convert to floats afterwards
@@ -73,7 +79,7 @@ dfg <- df %>%
   gather(metric_id, value, -starts_with("dataset_"), -starts_with("method"), -filter) %>%
   filter(filter | metric_id %in% c("finished", "correct_format", "format_check"))
 
-dfg_nosol <- dfg %>% filter(method_id != "dummy_solution")
+dfg_nosol <- dfg %>% filter(!grepl("solution", method_id))
 ```
 
 Colour by method (dummy_solution not shown).
