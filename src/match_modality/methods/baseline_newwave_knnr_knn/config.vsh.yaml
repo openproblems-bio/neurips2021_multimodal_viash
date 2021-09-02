@@ -43,6 +43,17 @@ functionality:
       example: "output.h5ad"
       description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
+    - name: "--newwave_maxiter"
+      type: "integer"
+      default: 40
+      description: Maximum number of NewWave iterations.
+    - name: "--newwave_ngene"
+      type: "integer"
+      default: 200
+      description: Setting of the n_gene_par NewWave parameter.
+    - name: "--newwave_ncell"
+      type: "integer"
+      default: 200
   resources:
     - type: r_script
       path: script.R

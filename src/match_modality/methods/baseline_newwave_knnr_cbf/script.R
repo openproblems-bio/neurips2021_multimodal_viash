@@ -62,9 +62,9 @@ res1 <- NewWave::newWave(
   X = "~batch",
   verbose = TRUE,
   K = 10,
-  maxiter_optimize = 100,
-  n_gene_par = min(300, nrow(data1)),
-  n_cell_par = min(300, ncol(data1)),
+  maxiter_optimize = par$newwave_maxiter,
+  n_gene_par = min(par$newwave_ngene, nrow(data1)),
+  n_cell_par = min(par$newwave_ncell, ncol(data1)),
   commondispersion = FALSE
 )
 dr_x1 <- SingleCellExperiment::reducedDim(res1)
@@ -81,9 +81,9 @@ res2 <- NewWave::newWave(
   X = "~batch",
   verbose = TRUE,
   K = 10,
-  maxiter_optimize = 100,
-  n_gene_par = min(300, nrow(data2)),
-  n_cell_par = min(300, ncol(data2)),
+  maxiter_optimize = par$newwave_maxiter,
+  n_gene_par = min(par$newwave_ngene, nrow(data2)),
+  n_cell_par = min(par$newwave_ncell, ncol(data2)),
   commondispersion = FALSE
 )
 dr_x2 <- SingleCellExperiment::reducedDim(res2)
