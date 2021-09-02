@@ -1,5 +1,5 @@
 method_id	metric_id	value
-baseline_randomforest	mean_pearson_per_cell	0.8577450009105859
-baseline_randomforest	mean_pearson_per_gene	0.41179806375945
-baseline_randomforest	mean_spearman_per_cell	0.8160407461628522
-baseline_randomforest	mean_spearman_per_gene	0.3659242625834213
+baseline_randomforest	logp1_mse	0.12756213445664877
+baseline_randomforest	logp1_rmse	0.19983867654212165
+baseline_randomforest	mse	0.34141183729941665
+baseline_randomforest	rmse	0.5843045757988009

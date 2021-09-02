@@ -29,7 +29,7 @@ bin/viash run src/match_modality/datasets/censor_dataset/config.vsh.yaml -- \
   --output_test_mod2 ${out_file}.test_mod2.h5ad \
   --output_test_sol ${out_file}.test_sol.h5ad
   
-bin/viash run src/match_modality/methods/baseline_dr_nn_knn/config.vsh.yaml -- \
+bin/viash run src/match_modality/methods/baseline_newwave_knnr_cbf/config.vsh.yaml -- \
   --input_train_mod1 ${out_file}.train_mod1.h5ad \
   --input_train_mod2 ${out_file}.train_mod2.h5ad \
   --input_train_sol ${out_file}.train_sol.h5ad \

@@ -34,13 +34,13 @@ viash run src/predict_modality/methods/baseline_randomforest/config.vsh.yaml -- 
   --input_test_mod1 ${out_file}.test_mod1.h5ad \
   --output ${out_file}.prediction.h5ad
   
-viash run src/predict_modality/metrics/correlation/config.vsh.yaml -- \
+viash run src/predict_modality/metrics/mse/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.test_mod2.h5ad \
   --output ${out_file}.scores.h5ad
 
 viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/predict_modality/metrics/correlation/metric_meta_correlation.tsv \
+  --metric_meta src/predict_modality/metrics/mse/metric_meta_mse.tsv \
   --output ${out_file}.scores.tsv \
   --summary ${out_file}.summary.tsv

@@ -1,5 +1,5 @@
 method_id	metric_id	value
-baseline_lmds	rfoob_batch_error	0.03235294117647059
-baseline_lmds	rfoob_celltype_accuracy	0.6705882352941177
-baseline_lmds	rfoob_pseudotimeadt_rsq	0.66415432684209
-baseline_lmds	rfoob_pseudotimegex_rsq	0.9053121839024514
+baseline_lmds	rfoob_batch_error	0.029411764705882353
+baseline_lmds	rfoob_celltype_accuracy	0.6794117647058824
+baseline_lmds	rfoob_pseudotimeadt_rsq	0.6637731679962985
+baseline_lmds	rfoob_pseudotimegex_rsq	0.9064491992953161
