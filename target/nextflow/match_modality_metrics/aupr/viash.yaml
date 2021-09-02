@@ -952,5 +952,5 @@ info:
   output: "target/nextflow/match_modality_metrics/aupr"
   executable: "target/nextflow/match_modality_metrics/aupr/aupr"
   viash_version: "0.5.3"
-  git_commit: "a8f7d9be4370f51914b22ab85e556cea4caadcbb"
+  git_commit: "304e59c5f4031df3bf047542ef79524396ca66ca"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
