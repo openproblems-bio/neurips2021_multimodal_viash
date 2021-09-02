@@ -1,2 +1,5 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
 mse	0	+Inf	false
+rmse	0	+Inf	false
+logp1_mse	0	+Inf	false
+logp1_rmse	0	+Inf	false

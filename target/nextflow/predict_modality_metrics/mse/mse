@@ -304,7 +304,7 @@ expect_true(
 
 cat("Computing MSE metrics\\n")
 # Wrangle data
-scores <- 
+comp <- 
   full_join(
     summary(ad_sol\$X) %>% rename(solx = x),
     summary(ad_pred\$X) %>% rename(predx = x),
@@ -314,9 +314,13 @@ scores <-
   mutate(
     solx = ifelse(is.na(solx), 0, solx),
     predx = ifelse(is.na(predx), 0, predx),
-  ) %>%
+  )
+scores <- comp %>%
   summarise(
-    mse = mean((solx - predx)^2)
+    mse = sum((solx - predx)^2) / nrow(ad_pred) / nrow(ad_sol),
+    rmse = sqrt(mse),
+    logp1_mse = log10(mse + 1),
+    logp1_rmse = log10(rmse + 1)
   )
 
 cat("Create output object\\n")

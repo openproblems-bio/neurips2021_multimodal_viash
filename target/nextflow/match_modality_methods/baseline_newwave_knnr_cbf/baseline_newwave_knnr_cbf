@@ -486,7 +486,7 @@ pred_mod2 <- apply(dr_x2_train, 2, function(yi) {
 # )
 
 
-cat("Minimising distances between mod1 and mod2 pairs with GA\\n")
+cat("Minimising distances between mod1 and mod2 pairs\\n")
 gen_vec <- function(z) {
   int <- seq_len(nrow(pred_mod1))
 
@@ -514,6 +514,7 @@ gen_vec <- function(z) {
 }
 
 outs <- pbapply::pblapply(seq_len(par\$n_pop), cl = n_cores, gen_vec)
+# outs <- lapply(seq_len(par\$n_pop), gen_vec)
 df <- bind_rows(outs) %>%
   group_by(i, j) %>%
   summarise(n = n(), .groups = "drop") %>%

@@ -61,7 +61,7 @@ platforms:
       - type: r
         packages: [ lmds, dynutils, FNN, pbapply ]
         bioc: [ SingleCellExperiment, NewWave ]
-      - type: python
-        packages: [ tensorflow ]
+      - type: r
+        packages: [ proxy, proxyC ]
   - type: nextflow
     labels: [ highmem, midtime, highcpu ]
