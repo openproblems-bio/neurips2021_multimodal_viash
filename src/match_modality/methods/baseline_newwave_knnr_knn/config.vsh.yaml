@@ -60,4 +60,4 @@ platforms:
       - type: python
         packages: [ tensorflow ]
   - type: nextflow
-    labels: [ midmem, midtime, midcpu ]
+    labels: [ highmem, midtime, highcpu ]

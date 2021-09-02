@@ -18,5 +18,14 @@ bin/nextflow \
   -entry pilot_wf \
   --publishDir output/pilot/match_modality/ \
   -resume \
-  -c src/common/workflows/resource_labels_vhighmem.config \
-  --datasets 'output/public_datasets/match_modality/openproblems_**.h5ad'
+  -c src/common/workflows/resource_labels.config \
+  --datasets 'output/public_datasets/match_modality/dyngen_**.h5ad'
+
+bin/nextflow \
+  run . \
+  -main-script src/match_modality/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/match_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config \
+  --datasets 'output/public_datasets/match_modality/dyngen_**.h5ad'

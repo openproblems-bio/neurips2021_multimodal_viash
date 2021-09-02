@@ -176,7 +176,7 @@ gen_vec <- function(z) {
   tibble::tibble(i, j)
 }
 
-outs <- pbapply::pblapply(seq_len(par$n_pop), cl = cores, gen_vec)
+outs <- pbapply::pblapply(seq_len(par$n_pop), cl = n_cores, gen_vec)
 df <- bind_rows(outs) %>%
   group_by(i, j) %>%
   summarise(n = n(), .groups = "drop") %>%
