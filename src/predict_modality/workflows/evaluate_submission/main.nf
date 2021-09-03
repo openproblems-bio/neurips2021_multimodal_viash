@@ -4,7 +4,7 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "predict_modality"
 
-include  { correlation }             from "$targetDir/${task}_metrics/correlation/main.nf"             params(params)
+include  { correlation }               from "$targetDir/${task}_metrics/correlation/main.nf"               params(params)
 include  { check_format }              from "$targetDir/${task}_metrics/check_format/main.nf"              params(params)
 include  { extract_scores }            from "$targetDir/common/extract_scores/main.nf"                     params(params)
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
