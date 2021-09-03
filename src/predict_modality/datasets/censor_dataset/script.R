@@ -6,6 +6,9 @@ library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
+# data_path <- "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting."
+data_path <- "output/public_datasets/common/dyngen_citeseq_1/dyngen_citeseq_1.split_traintest."
+out_path <- data_path %>% gsub("/common/", "/predict_modality/", .) %>% gsub("[^\\.]*\\.$", "censor_dataset\\.", .)
 par <- list(
   # input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
   # input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
@@ -13,12 +16,12 @@ par <- list(
   # output_train_mod2 = "output_train_mod2.h5ad",
   # output_test_mod1 = "output_test_mod1.h5ad",
   # output_test_mod2 = "output_test_mod2.h5ad",
-  input_mod1 = "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting.output_mod2.h5ad",
-  input_mod2 = "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting.output_rna.h5ad",
-  output_train_mod1 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_train_mod1.h5ad",
-  output_train_mod2 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_train_mod2.h5ad",
-  output_test_mod1 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_test_mod1.h5ad",
-  output_test_mod2 = "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_test_mod2.h5ad",
+  input_mod1 = paste0(data_path, "output_mod2.h5ad"),
+  input_mod2 = paste0(data_path, "output_rna.h5ad"),
+  output_train_mod1 = paste0(out_path, "output_train_mod1.h5ad"),
+  output_train_mod2 = paste0(out_path, "output_train_mod2.h5ad"),
+  output_test_mod1 = paste0(out_path, "output_test_mod1.h5ad"),
+  output_test_mod2 = paste0(out_path, "output_test_mod2.h5ad"),
   seed = 1L,
   max_mod1_columns = NULL,
   max_mod2_columns = 5000L
@@ -35,33 +38,27 @@ common_uns <- list(dataset_id = new_dataset_id)
 
 process_ad <- function(ad) {
   mod <- unique(ad$var[["feature_types"]])
-
+  ad$layers <- list(counts = as(ad$X, "CsparseMatrix"))
+  
+  # normalize
   if (mod == "GEX") {
     cat("Applying precomputed size factors\n")
-    ad_X <- as(ad$X, "CsparseMatrix")
     size_factors <-
       if (!is.null(ad$obs[["size_factors"]])) {
         ad$obs[["size_factors"]]
       } else {
         rep(1, nrow(ad))
       }
-    ad_X@x <- log10(ad_X@x / size_factors[ad_X@i + 1] + 1)
-    ad$layers <- list(counts = ad$X)
-    ad$X <- ad_X
+    ad$X@x <- log10(ad$X@x / size_factors[ad$X@i + 1] + 1)
   } else if (mod == "ADT") {
     cat("CLR normalizing ADT data\n")
     obj <- Seurat::CreateSeuratObject(counts = ad$X, assay = "ADT")
     obj <- Seurat::NormalizeData(obj, normalization.method = "CLR", margin = 2)
-    ad_X <- as(obj[["ADT"]]@data, "CsparseMatrix")
-    ad$layers <- list(counts = ad$X)
-    ad$X <- ad_X
+    ad$X <- as(obj[["ADT"]]@data, "CsparseMatrix")
   } else if (mod == "ATAC") {
     cat("Binarizing ATAC data\n")
-    ad_X <- as(ad$X, "CsparseMatrix")
-    ad_X@x <- (ad_X@x > 0) + 0
-    ad$X <- ad_X
+    ad$X@x <- (ad$X@x > 0) + 0
   }
-
   ad
 }
 
@@ -90,14 +87,14 @@ test_obs <- ad1_raw$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
 
 out_train_mod1 <- anndata::AnnData(
   X = ad1_raw$X[is_train, , drop = FALSE],
-  layers = list(counts = ad1_raw$layers$counts[is_train, , drop = FALSE]),
+  layers = list(counts = ad1_raw$layers[["counts"]][is_train, , drop = FALSE]),
   obs = train_obs,
   var = ad1_var,
   uns = common_uns
 )
 out_train_mod2 <- anndata::AnnData(
   X = ad2_raw$X[is_train, , drop = FALSE],
-  layers = list(counts = ad2_raw$layers$counts[is_train, , drop = FALSE]),
+  layers = list(counts = ad2_raw$layers[["counts"]][is_train, , drop = FALSE]),
   obs = train_obs,
   var = ad2_var,
   uns = common_uns
@@ -106,14 +103,14 @@ out_train_mod2 <- anndata::AnnData(
 cat("Create test objects\n")
 out_test_mod1 <- anndata::AnnData(
   X = ad1_raw$X[!is_train, , drop = FALSE],
-  layers = list(counts = ad1_raw$layers$counts[!is_train, , drop = FALSE]),
+  layers = list(counts = ad1_raw$layers[["counts"]][!is_train, , drop = FALSE]),
   obs = test_obs,
   var = ad1_var,
   uns = common_uns
 )
 out_test_mod2 <- anndata::AnnData(
   X = ad2_raw$X[!is_train, , drop = FALSE],
-  layers = list(counts = ad2_raw$layers$counts[!is_train, , drop = FALSE]),
+  layers = list(counts = ad2_raw$layers[["counts"]][!is_train, , drop = FALSE]),
   obs = test_obs,
   var = ad2_var,
   uns = common_uns

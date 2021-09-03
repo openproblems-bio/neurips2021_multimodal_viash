@@ -12,7 +12,7 @@ requireNamespace("SingleCellExperiment", quietly = TRUE)
 # path <- "resources_test/match_modality/test_resource."
 # path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
 # path <- "output/public_datasets/match_modality/dyngen_atac_1/dyngen_atac_1.censor_dataset.output_"
-path <- "output/public_datasets/match_modality/dyngen_citeseq_3/dyngen_citeseq_3.censor_dataset.output_"
+path <- "output/public_datasets/match_modality/dyngen_citeseq_3_manual/dyngen_citeseq_3_manual.censor_dataset.output_"
 # path <- "debug/debug."
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
@@ -54,11 +54,8 @@ data1 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod1$X), t(input_test_mod1$X))),
   colData = data.frame(batch = factor(batch1))
 )
-
-# option 1: filter by HVG
 # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
 
-# option 2: use zinbsurf instead of zinbwave
 # res1 <- zinbwave::zinbsurf(data1, K=10, X=~batch)
 res1 <- NewWave::newWave(
   data1,
