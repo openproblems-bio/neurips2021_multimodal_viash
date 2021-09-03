@@ -19,7 +19,6 @@ include  { check_format }                from "$targetDir/${task}_metrics/check_
 include  { collect_solution_metadata }   from "$targetDir/${task}_results/collect_solution_metadata/main.nf"  params(params)
 include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"               params(params)
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                       params(params)
-include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 params.datasets = "output/public_datasets/$task/**.h5ad"
 
@@ -84,9 +83,6 @@ workflow pilot_wf {
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def predictions = b0.mix(b1, b2, b4, d0, d1, d2, d3)
-
-  // fetch dataset ids in predictions and in solutions
-  def solution_dids = solution | map { it[1] } | get_id_solutions
 
   // create solutions meta
   def solutionsMeta = solution
