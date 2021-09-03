@@ -5,8 +5,10 @@ targetDir = "${params.rootDir}/target/nextflow"
 task = "predict_modality"
 
 include  { correlation }               from "$targetDir/${task}_metrics/correlation/main.nf"               params(params)
+include  { mse }                       from "$targetDir/${task}_metrics/mse/main.nf"                       params(params)
 include  { check_format }              from "$targetDir/${task}_metrics/check_format/main.nf"              params(params)
-include  { extract_scores }            from "$targetDir/common/extract_scores/main.nf"                     params(params)
+include  { collect_solution_metadata } from "$targetDir/${task}_results/collect_solution_metadata/main.nf" params(params)
+include  { final_scores }              from "$targetDir/${task}_results/final_scores/main.nf"              params(params)
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
@@ -19,8 +21,11 @@ workflow {
 
   // create solutions meta
   def solutionsMeta = solutions
-    | map{ it[0] }
-    | collectFile(name: "solutions_meta.tsv", newLine: true, seed: "dataset_id")
+    | map { it[1] } 
+    | toList()
+    | map{ [ "meta_solution", it, params ] }
+    | collect_solution_metadata
+    | map{ it[1] }
   
   // create metrics meta
   def metricsMeta = 
@@ -38,7 +43,7 @@ workflow {
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
     | combine(solutionsMeta)
-    | map{ [ "output", [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
-    | extract_scores
+    | map{ [ "output", [ input: it[0], metric_meta: it[1], solution_meta: it[2] ], params ] }
+    | final_scores
 }
 
