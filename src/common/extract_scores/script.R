@@ -114,14 +114,5 @@ final_scores <- bind_rows(
     inner_join(metric_meta %>% select(metric_id), by = "metric_id"),
   anti_join(missing_values, scores, by = c("method_id", "dataset_id", "metric_id"))
 )
-
-cat("Computing summary scores\n")
-summary <-
-  final_scores %>% 
-  group_by(method_id, metric_id) %>% 
-  summarise(value = mean(value), .groups = "drop") %>% 
-  inner_join(method_meta, by = "method_id")
-
 cat("Writing results to tsv files\n")
 write_tsv(final_scores, par$output)
-write_tsv(summary, par$summary)
