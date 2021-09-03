@@ -44,8 +44,11 @@ normcol_factor <- 1 / Matrix::colSums(X_pred)
 normcol_fac <- unlist(lapply(seq_len(nrow(X_pred)), function(i) rep(normcol_factor[[i]], X_pred@p[[i+1]] - X_pred@p[[i]])))
 X_pred_normcol@x <- X_pred_normcol@x * normcol_fac
 
-match_probability_mod1 <- sum(X_pred_normrow * X_sol) / sum(X_sol)
-match_probability_mod2 <- sum(X_pred_normcol * X_sol) / sum(X_sol)
+match_probability_per_mod1 <- rowSums(X_pred_normrow * X_sol)
+match_probability_per_mod2 <- colSums(X_pred_normcol * X_sol)
+
+match_probability_mod1 <- mean(match_probability_per_mod1)
+match_probability_mod2 <- mean(match_probability_per_mod2)
 
 cat("Create output object\n")
 out <- anndata::AnnData(
@@ -53,7 +56,11 @@ out <- anndata::AnnData(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
     metric_ids = c("match_probability_mod1", "match_probability_mod2"),
-    metric_values = c(match_probability_mod1, match_probability_mod2)
+    metric_values = c(match_probability_mod1, match_probability_mod2),
+    per_cell = list(
+      match_probability_per_mod1 = match_probability_per_mod1, 
+      match_probability_per_mod2 = match_probability_per_mod2
+    )
   )
 )
 

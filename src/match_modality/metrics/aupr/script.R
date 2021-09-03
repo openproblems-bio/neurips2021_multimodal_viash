@@ -163,7 +163,8 @@ out <- anndata::AnnData(
     dataset_id = ad_pred$uns$dataset_id,
     method_id = ad_pred$uns$method_id,
     metric_ids = names(out_values),
-    metric_values = as.numeric(out_values)
+    metric_values = as.numeric(out_values),
+    genie3 = au_out
   )
 )
 
