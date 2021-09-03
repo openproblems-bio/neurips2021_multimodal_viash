@@ -1,0 +1,33 @@
+functionality:
+  name: "collect_solution_metadata"
+  namespace: "predict_modality_results"
+  version: "dev"
+  description: "Precompute certain values on datasets."
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input"
+      type: "file"
+      multiple: true
+      required: true
+      example: "dataset.h5ad"
+      description: "Input dataset h5ads"
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.tsv"
+      required: true
+      description: "Output tsv"
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0_bioc3.12" # contains a few bioconductor and the 'anndata' package
+  - type: nextflow
+    publish: true
+    per_id: false
+    labels: [ lowmem, lowtime, lowcpu ]

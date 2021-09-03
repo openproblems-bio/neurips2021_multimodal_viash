@@ -9,11 +9,6 @@ par <- list(
   input_prediction = "resources_test/predict_modality/test_resource.prediction.h5ad",
   output = "test_resource.scores.h5ad"
 )
-par <- list(
-  input_solution = "work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2.censor_dataset.output_test_mod2.h5ad",
-  input_prediction = "work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2.dummy_meanpergene.output.h5ad",
-  output = "test_resource.scores.h5ad"
-)
 #/home/rcannood/workspace/openproblems/neurips2021_multimodal_viash/work/29/320fe1e10fcd323020345bcc8969c2/openproblems_bmmc_cite_mod2_dummy_meanpergene.correlation.output.h5ad
 ## VIASH END
 
@@ -67,8 +62,11 @@ spearman_vec_2[tv_sd2 == 0 | pv_sd2 == 0] <- 0
 mean_pearson_per_gene <- mean(pearson_vec_2)
 mean_spearman_per_gene <- mean(spearman_vec_2)
 
-metric_ids <- c("mean_pearson_per_cell", "mean_spearman_per_cell", "mean_pearson_per_gene", "mean_spearman_per_gene")
-metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_per_gene, mean_spearman_per_gene)
+overall_pearson <- cor(as.vector(tv), as.vector(pv), method = "pearson")
+overall_spearman <- cor(as.vector(tv), as.vector(pv), method = "spearman")
+
+metric_ids <- c("mean_pearson_per_cell", "mean_spearman_per_cell", "mean_pearson_per_gene", "mean_spearman_per_gene", "overall_pearson", "overall_spearman")
+metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_per_gene, mean_spearman_per_gene, overall_pearson, overall_spearman)
 
 cat("Create output object\n")
 out <- anndata::AnnData(

@@ -381,8 +381,11 @@ functionality:
       mean_pearson_per_gene <- mean(pearson_vec_2)
       mean_spearman_per_gene <- mean(spearman_vec_2)
       
-      metric_ids <- c("mean_pearson_per_cell", "mean_spearman_per_cell", "mean_pearson_per_gene", "mean_spearman_per_gene")
-      metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_per_gene, mean_spearman_per_gene)
+      overall_pearson <- cor(as.vector(tv), as.vector(pv), method = "pearson")
+      overall_spearman <- cor(as.vector(tv), as.vector(pv), method = "spearman")
+      
+      metric_ids <- c("mean_pearson_per_cell", "mean_spearman_per_cell", "mean_pearson_per_gene", "mean_spearman_per_gene", "overall_pearson", "overall_spearman")
+      metric_values <- c(mean_pearson_per_cell, mean_spearman_per_cell, mean_pearson_per_gene, mean_spearman_per_gene, overall_pearson, overall_spearman)
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
@@ -837,5 +840,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/correlation"
   executable: "target/nextflow/predict_modality_metrics/correlation/correlation"
   viash_version: "0.5.3"
-  git_commit: "bb6018a917800aaec87513d592dd1d598c6eb7df"
+  git_commit: "d430c554bcaa85ae5302c2d72eed1ed637611d18"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

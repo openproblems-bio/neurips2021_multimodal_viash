@@ -3,3 +3,5 @@ mean_pearson_per_cell	-1	1	true
 mean_spearman_per_cell	-1	1	true
 mean_pearson_per_gene	-1	1	true
 mean_spearman_per_gene	-1	1	true
+overall_pearson	-1	1	true
+overall_spearman	-1	1	true

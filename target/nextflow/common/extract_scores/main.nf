@@ -116,20 +116,6 @@ process filterOutput {
 
 }
 
-// A process that filters out summary from the output Map
-process filterSummary {
-
-  input:
-    tuple val(id), val(input), val(_params)
-  output:
-    tuple val(id), val(output), val(_params)
-  when:
-    input.keySet().contains("summary")
-  exec:
-    output = input["summary"]
-
-}
-
 def overrideIO(_params, inputs, outputs) {
 
   // `inputs` in fact can be one of:
@@ -317,16 +303,7 @@ workflow {
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
   result = extract_scores(ch_)
-
-  result \
-    | filterOutput \
-    | view{ "Output for output: " + it[1] }
-
-
-  result \
-    | filterSummary \
-    | view{ "Output for summary: " + it[1] }
-
+  result.view{ it[1] }
 }
 
 // This workflow is not production-ready yet, we leave it in for future dev

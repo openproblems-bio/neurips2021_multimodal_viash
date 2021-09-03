@@ -181,13 +181,6 @@ function ViashHelp {
   echo "        Output tsv"
   echo ""
 
-
-  echo "   --summary"
-  echo "        type: file, required parameter, output"
-  echo "        example: summary.tsv"
-  echo "        Summary tsv"
-  echo ""
-
 }
 
 # initialise array
@@ -291,14 +284,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --summary)
-            VIASH_PAR_SUMMARY="$2"
-            shift 2
-            ;;
-        --summary=*)
-            VIASH_PAR_SUMMARY=$(ViashRemoveFlags "$1")
-            shift 1
-            ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
             VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -323,10 +308,6 @@ if [ -z "$VIASH_PAR_METRIC_META" ]; then
 fi
 if [ -z "$VIASH_PAR_OUTPUT" ]; then
   ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
-  exit 1
-fi
-if [ -z "$VIASH_PAR_SUMMARY" ]; then
-  ViashError '--summary' is a required argument. Use "--help" to get more information on the parameters.
   exit 1
 fi
 
@@ -354,8 +335,7 @@ par <- list(
   "method_meta" = $( if [ ! -z ${VIASH_PAR_METHOD_META+x} ]; then echo "strsplit('$VIASH_PAR_METHOD_META', split = ':')[[1]]"; else echo NULL; fi ),
   "dataset_meta" = $( if [ ! -z ${VIASH_PAR_DATASET_META+x} ]; then echo "strsplit('$VIASH_PAR_DATASET_META', split = ':')[[1]]"; else echo NULL; fi ),
   "metric_meta" = $( if [ ! -z ${VIASH_PAR_METRIC_META+x} ]; then echo "strsplit('$VIASH_PAR_METRIC_META', split = ':')[[1]]"; else echo NULL; fi ),
-  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
-  "summary" = $( if [ ! -z ${VIASH_PAR_SUMMARY+x} ]; then echo "'$VIASH_PAR_SUMMARY'"; else echo NULL; fi )
+  "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi )
 )
 
 # get meta parameters
@@ -465,17 +445,8 @@ final_scores <- bind_rows(
     inner_join(metric_meta %>% select(metric_id), by = "metric_id"),
   anti_join(missing_values, scores, by = c("method_id", "dataset_id", "metric_id"))
 )
-
-cat("Computing summary scores\\n")
-summary <-
-  final_scores %>% 
-  group_by(method_id, metric_id) %>% 
-  summarise(value = mean(value), .groups = "drop") %>% 
-  inner_join(method_meta, by = "method_id")
-
 cat("Writing results to tsv files\\n")
 write_tsv(final_scores, par\$output)
-write_tsv(summary, par\$summary)
 VIASHMAIN
 PATH="$VIASH_RESOURCES_DIR:\$PATH"
 

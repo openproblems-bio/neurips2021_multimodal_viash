@@ -806,5 +806,5 @@ info:
   output: "target/nextflow/common_process_metadata/collect_dataset_metadata"
   executable: "target/nextflow/common_process_metadata/collect_dataset_metadata/collect_dataset_metadata"
   viash_version: "0.5.3"
-  git_commit: "bb6018a917800aaec87513d592dd1d598c6eb7df"
+  git_commit: "d430c554bcaa85ae5302c2d72eed1ed637611d18"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
