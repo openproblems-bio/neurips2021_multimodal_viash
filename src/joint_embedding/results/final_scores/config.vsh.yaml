@@ -1,0 +1,68 @@
+functionality:
+  name: "final_scores"
+  namespace: "joint_embedding_results"
+  version: "dev"
+  description: "Generate the final scores."
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input"
+      type: "file"
+      multiple: true
+      required: true
+      example: "input.h5ad"
+      description: "Input h5ad files containing metadata and metrics in adata.uns."
+    - name: "--method_meta"
+      type: file
+      example: "method_meta.tsv"
+      description: "A method metadata file. Must contain column 'method_id'."
+      multiple: true
+    - name: "--dataset_meta"
+      type: file
+      example: "dataset_meta.tsv"
+      description: "A dataset metadata file."
+      multiple: true
+    - name: "--metric_meta"
+      type: file
+      example: "metric_meta.tsv"
+      description: "A metric metadata file containing the default value of each metric in case a method errored on a particular dataset. Must contain column 'metric_id' and 'metric_value'."
+      multiple: true
+      required: true
+    - name: "--output_scores"
+      type: "file"
+      direction: "output"
+      example: "output.tsv"
+      required: true
+      description: "Output tsv"
+    - name: "--output_summary"
+      type: "file"
+      direction: "output"
+      example: "output.tsv"
+      required: true
+      description: "Output tsv"
+    - name: "--output_json"
+      type: "file"
+      direction: "output"
+      example: "output.json"
+      required: true
+      description: "EvalAI score json"
+  resources:
+    - type: r_script
+      path: script.R
+  # tests:
+  #   - type: r_script
+  #     path: test.R
+  #   - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: "dataintuitive/randpy:r4.0_bioc3.12" # contains a few bioconductor and the 'anndata' package
+    setup:
+      - type: r
+        cran: [ dynutils, jsonlite ]
+  - type: nextflow
+    publish: true
+    per_id: false
+    labels: [ lowmem, lowtime, lowcpu ]

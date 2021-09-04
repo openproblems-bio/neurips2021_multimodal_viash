@@ -23,9 +23,8 @@ include  { cc_cons }                    from "$targetDir/${task}_metrics/cc_cons
 include  { ti_cons }                    from "$targetDir/${task}_metrics/ti_cons/main.nf"                      params(params)
 include  { graph_connectivity }         from "$targetDir/${task}_metrics/graph_connectivity/main.nf"           params(params)
 include  { check_format }               from "$targetDir/${task}_metrics/check_format/main.nf"                 params(params)
-include  { extract_scores }             from "$targetDir/common/extract_scores/main.nf"                        params(params)
+include  { final_scores }               from "$targetDir/${task}_results/final_scores/main.nf"                 params(params)
 include  { bind_tsv_rows }              from "$targetDir/common/bind_tsv_rows/main.nf"                         params(params)
-include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 params.datasets = "output/public_datasets/$task/**.h5ad"
 workflow pilot_wf {
@@ -90,14 +89,9 @@ workflow pilot_wf {
 
   def predictions = b0.mix(b1, b2, b3, b4, b5, d0, d1, d2)
 
-  // fetch dataset ids in predictions and in solutions
-  def prediction_dids = predictions | map { it[1].input_prediction } | get_id_predictions
-  def solution_dids = solution | map { it[1] } | get_id_solutions
-
-  // create solutions meta
-  def solutionsMeta = solution_dids
-    | map{ it[0] }
-    | collectFile(name: "solutions_meta.tsv", newLine: true, seed: "dataset_id")
+  // create datasets meta
+  def datasetsMeta = 
+    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
   
   // create metrics meta
   def metricsMeta = 
@@ -114,7 +108,7 @@ workflow pilot_wf {
     | toList()
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
-    | combine(solutionsMeta)
+    | combine(datasetsMeta)
     | map{ [ "output", [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
-    | extract_scores
+    | final_scores
 }
