@@ -19,7 +19,7 @@ bin/nextflow \
   --publishDir output/pilot_inhouse/predict_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
-  --datasets 'output/inhouse_datasets/predict_modality/**.h5ad'
+  --datasets 'output/datasets/predict_modality/**.h5ad'
 
 bin/nextflow \
   run . \
@@ -28,4 +28,4 @@ bin/nextflow \
   --publishDir output/pilot_inhouse/predict_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
-  --datasets 'output/inhouse_datasets/predict_modality/**.h5ad'
+  --datasets 'output/datasets/predict_modality/**.h5ad'
