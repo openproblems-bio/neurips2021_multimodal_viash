@@ -14,3 +14,11 @@ bin/nextflow \
   --datasets 'output/public_datasets/common/**.h5ad' \
   --publishDir output/public_datasets/joint_embedding/ \
   -resume
+
+
+bin/nextflow \
+  run . \
+  -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
+  --datasets 'output/inhouse_datasets/common/**.h5ad' \
+  --publishDir output/inhouse_datasets/joint_embedding/ \
+  -resume
