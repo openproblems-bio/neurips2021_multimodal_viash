@@ -864,5 +864,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/nmi"
   executable: "target/nextflow/joint_embedding_metrics/nmi/nmi"
   viash_version: "0.5.3"
-  git_commit: "ac4c28b19a3d6119ce5aff39d991a2c093e1311b"
+  git_commit: "f1d405d8f767ec22e0e5795b5a649ab3398f56e3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
