@@ -976,5 +976,5 @@ info:
   output: "target/nextflow/common/extract_scores"
   executable: "target/nextflow/common/extract_scores/extract_scores"
   viash_version: "0.5.3"
-  git_commit: "1da693fede5cf5c57444b5aed5fc983e1d20e4ca"
+  git_commit: "ac4c28b19a3d6119ce5aff39d991a2c093e1311b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
