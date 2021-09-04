@@ -112,12 +112,12 @@ patchwork::wrap_plots(
   ggplot(dfg) +
     ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_phase), groupOnX = TRUE, size = 1) +
     facet_wrap(~metric_id, scales = "free_y") +
-    scale_colour_brewer(palette = "Set3") +
+    scale_colour_brewer(palette = "Dark2") +
     labs(x = NULL, y = "Metric Value", colour = "Phase"),
   ggplot(dfg) +
     geom_boxplot(aes(method_id, value, colour = dataset_phase)) +
     facet_wrap(~metric_id, scales = "free_y") +
-    scale_colour_brewer(palette = "Set3") +
+    scale_colour_brewer(palette = "Dark2") +
     labs(x = NULL, y = "Metric Value", colour = "Phase"),
   ncol = 1
   # guides = "collect"
@@ -129,12 +129,13 @@ patchwork::wrap_plots(
 \newpage
 Comparing most interesting metrics.
 
-```{r scatter2, fig.width=10, fig.height=6}
+```{r scatter2, fig.width=10, fig.height=3.5}
 patchwork::wrap_plots(
   ggplot(df, aes(mean_pearson_per_cell, rmse)) + geom_point(aes(colour = method_type)),
   ggplot(df, aes(rmse, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)),
   ggplot(df, aes(mean_pearson_per_cell, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)),
-  ncol = 1
+  nrow = 1,
+  guides = "collect"
 ) & theme_bw() & scale_colour_brewer(palette = "Set2")
 ```
 
