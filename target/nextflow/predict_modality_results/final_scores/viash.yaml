@@ -488,7 +488,7 @@ functionality:
           default_mae = "d"
         )
       )
-      dataset_specific_defaults <- solution_meta %>% 
+      dataset_specific_defaults <- solution_meta %>%
         select(dataset_id, mse = default_mse, mae = default_mae) %>%
         mutate(
           rmse = sqrt(mse),
@@ -566,15 +566,15 @@ functionality:
       cat("Creating default scores for missing entries based on metrics meta\\n")
       final_scores <- scores %>%
         full_join(method_meta, by = "method_id") %>%
-        full_join(solution_meta %>% transmute(dataset_id, subtask = toupper(gsub(".*_", "", dataset_id))), by = "dataset_id") %>%
+        full_join(solution_meta %>% transmute(dataset_id, dataset_subtask = toupper(gsub(".*_", "", dataset_id))), by = "dataset_id") %>%
         full_join(metric_defaults, by = "metric_id") %>%
         full_join(dataset_specific_defaults, by = c("dataset_id", "metric_id")) %>%
         mutate(value_after_default = value %|% dataset_specific_default %|% missing_value) %>%
-        select(dataset_id, method_id, metric_id, subtask, value, value_after_default)
+        select(dataset_id, method_id, metric_id, dataset_subtask, value, value_after_default)
       
       summary <-
-        bind_rows(final_scores, final_scores %>% mutate(subtask = "Overall")) %>%
-        group_by(method_id, metric_id, subtask) %>%
+        bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
+        group_by(method_id, metric_id, dataset_subtask) %>%
         summarise(
           mean = mean(value_after_default),
           var = var(value_after_default),
@@ -586,19 +586,19 @@ functionality:
       # summary %>%
       #   filter(metric_id == "mean_spearman_per_cell") %>%
       #   select(-var) %>%
-      #   spread(subtask, mean) %>%
+      #   spread(dataset_subtask, mean) %>%
       #   arrange(Overall)
       
       # summary %>%
       #   filter(metric_id == "mse") %>%
       #   select(-var) %>%
-      #   spread(subtask, mean) %>%
+      #   spread(dataset_subtask, mean) %>%
       #   arrange(Overall)
       
       jsontib <- summary %>%
         filter(metric_id == "mse") %>%
         select(-var) %>%
-        spread(subtask, mean) %>%
+        spread(dataset_subtask, mean) %>%
         arrange(Overall)
       
       cat("Writing output\\n")
@@ -1134,5 +1134,5 @@ info:
   output: "target/nextflow/predict_modality_results/final_scores"
   executable: "target/nextflow/predict_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "a6ff5e958e9cef02d0b0f5c31d211690629f554d"
+  git_commit: "a0892315a90c0a4521e67aa796446c0bc39d344c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
