@@ -43,6 +43,9 @@ ad2$obs[["pseudotime_order_GEX"]] <- ad1$obs[["pseudotime_order_GEX"]]
 
 iid_sel <- seq_len(nrow(ad1)) %in% sample.int(nrow(ad1), 0.1 * nrow(ad1))
 
+table(iid_sel)
+table(iid_sel, ad1$obs$batch)
+
 #############
 # create phase 1
 

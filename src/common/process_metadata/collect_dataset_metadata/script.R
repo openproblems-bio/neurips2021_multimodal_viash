@@ -5,7 +5,7 @@ library(tidyverse)
 ## VIASH START
 par <- list(
   input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
-  input_h5ads = list.files("output/public_datasets/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+  input_h5ads = list.files("output/inhouse_datasets/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
   output = "results/meta_datasets.tsv"
 )
 ## VIASH END
