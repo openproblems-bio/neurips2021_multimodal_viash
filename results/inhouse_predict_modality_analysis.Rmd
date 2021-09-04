@@ -44,9 +44,21 @@ df <-
   mutate(
     format_check = (correct_format + finished) / 2
   )
-write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_")), "results/pilot_predict_modality_scores.tsv")
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_"), -subtask), "results/inhouse_predict_modality_scores.tsv")
 ```
 
+```{r summtsv, include=FALSE}
+summ <- df %>% 
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -subtask) %>% 
+  group_by(method_id, metric_id) %>%
+  summarise(
+    mean = mean(value),
+    var = var(value),
+    .groups = "drop"
+  ) %>% 
+  left_join(meta_ms, by = "method_id")
+write_tsv(summ, "results/inhouse_predict_modality_summary.tsv")
+```
 
 \newpage
 ## Visualise results
@@ -129,19 +141,21 @@ patchwork::wrap_plots(
 \newpage
 Comparing most interesting metrics.
 
-```{r scatter2, fig.width=10, fig.height=3.5}
-patchwork::wrap_plots(
-  ggplot(df, aes(mean_pearson_per_cell, rmse)) + geom_point(aes(colour = method_type)),
-  ggplot(df, aes(rmse, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)),
-  ggplot(df, aes(mean_pearson_per_cell, mean_pearson_per_gene)) + geom_point(aes(colour = method_type)),
-  nrow = 1,
-  guides = "collect"
-) & theme_bw() & scale_colour_brewer(palette = "Set2")
-```
+```{r scatter2, fig.width=10, fig.height=10}
+selected_metrics <- c("rmse", "mae", "mean_spearman_per_cell", "mean_spearman_per_gene")
 
-```{r bar, fig.width=10, fig.height=4}
-ggplot(dfg %>% filter(metric_id %in% c("mean_spearman_per_cell", "mean_spearman_per_gene", "rmse"))) + 
-  geom_histogram(aes(value, fill = method_type)) + 
-  facet_grid(method_type~metric_id, scales = "free_x") +
-  theme_bw()
+plots <- 
+  crossing(x = selected_metrics, y = selected_metrics) %>% 
+  filter(x > y) %>% 
+  pmap(function(x, y) {
+    ggplot(df, aes_string(x, y)) + geom_point(aes(colour = method_type)) + labs(x = x, y = y)
+  })
+GGally::ggpairs(
+  df, 
+  mapping = aes(colour = method_type, fill = method_type), 
+  columns = selected_metrics,
+  diag = list(continuous = "barDiag", discrete = "barDiag", na = "naDiag")
+) & theme_bw() & 
+  scale_colour_brewer(palette = "Set2") &
+  scale_fill_brewer(palette = "Set2")
 ```

@@ -1,391 +1,99 @@
-method_id	metric_id	subtask	mean	var
-baseline_knn	correct_format	ADT2GEX	1	0
-baseline_knn	correct_format	GEX2ADT	1	0
-baseline_knn	correct_format	Overall	1	0
-baseline_knn	finished	ADT2GEX	1	0
-baseline_knn	finished	GEX2ADT	1	0
-baseline_knn	finished	Overall	1	0
-baseline_knn	logp1_mse	ADT2GEX	0.017495287206672042	1.705712745723425e-8
-baseline_knn	logp1_mse	GEX2ADT	0.008296347113446168	3.730433418250082e-6
-baseline_knn	logp1_mse	Overall	0.012895817160059105	2.9455996461488594e-5
-baseline_knn	logp1_rmse	ADT2GEX	0.08017440617294717	7.772787026728475e-8
-baseline_knn	logp1_rmse	GEX2ADT	0.05627666447245448	3.9028614182535884e-5
-baseline_knn	logp1_rmse	Overall	0.06822553532270083	2.034028001454235e-4
-baseline_knn	mae	ADT2GEX	0.12810534780566202	2.0000080293739567e-6
-baseline_knn	mae	GEX2ADT	0.09385026749004807	9.617739707821048e-5
-baseline_knn	mae	Overall	0.11097780764785503	4.2386264417891513e-4
-baseline_knn	mean_pearson_per_cell	ADT2GEX	0.8619726700210704	1.939312766176424e-5
-baseline_knn	mean_pearson_per_cell	GEX2ADT	0.8595197280766518	0.0011953901050597003
-baseline_knn	mean_pearson_per_cell	Overall	0.8607461990488611	4.069333856347174e-4
-baseline_knn	mean_pearson_per_gene	ADT2GEX	0.32546335428466666	5.146772623360547e-4
-baseline_knn	mean_pearson_per_gene	GEX2ADT	0.7474409587844302	0.0012011685539942405
-baseline_knn	mean_pearson_per_gene	Overall	0.5364521565345485	0.0599269815052297
-baseline_knn	mean_spearman_per_cell	ADT2GEX	0.6222553893527383	4.138025420785048e-6
-baseline_knn	mean_spearman_per_cell	GEX2ADT	0.8329555421657329	6.982939620997015e-4
-baseline_knn	mean_spearman_per_cell	Overall	0.7276054657592355	0.015032328794313253
-baseline_knn	mean_spearman_per_gene	ADT2GEX	0.26678791532010776	7.86181744389925e-4
-baseline_knn	mean_spearman_per_gene	GEX2ADT	0.5879262056883288	0.002199983179039798
-baseline_knn	mean_spearman_per_gene	Overall	0.4273570605042183	0.035371988821351195
-baseline_knn	mse	ADT2GEX	0.04110683341756698	9.802296908910451e-8
-baseline_knn	mse	GEX2ADT	0.019291715758350918	2.0548721031554087e-5
-baseline_knn	mse	Overall	0.03019927458795895	1.6551536749536124e-4
-baseline_knn	overall_pearson	ADT2GEX	0.8507067419184959	1.0809276623989939e-6
-baseline_knn	overall_pearson	GEX2ADT	0.8598552007414825	0.0011673589321104338
-baseline_knn	overall_pearson	Overall	0.8552809713299893	4.173780528695707e-4
-baseline_knn	overall_spearman	ADT2GEX	0.614468571163096	4.080504497786591e-6
-baseline_knn	overall_spearman	GEX2ADT	0.8371338171300936	7.247971799077385e-4
-baseline_knn	overall_spearman	Overall	0.7258011941465947	0.016769563148649705
-baseline_knn	rmse	ADT2GEX	0.20274746691778656	5.961519760457222e-7
-baseline_knn	rmse	GEX2ADT	0.1384111238686117	2.6815309555749175e-4
-baseline_knn	rmse	Overall	0.17057929539319913	0.0014693047614915493
-baseline_linearmodel	correct_format	ADT2GEX	1	0
-baseline_linearmodel	correct_format	ATAC2GEX	1	0
-baseline_linearmodel	correct_format	GEX2ADT	1	0
-baseline_linearmodel	correct_format	GEX2ATAC	1	0
-baseline_linearmodel	correct_format	Overall	1	0
-baseline_linearmodel	finished	ADT2GEX	1	0
-baseline_linearmodel	finished	ATAC2GEX	1	0
-baseline_linearmodel	finished	GEX2ADT	1	0
-baseline_linearmodel	finished	GEX2ATAC	1	0
-baseline_linearmodel	finished	Overall	1	0
-baseline_linearmodel	logp1_mse	ADT2GEX	NA	NA
-baseline_linearmodel	logp1_mse	ATAC2GEX	0.019846293067094643	1.4315996361244644e-6
-baseline_linearmodel	logp1_mse	GEX2ADT	NA	NA
-baseline_linearmodel	logp1_mse	GEX2ATAC	0.03485109819669323	1.3365232515642277e-5
-baseline_linearmodel	logp1_mse	Overall	NA	NA
-baseline_linearmodel	logp1_rmse	ADT2GEX	NA	NA
-baseline_linearmodel	logp1_rmse	ATAC2GEX	0.08499128382186308	5.653136781463343e-6
-baseline_linearmodel	logp1_rmse	GEX2ADT	NA	NA
-baseline_linearmodel	logp1_rmse	GEX2ATAC	0.11016732834971765	2.8860064593936494e-5
-baseline_linearmodel	logp1_rmse	Overall	NA	NA
-baseline_linearmodel	mae	ADT2GEX	NA	NA
-baseline_linearmodel	mae	ATAC2GEX	0.14162547863566885	9.572086864215984e-6
-baseline_linearmodel	mae	GEX2ADT	NA	NA
-baseline_linearmodel	mae	GEX2ATAC	0.1662796535847013	1.4406925127283441e-4
-baseline_linearmodel	mae	Overall	NA	NA
-baseline_linearmodel	mean_pearson_per_cell	ADT2GEX	0.8526636935677948	8.222061302367683e-5
-baseline_linearmodel	mean_pearson_per_cell	ATAC2GEX	0.5491529859677811	0.001712994364544237
-baseline_linearmodel	mean_pearson_per_cell	GEX2ADT	0.846179119918135	7.517129620698888e-4
-baseline_linearmodel	mean_pearson_per_cell	GEX2ATAC	0.2960859633614018	0.0011459318693629534
-baseline_linearmodel	mean_pearson_per_cell	Overall	0.5933402474959408	0.05998243853073448
-baseline_linearmodel	mean_pearson_per_gene	ADT2GEX	0.3098824317847224	6.788507040025793e-4
-baseline_linearmodel	mean_pearson_per_gene	ATAC2GEX	0.05205307569921132	0.00189522742598683
-baseline_linearmodel	mean_pearson_per_gene	GEX2ADT	0.7201564727498942	6.595858690499277e-4
-baseline_linearmodel	mean_pearson_per_gene	GEX2ATAC	0.03311344437054374	9.288441670894893e-4
-baseline_linearmodel	mean_pearson_per_gene	Overall	0.23155773692784987	0.07905774740622037
-baseline_linearmodel	mean_spearman_per_cell	ADT2GEX	0.6007996710222738	7.410084736189238e-5
-baseline_linearmodel	mean_spearman_per_cell	ATAC2GEX	0.4296391460115506	4.8704645005509344e-5
-baseline_linearmodel	mean_spearman_per_cell	GEX2ADT	0.8153572968453098	4.401519075395897e-4
-baseline_linearmodel	mean_spearman_per_cell	GEX2ATAC	0.2812962441790244	0.0010892296279818167
-baseline_linearmodel	mean_spearman_per_cell	Overall	0.4965120106306892	0.04224844500650948
-baseline_linearmodel	mean_spearman_per_gene	ADT2GEX	0.25040477636429265	0.0010631140465116413
-baseline_linearmodel	mean_spearman_per_gene	ATAC2GEX	0.05010612181749497	0.0018913090978774306
-baseline_linearmodel	mean_spearman_per_gene	GEX2ADT	0.5597265925807549	0.0013835444743510237
-baseline_linearmodel	mean_spearman_per_gene	GEX2ATAC	0.03257619398258839	8.919880736279618e-4
-baseline_linearmodel	mean_spearman_per_gene	Overall	0.18683096852903452	0.04685149570656364
-baseline_linearmodel	mse	ADT2GEX	NA	NA
-baseline_linearmodel	mse	ATAC2GEX	0.046760659103884904	8.319389327992611e-6
-baseline_linearmodel	mse	GEX2ADT	NA	NA
-baseline_linearmodel	mse	GEX2ATAC	0.08358091584083786	8.298701557369863e-5
-baseline_linearmodel	mse	Overall	NA	NA
-baseline_linearmodel	overall_pearson	ADT2GEX	0.8420996943733468	2.174174590429332e-5
-baseline_linearmodel	overall_pearson	ATAC2GEX	0.5418873583555047	0.0017578715115277946
-baseline_linearmodel	overall_pearson	GEX2ADT	0.8437718724161625	6.792513272546416e-4
-baseline_linearmodel	overall_pearson	GEX2ATAC	0.30901763474135063	0.0014285516918561524
-baseline_linearmodel	overall_pearson	Overall	0.5924458112869584	0.05630228949266249
-baseline_linearmodel	overall_spearman	ADT2GEX	0.5932045023463177	5.921251626483744e-5
-baseline_linearmodel	overall_spearman	ATAC2GEX	0.42355173344728064	5.7605324099598e-5
-baseline_linearmodel	overall_spearman	GEX2ADT	0.8183152079583245	4.6654411626173e-4
-baseline_linearmodel	overall_spearman	GEX2ATAC	0.2925064662717878	0.0011872965960476767
-baseline_linearmodel	overall_spearman	Overall	0.49712140197664895	0.041072190105686884
-baseline_linearmodel	rmse	ADT2GEX	NA	NA
-baseline_linearmodel	rmse	ATAC2GEX	0.21617374511275156	4.435654171804038e-5
-baseline_linearmodel	rmse	GEX2ADT	NA	NA
-baseline_linearmodel	rmse	GEX2ATAC	0.2888116386361997	2.5312984366660825e-4
-baseline_linearmodel	rmse	Overall	NA	NA
-baseline_randomforest	correct_format	GEX2ADT	1	0
-baseline_randomforest	correct_format	Overall	1	0
-baseline_randomforest	finished	GEX2ADT	1	0
-baseline_randomforest	finished	Overall	1	0
-baseline_randomforest	logp1_mse	GEX2ADT	0.009544717014772015	4.4525928484498955e-6
-baseline_randomforest	logp1_mse	Overall	0.009544717014772015	4.4525928484498955e-6
-baseline_randomforest	logp1_rmse	GEX2ADT	0.06015254329519272	3.991925080113104e-5
-baseline_randomforest	logp1_rmse	Overall	0.06015254329519272	3.991925080113104e-5
-baseline_randomforest	mae	GEX2ADT	0.10011197422630314	1.0506428262215434e-4
-baseline_randomforest	mae	Overall	0.10011197422630314	1.0506428262215434e-4
-baseline_randomforest	mean_pearson_per_cell	GEX2ADT	0.8369498860137743	0.0014643430208034658
-baseline_randomforest	mean_pearson_per_cell	Overall	0.8369498860137743	0.0014643430208034658
-baseline_randomforest	mean_pearson_per_gene	GEX2ADT	0.7093165931654559	0.0014405528732459507
-baseline_randomforest	mean_pearson_per_gene	Overall	0.7093165931654559	0.0014405528732459507
-baseline_randomforest	mean_spearman_per_cell	GEX2ADT	0.814627357879	8.018260012052523e-4
-baseline_randomforest	mean_spearman_per_cell	Overall	0.814627357879	8.018260012052523e-4
-baseline_randomforest	mean_spearman_per_gene	GEX2ADT	0.5503993046833127	0.0021096874005797897
-baseline_randomforest	mean_spearman_per_gene	Overall	0.5503993046833127	0.0021096874005797897
-baseline_randomforest	mse	GEX2ADT	0.022226840819802054	2.4668088883816927e-5
-baseline_randomforest	mse	Overall	0.022226840819802054	2.4668088883816927e-5
-baseline_randomforest	overall_pearson	GEX2ADT	0.8371614509903214	0.0014016908457761099
-baseline_randomforest	overall_pearson	Overall	0.8371614509903214	0.0014016908457761099
-baseline_randomforest	overall_spearman	GEX2ADT	0.8177315596163172	8.252772638671182e-4
-baseline_randomforest	overall_spearman	Overall	0.8177315596163172	8.252772638671182e-4
-baseline_randomforest	rmse	GEX2ADT	0.14861774723154927	2.7921205524276325e-4
-baseline_randomforest	rmse	Overall	0.14861774723154927	2.7921205524276325e-4
-dummy_meanpergene	correct_format	ADT2GEX	1	0
-dummy_meanpergene	correct_format	ATAC2GEX	1	0
-dummy_meanpergene	correct_format	GEX2ADT	1	0
-dummy_meanpergene	correct_format	GEX2ATAC	1	0
-dummy_meanpergene	correct_format	Overall	1	0
-dummy_meanpergene	finished	ADT2GEX	1	0
-dummy_meanpergene	finished	ATAC2GEX	1	0
-dummy_meanpergene	finished	GEX2ADT	1	0
-dummy_meanpergene	finished	GEX2ATAC	1	0
-dummy_meanpergene	finished	Overall	1	0
-dummy_meanpergene	logp1_mse	ADT2GEX	NA	NA
-dummy_meanpergene	logp1_mse	ATAC2GEX	0.020232598494685054	5.462306504470363e-7
-dummy_meanpergene	logp1_mse	GEX2ADT	NA	NA
-dummy_meanpergene	logp1_mse	GEX2ATAC	0.03498159608669077	1.49347489819796e-5
-dummy_meanpergene	logp1_mse	Overall	NA	NA
-dummy_meanpergene	logp1_rmse	ADT2GEX	NA	NA
-dummy_meanpergene	logp1_rmse	ATAC2GEX	0.08577262915233042	2.120671786718222e-6
-dummy_meanpergene	logp1_rmse	GEX2ADT	NA	NA
-dummy_meanpergene	logp1_rmse	GEX2ATAC	0.1103449722822215	3.216909571392117e-5
-dummy_meanpergene	logp1_rmse	Overall	NA	NA
-dummy_meanpergene	mae	ADT2GEX	NA	NA
-dummy_meanpergene	mae	ATAC2GEX	0.14350676309780375	1.7926384911015838e-6
-dummy_meanpergene	mae	GEX2ADT	NA	NA
-dummy_meanpergene	mae	GEX2ATAC	0.16679891975073952	1.0932215888946968e-4
-dummy_meanpergene	mae	Overall	NA	NA
-dummy_meanpergene	mean_pearson_per_cell	ADT2GEX	0.7619272872798248	7.193082312311314e-5
-dummy_meanpergene	mean_pearson_per_cell	ATAC2GEX	0.5368704076110221	7.782123929202572e-4
-dummy_meanpergene	mean_pearson_per_cell	GEX2ADT	0.4168253915027492	0.001459631708902165
-dummy_meanpergene	mean_pearson_per_cell	GEX2ATAC	0.29899676132914593	9.939505386261142e-4
-dummy_meanpergene	mean_pearson_per_cell	Overall	0.4865106864385652	0.03106547755257049
-dummy_meanpergene	mean_pearson_per_gene	ADT2GEX	0	0
-dummy_meanpergene	mean_pearson_per_gene	ATAC2GEX	0	0
-dummy_meanpergene	mean_pearson_per_gene	GEX2ADT	0	0
-dummy_meanpergene	mean_pearson_per_gene	GEX2ATAC	0	0
-dummy_meanpergene	mean_pearson_per_gene	Overall	0	0
-dummy_meanpergene	mean_spearman_per_cell	ADT2GEX	0.5274190250790263	2.3510260037151022e-5
-dummy_meanpergene	mean_spearman_per_cell	ATAC2GEX	0.42327815964844706	3.235992877880322e-5
-dummy_meanpergene	mean_spearman_per_cell	GEX2ADT	0.48468170501643537	6.62249715003767e-4
-dummy_meanpergene	mean_spearman_per_cell	GEX2ATAC	0.283552981016985	9.42715768317532e-4
-dummy_meanpergene	mean_spearman_per_cell	Overall	0.414469488218722	0.009962310172136021
-dummy_meanpergene	mean_spearman_per_gene	ADT2GEX	0	0
-dummy_meanpergene	mean_spearman_per_gene	ATAC2GEX	0	0
-dummy_meanpergene	mean_spearman_per_gene	GEX2ADT	0	0
-dummy_meanpergene	mean_spearman_per_gene	GEX2ATAC	0	0
-dummy_meanpergene	mean_spearman_per_gene	Overall	0	0
-dummy_meanpergene	mse	ADT2GEX	NA	NA
-dummy_meanpergene	mse	ATAC2GEX	0.047690528448786344	3.178567480681587e-6
-dummy_meanpergene	mse	GEX2ADT	NA	NA
-dummy_meanpergene	mse	GEX2ATAC	0.08390956392458246	9.277008419613701e-5
-dummy_meanpergene	mse	Overall	NA	NA
-dummy_meanpergene	overall_pearson	ADT2GEX	0.7332233755453689	1.43505421825384e-7
-dummy_meanpergene	overall_pearson	ATAC2GEX	0.5291563692816446	7.401159240046151e-4
-dummy_meanpergene	overall_pearson	GEX2ADT	0.41154656324398275	0.001540373208695682
-dummy_meanpergene	overall_pearson	GEX2ATAC	0.3066808813263798	8.961345877982425e-4
-dummy_meanpergene	overall_pearson	Overall	0.47970516294027765	0.026643960768629876
-dummy_meanpergene	overall_spearman	ADT2GEX	0.517662260312147	1.7333090335479184e-5
-dummy_meanpergene	overall_spearman	ATAC2GEX	0.41729849065373514	2.5446790920894384e-5
-dummy_meanpergene	overall_spearman	GEX2ADT	0.4903531274770493	7.782205369686346e-4
-dummy_meanpergene	overall_spearman	GEX2ATAC	0.2918412746241827	8.44657422989479e-4
-dummy_meanpergene	overall_spearman	Overall	0.4143450071412146	0.008942978112340122
-dummy_meanpergene	rmse	ADT2GEX	NA	NA
-dummy_meanpergene	rmse	ATAC2GEX	0.2183561411356879	1.668611567683161e-5
-dummy_meanpergene	rmse	GEX2ADT	NA	NA
-dummy_meanpergene	rmse	GEX2ATAC	0.28934644460973397	2.822983744329442e-4
-dummy_meanpergene	rmse	Overall	NA	NA
-dummy_random	correct_format	ADT2GEX	1	0
-dummy_random	correct_format	ATAC2GEX	1	0
-dummy_random	correct_format	GEX2ADT	1	0
-dummy_random	correct_format	GEX2ATAC	1	0
-dummy_random	correct_format	Overall	1	0
-dummy_random	finished	ADT2GEX	1	0
-dummy_random	finished	ATAC2GEX	1	0
-dummy_random	finished	GEX2ADT	1	0
-dummy_random	finished	GEX2ATAC	1	0
-dummy_random	finished	Overall	1	0
-dummy_random	logp1_mse	ADT2GEX	NA	NA
-dummy_random	logp1_mse	ATAC2GEX	0.03968492037264512	2.5042674324417746e-7
-dummy_random	logp1_mse	GEX2ADT	NA	NA
-dummy_random	logp1_mse	GEX2ATAC	0.06721447096017583	1.4080852229860013e-5
-dummy_random	logp1_mse	Overall	NA	NA
-dummy_random	logp1_rmse	ADT2GEX	NA	NA
-dummy_random	logp1_rmse	ATAC2GEX	0.11704643893754899	4.5723786218048706e-7
-dummy_random	logp1_rmse	GEX2ADT	NA	NA
-dummy_random	logp1_rmse	GEX2ATAC	0.14891155700911193	1.4693564490676147e-5
-dummy_random	logp1_rmse	Overall	NA	NA
-dummy_random	mae	ADT2GEX	NA	NA
-dummy_random	mae	ATAC2GEX	0.1619129600470378	2.076057612029871e-6
-dummy_random	mae	GEX2ADT	NA	NA
-dummy_random	mae	GEX2ATAC	0.16741497756705934	1.0124904823611663e-4
-dummy_random	mae	Overall	NA	NA
-dummy_random	mean_pearson_per_cell	ADT2GEX	0.5813702029164796	8.543759182490598e-5
-dummy_random	mean_pearson_per_cell	ATAC2GEX	0.2985434516662141	2.5560859089873093e-4
-dummy_random	mean_pearson_per_cell	GEX2ADT	0.17807643716776062	1.8229359107283736e-5
-dummy_random	mean_pearson_per_cell	GEX2ATAC	0.09126723195885036	8.343584267149505e-5
-dummy_random	mean_pearson_per_cell	Overall	0.2688325331043674	0.03442791204206801
-dummy_random	mean_pearson_per_gene	ADT2GEX	0.00354650957137831	8.60229359821951e-7
-dummy_random	mean_pearson_per_gene	ATAC2GEX	9.396831096183951e-4	1.0173821237632868e-6
-dummy_random	mean_pearson_per_gene	GEX2ADT	-0.006678503410771728	1.274282633060849e-4
-dummy_random	mean_pearson_per_gene	GEX2ATAC	-3.867232872670602e-4	4.306824038751798e-8
-dummy_random	mean_pearson_per_gene	Overall	-4.605108211732832e-4	2.7305182763046322e-5
-dummy_random	mean_spearman_per_cell	ADT2GEX	0.3754744583173783	3.7070524145227667e-6
-dummy_random	mean_spearman_per_cell	ATAC2GEX	0.23055656010244296	1.1292761606069235e-4
-dummy_random	mean_spearman_per_cell	GEX2ADT	0.2675363250230761	1.1403324883926333e-5
-dummy_random	mean_spearman_per_cell	GEX2ATAC	0.09126723195885032	8.343584267149509e-5
-dummy_random	mean_spearman_per_cell	Overall	0.22514929428647887	0.011450822592893052
-dummy_random	mean_spearman_per_gene	ADT2GEX	0.0028415209867424626	1.1396283862152295e-6
-dummy_random	mean_spearman_per_gene	ATAC2GEX	0.0012960035926790979	9.007187366221392e-7
-dummy_random	mean_spearman_per_gene	GEX2ADT	-0.005540064982681735	8.338946670684519e-5
-dummy_random	mean_spearman_per_gene	GEX2ATAC	-3.8672328726705433e-4	4.3068240387523327e-8
-dummy_random	mean_spearman_per_gene	Overall	-0.00026692470756424145	1.8747204972480106e-5
-dummy_random	mse	ADT2GEX	NA	NA
-dummy_random	mse	ATAC2GEX	0.09568347726323799	1.5945441021081562e-6
-dummy_random	mse	GEX2ADT	NA	NA
-dummy_random	mse	GEX2ATAC	0.16741497756705934	1.0124904823611663e-4
-dummy_random	mse	Overall	NA	NA
-dummy_random	overall_pearson	ADT2GEX	0.5224640621510495	1.5357991388794e-4
-dummy_random	overall_pearson	ATAC2GEX	0.2879232449035238	2.658986365487818e-4
-dummy_random	overall_pearson	GEX2ADT	0.1730590133766407	1.0948517556867195e-5
-dummy_random	overall_pearson	GEX2ATAC	0.09529041530018305	7.833211855547994e-5
-dummy_random	overall_pearson	Overall	0.2540687131666501	0.02634669901690999
-dummy_random	overall_spearman	ADT2GEX	0.35765801011940435	4.996488612094233e-6
-dummy_random	overall_spearman	ATAC2GEX	0.221641876647488	1.1122058781112137e-4
-dummy_random	overall_spearman	GEX2ADT	0.27160886927595834	8.643266963349562e-6
-dummy_random	overall_spearman	GEX2ATAC	0.09529041530018242	7.833211855539607e-5
-dummy_random	overall_spearman	Overall	0.22093306346337366	0.010030663799419474
-dummy_random	rmse	ADT2GEX	NA	NA
-dummy_random	rmse	ATAC2GEX	0.30932297899068717	4.157897347355726e-6
-dummy_random	rmse	GEX2ADT	NA	NA
-dummy_random	rmse	GEX2ATAC	0.40903835805625544	1.538988085528556e-4
-dummy_random	rmse	Overall	NA	NA
-dummy_solution	correct_format	ADT2GEX	1	0
-dummy_solution	correct_format	ATAC2GEX	1	0
-dummy_solution	correct_format	GEX2ADT	1	0
-dummy_solution	correct_format	GEX2ATAC	1	0
-dummy_solution	correct_format	Overall	1	0
-dummy_solution	finished	ADT2GEX	1	0
-dummy_solution	finished	ATAC2GEX	1	0
-dummy_solution	finished	GEX2ADT	1	0
-dummy_solution	finished	GEX2ATAC	1	0
-dummy_solution	finished	Overall	1	0
-dummy_solution	logp1_mse	ADT2GEX	NA	NA
-dummy_solution	logp1_mse	ATAC2GEX	0	0
-dummy_solution	logp1_mse	GEX2ADT	NA	NA
-dummy_solution	logp1_mse	GEX2ATAC	0	0
-dummy_solution	logp1_mse	Overall	NA	NA
-dummy_solution	logp1_rmse	ADT2GEX	NA	NA
-dummy_solution	logp1_rmse	ATAC2GEX	0	0
-dummy_solution	logp1_rmse	GEX2ADT	NA	NA
-dummy_solution	logp1_rmse	GEX2ATAC	0	0
-dummy_solution	logp1_rmse	Overall	NA	NA
-dummy_solution	mae	ADT2GEX	NA	NA
-dummy_solution	mae	ATAC2GEX	0	0
-dummy_solution	mae	GEX2ADT	NA	NA
-dummy_solution	mae	GEX2ATAC	0	0
-dummy_solution	mae	Overall	NA	NA
-dummy_solution	mean_pearson_per_cell	ADT2GEX	0.9999999999999986	2.465190328815662e-32
-dummy_solution	mean_pearson_per_cell	ATAC2GEX	0.9999999999999987	6.162975822039155e-33
-dummy_solution	mean_pearson_per_cell	GEX2ADT	1	0
-dummy_solution	mean_pearson_per_cell	GEX2ATAC	1.0000000000000002	2.465190328815662e-32
-dummy_solution	mean_pearson_per_cell	Overall	0.9999999999999993	7.135356451738665e-31
-dummy_solution	mean_pearson_per_gene	ADT2GEX	0.999999999999998	1.6023737137301802e-31
-dummy_solution	mean_pearson_per_gene	ATAC2GEX	0.9999999999999981	1.3620176566706532e-30
-dummy_solution	mean_pearson_per_gene	GEX2ADT	0.9999999999999933	1.0366125332669858e-29
-dummy_solution	mean_pearson_per_gene	GEX2ATAC	1.0000000000000004	1.7995889400354332e-30
-dummy_solution	mean_pearson_per_gene	Overall	0.9999999999999979	8.904815287755241e-30
-dummy_solution	mean_spearman_per_cell	ADT2GEX	1	0
-dummy_solution	mean_spearman_per_cell	ATAC2GEX	1	0
-dummy_solution	mean_spearman_per_cell	GEX2ADT	1	0
-dummy_solution	mean_spearman_per_cell	GEX2ATAC	1	0
-dummy_solution	mean_spearman_per_cell	Overall	1	0
-dummy_solution	mean_spearman_per_gene	ADT2GEX	1	0
-dummy_solution	mean_spearman_per_gene	ATAC2GEX	1	0
-dummy_solution	mean_spearman_per_gene	GEX2ADT	1	0
-dummy_solution	mean_spearman_per_gene	GEX2ATAC	1	0
-dummy_solution	mean_spearman_per_gene	Overall	1	0
-dummy_solution	mse	ADT2GEX	NA	NA
-dummy_solution	mse	ATAC2GEX	0	0
-dummy_solution	mse	GEX2ADT	NA	NA
-dummy_solution	mse	GEX2ATAC	0	0
-dummy_solution	mse	Overall	NA	NA
-dummy_solution	overall_pearson	ADT2GEX	1	0
-dummy_solution	overall_pearson	ATAC2GEX	0.9999999999999999	1.8488927466117464e-32
-dummy_solution	overall_pearson	GEX2ADT	1	0
-dummy_solution	overall_pearson	GEX2ATAC	1	6.162975822039155e-33
-dummy_solution	overall_pearson	Overall	1	6.847750913376839e-33
-dummy_solution	overall_spearman	ADT2GEX	1	1.232595164407831e-32
-dummy_solution	overall_spearman	ATAC2GEX	1	6.162975822039155e-33
-dummy_solution	overall_spearman	GEX2ADT	1	0
-dummy_solution	overall_spearman	GEX2ATAC	0.9999999999999999	1.8488927466117464e-32
-dummy_solution	overall_spearman	Overall	1	8.217301096052206e-33
-dummy_solution	rmse	ADT2GEX	NA	NA
-dummy_solution	rmse	ATAC2GEX	0	0
-dummy_solution	rmse	GEX2ADT	NA	NA
-dummy_solution	rmse	GEX2ATAC	0	0
-dummy_solution	rmse	Overall	NA	NA
-dummy_zeros	correct_format	ADT2GEX	1	0
-dummy_zeros	correct_format	ATAC2GEX	1	0
-dummy_zeros	correct_format	GEX2ADT	1	0
-dummy_zeros	correct_format	GEX2ATAC	1	0
-dummy_zeros	correct_format	Overall	1	0
-dummy_zeros	finished	ADT2GEX	1	0
-dummy_zeros	finished	ATAC2GEX	1	0
-dummy_zeros	finished	GEX2ADT	1	0
-dummy_zeros	finished	GEX2ATAC	1	0
-dummy_zeros	finished	Overall	1	0
-dummy_zeros	logp1_mse	ADT2GEX	NA	NA
-dummy_zeros	logp1_mse	ATAC2GEX	0.033881025578374524	2.495100610611556e-7
-dummy_zeros	logp1_mse	GEX2ADT	NA	NA
-dummy_zeros	logp1_mse	GEX2ATAC	0.042664619512833006	3.7691472630778016e-5
-dummy_zeros	logp1_mse	Overall	NA	NA
-dummy_zeros	logp1_rmse	ADT2GEX	NA	NA
-dummy_zeros	logp1_rmse	ATAC2GEX	0.10884934909789651	5.441588445428193e-7
-dummy_zeros	logp1_rmse	GEX2ADT	NA	NA
-dummy_zeros	logp1_rmse	GEX2ATAC	0.12077822449448407	6.589895418828478e-5
-dummy_zeros	logp1_rmse	Overall	NA	NA
-dummy_zeros	mae	ADT2GEX	NA	NA
-dummy_zeros	mae	ATAC2GEX	0.12227231061890907	6.667992586442884e-6
-dummy_zeros	mae	GEX2ADT	NA	NA
-dummy_zeros	mae	GEX2ATAC	0.10329969914968973	2.4201802188184688e-4
-dummy_zeros	mae	Overall	NA	NA
-dummy_zeros	mean_pearson_per_cell	ADT2GEX	0	0
-dummy_zeros	mean_pearson_per_cell	ATAC2GEX	0	0
-dummy_zeros	mean_pearson_per_cell	GEX2ADT	0	0
-dummy_zeros	mean_pearson_per_cell	GEX2ATAC	0	0
-dummy_zeros	mean_pearson_per_cell	Overall	0	0
-dummy_zeros	mean_pearson_per_gene	ADT2GEX	0	0
-dummy_zeros	mean_pearson_per_gene	ATAC2GEX	0	0
-dummy_zeros	mean_pearson_per_gene	GEX2ADT	0	0
-dummy_zeros	mean_pearson_per_gene	GEX2ATAC	0	0
-dummy_zeros	mean_pearson_per_gene	Overall	0	0
-dummy_zeros	mean_spearman_per_cell	ADT2GEX	0	0
-dummy_zeros	mean_spearman_per_cell	ATAC2GEX	0	0
-dummy_zeros	mean_spearman_per_cell	GEX2ADT	0	0
-dummy_zeros	mean_spearman_per_cell	GEX2ATAC	0	0
-dummy_zeros	mean_spearman_per_cell	Overall	0	0
-dummy_zeros	mean_spearman_per_gene	ADT2GEX	0	0
-dummy_zeros	mean_spearman_per_gene	ATAC2GEX	0	0
-dummy_zeros	mean_spearman_per_gene	GEX2ADT	0	0
-dummy_zeros	mean_spearman_per_gene	GEX2ATAC	0	0
-dummy_zeros	mean_spearman_per_gene	Overall	0	0
-dummy_zeros	mse	ADT2GEX	NA	NA
-dummy_zeros	mse	ATAC2GEX	0.0811382111628018	1.5463413235168792e-6
-dummy_zeros	mse	GEX2ADT	NA	NA
-dummy_zeros	mse	GEX2ATAC	0.10329969914968973	2.4201802188184688e-4
-dummy_zeros	mse	Overall	NA	NA
-dummy_zeros	overall_pearson	ADT2GEX	-1	0
-dummy_zeros	overall_pearson	ATAC2GEX	-1	0
-dummy_zeros	overall_pearson	GEX2ADT	-1	0
-dummy_zeros	overall_pearson	GEX2ATAC	-1	0
-dummy_zeros	overall_pearson	Overall	-1	0
-dummy_zeros	overall_spearman	ADT2GEX	-1	0
-dummy_zeros	overall_spearman	ATAC2GEX	-1	0
-dummy_zeros	overall_spearman	GEX2ADT	-1	0
-dummy_zeros	overall_spearman	GEX2ATAC	-1	0
-dummy_zeros	overall_spearman	Overall	-1	0
-dummy_zeros	rmse	ADT2GEX	NA	NA
-dummy_zeros	rmse	ATAC2GEX	0.28484212429681405	4.763083320185392e-6
-dummy_zeros	rmse	GEX2ADT	NA	NA
-dummy_zeros	rmse	GEX2ATAC	0.3207745215490174	6.051082120330318e-4
-dummy_zeros	rmse	Overall	NA	NA
+method_id	metric_id	mean	var	method_task	method_label	method_description	method_maintainer	method_num_authors	method_language	method_type	method_doi
+baseline_knn	correct_format	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	finished	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	format_check	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	logp1_mse	0.012895817160059102	2.9455996461488598e-5	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	logp1_rmse	0.06822553532270083	2.0340280014542354e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mae	0.11097780764785503	4.2386264417891513e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_pearson_per_cell	0.8607461990488611	4.069333856347174e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_pearson_per_gene	0.5364521565345485	0.0599269815052297	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_spearman_per_cell	0.7276054657592355	0.015032328794313253	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_spearman_per_gene	0.4273570605042183	0.0353719888213512	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mse	0.03019927458795895	1.6551536749536124e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	overall_pearson	0.8552809713299893	4.173780528695707e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	overall_spearman	0.7258011941465947	0.016769563148649705	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	rmse	0.17057929539319913	0.0014693047614915493	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	correct_format	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	finished	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	format_check	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	logp1_mse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	logp1_rmse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mae	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_pearson_per_cell	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_pearson_per_gene	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_spearman_per_cell	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_spearman_per_gene	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	overall_pearson	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	overall_spearman	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	rmse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	correct_format	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	finished	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	format_check	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	logp1_mse	0.00954471701477201	4.452592848449869e-6	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	logp1_rmse	0.06015254329519272	3.99192508011311e-5	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mae	0.10011197422630315	1.0506428262215414e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_cell	0.8369498860137743	0.0014643430208034658	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_gene	0.7093165931654559	0.0014405528732459507	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_cell	0.814627357879	8.018260012052523e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_gene	0.5503993046833127	0.0021096874005797897	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mse	0.02222684081980205	2.466808888381688e-5	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_pearson	0.8371614509903214	0.0014016908457761099	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_spearman	0.8177315596163172	8.252772638671182e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	rmse	0.14861774723154927	2.7921205524276325e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+dummy_meanpergene	correct_format	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	finished	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	format_check	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	logp1_mse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	logp1_rmse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mae	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_pearson_per_cell	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_pearson_per_gene	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_spearman_per_cell	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_spearman_per_gene	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	overall_pearson	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	overall_spearman	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	rmse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_random	correct_format	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	finished	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	format_check	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	logp1_mse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	logp1_rmse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mae	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_pearson_per_cell	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_pearson_per_gene	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_spearman_per_cell	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_spearman_per_gene	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	overall_pearson	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	overall_spearman	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	rmse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_solution	correct_format	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	finished	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	format_check	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	logp1_mse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	logp1_rmse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mae	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_pearson_per_cell	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_pearson_per_gene	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_spearman_per_cell	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_spearman_per_gene	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	overall_pearson	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	overall_spearman	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	rmse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_zeros	correct_format	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	finished	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	format_check	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	logp1_mse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	logp1_rmse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mae	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_pearson_per_cell	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_pearson_per_gene	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_spearman_per_cell	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_spearman_per_gene	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	overall_pearson	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	overall_spearman	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rmse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
