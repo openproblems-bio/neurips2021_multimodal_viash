@@ -833,5 +833,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_newwave"
   executable: "target/nextflow/joint_embedding_methods/baseline_newwave/baseline_newwave"
   viash_version: "0.5.3"
-  git_commit: "5f068ad3a336f24d93df5d1ed5ec52bbb10fd17c"
+  git_commit: "ec97ed69425b9a7b6f1b6b873431038d934101db"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -7,10 +7,10 @@ set.seed(1)
 # sync to local folder
 # system("aws s3 sync s3://openproblems-bio/public/ output/manual_formatting/ --profile op2")
 
-train <- c("s1d1", "s1d1", "s2d4", "s3d1")
+train <- c("s1d1", "s1d2", "s2d4", "s3d1")
 valid <- c("s2d1", "s3d6")
 backup_test <- c("s1d3", "s2d5", "s3d7")
-output_dir <- "output/inhouse_datasets/common/"
+output_dir <- "output/datasets/common/"
 
 #############################
 # Process multiome
@@ -19,6 +19,9 @@ output_dir <- "output/inhouse_datasets/common/"
 ad1 <- read_h5ad("output/manual_formatting/multiome/Multiome_GEX_processed.h5ad")
 ad2 <- read_h5ad("output/manual_formatting/multiome/Multiome_ATAC_processed.h5ad")
 dataset_id <- ad1$uns[["dataset_id"]]
+
+testthat::expect_length(setdiff(ad1$obs$batch, c(train, valid, backup_test)), 0)
+setdiff(c(train, valid, backup_test), unique(ad1$obs$batch))
 
 # check reads
 ad1$layers[["counts"]][1:10, 1:10]
@@ -106,11 +109,19 @@ ad2_iid$write_h5ad(paste0(output_dir, did_iid, "/", did_iid, ".manual_formatting
 #############################
 # Process cite
 
+# temporary setup until more samples arrive
+train <- c("s1d1")
+valid <- c("s1d2")
+backup_test <- NULL
+
 
 # read data
 bd1 <- read_h5ad("output/manual_formatting/cite/CITE_GEX_processed.h5ad")
 bd2 <- read_h5ad("output/manual_formatting/cite/CITE_ADT_processed.h5ad")
 dataset_id <- bd1$uns[["dataset_id"]]
+
+testthat::expect_length(setdiff(bd1$obs$batch, c(train, valid, backup_test)), 0)
+setdiff(c(train, valid, backup_test), unique(bd1$obs$batch))
 
 # check reads
 bd1$layers[["counts"]][1:10, 1:10]
@@ -152,22 +163,22 @@ bd1_phase1$write_h5ad(paste0(output_dir, did_phase1, "/", did_phase1, ".manual_f
 bd2_phase1$write_h5ad(paste0(output_dir, did_phase1, "/", did_phase1, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
-#############
-# create phase 2
+# #############
+# # create phase 2
 
-bd1_phase2 <- bd1$copy()
-bd2_phase2 <- bd2$copy()
+# bd1_phase2 <- bd1$copy()
+# bd2_phase2 <- bd2$copy()
 
-bd1_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
-bd2_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
+# bd1_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
+# bd2_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
 
-did_phase2 <- paste0(dataset_id, "_phase2")
-bd1_phase2$uns[["dataset_id"]] <- did_phase2
-bd2_phase2$uns[["dataset_id"]] <- did_phase2
+# did_phase2 <- paste0(dataset_id, "_phase2")
+# bd1_phase2$uns[["dataset_id"]] <- did_phase2
+# bd2_phase2$uns[["dataset_id"]] <- did_phase2
 
-dir.create(paste0(output_dir, did_phase2), recursive = TRUE)
-bd1_phase2$write_h5ad(paste0(output_dir, did_phase2, "/", did_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
-bd2_phase2$write_h5ad(paste0(output_dir, did_phase2, "/", did_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
+# dir.create(paste0(output_dir, did_phase2), recursive = TRUE)
+# bd1_phase2$write_h5ad(paste0(output_dir, did_phase2, "/", did_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
+# bd2_phase2$write_h5ad(paste0(output_dir, did_phase2, "/", did_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
 #############

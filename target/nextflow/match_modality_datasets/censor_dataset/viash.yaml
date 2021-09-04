@@ -585,7 +585,8 @@ functionality:
       )
       
       cat("Create test objects\\n")
-      test_obs <- input_mod1\$obs[test_ix, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+      test_obs <- input_mod1\$obs[test_ix, , drop = FALSE] %>% 
+        select(one_of("batch", "size_factors"))
       
       output_test_mod1 <- anndata::AnnData(
         X = input_mod1\$X[test_ix, , drop = FALSE],
@@ -1298,5 +1299,5 @@ info:
   output: "target/nextflow/match_modality_datasets/censor_dataset"
   executable: "target/nextflow/match_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "5f068ad3a336f24d93df5d1ed5ec52bbb10fd17c"
+  git_commit: "ec97ed69425b9a7b6f1b6b873431038d934101db"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

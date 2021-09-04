@@ -6,10 +6,15 @@ library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
-input_path <- "resources_test/common/test_resource."
-# input_path <- "output/public_datasets/common/openproblems_bmmc_multiome/openproblems_bmmc_multiome.manual_formatting."
-output_path <- ""
-output_path <- "output/public_datasets/match_modality/openproblems_bmmc_multiome/openproblems_bmmc_multiome.censor_dataset."
+# input_path <- "resources_test/common/test_resource."
+# input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
+# input_path <- "output/datasets/common/openproblems_bmmc_cite_phase2/openproblems_bmmc_cite_phase2.manual_formatting."
+input_path <- "output/datasets/common/openproblems_bmmc_cite_iid/openproblems_bmmc_cite_iid.manual_formatting."
+# output_path <- ""
+# output_path <- "output/datasets/match_modality/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.censor_dataset."
+# output_path <- "output/datasets/match_modality/openproblems_bmmc_cite_phase2/openproblems_bmmc_cite_phase2.censor_dataset."
+output_path <- "output/datasets/match_modality/openproblems_bmmc_cite_iid/openproblems_bmmc_cite_iid.censor_dataset."
+dir.create(dirname(output_path), recursive = TRUE)
 
 par <- list(
   input_mod1 = paste0(input_path, "output_rna.h5ad"),
@@ -62,7 +67,8 @@ output_train_mod2 <- anndata::AnnData(
 )
 
 cat("Create test objects\n")
-test_obs <- input_mod1$obs[test_ix, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+test_obs <- input_mod1$obs[test_ix, , drop = FALSE] %>% 
+  select(one_of("batch", "size_factors"))
 
 output_test_mod1 <- anndata::AnnData(
   X = input_mod1$X[test_ix, , drop = FALSE],

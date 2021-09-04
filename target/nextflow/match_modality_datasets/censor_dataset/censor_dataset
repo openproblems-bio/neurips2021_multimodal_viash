@@ -462,7 +462,8 @@ output_train_mod2 <- anndata::AnnData(
 )
 
 cat("Create test objects\\n")
-test_obs <- input_mod1\$obs[test_ix, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+test_obs <- input_mod1\$obs[test_ix, , drop = FALSE] %>% 
+  select(one_of("batch", "size_factors"))
 
 output_test_mod1 <- anndata::AnnData(
   X = input_mod1\$X[test_ix, , drop = FALSE],

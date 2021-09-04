@@ -18,7 +18,7 @@ bin/nextflow \
   -entry pilot_wf \
   --publishDir output/pilot_inhouse/joint_embedding/ \
   -resume \
-  --datasets 'output/inhouse_datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets/joint_embedding/**.h5ad'
 
 bin/nextflow \
   run . \
@@ -27,7 +27,7 @@ bin/nextflow \
   --publishDir output/pilot_inhouse/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
-  --datasets 'output/inhouse_datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets/joint_embedding/**.h5ad'
 
 bin/nextflow \
   run . \
@@ -36,7 +36,7 @@ bin/nextflow \
   --publishDir output/pilot_inhouse/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
-  --datasets 'output/inhouse_datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets/joint_embedding/**.h5ad'
 
 bin/nextflow \
   run . \
@@ -45,4 +45,4 @@ bin/nextflow \
   --publishDir output/pilot_inhouse/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vvhighmem.config \
-  --datasets 'output/inhouse_datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets/joint_embedding/**.h5ad'
