@@ -855,5 +855,5 @@ info:
   output: "target/nextflow/predict_modality_methods/dummy_meanpergene"
   executable: "target/nextflow/predict_modality_methods/dummy_meanpergene/dummy_meanpergene"
   viash_version: "0.5.3"
-  git_commit: "82ba018611a55acb9d7957b1b3674e87b999796d"
+  git_commit: "dd1e7e3a29e62e7f2e4651dc12d3c6dbdde94ce8"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

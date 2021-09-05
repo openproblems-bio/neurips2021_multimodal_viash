@@ -2,98 +2,98 @@ method_id	metric_id	mean	var	method_task	method_label	method_description	method_
 baseline_knn	correct_format	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_knn	finished	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_knn	format_check	1	0	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	logp1_mse	0.012895817160059102	2.9455996461488598e-5	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	logp1_rmse	0.06822553532270083	2.0340280014542354e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mae	0.11097780764785503	4.2386264417891513e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mean_pearson_per_cell	0.8607461990488611	4.069333856347174e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mean_pearson_per_gene	0.5364521565345485	0.0599269815052297	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mean_spearman_per_cell	0.7276054657592355	0.015032328794313253	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mean_spearman_per_gene	0.4273570605042183	0.0353719888213512	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	mse	0.03019927458795895	1.6551536749536124e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	overall_pearson	0.8552809713299893	4.173780528695707e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	overall_spearman	0.7258011941465947	0.016769563148649705	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knn	rmse	0.17057929539319913	0.0014693047614915493	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	logp1_mse	0.0129905134815665	3.0162960870035045e-5	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	logp1_rmse	0.06844492718199537	2.0713376034031192e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mae	0.11141962084937254	4.3914978536264645e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_pearson_per_cell	0.8597538939681449	4.374513257573099e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_pearson_per_gene	0.5356778839916239	0.060016826216633734	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_spearman_per_cell	0.7271823992973356	0.015075426377786557	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mean_spearman_per_gene	0.42729017163923844	0.03542161549598487	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	mse	0.030425376262216936	1.6954836474760915e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	overall_pearson	0.8542190850638085	4.5320947628836665e-4	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	overall_spearman	0.7254069845378521	0.016799324148429884	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knn	rmse	0.17117940498134707	0.001497316763265217	predict_modality	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_linearmodel	correct_format	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_linearmodel	finished	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_linearmodel	format_check	1	0	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	logp1_mse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	logp1_rmse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mae	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mean_pearson_per_cell	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mean_pearson_per_gene	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mean_spearman_per_cell	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mean_spearman_per_gene	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	mse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	overall_pearson	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	overall_spearman	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_linearmodel	rmse	NA	NA	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	logp1_mse	0.018926408708326972	7.645306172147809e-5	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	logp1_rmse	0.081173250400837	3.2021590441964697e-4	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mae	0.1331172553301021	5.654062056003326e-4	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_pearson_per_cell	0.6792836819173059	0.05023689555164792	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_pearson_per_gene	0.32009473184372117	0.08742605552407524	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_spearman_per_cell	0.5706010110444374	0.03934482080721731	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mean_spearman_per_gene	0.2572742232762983	0.050621825496479915	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	mse	0.04472537730189897	4.4758730235632416e-4	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	overall_pearson	0.6760126142957108	0.04756117533517429	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	overall_spearman	0.5694795043692706	0.03908009286535856	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linearmodel	rmse	0.20639525325658728	0.0024807728575561958	predict_modality	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_randomforest	correct_format	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_randomforest	finished	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_randomforest	format_check	1	0	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	logp1_mse	0.00954471701477201	4.452592848449869e-6	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	logp1_rmse	0.06015254329519272	3.99192508011311e-5	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mae	0.10011197422630315	1.0506428262215414e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_pearson_per_cell	0.8369498860137743	0.0014643430208034658	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_pearson_per_gene	0.7093165931654559	0.0014405528732459507	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_spearman_per_cell	0.814627357879	8.018260012052523e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_spearman_per_gene	0.5503993046833127	0.0021096874005797897	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mse	0.02222684081980205	2.466808888381688e-5	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	overall_pearson	0.8371614509903214	0.0014016908457761099	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	overall_spearman	0.8177315596163172	8.252772638671182e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	rmse	0.14861774723154927	2.7921205524276325e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	logp1_mse	0.014205631902530718	3.096387031451073e-5	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	logp1_rmse	0.07158276577679604	1.9008441288857208e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mae	0.11687011751417102	4.2569453103518973e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_cell	0.8437217263519476	4.723234364769068e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_gene	0.4919617149281049	0.0645746625631602	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_cell	0.7077131612413868	0.015816768762789726	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_gene	0.3912550414999216	0.03598235410266155	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mse	0.03331410113496818	1.7504481885990898e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_pearson	0.8374379823058414	3.9568329024600163e-4	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_spearman	0.7041919085041666	0.017769416096549525	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	rmse	0.17963220141415734	0.00139516446676239	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
 dummy_meanpergene	correct_format	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
 dummy_meanpergene	finished	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
 dummy_meanpergene	format_check	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	logp1_mse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	logp1_rmse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mae	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mean_pearson_per_cell	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mean_pearson_per_gene	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mean_spearman_per_cell	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mean_spearman_per_gene	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	mse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	overall_pearson	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	overall_spearman	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
-dummy_meanpergene	rmse	NA	NA	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	logp1_mse	0.02762696984640221	3.2549294192754355e-5	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	logp1_rmse	0.09859336666850677	8.981635839002304e-5	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mae	0.1636355053752689	1.9811312566687847e-4	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_pearson_per_cell	0.4793316433753045	0.031132653117949	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_pearson_per_gene	0	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_spearman_per_cell	0.4134751429706559	0.0103955138976254	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mean_spearman_per_gene	0	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	mse	0.06576318231025882	1.9631344129216786e-4	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	overall_pearson	0.4724289422671111	0.026577874437654095	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	overall_spearman	0.4135283748707335	0.009305059227428235	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+dummy_meanpergene	rmse	0.25512342019935824	7.50247528933906e-4	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
 dummy_random	correct_format	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
 dummy_random	finished	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
 dummy_random	format_check	1	0	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	logp1_mse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	logp1_rmse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mae	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mean_pearson_per_cell	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mean_pearson_per_gene	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mean_spearman_per_cell	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mean_spearman_per_gene	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	mse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	overall_pearson	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	overall_spearman	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
-dummy_random	rmse	NA	NA	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	logp1_mse	0.0539238424952622	1.4225734906075815e-4	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	logp1_rmse	0.13392048204904664	1.9032636358802004e-4	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mae	0.18630743449209666	8.779381835253107e-4	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_pearson_per_cell	0.26535343294219965	0.033699459989941526	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_pearson_per_gene	-1.692840513065809e-4	5.795784920715125e-7	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_spearman_per_cell	0.22648475936697393	0.01162339868294552	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mean_spearman_per_gene	-4.058302041060337e-4	1.1920281334158676e-6	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	mse	0.13258597547940282	9.662117246183129e-4	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	overall_pearson	0.25048890556257053	0.025473853016672127	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	overall_spearman	0.22222140556922002	0.010124474124234704	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	rmse	0.361812843283191	0.0018638243497065292	predict_modality	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
 dummy_solution	correct_format	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
 dummy_solution	finished	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
 dummy_solution	format_check	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	logp1_mse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	logp1_rmse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mae	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mean_pearson_per_cell	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mean_pearson_per_gene	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mean_spearman_per_cell	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mean_spearman_per_gene	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	mse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	overall_pearson	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	overall_spearman	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	rmse	NA	NA	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	logp1_mse	0	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	logp1_rmse	0	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mae	0	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_pearson_per_cell	0.9999999999999994	4.998858166765092e-31	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_pearson_per_gene	0.9999999999999976	2.3068703276983895e-29	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_spearman_per_cell	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mean_spearman_per_gene	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	mse	0	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	overall_pearson	1	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	overall_spearman	1	5.4782007307014706e-33	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	rmse	0	0	predict_modality	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
 dummy_zeros	correct_format	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
 dummy_zeros	finished	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
 dummy_zeros	format_check	1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	logp1_mse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	logp1_rmse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mae	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mean_pearson_per_cell	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mean_pearson_per_gene	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mean_spearman_per_cell	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mean_spearman_per_gene	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	mse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	overall_pearson	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	overall_spearman	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	rmse	NA	NA	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	logp1_mse	0.05265123655838811	3.633223022872787e-4	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	logp1_rmse	0.131270879306019	4.772371059406544e-4	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mae	0.17457511174081358	0.008563681284732916	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_pearson_per_cell	0	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_pearson_per_gene	0	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_spearman_per_cell	0	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mean_spearman_per_gene	0	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	mse	0.12987198775961284	0.0024889425424115	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	overall_pearson	-1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	overall_spearman	-1	0	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rmse	0.35446370909938724	0.004697185212353122	predict_modality	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA
