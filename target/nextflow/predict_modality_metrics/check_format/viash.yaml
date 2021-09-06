@@ -818,5 +818,5 @@ info:
   output: "target/nextflow/predict_modality_metrics/check_format"
   executable: "target/nextflow/predict_modality_metrics/check_format/check_format"
   viash_version: "0.5.3"
-  git_commit: "22126eecf6df2dbd03575981c8eac3eff840910c"
+  git_commit: "0feae4db315ddbec8e2d1296fe80e55bf2b27c47"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
