@@ -2,23 +2,25 @@ cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(testthat, warn.conflicts = FALSE, quietly = TRUE)
-library(rlang)
 
 ## VIASH START
 par <- list(
-  input = list.files("work/8a/76bbffc8075112714fba7fe14400f7", pattern = "*.h5ad$", full.names = TRUE),
+  input = list.files("work/51/edcecba8b7d4631d6232a63e4c5b36/", pattern = "*.h5ad$", full.names = TRUE),
   output = "output/pilot/joint_embedding/output.extract_scores.output.tsv",
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  #solution_meta = "output/pilot/joint_embedding/meta_solution.collect_solution_metadata.output.tsv"
   dataset_meta = "results/meta_datasets.tsv"
 )
 ## VIASH END
 
 cat("Reading solution meta files\n")
-dataset_meta <- readr::read_tsv(
-  par$dataset_meta
-)
+dataset_meta <- 
+  readr::read_tsv(par$dataset_meta) %>% 
+  transmute(
+    dataset_orig_id = dataset_id,
+    dataset_id = paste0(dataset_id, "_JE"),
+    dataset_subtask = mod2_modality
+  )
 
 cat("Reading metric meta files\n")
 metric_defaults <-
@@ -93,21 +95,26 @@ print(method_meta)
 colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_meta)))
 
 cat("Creating default scores for missing entries based on metrics meta\n")
-final_scores <- scores %>%
-  full_join(method_meta, by = "method_id") %>%
-  full_join(dataset_meta %>% select(dataset_orig_id = dataset_id, dataset_subtask = mod2_modality), by = "dataset_orig_id") %>%
-  full_join(metric_defaults, by = "metric_id") %>%
-  mutate(value_after_default = value %|% missing_value) %>%
-  select(dataset_id, method_id, metric_id, dataset_subtask, value, value_after_default)
+default_scores <- crossing(
+  method_id = method_meta$method_id, 
+  dataset_meta %>% select(dataset_id, dataset_orig_id),
+  metric_defaults %>% mutate(value = NA_real_, value_after_default = missing_value) %>% select(-missing_value)
+)
+
+scores1 <- bind_rows(
+  scores %>% mutate(value_after_default = value),
+  anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
+) %>% 
+  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
 
 cat("Calculating geometric mean\n")
-geomean <- final_scores %>%
+geomean <- scores1 %>%
   filter(metric_id %in% c("ari", "asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
   group_by(dataset_id, method_id, dataset_subtask) %>%
   summarise_if(is.numeric, dynutils::calculate_geometric_mean) %>%
   ungroup() %>%
   mutate(metric_id = "geometric_mean")
-final_scores <- bind_rows(final_scores %>% filter(metric_id != "geometric_mean"), geomean)
+final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)
 
 summary <-
   bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%

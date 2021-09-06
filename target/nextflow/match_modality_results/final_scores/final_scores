@@ -388,12 +388,14 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 
 ## VIASH END
 
+json_metric <- "match_probability_mod1"
+
 cat("Reading solution meta files\\n")
 dataset_meta <- 
   readr::read_tsv(par\$dataset_meta) %>% 
   transmute(
-    dataset_orig_id = dataset_id,
-    dataset_id = paste0(dataset_id, "_JE"),
+    dataset_orig_id = dataset_id, 
+    dataset_id = paste0(dataset_orig_id, "_MM"), 
     dataset_subtask = mod2_modality
   )
 
@@ -439,7 +441,7 @@ scores <- map_df(par\$input, function(inp) {
     value = metric_values
   ) %>%
   mutate(
-    dataset_orig_id = gsub("_JE\$", "", dataset_id)
+    dataset_orig_id = gsub("_MM\$", "", dataset_id)
   )
 
 expect_true(
@@ -476,20 +478,11 @@ default_scores <- crossing(
   metric_defaults %>% mutate(value = NA_real_, value_after_default = missing_value) %>% select(-missing_value)
 )
 
-scores1 <- bind_rows(
+final_scores <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
 ) %>% 
   left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
-
-cat("Calculating geometric mean\\n")
-geomean <- scores1 %>%
-  filter(metric_id %in% c("ari", "asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
-  group_by(dataset_id, method_id, dataset_subtask) %>%
-  summarise_if(is.numeric, dynutils::calculate_geometric_mean) %>%
-  ungroup() %>%
-  mutate(metric_id = "geometric_mean")
-final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)
 
 summary <-
   bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
@@ -503,19 +496,19 @@ summary <-
 # unique(scores\$metric_id)
 
 # summary %>%
-#   filter(metric_id == "mean_spearman_per_cell") %>%
+#   filter(metric_id == "match_probability_mod1") %>%
 #   select(-var) %>%
-#   spread(subtask, mean) %>%
+#   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
 # summary %>%
-#   filter(metric_id == "mse") %>%
+#   filter(metric_id == "match_probability_mod2") %>%
 #   select(-var) %>%
-#   spread(subtask, mean) %>%
+#   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
 jsontib <- summary %>%
-  filter(metric_id == "geometric_mean") %>%
+  filter(metric_id == json_metric) %>%
   select(-var) %>%
   spread(dataset_subtask, mean) %>%
   arrange(Overall)

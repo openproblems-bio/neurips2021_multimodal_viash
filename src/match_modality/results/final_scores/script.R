@@ -1,48 +1,32 @@
 cat("Loading dependencies\n")
-library(anndata, warn.conflicts = FALSE)
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
 library(testthat, warn.conflicts = FALSE, quietly = TRUE)
-library(rlang)
 
 ## VIASH START
 par <- list(
-  # input = "resources_test/predict_modality/test_resource.scores.h5ad",
-  input = list.files("work/16/d7c9c6d5776084c2b7cd6f1b4fe39b", pattern = "*.h5ad$", full.names = TRUE),
-  output = "output/pilot/predict_modality/output.extract_scores.output.tsv",
+  input = list.files("work/97/b44fbcc347e6fbd5080464ff8df4f4", pattern = "*.h5ad$", full.names = TRUE),
+  output = "output/pilot/match_modality/output.extract_scores.output.tsv",
   method_meta = NULL,
-  metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv"
+  metric_meta = list.files("src/match_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
+  #solution_meta = "output/pilot/match_modality/meta_solution.collect_solution_metadata.output.tsv"
+  dataset_meta = "results/meta_datasets.tsv"
 )
-par$input <- par$input[!duplicated(basename(par$input))]
-inp <- par$input[[1]]
 ## VIASH END
 
+json_metric <- "match_probability_mod1"
+
 cat("Reading solution meta files\n")
-solution_meta <- readr::read_tsv(
-  par$solution_meta,
-  col_types = cols(
-    dataset_id = "c",
-    modality = "c",
-    default_mse = "d",
-    default_mae = "d"
+dataset_meta <- 
+  readr::read_tsv(par$dataset_meta) %>% 
+  transmute(
+    dataset_orig_id = dataset_id, 
+    dataset_id = paste0(dataset_orig_id, "_MM"), 
+    dataset_subtask = mod2_modality
   )
-)
-dataset_meta <- solution_meta %>% transmute(
-  dataset_id, 
-  dataset_subtask = toupper(gsub(".*_", "", dataset_id))
-)
-dataset_specific_defaults <- solution_meta %>%
-  select(dataset_id, mse = default_mse, mae = default_mae) %>%
-  mutate(
-    rmse = sqrt(mse),
-    logp1_mse = log10(mse + 1),
-    logp1_rmse = log10(rmse + 1)
-  ) %>%
-  gather(metric_id, missing_value, -dataset_id)
 
 cat("Reading metric meta files\n")
-overall_metric_defaults <-
+metric_defaults <-
   map_df(
     par$metric_meta,
     read_tsv,
@@ -61,10 +45,6 @@ overall_metric_defaults <-
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
   )
-metric_defaults <- bind_rows(
-  dataset_specific_defaults,
-  crossing(overall_metric_defaults, dataset_id = dataset_meta$dataset_id) %>% anti_join(dataset_specific_defaults, by = "metric_id")
-)
 
 cat("Reading input h5ad files\n")
 scores <- map_df(par$input, function(inp) {
@@ -82,8 +62,13 @@ scores <- map_df(par$input, function(inp) {
   rm(ad)
   out
 }) %>%
-  rename(metric_id = metric_ids, value = metric_values) %>%
-  filter(!is.na(value))
+  rename(
+    metric_id = metric_ids, 
+    value = metric_values
+  ) %>%
+  mutate(
+    dataset_orig_id = gsub("_MM$", "", dataset_id)
+  )
 
 expect_true(
   all(unique(scores$metric_id) %in% metric_defaults$metric_id),
@@ -114,17 +99,16 @@ colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_
 
 cat("Creating default scores for missing entries based on metrics meta\n")
 default_scores <- crossing(
-  method_id = method_meta$method_id,
-  metric_defaults
-) %>% 
-  mutate(value = NA_real_) %>% 
-  rename(value_after_default = missing_value)
+  method_id = method_meta$method_id, 
+  dataset_meta %>% select(dataset_id, dataset_orig_id),
+  metric_defaults %>% mutate(value = NA_real_, value_after_default = missing_value) %>% select(-missing_value)
+)
 
 final_scores <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
-) %>%
-  left_join(dataset_meta, by = "dataset_id")
+) %>% 
+  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
 
 summary <-
   bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
@@ -138,19 +122,19 @@ summary <-
 # unique(scores$metric_id)
 
 # summary %>%
-#   filter(metric_id == "mean_spearman_per_cell") %>%
+#   filter(metric_id == "match_probability_mod1") %>%
 #   select(-var) %>%
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
 # summary %>%
-#   filter(metric_id == "mse") %>%
+#   filter(metric_id == "match_probability_mod2") %>%
 #   select(-var) %>%
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
 jsontib <- summary %>%
-  filter(metric_id == "mse") %>%
+  filter(metric_id == json_metric) %>%
   select(-var) %>%
   spread(dataset_subtask, mean) %>%
   arrange(Overall)
