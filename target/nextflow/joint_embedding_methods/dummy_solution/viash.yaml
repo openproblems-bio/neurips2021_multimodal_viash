@@ -301,25 +301,18 @@ functionality:
       
       cat("Reading h5ad files\\n")
       ad_sol <- anndata::read_h5ad(par\$input_solution)
+      obs <- ad_sol\$obs
       
-      ct <- ad_sol\$obs\$cell_type
-      pt1 <- ad_sol\$obs\$pseudotime_order_GEX
-      pt2 <- if (!is.null(ad_sol\$obs\$pseudotime_order_ADT)) ad_sol\$obs\$pseudotime_order_ADT else ad_sol\$obs\$pseudotime_order_ATAC
-      
-      mat <- cbind(
-        sapply(seq_len(100), function(i) {
-          match(ct, sample(unique(ct)))
-        }),
-        sapply(seq_len(20), function(i) {
-          ifelse(is.finite(pt1), pt1, runif(length(pt1)))
-        }),
-        sapply(seq_len(20), function(i) {
-          ifelse(is.finite(pt2), pt2, runif(length(pt2)))
-        })
+      ct_mat <- sapply(unique(obs\$cell_type), function(ct) {
+        (obs\$cell_type == ct) + 0
+      })
+      obs_mat <- cbind(
+        ct_mat,
+        ifelse(is.na(obs\$pseudotime_order_ATAC), runif(nrow(obs)), obs\$pseudotime_order_ATAC),
+        ifelse(is.na(obs\$pseudotime_order_GEX), runif(nrow(obs)), obs\$pseudotime_order_GEX)
       )
+      dr <- prcomp(obs_mat)\$x[,1:3]
       
-      cat("Performing DR\\n")
-      dr <- dyndimred::dimred_knn_fr(mat, n_neighbors = round(mean(table(ct))))
       rownames(dr) <- rownames(ad_sol)
       colnames(dr) <- paste0("comp_", seq_len(ncol(dr)))
       
@@ -758,5 +751,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_solution"
   executable: "target/nextflow/joint_embedding_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.3"
-  git_commit: "0feae4db315ddbec8e2d1296fe80e55bf2b27c47"
+  git_commit: "7eda3b8e813e9de74718759e26c89277f1931891"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
