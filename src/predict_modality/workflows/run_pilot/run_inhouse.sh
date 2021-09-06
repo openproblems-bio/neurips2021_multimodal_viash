@@ -12,6 +12,16 @@ cd "$REPO_ROOT"
 
 export NXF_VER=21.04.1
 
+
+# bin/nextflow \
+#   run . \
+#   -main-script src/predict_modality/workflows/run_pilot/main.nf \
+#   -entry pilot_wf \
+#   --publishDir output/pilot_inhouse/predict_modality/ \
+#   -resume \
+#   -c src/common/workflows/resource_labels.config \
+#   --datasets 'output/datasets/predict_modality/**.h5ad'
+
 bin/nextflow \
   run . \
   -main-script src/predict_modality/workflows/run_pilot/main.nf \
