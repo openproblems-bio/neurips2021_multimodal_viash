@@ -306,15 +306,32 @@ functionality:
       ct_mat <- sapply(unique(obs\$cell_type), function(ct) {
         (obs\$cell_type == ct) + 0
       })
+      
+      pt_name <- if ("pseudotime_order_ATAC" %in% colnames(obs)) "pseudotime_order_ATAC" else "pseudotime_order_ADT"
       obs_mat <- cbind(
         ct_mat,
-        ifelse(is.na(obs\$pseudotime_order_ATAC), runif(nrow(obs)), obs\$pseudotime_order_ATAC),
+        ifelse(is.na(obs[[pt_name]]), runif(nrow(obs)), obs[[pt_name]]),
         ifelse(is.na(obs\$pseudotime_order_GEX), runif(nrow(obs)), obs\$pseudotime_order_GEX)
       )
-      dr <- prcomp(obs_mat)\$x[,1:3]
+      dr <- uwot::umap(obs_mat, n_components = 10)
       
       rownames(dr) <- rownames(ad_sol)
       colnames(dr) <- paste0("comp_", seq_len(ncol(dr)))
+      
+      
+      # patchwork::wrap_plots(
+      #   map(colnames(obs), function(cn) {
+      #     vec <- obs[[cn]]
+      #     g <- 
+      #       qplot(dr[,1], dr[,2], colour = vec) + 
+      #       theme_bw() + 
+      #       labs(colour = cn)
+      #     if (is.numeric(vec)) {
+      #       g <- g + viridis::scale_colour_viridis()
+      #     }
+      #     g
+      #   })
+      # )
       
       out <- anndata::AnnData(
         X = dr,
@@ -751,5 +768,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/dummy_solution"
   executable: "target/nextflow/joint_embedding_methods/dummy_solution/dummy_solution"
   viash_version: "0.5.3"
-  git_commit: "7eda3b8e813e9de74718759e26c89277f1931891"
+  git_commit: "a27e2cc5bc2a7057f75326037a5f7be1f9b392ca"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

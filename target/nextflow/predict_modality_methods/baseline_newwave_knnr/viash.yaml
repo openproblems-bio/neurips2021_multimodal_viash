@@ -1008,5 +1008,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_newwave_knnr"
   executable: "target/nextflow/predict_modality_methods/baseline_newwave_knnr/baseline_newwave_knnr"
   viash_version: "0.5.3"
-  git_commit: "7eda3b8e813e9de74718759e26c89277f1931891"
+  git_commit: "a27e2cc5bc2a7057f75326037a5f7be1f9b392ca"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
