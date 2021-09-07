@@ -10,9 +10,12 @@ workflow {
   Channel.fromPath(params.datasets)
     | map { [ it.getParent().baseName, it ] }
     | groupTuple
-    | map { id, datas -> 
+    | flatMap { id, datas -> 
       def fileMap = datas.collectEntries { [ (it.name.split(/\./)[-2]), it ]}
-      [ id, [ input_mod1: fileMap.output_rna, input_mod2: fileMap.output_mod2 ], params ]
+      [
+        [ id + "_rna", [ input_mod1: fileMap.output_rna, input_mod2: fileMap.output_mod2 ], params ],
+        [ id + "_mod2", [ input_mod1: fileMap.output_mod2, input_mod2: fileMap.output_rna ], params ] 
+      ]
     }
     | censor_dataset
 }
