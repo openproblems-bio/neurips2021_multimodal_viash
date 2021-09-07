@@ -6,12 +6,13 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 par <- list(
   input = list.files("work/51/edcecba8b7d4631d6232a63e4c5b36/", pattern = "*.h5ad$", full.names = TRUE),
-  output = "output/pilot/joint_embedding/output.extract_scores.output.tsv",
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   dataset_meta = "results/meta_datasets.tsv"
 )
 ## VIASH END
+
+json_metrics <- c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")
 
 cat("Reading solution meta files\n")
 dataset_meta <- 
@@ -109,7 +110,7 @@ scores1 <- bind_rows(
 
 cat("Calculating geometric mean\n")
 geomean <- scores1 %>%
-  filter(metric_id %in% c("ari", "asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
+  filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
   group_by(dataset_id, method_id, dataset_subtask) %>%
   summarise_if(is.numeric, dynutils::calculate_geometric_mean) %>%
   ungroup() %>%
@@ -117,7 +118,8 @@ geomean <- scores1 %>%
 final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)
 
 summary <-
-  bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
+  final_scores %>%
+  # bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
   group_by(method_id, metric_id, dataset_subtask) %>%
   summarise(
     mean = mean(value_after_default),
@@ -139,13 +141,21 @@ summary <-
 #   spread(subtask, mean) %>%
 #   arrange(Overall)
 
-jsontib <- summary %>%
-  filter(metric_id == "geometric_mean") %>%
-  select(-var) %>%
-  spread(dataset_subtask, mean) %>%
-  arrange(Overall)
+json_out <- summary %>%
+  filter(metric_id %in% json_metrics) %>%
+  mutate(comb_id = paste0(metric_id, "_", dataset_subtask)) %>%
+  select(-var, -metric_id, -dataset_subtask) %>%
+  spread(comb_id, mean) %>%
+  arrange(asw_label_ADT) %>%
+  dynutils::tibble_as_list()
+
+# if there is only one method, output the json as {} instead of [{}].
+if (length(json_out) == 1) {
+  json_out <- json_out[[1]]
+  json_out <- json_out[names(json_out) != "method_id"]
+}
 
 cat("Writing output\n")
 write_tsv(final_scores, par$output_scores)
 write_tsv(summary, par$output_summary)
-jsonlite::write_json(dynutils::tibble_as_list(jsontib), par$output_json)
+jsonlite::write_json(json_out, par$output_json)

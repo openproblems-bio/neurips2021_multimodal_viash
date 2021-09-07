@@ -6,7 +6,6 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 par <- list(
   input = list.files("work/97/b44fbcc347e6fbd5080464ff8df4f4", pattern = "*.h5ad$", full.names = TRUE),
-  output = "output/pilot/match_modality/output.extract_scores.output.tsv",
   method_meta = NULL,
   metric_meta = list.files("src/match_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   #solution_meta = "output/pilot/match_modality/meta_solution.collect_solution_metadata.output.tsv"
@@ -133,13 +132,20 @@ summary <-
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
-jsontib <- summary %>%
+json_out <- summary %>%
   filter(metric_id == json_metric) %>%
-  select(-var) %>%
+  select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall)
+  arrange(Overall) %>%
+  dynutils::tibble_as_list()
+
+# if there is only one method, output the json as {} instead of [{}].
+if (length(json_out) == 1) {
+  json_out <- json_out[[1]]
+  json_out <- json_out[names(json_out) != "method_id"]
+}
 
 cat("Writing output\n")
 write_tsv(final_scores, par$output_scores)
 write_tsv(summary, par$output_summary)
-jsonlite::write_json(dynutils::tibble_as_list(jsontib), par$output_json)
+jsonlite::write_json(json_out, par$output_json)
