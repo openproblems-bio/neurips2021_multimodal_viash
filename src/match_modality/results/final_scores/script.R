@@ -17,7 +17,7 @@ par <- list(
 )
 ## VIASH END
 
-json_metric <- "match_probability_mod1"
+json_metric <- "match_probability"
 
 cat("Reading solution meta files\n")
 dataset_meta <- 
@@ -125,13 +125,7 @@ summary <-
 # unique(scores$metric_id)
 
 # summary %>%
-#   filter(metric_id == "match_probability_mod1") %>%
-#   select(-var) %>%
-#   spread(dataset_subtask, mean) %>%
-#   arrange(Overall)
-
-# summary %>%
-#   filter(metric_id == "match_probability_mod2") %>%
+#   filter(metric_id == "match_probability") %>%
 #   select(-var) %>%
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
