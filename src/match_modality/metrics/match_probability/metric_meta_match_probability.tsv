@@ -1,3 +1,2 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
-match_probability_mod1	0	1	true
-match_probability_mod2	0	1	true
+match_probability	0	1	true

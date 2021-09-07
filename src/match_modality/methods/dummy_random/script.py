@@ -1,6 +1,7 @@
 import anndata as ad
 import numpy as np
 import scipy.sparse
+from sklearn.preprocessing import normalize
 
 # VIASH START
 par = {
@@ -29,9 +30,12 @@ pairing_matrix = scipy.sparse.csr_matrix(
     shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
 )
 
+# row normalise
+prob_matrix = normalize(pairing_matrix, norm="l1")
+
 # Write out prediction
 prediction = ad.AnnData(
-    X=pairing_matrix,
+    X=prob_matrix,
     uns={
         "method_id": "dummy_random",
         "dataset_id": input_test_mod1.uns["dataset_id"]

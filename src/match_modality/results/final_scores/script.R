@@ -4,16 +4,20 @@ library(tidyverse)
 library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
+out_path <- "output/pilot_inhouse/match_modality/output.final_scores.output_"
 par <- list(
   input = list.files("work/97/b44fbcc347e6fbd5080464ff8df4f4", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/match_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   #solution_meta = "output/pilot/match_modality/meta_solution.collect_solution_metadata.output.tsv"
-  dataset_meta = "results/meta_datasets.tsv"
+  dataset_meta = "results/meta_datasets.tsv",
+  output_scores = paste0(out_path, "scores.tsv"),
+  output_summary = paste0(out_path, "summary.tsv"),
+  output_json = paste0(out_path, "json.json")
 )
 ## VIASH END
 
-json_metric <- "match_probability_mod1"
+json_metric <- "match_probability"
 
 cat("Reading solution meta files\n")
 dataset_meta <- 
@@ -121,13 +125,7 @@ summary <-
 # unique(scores$metric_id)
 
 # summary %>%
-#   filter(metric_id == "match_probability_mod1") %>%
-#   select(-var) %>%
-#   spread(dataset_subtask, mean) %>%
-#   arrange(Overall)
-
-# summary %>%
-#   filter(metric_id == "match_probability_mod2") %>%
+#   filter(metric_id == "match_probability") %>%
 #   select(-var) %>%
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
@@ -146,6 +144,8 @@ if (length(json_out) == 1) {
 }
 
 cat("Writing output\n")
+final_scores <- final_scores %>% map(as.vector) %>% as_tibble
+summary <- summary %>% map(as.vector) %>% as_tibble
 write_tsv(final_scores, par$output_scores)
 write_tsv(summary, par$output_summary)
 jsonlite::write_json(json_out, par$output_json)

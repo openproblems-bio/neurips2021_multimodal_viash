@@ -432,6 +432,7 @@ functionality:
       import scipy.sparse
       import numpy as np
       
+      from sklearn.preprocessing import normalize
       from sklearn.decomposition import TruncatedSVD
       from sklearn.neighbors import NearestNeighbors
       
@@ -525,9 +526,12 @@ functionality:
           shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
       )
       
+      # row normalise
+      prob_matrix = normalize(pairing_matrix, norm="l1")
+      
       print("Write prediction output")
       prediction = ad.AnnData(
-          X=pairing_matrix,
+          X=prob_matrix,
           uns={
               "dataset_id": input_train_mod1.uns["dataset_id"],
               "method_id": "baseline_procrustes_knn"
@@ -1025,5 +1029,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_procrustes_knn"
   executable: "target/nextflow/match_modality_methods/baseline_procrustes_knn/baseline_procrustes_knn"
   viash_version: "0.5.3"
-  git_commit: "d972059f97f016ff888e2d884bd2ec496ee74322"
+  git_commit: "4be8f5598ae71a7150a25b91a3acd786b6fc0dbe"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

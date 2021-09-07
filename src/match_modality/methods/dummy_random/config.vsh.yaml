@@ -55,6 +55,6 @@ platforms:
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, numpy ]
+        pip: [ anndata, numpy, sklearn ]
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

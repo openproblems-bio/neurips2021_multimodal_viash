@@ -309,6 +309,10 @@ functionality:
       ix <- sample.int(nrow(input_test_sol) * ncol(input_test_sol), nrow(input_test_sol) * 10)
       input_test_sol\$X[ix] <- runif(length(ix))
       
+      # normalise to make rows sum to 1
+      rs <- Matrix::rowSums(input_test_sol\$X)
+      input_test_sol\$X@x <- input_test_sol\$X@x / rs[input_test_sol\$X@i + 1]
+      
       input_test_sol\$uns[["method_id"]] <- meta\$functionality_name
       
       cat("Writing predictions to file\\n")
@@ -738,5 +742,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_semisolution"
   executable: "target/nextflow/match_modality_methods/dummy_semisolution/dummy_semisolution"
   viash_version: "0.5.3"
-  git_commit: "d972059f97f016ff888e2d884bd2ec496ee74322"
+  git_commit: "4be8f5598ae71a7150a25b91a3acd786b6fc0dbe"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

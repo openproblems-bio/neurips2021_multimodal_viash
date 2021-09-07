@@ -532,8 +532,10 @@ if (length(json_out) == 1) {
 }
 
 cat("Writing output\\n")
-write_tsv(final_scores, par\$output_scores)
-write_tsv(summary, par\$output_summary)
+final_scores <- final_scores %>% map(as.vector) %>% as_tibble
+summary <- summary %>% map(as.vector) %>% as_tibble
+readr::write_tsv(final_scores, par\$output_scores)
+readr::write_tsv(summary, par\$output_summary)
 jsonlite::write_json(json_out, par\$output_json)
 VIASHMAIN
 PATH="$VIASH_RESOURCES_DIR:\$PATH"

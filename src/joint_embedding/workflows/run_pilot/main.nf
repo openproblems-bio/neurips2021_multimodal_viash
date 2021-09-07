@@ -12,7 +12,6 @@ include  { baseline_totalvi }           from "$targetDir/${task}_methods/baselin
 include  { baseline_newwave }           from "$targetDir/${task}_methods/baseline_newwave/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
-include  { dummy_solution }             from "$targetDir/${task}_methods/dummy_solution/main.nf"               params(params)
 include  { rfoob }                      from "$targetDir/${task}_metrics/rfoob/main.nf"                        params(params)
 include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
@@ -81,13 +80,8 @@ workflow pilot_wf {
     | dummy_zeros
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d2 = solution
-    | map { id, input -> [ id, input, params ] }  
-    | dummy_solution
-    | join(solution)
-    | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, b5, d0, d1, d2)
+  def predictions = b0.mix(b1, b2, b3, b4, b5, d0, d1)
 
   // create datasets meta
   def datasetsMeta = 

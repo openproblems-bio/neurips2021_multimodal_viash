@@ -4,11 +4,15 @@ library(tidyverse)
 library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
+out_path <- "output/pilot_inhouse/joint_embedding/output.final_scores.output_"
 par <- list(
   input = list.files("work/51/edcecba8b7d4631d6232a63e4c5b36/", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  dataset_meta = "results/meta_datasets.tsv"
+  dataset_meta = "results/meta_datasets.tsv",
+  output_scores = paste0(out_path, "scores.tsv"),
+  output_summary = paste0(out_path, "summary.tsv"),
+  output_json = paste0(out_path, "json.json")
 )
 ## VIASH END
 
@@ -156,6 +160,8 @@ if (length(json_out) == 1) {
 }
 
 cat("Writing output\n")
-write_tsv(final_scores, par$output_scores)
-write_tsv(summary, par$output_summary)
+final_scores <- final_scores %>% map(as.vector) %>% as_tibble
+summary <- summary %>% map(as.vector) %>% as_tibble
+readr::write_tsv(final_scores, par$output_scores)
+readr::write_tsv(summary, par$output_summary)
 jsonlite::write_json(json_out, par$output_json)

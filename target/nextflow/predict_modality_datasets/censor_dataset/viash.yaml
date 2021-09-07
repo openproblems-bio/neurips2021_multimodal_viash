@@ -80,22 +80,6 @@ functionality:
     direction: "Input"
     multiple: false
     multiple_sep: ":"
-  - type: "integer"
-    name: "--max_mod1_columns"
-    alternatives: []
-    description: "The maximum number of columns in mod1."
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
-  - type: "integer"
-    name: "--max_mod2_columns"
-    alternatives: []
-    description: "The maximum number of columns in mod2."
-    required: false
-    direction: "Input"
-    multiple: false
-    multiple_sep: ":"
   resources:
   - type: "bash_script"
     text: |
@@ -296,18 +280,6 @@ functionality:
         echo "        The seed for determining the train/test split."
         echo ""
       
-      
-        echo "   --max_mod1_columns"
-        echo "        type: integer"
-        echo "        The maximum number of columns in mod1."
-        echo ""
-      
-      
-        echo "   --max_mod2_columns"
-        echo "        type: integer"
-        echo "        The maximum number of columns in mod2."
-        echo ""
-      
       }
       
       # initialise array
@@ -395,22 +367,6 @@ functionality:
                   VIASH_PAR_SEED=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
-              --max_mod1_columns)
-                  VIASH_PAR_MAX_MOD1_COLUMNS="$2"
-                  shift 2
-                  ;;
-              --max_mod1_columns=*)
-                  VIASH_PAR_MAX_MOD1_COLUMNS=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
-              --max_mod2_columns)
-                  VIASH_PAR_MAX_MOD2_COLUMNS="$2"
-                  shift 2
-                  ;;
-              --max_mod2_columns=*)
-                  VIASH_PAR_MAX_MOD2_COLUMNS=$(ViashRemoveFlags "$1")
-                  shift 1
-                  ;;
               *)  # positional arg or unknown option
                   # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
                   VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -477,9 +433,7 @@ functionality:
         "output_train_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_TRAIN_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_TRAIN_MOD2'"; else echo NULL; fi ),
         "output_test_mod1" = $( if [ ! -z ${VIASH_PAR_OUTPUT_TEST_MOD1+x} ]; then echo "'$VIASH_PAR_OUTPUT_TEST_MOD1'"; else echo NULL; fi ),
         "output_test_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_TEST_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_TEST_MOD2'"; else echo NULL; fi ),
-        "seed" = $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "as.integer($VIASH_PAR_SEED)"; else echo NULL; fi ),
-        "max_mod1_columns" = $( if [ ! -z ${VIASH_PAR_MAX_MOD1_COLUMNS+x} ]; then echo "as.integer($VIASH_PAR_MAX_MOD1_COLUMNS)"; else echo NULL; fi ),
-        "max_mod2_columns" = $( if [ ! -z ${VIASH_PAR_MAX_MOD2_COLUMNS+x} ]; then echo "as.integer($VIASH_PAR_MAX_MOD2_COLUMNS)"; else echo NULL; fi )
+        "seed" = $( if [ ! -z ${VIASH_PAR_SEED+x} ]; then echo "as.integer($VIASH_PAR_SEED)"; else echo NULL; fi )
       )
       
       # get meta parameters
@@ -494,11 +448,11 @@ functionality:
       ## VIASH END
       
       cat("Reading input data\\n")
-      ad1_raw <- anndata::read_h5ad(par\$input_mod1)
-      ad2_raw <- anndata::read_h5ad(par\$input_mod2)
-      ad1_mod <- unique(ad1_raw\$var[["feature_types"]])
-      ad2_mod <- unique(ad2_raw\$var[["feature_types"]])
-      new_dataset_id <- paste0(ad1_raw\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
+      input_mod1 <- anndata::read_h5ad(par\$input_mod1)
+      input_mod2 <- anndata::read_h5ad(par\$input_mod2)
+      ad1_mod <- unique(input_mod1\$var[["feature_types"]])
+      ad2_mod <- unique(input_mod2\$var[["feature_types"]])
+      new_dataset_id <- paste0(input_mod1\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
       common_uns <- list(dataset_id = new_dataset_id)
       
       process_ad <- function(ad) {
@@ -521,71 +475,60 @@ functionality:
           obj <- Seurat::NormalizeData(obj, normalization.method = "CLR", margin = 2)
           ad\$X <- as(obj[["ADT"]]@data, "CsparseMatrix")
         } else if (mod == "ATAC") {
-          cat("Binarizing ATAC data\\n")
+          cat("Sampling and binarizing ATAC data\\n")
+          poss_ix <- which(colSums(ad\$X) > 0)
+          ad <- ad[, sort(sample(poss_ix, 10000))]\$copy()
           ad\$X@x <- (ad\$X@x > 0) + 0
         }
         ad
       }
       
-      ad1_raw <- process_ad(ad1_raw)
-      ad2_raw <- process_ad(ad2_raw)
-      
-      if (!is.null(par\$max_mod1_columns) && par\$max_mod1_columns < ncol(ad1_raw)) {
-        cat("Sampling mod1 columns\\n")
-        ad1_var <- proxyC::colSds(ad1_raw\$X)^2
-        ad1_ix <- sample.int(ncol(ad1_raw), par\$max_mod1_columns, prob = ad1_var)
-        ad1_raw <- ad1_raw[, ad1_ix]
-      }
-      if (!is.null(par\$max_mod2_columns) && par\$max_mod2_columns < ncol(ad2_raw)) {
-        cat("Sampling mod2 columns\\n")
-        ad2_var <- proxyC::colSds(ad2_raw\$X)^2
-        ad2_ix <- sample.int(ncol(ad2_raw), par\$max_mod2_columns, prob = ad2_var)
-        ad2_raw <- ad2_raw[, ad2_ix]
-      }
+      input_mod1 <- process_ad(input_mod1)
+      input_mod2 <- process_ad(input_mod2)
       
       cat("Creating train objects\\n")
-      ad1_var <- ad1_raw\$var %>% select(one_of("gene_ids"), feature_types)
-      ad2_var <- ad2_raw\$var %>% select(one_of("gene_ids"), feature_types)
-      is_train <- ad1_raw\$obs[["is_train"]]
-      train_obs <- ad1_raw\$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
-      test_obs <- ad1_raw\$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
+      ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
+      ad2_var <- input_mod2\$var %>% select(one_of("gene_ids"), feature_types)
+      is_train <- input_mod1\$obs[["is_train"]]
+      train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
+      test_obs <- input_mod1\$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
       
-      out_train_mod1 <- anndata::AnnData(
-        X = ad1_raw\$X[is_train, , drop = FALSE],
-        layers = list(counts = ad1_raw\$layers[["counts"]][is_train, , drop = FALSE]),
+      output_train_mod1 <- anndata::AnnData(
+        X = input_mod1\$X[is_train, , drop = FALSE],
+        layers = list(counts = input_mod1\$layers[["counts"]][is_train, , drop = FALSE]),
         obs = train_obs,
         var = ad1_var,
         uns = common_uns
       )
-      out_train_mod2 <- anndata::AnnData(
-        X = ad2_raw\$X[is_train, , drop = FALSE],
-        layers = list(counts = ad2_raw\$layers[["counts"]][is_train, , drop = FALSE]),
+      output_train_mod2 <- anndata::AnnData(
+        X = input_mod2\$X[is_train, , drop = FALSE],
+        layers = list(counts = input_mod2\$layers[["counts"]][is_train, , drop = FALSE]),
         obs = train_obs,
         var = ad2_var,
         uns = common_uns
       )
       
       cat("Create test objects\\n")
-      out_test_mod1 <- anndata::AnnData(
-        X = ad1_raw\$X[!is_train, , drop = FALSE],
-        layers = list(counts = ad1_raw\$layers[["counts"]][!is_train, , drop = FALSE]),
+      output_test_mod1 <- anndata::AnnData(
+        X = input_mod1\$X[!is_train, , drop = FALSE],
+        layers = list(counts = input_mod1\$layers[["counts"]][!is_train, , drop = FALSE]),
         obs = test_obs,
         var = ad1_var,
         uns = common_uns
       )
-      out_test_mod2 <- anndata::AnnData(
-        X = ad2_raw\$X[!is_train, , drop = FALSE],
-        layers = list(counts = ad2_raw\$layers[["counts"]][!is_train, , drop = FALSE]),
+      output_test_mod2 <- anndata::AnnData(
+        X = input_mod2\$X[!is_train, , drop = FALSE],
+        layers = list(counts = input_mod2\$layers[["counts"]][!is_train, , drop = FALSE]),
         obs = test_obs,
         var = ad2_var,
         uns = common_uns
       )
       
       cat("Saving output files as h5ad\\n")
-      zzz <- out_train_mod1\$write_h5ad(par\$output_train_mod1, compression = "gzip")
-      zzz <- out_train_mod2\$write_h5ad(par\$output_train_mod2, compression = "gzip")
-      zzz <- out_test_mod1\$write_h5ad(par\$output_test_mod1, compression = "gzip")
-      zzz <- out_test_mod2\$write_h5ad(par\$output_test_mod2, compression = "gzip")
+      zzz <- output_train_mod1\$write_h5ad(par\$output_train_mod1, compression = "gzip")
+      zzz <- output_train_mod2\$write_h5ad(par\$output_train_mod2, compression = "gzip")
+      zzz <- output_test_mod1\$write_h5ad(par\$output_test_mod1, compression = "gzip")
+      zzz <- output_test_mod2\$write_h5ad(par\$output_test_mod2, compression = "gzip")
       VIASHMAIN
       PATH="$VIASH_RESOURCES_DIR:\$PATH"
       
@@ -610,8 +553,6 @@ functionality:
           censor_dataset__output_test_mod1 = "viash_no_value"
           censor_dataset__output_test_mod2 = "viash_no_value"
           censor_dataset__seed = "no_default_value_configured"
-          censor_dataset__max_mod1_columns = "no_default_value_configured"
-          censor_dataset__max_mod2_columns = "no_default_value_configured"
           id = ""
           testScript = "test.R"
           testResources = [ "test.R", "../../../../resources_test" ]
@@ -709,28 +650,6 @@ functionality:
                 multiple_sep = ":"
                 value = "${params.censor_dataset__seed}"
                 description = "The seed for determining the train/test split."
-              }
-              max_mod1_columns {
-                name = "max_mod1_columns"
-                otype = "--"
-                required = false
-                type = "integer"
-                direction = "Input"
-                multiple = false
-                multiple_sep = ":"
-                value = "${params.censor_dataset__max_mod1_columns}"
-                description = "The maximum number of columns in mod1."
-              }
-              max_mod2_columns {
-                name = "max_mod2_columns"
-                otype = "--"
-                required = false
-                type = "integer"
-                direction = "Input"
-                multiple = false
-                multiple_sep = ":"
-                value = "${params.censor_dataset__max_mod2_columns}"
-                description = "The maximum number of columns in mod2."
               }
             }
           }
@@ -1160,5 +1079,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "d972059f97f016ff888e2d884bd2ec496ee74322"
+  git_commit: "4be8f5598ae71a7150a25b91a3acd786b6fc0dbe"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

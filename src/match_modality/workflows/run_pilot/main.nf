@@ -15,7 +15,6 @@ include  { dummy_constant }              from "$targetDir/${task}_methods/dummy_
 include  { dummy_random }                from "$targetDir/${task}_methods/dummy_random/main.nf"                params(params)
 include  { dummy_solution }              from "$targetDir/${task}_methods/dummy_solution/main.nf"              params(params)
 include  { dummy_semisolution }          from "$targetDir/${task}_methods/dummy_semisolution/main.nf"          params(params)
-include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                 params(params)
 include  { aupr }                        from "$targetDir/${task}_metrics/aupr/main.nf"                        params(params)
 include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
@@ -82,22 +81,18 @@ workflow pilot_wf {
     | dummy_random
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_random", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d2 = inputs 
-    | dummy_zeros
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d3 = solution
+  def d2 = solution
     | map { id, input -> [ id, input, params ] } 
     | dummy_solution
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
-  def d4 = solution
+  def d3 = solution
     | map { id, input -> [ id, input, params ] } 
     | dummy_semisolution
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_semisolution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, b5, b6, d0, d1, d2, d3, d4)
+  def predictions = b0.mix(b1, b2, b3, b4, b5, b6, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def datasetsMeta = 

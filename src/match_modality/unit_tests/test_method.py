@@ -1,6 +1,7 @@
 from os import path
 import subprocess
 import anndata as ad
+import numpy as np
 from scipy.sparse import issparse
 
 ## VIASH START
@@ -51,5 +52,6 @@ assert issparse(ad_pred.X)
 assert ad_pred.X.nonzero()[0].size <= 1000 * ad_sol.n_obs
 assert ad_pred.n_obs == ad_sol.n_obs
 assert ad_pred.n_vars == ad_sol.n_vars
+assert np.isclose(ad_pred.X.sum(axis=1), 1, atol=1e-10).all(), "All rows should sum to 1."
 
 print("> Test succeeded!")
