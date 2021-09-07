@@ -9,14 +9,13 @@ library(rlang)
 par <- list(
   # input = "resources_test/predict_modality/test_resource.scores.h5ad",
   input = list.files("work/16/d7c9c6d5776084c2b7cd6f1b4fe39b", pattern = "*.h5ad$", full.names = TRUE),
-  output = "output/pilot/predict_modality/output.extract_scores.output.tsv",
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv"
 )
-par$input <- par$input[!duplicated(basename(par$input))]
-inp <- par$input[[1]]
 ## VIASH END
+
+json_metric <- "rmse"
 
 cat("Reading solution meta files\n")
 solution_meta <- readr::read_tsv(
@@ -149,13 +148,20 @@ summary <-
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
-jsontib <- summary %>%
-  filter(metric_id == "mse") %>%
-  select(-var) %>%
+json_out <- summary %>%
+  filter(metric_id == json_metric) %>%
+  select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall)
+  arrange(Overall) %>%
+  dynutils::tibble_as_list()
+
+# if there is only one method, output the json as {} instead of [{}].
+if (length(json_out) == 1) {
+  json_out <- json_out[[1]]
+  json_out <- json_out[names(json_out) != "method_id"]
+}
 
 cat("Writing output\n")
 write_tsv(final_scores, par$output_scores)
 write_tsv(summary, par$output_summary)
-jsonlite::write_json(dynutils::tibble_as_list(jsontib), par$output_json)
+jsonlite::write_json(json_out, par$output_json)

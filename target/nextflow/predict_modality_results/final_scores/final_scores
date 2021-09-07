@@ -390,6 +390,8 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 
 ## VIASH END
 
+json_metric <- "rmse"
+
 cat("Reading solution meta files\\n")
 solution_meta <- readr::read_tsv(
   par\$solution_meta,
@@ -521,16 +523,23 @@ summary <-
 #   spread(dataset_subtask, mean) %>%
 #   arrange(Overall)
 
-jsontib <- summary %>%
-  filter(metric_id == "mse") %>%
-  select(-var) %>%
+json_out <- summary %>%
+  filter(metric_id == json_metric) %>%
+  select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall)
+  arrange(Overall) %>%
+  dynutils::tibble_as_list()
+
+# if there is only one method, output the json as {} instead of [{}].
+if (length(json_out) == 1) {
+  json_out <- json_out[[1]]
+  json_out <- json_out[names(json_out) != "method_id"]
+}
 
 cat("Writing output\\n")
 write_tsv(final_scores, par\$output_scores)
 write_tsv(summary, par\$output_summary)
-jsonlite::write_json(dynutils::tibble_as_list(jsontib), par\$output_json)
+jsonlite::write_json(json_out, par\$output_json)
 VIASHMAIN
 PATH="$VIASH_RESOURCES_DIR:\$PATH"
 
