@@ -4,6 +4,7 @@ import scipy.spatial
 import scipy.sparse
 import numpy as np
 
+from sklearn.preprocessing import normalize
 from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import NearestNeighbors
 
@@ -93,9 +94,12 @@ pairing_matrix = scipy.sparse.csr_matrix(
     shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
 )
 
+# row normalise
+prob_matrix = normalize(pairing_matrix, norm="l1")
+
 print("Write prediction output")
 prediction = ad.AnnData(
-    X=pairing_matrix,
+    X=prob_matrix,
     uns={
         "dataset_id": input_train_mod1.uns["dataset_id"],
         "method_id": "baseline_procrustes_knn"

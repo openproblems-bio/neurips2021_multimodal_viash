@@ -177,6 +177,10 @@ knn_mat <- Matrix::sparseMatrix(
   dims = list(nrow(input_test_mod1), nrow(input_test_mod2))
 )
 
+# normalise to make rows sum to 1
+rs <- Matrix::rowSums(knn_mat)
+knn_mat@x <- knn_mat@x / rs[knn_mat@i + 1]
+
 cat("Creating output anndata\n")
 out <- anndata::AnnData(
   X = as(knn_mat, "CsparseMatrix"),
