@@ -9,7 +9,7 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 # input_path <- "resources_test/common/test_resource."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase2/openproblems_bmmc_multiome_phase2.manual_formatting."
-input_path <- "output/datasets/common/openproblems_bmmc_multiome_iid/openproblems_bmmc_multiome_iid.manual_formatting."
+input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
 output_path <- ""
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset."
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase2/openproblems_bmmc_multiome_phase2.censor_dataset."
