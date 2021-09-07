@@ -34,7 +34,9 @@ correct_format <- tryCatch({
   assert_that(
     is(ad_pred$X, "sparseMatrix"),
     ad_pred$n_obs == ad_sol$n_obs,
-    ad_pred$n_vars == ad_sol$n_vars
+    ad_pred$n_vars == ad_sol$n_vars,
+    length(ad_pred$X@x) <= 1000 * ad_sol$n_obs,
+    all.equal(Matrix::rowSums(ad_pred$X), rep(1, ad_pred$n_obs), check.attributes = FALSE)
   )
 
   1
