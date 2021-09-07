@@ -6,12 +6,17 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 library(rlang)
 
 ## VIASH START
+out_path <- "output/pilot_inhouse/predict_modality/output.final_scores.output_"
 par <- list(
   # input = "resources_test/predict_modality/test_resource.scores.h5ad",
   input = list.files("work/16/d7c9c6d5776084c2b7cd6f1b4fe39b", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv"
+  solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv",
+  output_scores = paste0(out_path, "scores.tsv"),
+  output_summary = paste0(out_path, "summary.tsv"),
+  output_json = paste0(out_path, "json.json")
+  
 )
 ## VIASH END
 
@@ -162,6 +167,8 @@ if (length(json_out) == 1) {
 }
 
 cat("Writing output\n")
+final_scores <- final_scores %>% map(as.vector) %>% as_tibble
+summary <- summary %>% map(as.vector) %>% as_tibble
 write_tsv(final_scores, par$output_scores)
 write_tsv(summary, par$output_summary)
 jsonlite::write_json(json_out, par$output_json)
