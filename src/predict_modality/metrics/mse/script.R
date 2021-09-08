@@ -9,7 +9,7 @@ requireNamespace("anndata", quietly = TRUE)
 par <- list(
   input_solution = c("resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad"),
   input_prediction = c("resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad"),
-  output = "test_resource.scores.h5ad"
+  output = "openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad"
 )
 ## VIASH END
 

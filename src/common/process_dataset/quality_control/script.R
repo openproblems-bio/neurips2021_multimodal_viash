@@ -10,8 +10,8 @@ library(readr, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/test_resource.tmp.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.tmp.output_mod2.h5ad",
+  input_rna = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.tmp.output_rna.h5ad",
+  input_mod2 = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.tmp.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
   min_counts_per_cell = 10000,

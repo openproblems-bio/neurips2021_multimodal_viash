@@ -85,7 +85,7 @@ ad2_phase2$write_h5ad(paste0(output_dir, adid_phase2, "/", adid_phase2, ".manual
 
 
 #############
-# create test_resource
+# create openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter
 
 starter_cell <- which(ad1$obs$batch %in% starter_dev)
 row_sel <- sort(sample(starter_cell, 500))
@@ -184,7 +184,7 @@ bd2_phase1$write_h5ad(paste0(output_dir, bdid_phase1, "/", bdid_phase1, ".manual
 
 
 #############
-# create test_resource
+# create openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter
 
 starter_cell <- which(bd1$obs$batch %in% starter_dev)
 row_sel <- sort(sample(starter_cell, 600))
