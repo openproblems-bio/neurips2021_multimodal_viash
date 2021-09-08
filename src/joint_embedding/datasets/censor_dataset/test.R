@@ -2,8 +2,8 @@ library(testthat, quietly = TRUE, warn.conflicts = FALSE)
 requireNamespace("anndata", quietly = TRUE)
 
 par <- list(
-  input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
+  input_mod1 = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad",
+  input_mod2 = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_mod2.h5ad",
   output_mod1 = "output_mod1.h5ad",
   output_mod2 = "output_mod2.h5ad",
   output_solution = "solution.h5ad"

@@ -6,8 +6,8 @@ library(tidyverse)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/test_resource.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
+  input_rna = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad",
+  input_mod2 = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
   num_batches = 3L,

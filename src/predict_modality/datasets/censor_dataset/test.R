@@ -5,8 +5,8 @@ cat("> Running censor component\n")
 out <- processx::run(
   command = "./censor_dataset",
   args = c(
-    "--input_mod1", "resources_test/common/test_resource.output_rna.h5ad",
-    "--input_mod2", "resources_test/common/test_resource.output_mod2.h5ad",
+    "--input_mod1", "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad",
+    "--input_mod2", "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_mod2.h5ad",
     "--output_train_mod1", "output_train_mod1.h5ad",
     "--output_train_mod2", "output_train_mod2.h5ad",
     "--output_test_mod1", "output_test_mod1.h5ad",
@@ -22,7 +22,7 @@ expect_true(file.exists("output_test_mod1.h5ad"))
 expect_true(file.exists("output_test_mod2.h5ad"))
 
 cat("> Reading h5ad files\n")
-adata_orig <- anndata::read_h5ad("resources_test/common/test_resource.output_rna.h5ad")
+adata_orig <- anndata::read_h5ad("resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.output_rna.h5ad")
 adata_train_mod1 <- anndata::read_h5ad("output_train_mod1.h5ad")
 adata_train_mod2 <- anndata::read_h5ad("output_train_mod2.h5ad")
 adata_test_mod1 <- anndata::read_h5ad("output_test_mod1.h5ad")

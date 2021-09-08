@@ -5,9 +5,9 @@ requireNamespace("anndata", quietly = TRUE)
 ## VIASH START
 task <- "match_modality"
 par <- list(
-  input_solution = paste0("resources_test/", task, "/test_resource.test_sol.h5ad"),
-  input_prediction = paste0("resources_test/", task, "/test_resource.prediction.h5ad"),
-  output = paste0("resources_test/", task, "/test_resource.scores.h5ad")
+  input_solution = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_sol.h5ad"),
+  input_prediction = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad"),
+  output = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad")
 )
 ## VIASH END
 

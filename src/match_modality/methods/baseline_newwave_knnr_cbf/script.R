@@ -12,7 +12,8 @@ requireNamespace("SingleCellExperiment", quietly = TRUE)
 # path <- "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
 # path <- "output/public_datasets/match_modality/dyngen_atac_1/dyngen_atac_1.censor_dataset.output_"
-path <- "output/public_datasets/match_modality/dyngen_citeseq_3/dyngen_citeseq_3.censor_dataset.output_"
+# path <- "output/public_datasets/match_modality/dyngen_citeseq_3/dyngen_citeseq_3.censor_dataset.output_"
+path <- "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # path <- "debug/debug."
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
@@ -21,7 +22,8 @@ par <- list(
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),
   input_test_mod2 = paste0(path, "test_mod2.h5ad"),
   output = "output.h5ad",
-  n_pop = 300L
+  n_pop = 300L,
+  newwave_maxiter = 10
 )
 meta <- list(functionality_name = "foo")
 
@@ -54,7 +56,7 @@ data1 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod1$X), t(input_test_mod1$X))),
   colData = data.frame(batch = factor(batch1))
 )
-
+data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
 # option 1: filter by HVG
 # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
 
@@ -76,6 +78,7 @@ data2 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod2$X[order(match_train), , drop = FALSE]), t(input_test_mod2$X))),
   colData = data.frame(batch = factor(batch2))
 )
+data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
 # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
 
 # res2 <- zinbwave::zinbsurf(data2, K=10, X=~batch)

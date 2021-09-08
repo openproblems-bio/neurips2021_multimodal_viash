@@ -353,7 +353,7 @@ functionality:
       cat("Unscrambling predictions\\n")
       pairing_ix <- ad_sol\$uns[["pairing_ix"]]
       X_pred <- as(ad_pred\$X, "CsparseMatrix")[, order(pairing_ix)]
-      dimnames(X_pred) <- NULL
+      dimnames(X_pred) <- list(NULL, NULL)
       
       cat("Calculating normalisation factors\\n")
       rowSum <- Matrix::rowSums(X_pred)
@@ -361,7 +361,7 @@ functionality:
       cat("Computing the match modality score\\n")
       match_probability_vec <- diag(X_pred) / rowSum
       
-      match_probability <- mean(match_probability_per_mod1)
+      match_probability <- mean(match_probability_vec)
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
@@ -820,5 +820,5 @@ info:
   output: "target/nextflow/match_modality_metrics/match_probability"
   executable: "target/nextflow/match_modality_metrics/match_probability/match_probability"
   viash_version: "0.5.3"
-  git_commit: "554b7a89d2eb9b0030c49084fc1a75a7487b26ce"
+  git_commit: "d525b6ee8f5e48a74f18f96225095f562a63e9bd"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

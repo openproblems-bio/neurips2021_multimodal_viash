@@ -14,7 +14,8 @@ conda_bin <- "/opt/conda/bin/conda"
 ## VIASH START
 # data_path <- "output/public_datasets/predict_modality/totalvispleenlymph_spleen_lymph_111_rna/totalvispleenlymph_spleen_lymph_111_rna.censor_dataset.output_"
 # data_path <- "output/public_datasets/predict_modality/babel_GM12878_rna/babel_GM12878_rna.censor_dataset.output_"
-data_path <- "output/public_datasets/predict_modality/dyngen_atac_1_rna/dyngen_atac_1_rna.censor_dataset.output_"
+# data_path <- "output/public_datasets/predict_modality/dyngen_atac_1_rna/dyngen_atac_1_rna.censor_dataset.output_"
+data_path <- "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 par <- list(
   input_train_mod1 = paste0(data_path, "train_mod1.h5ad"),
   input_train_mod2 = paste0(data_path, "train_mod2.h5ad"),

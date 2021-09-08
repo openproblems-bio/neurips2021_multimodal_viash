@@ -425,6 +425,7 @@ data1 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod1\$X), t(input_test_mod1\$X))),
   colData = data.frame(batch = factor(batch1))
 )
+data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
 # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
 
 # res1 <- zinbwave::zinbsurf(data1, K=10, X=~batch)
@@ -444,6 +445,7 @@ data2 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod2\$X[order(match_train), , drop = FALSE]), t(input_test_mod2\$X))),
   colData = data.frame(batch = factor(batch2))
 )
+data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
 # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
 
 # res2 <- zinbwave::zinbsurf(data2, K=10, X=~batch)

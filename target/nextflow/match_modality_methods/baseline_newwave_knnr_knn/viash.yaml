@@ -528,6 +528,7 @@ functionality:
         assays = list(counts = cbind(t(input_train_mod1\$X), t(input_test_mod1\$X))),
         colData = data.frame(batch = factor(batch1))
       )
+      data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
       # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
       
       # res1 <- zinbwave::zinbsurf(data1, K=10, X=~batch)
@@ -547,6 +548,7 @@ functionality:
         assays = list(counts = cbind(t(input_train_mod2\$X[order(match_train), , drop = FALSE]), t(input_test_mod2\$X))),
         colData = data.frame(batch = factor(batch2))
       )
+      data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
       # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
       
       # res2 <- zinbwave::zinbsurf(data2, K=10, X=~batch)
@@ -1142,5 +1144,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_newwave_knnr_knn"
   executable: "target/nextflow/match_modality_methods/baseline_newwave_knnr_knn/baseline_newwave_knnr_knn"
   viash_version: "0.5.3"
-  git_commit: "554b7a89d2eb9b0030c49084fc1a75a7487b26ce"
+  git_commit: "d525b6ee8f5e48a74f18f96225095f562a63e9bd"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

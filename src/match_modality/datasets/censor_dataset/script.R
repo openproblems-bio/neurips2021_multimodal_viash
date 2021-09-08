@@ -6,7 +6,7 @@ library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
-# input_path <- "resources_test/common/test_resource."
+# input_path <- "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase2/openproblems_bmmc_multiome_phase2.manual_formatting."
 input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."

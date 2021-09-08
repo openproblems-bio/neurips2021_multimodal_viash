@@ -2,7 +2,7 @@
 par = dict(
     input_prediction="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
     input_solution="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.solution.h5ad",
-    output="test_resource.ari.had",
+    output="openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.ari.had",
     debug=True
 )
 
