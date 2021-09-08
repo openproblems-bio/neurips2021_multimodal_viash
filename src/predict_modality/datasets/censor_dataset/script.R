@@ -52,7 +52,9 @@ process_ad <- function(ad) {
   } else if (mod == "ATAC") {
     cat("Sampling and binarizing ATAC data\n")
     poss_ix <- which(colSums(ad$X) > 0)
-    ad <- ad[, sort(sample(poss_ix, 10000))]$copy()
+    if (ncol(ad) > 10000) {
+      ad <- ad[, sort(sample(poss_ix, 10000))]$copy()
+    }
     ad$X@x <- (ad$X@x > 0) + 0
   }
   ad
