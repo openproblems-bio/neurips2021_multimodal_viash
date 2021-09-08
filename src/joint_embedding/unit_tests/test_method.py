@@ -13,8 +13,8 @@ command = "./" + method_id
 
 # define some filenames
 testpar = {
-    "input_mod1": "resources_test/joint_embedding/test_resource.mod1.h5ad",
-    "input_mod2": "resources_test/joint_embedding/test_resource.mod2.h5ad",
+    "input_mod1": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad",
+    "input_mod2": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad",
     "output": "output.h5ad",
 }
 

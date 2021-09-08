@@ -8,9 +8,9 @@ requireNamespace("pracma", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = "resources_test/match_modality/test_resource.test_sol.h5ad",
-  input_prediction = "resources_test/match_modality/test_resource.prediction.h5ad",
-  output = "resources_test/match_modality/test_resource.scores.h5ad"
+  input_solution = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_sol.h5ad",
+  input_prediction = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
+  output = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad"
 )
 ## VIASH END
 

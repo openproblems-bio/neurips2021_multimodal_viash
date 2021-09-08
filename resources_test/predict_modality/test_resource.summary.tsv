@@ -1,5 +1,0 @@
-method_id	metric_id	value
-baseline_randomforest	logp1_mse	0.12756213445664877
-baseline_randomforest	logp1_rmse	0.19983867654212165
-baseline_randomforest	mse	0.34141183729941665
-baseline_randomforest	rmse	0.5843045757988009

@@ -19,8 +19,8 @@ library(lmds, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_mod1 = "sample_data/test_resource.mod1.h5ad",
-  input_mod2 = "sample_data/test_resource.mod2.h5ad",
+  input_mod1 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad",
+  input_mod2 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad",
   output = "output.h5ad",
   distance_method = "spearman",
   n_pcs = 4L

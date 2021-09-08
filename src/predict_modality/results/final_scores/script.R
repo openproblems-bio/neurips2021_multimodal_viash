@@ -8,7 +8,7 @@ library(rlang)
 ## VIASH START
 out_path <- "output/pilot_inhouse/predict_modality/output.final_scores.output_"
 par <- list(
-  # input = "resources_test/predict_modality/test_resource.scores.h5ad",
+  # input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
   input = list.files("work/16/d7c9c6d5776084c2b7cd6f1b4fe39b", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),

@@ -744,5 +744,5 @@ info:
   output: "target/nextflow/predict_modality_results/collect_solution_metadata"
   executable: "target/nextflow/predict_modality_results/collect_solution_metadata/collect_solution_metadata"
   viash_version: "0.5.3"
-  git_commit: "b1861b13b97da729e8eb1a6ef32ef6ad0917b38a"
+  git_commit: "554b7a89d2eb9b0030c49084fc1a75a7487b26ce"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

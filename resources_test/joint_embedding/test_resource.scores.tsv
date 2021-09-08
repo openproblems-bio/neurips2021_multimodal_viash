@@ -1,5 +1,0 @@
-dataset_id	method_id	metric_id	value
-test_resource_JE	baseline_lmds	rfoob_celltype_accuracy	0.6794117647058824
-test_resource_JE	baseline_lmds	rfoob_pseudotimegex_rsq	0.9064491992953161
-test_resource_JE	baseline_lmds	rfoob_pseudotimeadt_rsq	0.6637731679962985
-test_resource_JE	baseline_lmds	rfoob_batch_error	0.029411764705882353

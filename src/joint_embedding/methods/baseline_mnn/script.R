@@ -7,7 +7,7 @@ requireNamespace("batchelor", quietly = TRUE)
 requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
-path <- "resources_test/joint_embedding/test_resource."
+path <- "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # path <- "output/public_datasets/joint_embedding/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
 par <- list(
   input_mod1 = paste0(path, "mod1.h5ad"),

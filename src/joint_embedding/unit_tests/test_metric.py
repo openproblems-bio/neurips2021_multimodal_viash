@@ -14,8 +14,8 @@ command = "./" + method_id
 
 # define some filenames
 testpar = {
-  "input_prediction": "resources_test/joint_embedding/test_resource.prediction.h5ad",
-  "input_solution": "resources_test/joint_embedding/test_resource.solution.h5ad",
+  "input_prediction": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
+  "input_solution": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.solution.h5ad",
   "output": "output.h5ad"
 }
 meta_path = resources_dir + '/metric_meta.tsv'
