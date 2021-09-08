@@ -71,15 +71,8 @@ viash build $par_src/$par_task/metrics/check_format/config.vsh.yaml -p docker -o
 
 # todo: update to multisample
 echo "  Copy sample resources"
-mkdir -p $output_dir/sample_data/
-if [[ $par_task == "predict_modality" ]]; then
-  cp $resources_dir/resources_test/$par_task/test_resource.t*.h5ad $output_dir/sample_data/
-elif [[ $par_task == "match_modality" ]]; then
-  cp $resources_dir/resources_test/$par_task/test_resource.t*.h5ad $output_dir/sample_data/
-elif [[ $par_task == "joint_embedding" ]]; then
-  cp $resources_dir/resources_test/$par_task/test_resource.mod[12].h5ad $output_dir/sample_data/
-  cp $resources_dir/resources_test/$par_task/test_resource.solution.h5ad $output_dir/sample_data/
-fi
+rsync -avzr $resources_dir/resources_test/$par_task/ $output_dir/sample_data/ \
+  --include="*/" --include="*mod[12].h5ad" --include="*solution.h5ad" --include="*sol.h5ad" --exclude="*" # --dry-run
 
 echo "  Zipping starter kit"
 [ -f ${output_dir}.zip ] && rm ${output_dir}.zip

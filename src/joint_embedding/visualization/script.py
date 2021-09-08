@@ -11,10 +11,10 @@ logging.basicConfig(level=logging.INFO)
 # replaced with the parameters as specified in your config.vsh.yaml.
 
 par = {
-    'input_prediction': 'resources_test/joint_embedding/test_resource.prediction.h5ad',
-    'input_solution': 'resources_test/joint_embedding/test_resource.solution.h5ad',
-    'output_umap': 'resources_test/joint_embedding/test_resource.umap.png',
-    'output_emb': 'resources_test/joint_embedding/test_resource.emb.png'
+    'input_prediction': 'resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad',
+    'input_solution': 'resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.solution.h5ad',
+    'output_umap': 'resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.umap.png',
+    'output_emb': 'resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.emb.png'
 }
 
 ## VIASH END

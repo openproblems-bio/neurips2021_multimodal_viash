@@ -3,8 +3,8 @@ import numpy as np
 
 ## VIASH START
 par = {
-    "input_mod1": "resources_test/joint_embedding/test_resource.mod1.h5ad",
-    "input_mod2": "resources_test/joint_embedding/test_resource.mod2.h5ad",
+    "input_mod1": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad",
+    "input_mod2": "resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad",
     "output": "tmp/output_prediction.h5ad",
     "n_dims": 100,
 }

@@ -1,8 +1,8 @@
 ## VIASH START
 par = dict(
-    input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
-    input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.cc_cons.tsv",
+    input_prediction="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
+    input_solution="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.solution.h5ad",
+    output="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.cc_cons.tsv",
     debug=True
 )
 ## VIASH END

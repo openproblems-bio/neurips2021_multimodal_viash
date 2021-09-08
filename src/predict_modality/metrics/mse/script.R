@@ -7,8 +7,8 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_solution = c("resources_test/predict_modality/test_resource.test_mod2.h5ad"),
-  input_prediction = c("resources_test/predict_modality/test_resource.prediction.h5ad"),
+  input_solution = c("resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad"),
+  input_prediction = c("resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad"),
   output = "test_resource.scores.h5ad"
 )
 ## VIASH END

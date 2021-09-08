@@ -21,11 +21,11 @@ library(keras, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_train_mod1 = "resources_test/match_modality/test_resource.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/match_modality/test_resource.train_mod2.h5ad",
-  input_train_sol = "resources_test/match_modality/test_resource.train_sol.h5ad",
-  input_test_mod1 = "resources_test/match_modality/test_resource.test_mod1.h5ad",
-  input_test_mod2 = "resources_test/match_modality/test_resource.test_mod2.h5ad",
+  input_train_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
+  input_train_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
+  input_train_sol = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_sol.h5ad",
+  input_test_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
+  input_test_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
   output = "output.h5ad",
   distance_method = "pearson"
 )

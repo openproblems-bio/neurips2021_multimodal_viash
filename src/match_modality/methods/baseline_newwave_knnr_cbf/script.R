@@ -9,7 +9,7 @@ requireNamespace("FNN", quietly = TRUE)
 requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
-# path <- "resources_test/match_modality/test_resource."
+# path <- "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # path <- "output/public_datasets/match_modality/dyngen_citeseq_1/dyngen_citeseq_1.censor_dataset.output_"
 # path <- "output/public_datasets/match_modality/dyngen_atac_1/dyngen_atac_1.censor_dataset.output_"
 path <- "output/public_datasets/match_modality/dyngen_citeseq_3/dyngen_citeseq_3.censor_dataset.output_"

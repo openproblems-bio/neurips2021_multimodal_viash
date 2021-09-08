@@ -5,8 +5,8 @@ library(tidyverse)
 ## VIASH START
 par <- list(
   input = c(
-  "resources_test/predict_modality/test_resource.scores.h5ad", 
-  "resources_test/predict_modality/test_resource.scores.h5ad"
+  "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad", 
+  "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad"
   ),
   output = "tmp/task1_scores.tsv"
 )

@@ -39,8 +39,8 @@ You can run the code manually on the sample dataset as follows:
 
 ```sh
 $ viash run config.vsh.yaml -- \
-  --input_mod1 sample_data/test_resource.mod1.h5ad \
-  --input_mod2 sample_data/test_resource.mod2.h5ad \
+  --input_mod1 sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad \
+  --input_mod2 sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad \
   --output test_output.h5ad
 ```
 

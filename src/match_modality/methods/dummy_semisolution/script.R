@@ -3,7 +3,7 @@ requireNamespace("anndata", quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_test_sol = "resources_test/match_modality/test_resource.test_sol.h5ad",
+  input_test_sol = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_sol.h5ad",
   output = "output.h5ad"
 )
 meta <- list(functionality_name = "foo")

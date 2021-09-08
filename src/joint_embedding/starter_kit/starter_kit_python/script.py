@@ -20,8 +20,8 @@ logging.basicConfig(level=logging.INFO)
 # replaced with the parameters as specified in your config.vsh.yaml.
 
 par = {
-    'input_mod1': 'sample_data/test_resource.mod1.h5ad',
-    'input_mod2': 'sample_data/test_resource.mod2.h5ad',
+    'input_mod1': 'sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad',
+    'input_mod2': 'sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad',
     'output': 'output.h5ad',
     'n_dim': 100,
 }
