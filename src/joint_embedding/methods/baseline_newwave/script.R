@@ -30,6 +30,7 @@ data1 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = t(input_mod1$X)),
   colData = data.frame(batch = factor(batch))
 )
+data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
 res1 <- NewWave::newWave(
   data1,
   X = "~batch",
@@ -47,6 +48,7 @@ data2 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = t(input_mod2$X)),
   colData = data.frame(batch = factor(batch))
 )
+data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
 res2 <- NewWave::newWave(
   data2,
   X = "~batch",
