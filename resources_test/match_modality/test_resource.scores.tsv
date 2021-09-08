@@ -1,3 +1,0 @@
-dataset_id	method_id	metric_id	value
-test_resource_MM	baseline_newwave_knnr_cbf	pairing_auroc	0.6518554353592663
-test_resource_MM	baseline_newwave_knnr_cbf	pairing_aupr	0.03464555781292944
