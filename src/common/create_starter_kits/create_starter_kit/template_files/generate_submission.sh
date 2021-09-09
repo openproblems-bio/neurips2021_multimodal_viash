@@ -8,10 +8,44 @@ MAX_TIME="$par_time"
 MAX_CPUS="$par_cpus"
 PIPELINE_VERSION="$par_pipeline_version"
 
+# helper functions
+
+# get_script_dir: return the path of a bash file, following symlinks
+function get_script_dir {
+  SOURCE="$1"
+  while [ -h "$SOURCE" ]; do
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+  done
+  cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd
+}
+
+# get_latest_release: get the version number of the latest release on git
+function get_latest_release {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+    grep '"tag_name":' |                                            # Get tag line
+    sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+}
+
+# cd to root dir of starter kit
+cd `get_script_dir ${BASH_SOURCE[0]}`/..
+
 [ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
 
+LATEST_RELEASE=`get_latest_release openproblems-bio/neurips2021_multimodal_viash`
+if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
+  echo ""
+  echo "######################################################################"
+  echo "##                             WARNING                              ##"
+  echo "######################################################################"
+  echo "A newer version of this starter kit is available! Updating to the"
+  echo "latest version is strongly recommended. See README.md for more info."
+  echo "Continuing in 10 seconds."
+  sleep 10
+fi
+
 # TODO: add more checks
-# e.g. are nextflow and viash (>=0.5.1) are on the path?
 
 echo ""
 echo "######################################################################"
@@ -39,15 +73,25 @@ echo "######################################################################"
 echo "##                      Sync datasets from S3                       ##"
 echo "######################################################################"
 
-if [ ! -d output/public_datasets/$par_task/ ]; then
-  mkdir -p output/public_datasets/$par_task/
+if [ ! -d output/datasets/$par_task/ ]; then
+  mkdir -p output/datasets/$par_task/
 
-  docker run \
-    --user $(id -u):$(id -g) \
-    --rm -it \
-    -v $(pwd)/output:/output \
-    amazon/aws-cli \
-    s3 sync s3://neurips2021-multimodal-public-datasets/$par_task/ /output/public_datasets/$par_task/ --no-sign-request
+  # use aws cli if installed
+  if command -v aws &> /dev/null; then
+    aws s3 sync --no-sign-request \
+      s3://openproblems-bio/public/phase1-data/$par_task/ \
+      output/datasets/$par_task/
+  # else use aws docker container instead
+  else
+    docker run \
+      --user $(id -u):$(id -g) \
+      --rm -it \
+      -v $(pwd)/output:/output \
+      amazon/aws-cli \
+      s3 sync --no-sign-request \
+      s3://openproblems-bio/public/phase1-data/$par_task/ \
+      /output/datasets/$par_task/
+  fi
 fi
 
 echo ""
@@ -64,7 +108,7 @@ bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/generate_submission/main.nf \
-  --datasets 'output/public_datasets/$par_task/dyngen_**.h5ad' \
+  --datasets 'output/datasets/$par_task/**.h5ad' \
   --publishDir output/predictions/$par_task/ \
   -resume \
   -latest
@@ -98,3 +142,12 @@ echo "Or this command to create a public one:"
 echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --public"
 echo ""
 echo "Good luck!"
+
+if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
+  echo ""
+  echo "######################################################################"
+  echo "##                             WARNING                              ##"
+  echo "######################################################################"
+  echo "A newer version of this starter kit is available! Updating to the"
+  echo "latest version is strongly recommended. See README.md for more info."
+fi
