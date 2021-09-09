@@ -88,7 +88,7 @@ if [ $USER == "rcannood" ]; then
       out_dir="$name/output"
       echo copying to $out_dir
       mkdir -p $out_dir
-      cp -r output/public_datasets $out_dir
+      cp -r output/datasets $out_dir
     fi
   done
 fi

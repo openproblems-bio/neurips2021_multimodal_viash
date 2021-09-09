@@ -4,11 +4,11 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "predict_modality"
 
-include  { correlation }               from "$targetDir/${task}_metrics/correlation/main.nf"               params(params)
-include  { mse }                       from "$targetDir/${task}_metrics/mse/main.nf"                       params(params)
-include  { check_format }              from "$targetDir/${task}_metrics/check_format/main.nf"              params(params)
-include  { collect_solution_metadata } from "$targetDir/${task}_results/collect_solution_metadata/main.nf" params(params)
-include  { final_scores }              from "$targetDir/${task}_results/final_scores/main.nf"              params(params)
+include  { correlation }                 from "$targetDir/${task}_metrics/correlation/main.nf"                params(params)
+include  { mse }                         from "$targetDir/${task}_metrics/mse/main.nf"                        params(params)
+include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"               params(params)
+include  { collect_solution_metadata }   from "$targetDir/${task}_results/collect_solution_metadata/main.nf"  params(params)
+include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"               params(params)
 include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
@@ -20,7 +20,7 @@ workflow {
   def solutions = Channel.fromPath(params.solutions) | get_id_solutions
 
   // create solutions meta
-  def solutionsMeta = solutions
+  def solutionsMeta = solution
     | map { it[1] } 
     | toList()
     | map{ [ "meta_solution", it, params ] }
@@ -29,9 +29,9 @@ workflow {
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/$task/**/metric_meta_*.tsv")
+    Channel.fromPath("$srcDir/$task/**/metric_meta*.tsv")
       | toList()
-      | map{ [ "meta", it, params ] }
+      | map{ [ "meta_metric", it, params ] }
       | bind_tsv_rows
       | map{ it[1] }
 
