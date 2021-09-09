@@ -26,30 +26,36 @@ echo "  Remove previous results"
 [[ -d $output_dir ]] && rm -r $output_dir
 
 echo "  Create new output dir"
-mkdir -p $output_dir
+mkdir -p $output_dir/scripts
 
 echo "  Copy template files"
 cp $resources_dir/template_files/README.md $output_dir/
-cp $resources_dir/template_files/generate_submission.sh $output_dir/
-cp $resources_dir/template_files/nextflow.config $output_dir/
+cp $resources_dir/template_files/generate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/evaluate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/nextflow.config $output_dir/scripts/
 cp $resources_dir/template_files/LICENSE $output_dir/
 cp $resources_dir/template_files/.gitignore $output_dir/
 
-echo "  Replace terms in templates"
-sed -i "s#\\\$par_task_name#$par_task_name#g" $output_dir/*
-sed -i "s#\\\$par_task#$par_task#g" $output_dir/*
-sed -i "s#\\\$par_language_name#$par_language_name#g" $output_dir/*
-sed -i "s#\\\$par_language#$par_language#g" $output_dir/*
-sed -i "s#\\\$par_evalai_phase#$par_evalai_phase#g" $output_dir/*
-sed -i "s#\\\$par_memory#$par_memory#g" $output_dir/*
-sed -i "s#\\\$par_time#$par_time#g" $output_dir/*
-sed -i "s#\\\$par_cpus#$par_cpus#g" $output_dir/*
-sed -i "s#\\\$par_pipeline_version#$par_pipeline_version#g" $output_dir/*
-sed -i "s#\\\$par_block_starter#$par_block_starter#g" $output_dir/*
-
 echo "  Run viash dockerfile"
 dockerfile=$(viash run $input_dir/config.vsh.yaml -- ---dockerfile | sed 's#^#\t#' | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's#&#\\\&#g')
-sed -i "s~\\\$codeblock_dockerfile~$dockerfile~g" $output_dir/*
+
+echo "  Replace terms in templates"
+for file in $(find $output_dir/ -type f); do
+  sed -i "s#\\\$par_task_name#$par_task_name#g" $file
+  sed -i "s#\\\$par_task#$par_task#g" $file
+  sed -i "s#\\\$par_language_name#$par_language_name#g" $file
+  sed -i "s#\\\$par_language#$par_language#g" $file
+  sed -i "s#\\\$par_evalai_phase#$par_evalai_phase#g" $file
+  sed -i "s#\\\$par_memory#$par_memory#g" $file
+  sed -i "s#\\\$par_time#$par_time#g" $file
+  sed -i "s#\\\$par_cpus#$par_cpus#g" $file
+  sed -i "s#\\\$par_pipeline_version#$par_pipeline_version#g" $file
+  sed -i "s~\\\$codeblock_dockerfile~$dockerfile~g" $file
+done
+
+
+
+
 
 echo "  Copy executables"
 mkdir $output_dir/bin

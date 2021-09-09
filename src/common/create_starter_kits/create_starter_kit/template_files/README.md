@@ -1,7 +1,9 @@
 # $par_task_name - Starter Kit for $par_language_name Users
 
 ## Online Documentation
-Full documentation for the competition, including much of the information here, can be found online at https://openproblems.bio/neurips_docs/
+Full documentation for the competition, including much of the information here, can be found online 
+at [openproblems.bio/neurips_docs/](https://openproblems.bio/neurips_docs/). The documentation for 
+Viash is available at [viash.io/docs](https://viash.io/docs).
 
 ## Getting started
 This starter kit assumes you have Bash, Java >= 8.0, and Docker installed.
@@ -114,6 +116,6 @@ $par_block_starter
 ## VIASH END
 ```
 
-## Competition documentation
-Documentation for the competition can be found at [openproblems.bio/neurips_docs](https://openproblems.bio/neurips_docs).
-The documentation for Viash is available at [viash.io/docs](https://viash.io/docs).
+## Updating the starter kit
+
+To update the starter kit to the latest release, simply download the corresponding zip file from the latest [GitHub release](https://github.com/openproblems-bio/neurips2021_multimodal_viash/releases/latest) and unzip it somewhere. After unzipping, copy any of the files which you have changed in the new directory, usually `config.vsh.yaml` and `script.R/py`.
