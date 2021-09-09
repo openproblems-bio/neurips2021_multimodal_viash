@@ -950,5 +950,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_randomforest"
   executable: "target/nextflow/predict_modality_methods/baseline_randomforest/baseline_randomforest"
   viash_version: "0.5.3"
-  git_commit: "45489fce64a8a654775a1a9accfad7153af7258b"
+  git_commit: "1ab6744a3587e05a9328d6976ac80d20c3bd02a3"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
