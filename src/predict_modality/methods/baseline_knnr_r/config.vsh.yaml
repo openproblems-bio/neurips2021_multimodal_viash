@@ -1,8 +1,8 @@
 functionality:
-  name: baseline_knn
+  name: baseline_knnr_r
   namespace: predict_modality_methods
   version: dev
-  description: K-nearest neighbor regression.
+  description: K-nearest neighbor regression in R.
   info:
     type: baseline
     label: KNNR

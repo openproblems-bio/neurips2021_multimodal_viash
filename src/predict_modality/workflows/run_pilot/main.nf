@@ -6,7 +6,8 @@ task = "predict_modality"
 
 include  { baseline_randomforest }       from "$targetDir/${task}_methods/baseline_randomforest/main.nf"      params(params)
 include  { baseline_linearmodel }        from "$targetDir/${task}_methods/baseline_linearmodel/main.nf"       params(params)
-include  { baseline_knn }                from "$targetDir/${task}_methods/baseline_knn/main.nf"               params(params)
+include  { baseline_knnr_r }             from "$targetDir/${task}_methods/baseline_knnr_r/main.nf"            params(params)
+include  { baseline_knnr_py }            from "$targetDir/${task}_methods/baseline_knnr_py/main.nf"           params(params)
 include  { baseline_babel }              from "$targetDir/${task}_methods/baseline_babel/main.nf"             params(params)
 include  { baseline_newwave_knnr }       from "$targetDir/${task}_methods/baseline_newwave_knnr/main.nf"      params(params)
 include  { dummy_zeros }                 from "$targetDir/${task}_methods/dummy_zeros/main.nf"                params(params)
@@ -52,9 +53,13 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_baseline_linearmodel", [ input_prediction: pred, input_solution: sol ], params ]}
   def b2 = inputs 
-    | baseline_knn
+    | baseline_knnr_r
     | join(solution)
-    | map { id, pred, params, sol -> [ id + "_baseline_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+    | map { id, pred, params, sol -> [ id + "_baseline_knnr_r", [ input_prediction: pred, input_solution: sol ], params ]}
+  def b3 = inputs 
+    | baseline_knnr_py
+    | join(solution)
+    | map { id, pred, params, sol -> [ id + "_baseline_knnr_py", [ input_prediction: pred, input_solution: sol ], params ]}
   // def b3 = inputs 
   //   | baseline_babel
   //   | join(solution)
@@ -82,7 +87,7 @@ workflow pilot_wf {
     | join(solution)
     | map { id, pred, params, sol -> [ id + "_dummy_solution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b4, d0, d1, d2, d3)
+  def predictions = b0.mix(b1, b2, b3, b4, d0, d1, d2, d3)
 
   // create solutions meta
   def solutionsMeta = solution

@@ -63,7 +63,7 @@ out <- anndata::AnnData(
   X = prediction,
   uns = list(
     dataset_id = input_train_mod2$uns[["dataset_id"]],
-    method_id = "baseline_knn"
+    method_id = meta$functionality_name
   )
 )
 
