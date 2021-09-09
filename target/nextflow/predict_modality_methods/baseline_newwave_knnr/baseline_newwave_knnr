@@ -382,6 +382,7 @@ data1 <- SummarizedExperiment::SummarizedExperiment(
   assays = list(counts = cbind(t(input_train_mod1\$layers[["counts"]]), t(input_test_mod1\$layers[["counts"]]))),
   colData = data.frame(batch = factor(batch1))
 )
+data1 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
 res1 <- NewWave::newWave(
   data1,
   X = "~batch",
