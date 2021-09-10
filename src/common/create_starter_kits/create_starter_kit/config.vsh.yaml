@@ -48,7 +48,7 @@ functionality:
       default: "10m"
     - name: "--cpus"
       type: "string"
-      default: "4"
+      default: "8"
     - name: "--pipeline_version"
       type: "string"
       default: "0.4.0"

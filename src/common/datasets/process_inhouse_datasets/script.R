@@ -7,6 +7,7 @@ set.seed(1)
 
 # sync to local folder
 # system("aws s3 sync s3://openproblems-bio/private/multiome/ output/manual_formatting/multiome/ --exclude '*' --include '*_training.h5ad' --profile op2")
+# system("aws s3 sync s3://openproblems-bio/private/ output/manual_formatting/ --exclude '*' --include '*_training.h5ad' --profile op2")
 
 starter_dev <- c("s1d1", "s1d2")
 train <- c("s1d1", "s2d1", "s2d4", "s3d6", "s3d1")
@@ -23,7 +24,7 @@ output_dir <- "output/datasets/common/"
 # read data
 ad1 <- read_h5ad("output/manual_formatting/multiome/multiome_gex_processed_training.h5ad")
 ad2 <- read_h5ad("output/manual_formatting/multiome/multiome_atac_processed_training.h5ad")
-adid <- ad1$uns[["dataset_id"]]
+adid <- "openproblems_bmmc_multiome"
 
 sort(unique(ad1$obs$batch))
 assert_that(length(setdiff(ad1$obs$batch, c(train, valid, backup_test))) == 0)
@@ -118,9 +119,9 @@ ad2_starter$write_h5ad(paste0(resources_test, adid_starter, "/", adid_starter, "
 # Process cite
 
 # read data
-bd1 <- read_h5ad("output/manual_formatting/cite/CITE_GEX_processed.training.h5ad")
-bd2 <- read_h5ad("output/manual_formatting/cite/CITE_ADT_processed.training.h5ad")
-bdid <- bd1$uns[["dataset_id"]]
+bd1 <- read_h5ad("output/manual_formatting/cite/cite_gex_processed_training.h5ad")
+bd2 <- read_h5ad("output/manual_formatting/cite/cite_adt_processed_training.h5ad")
+bdid <- "openproblems_bmmc_cite"
 
 testthat::expect_length(setdiff(bd1$obs$batch, c(train, valid, backup_test)), 0)
 setdiff(c(train, valid, backup_test), unique(bd1$obs$batch))
