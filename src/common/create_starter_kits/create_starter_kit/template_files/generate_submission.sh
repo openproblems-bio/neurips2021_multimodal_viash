@@ -124,7 +124,7 @@ zip -9 -r submission.zip . \
   --exclude=*work* \
   --exclude=*.DS_Store* \
   --exclude=nextflow.config \
-  --exclude=output/public_datasets/* \
+  --exclude=output/datasets/* \
   --exclude=bin/*
 
 # print message

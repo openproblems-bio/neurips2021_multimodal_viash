@@ -430,30 +430,26 @@ method_id <- meta\$functionality_name
 
 cat("Reading h5ad files\\n")
 input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
-input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2)
-input_train_sol <- anndata::read_h5ad(par\$input_train_sol)
 input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
-input_test_mod2 <- anndata::read_h5ad(par\$input_test_mod2)
 
-# reorder train_mod2 based on known solution
-match_train <- input_train_sol\$uns\$pairing_ix + 1
-
-# fetch batch labels
+# fetch a few variables
+train_ix <- seq_len(nrow(input_train_mod1))
+did <- input_train_mod1\$uns[["dataset_id"]]
 batch1 <- c(as.character(input_train_mod1\$obs\$batch), as.character(input_test_mod1\$obs\$batch))
-# don't know batch ordering in input_test_mod2
-batch2 <- c(as.character(input_train_mod1\$obs\$batch), rep("unknownbatch", nrow(input_test_mod2)))
 
 cat("Running NewWave\\n")
 data1 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = cbind(t(input_train_mod1\$X), t(input_test_mod1\$X))),
+  assays = list(counts = cbind(t(input_train_mod1\$layers[["counts"]]), t(input_test_mod1\$layers[["counts"]]))),
   colData = data.frame(batch = factor(batch1))
 )
 data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
 # option 1: filter by HVG
 # data1 <- data1[order(proxyC::rowSds(SummarizedExperiment::assay(data1)), decreasing = TRUE)[1:100], ]
 
-# option 2: use zinbsurf instead of zinbwave
-# res1 <- zinbwave::zinbsurf(data1, K=10, X=~batch)
+# remove large unneeded dataset objects
+rm(input_train_mod1, input_test_mod1)
+gc()
+
 res1 <- NewWave::newWave(
   data1,
   X = "~batch",
@@ -466,14 +462,27 @@ res1 <- NewWave::newWave(
 )
 dr_x1 <- SingleCellExperiment::reducedDim(res1)
 
+cat("Reading h5ad files\\n")
+input_train_mod2 <- anndata::read_h5ad(par\$input_train_mod2)
+input_test_mod2 <- anndata::read_h5ad(par\$input_test_mod2)
+input_train_sol <- anndata::read_h5ad(par\$input_train_sol)
+
+# don't know batch ordering in input_test_mod2
+match_train <- input_train_sol\$uns\$pairing_ix + 1
+batch2 <- c(as.character(input_train_sol\$obs\$batch), rep("unknownbatch", nrow(input_test_mod2)))
+
 data2 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = cbind(t(input_train_mod2\$X[order(match_train), , drop = FALSE]), t(input_test_mod2\$X))),
+  assays = list(counts = cbind(t(input_train_mod2\$layers[["counts"]][order(match_train), , drop = FALSE]), t(input_test_mod2\$layers[["counts"]]))),
   colData = data.frame(batch = factor(batch2))
 )
 data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
 # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
 
-# res2 <- zinbwave::zinbsurf(data2, K=10, X=~batch)
+# remove large unneeded dataset objects
+rm(input_train_mod2, input_test_mod2, input_train_sol)
+gc()
+
+cat("Running NewWave\\n")
 res2 <- NewWave::newWave(
   data2,
   X = "~batch",
@@ -489,19 +498,7 @@ dr_x2 <- SingleCellExperiment::reducedDim(res2)
 colnames(dr_x1) <- paste0("comp_", seq_len(ncol(dr_x1)))
 colnames(dr_x2) <- paste0("comp_", seq_len(ncol(dr_x2)))
 
-# # visual checks
-# ct1 <- c(as.character(input_train_sol\$obs\$cell_type), as.character(input_test_sol\$obs\$cell_type))
-# ct2 <- c(as.character(input_train_sol\$obs\$cell_type), as.character(input_test_sol\$obs\$cell_type[match_test]))
-# patchwork::wrap_plots(
-#   qplot(dr_x1[,1], dr_x1[,2], colour = factor(batch1)),
-#   qplot(dr_x2[,1], dr_x2[,2], colour = factor(batch2)),
-#   qplot(dr_x1[,1], dr_x1[,2], colour = factor(ct1)),
-#   qplot(dr_x2[,1], dr_x2[,2], colour = factor(ct2))
-# )
-
-
-# split DR matrices
-train_ix <- seq_len(nrow(input_train_mod1))
+# split up DR matrices
 dr_x1_train <- dr_x1[train_ix, , drop = FALSE]
 dr_x1_test <- dr_x1[-train_ix, , drop = FALSE]
 dr_x2_train <- dr_x2[train_ix, , drop = FALSE]
@@ -516,6 +513,7 @@ pred_mod1 <- apply(dr_x1_train, 2, function(yi) {
     k = min(15, nrow(dr_x1_test))
   )\$pred
 })
+
 cat("Predicting mod2 DR of test cells\\n")
 pred_mod2 <- apply(dr_x2_train, 2, function(yi) {
   FNN::knn.reg(
@@ -525,27 +523,6 @@ pred_mod2 <- apply(dr_x2_train, 2, function(yi) {
     k = min(15, nrow(dr_x1_test))
   )\$pred
 })
-
-
-# # visual checks
-# patchwork::wrap_plots(
-#   ggplot() +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type), data.frame(rbind(dr_x2, pred_mod2)), size = 3, colour = "gray") +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x2_train, type = "1train", input_train_sol\$obs), size = 3) +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x2_test, type = "2test", input_test_sol\$obs[match_test, ]), size = 3) +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(pred_mod2, type = "3pred", input_test_sol\$obs), size = 3) +
-#     facet_wrap(~type) +
-#     theme_bw(),
-#   ggplot() +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type), data.frame(rbind(dr_x1, pred_mod1)), size = 3, colour = "gray") +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x1_train, type = "1train", input_train_sol\$obs), size = 3) +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(dr_x1_test, type = "2test", input_test_sol\$obs[match_test, ]), size = 3) +
-#     geom_point(aes(comp_1, comp_2, colour = cell_type, shape = type), data.frame(pred_mod1, type = "3pred", input_test_sol\$obs), size = 3) +
-#     facet_wrap(~type) +
-#     theme_bw(),
-#   ncol = 1
-# )
-
 
 cat("Minimising distances between mod1 and mod2 pairs\\n")
 gen_vec <- function(z) {
@@ -573,8 +550,8 @@ gen_vec <- function(z) {
 
   tibble::tibble(i, j)
 }
-
 outs <- pbapply::pblapply(seq_len(par\$n_pop), cl = n_cores, gen_vec)
+
 # outs <- lapply(seq_len(par\$n_pop), gen_vec)
 df <- bind_rows(outs) %>%
   group_by(i, j) %>%
@@ -597,7 +574,7 @@ cat("Creating output anndata\\n")
 out <- anndata::AnnData(
   X = as(knn_mat, "CsparseMatrix"),
   uns = list(
-    dataset_id = input_train_mod1\$uns[["dataset_id"]],
+    dataset_id = did,
     method_id = method_id
   )
 )

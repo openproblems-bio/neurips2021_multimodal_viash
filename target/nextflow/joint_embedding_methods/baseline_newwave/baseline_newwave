@@ -296,7 +296,7 @@ batch <- as.character(input_mod1\$obs\$batch)
 
 cat("Running NewWave on mod1\\n")
 data1 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = t(input_mod1\$X)),
+  assays = list(counts = t(input_mod1\$layers[["counts"]])),
   colData = data.frame(batch = factor(batch))
 )
 data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
@@ -314,7 +314,7 @@ dr_x1 <- SingleCellExperiment::reducedDim(res1)
 
 cat("Running NewWave on mod2\\n")
 data2 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = t(input_mod2\$X)),
+  assays = list(counts = t(input_mod2\$layers[["counts"]])),
   colData = data.frame(batch = factor(batch))
 )
 data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]

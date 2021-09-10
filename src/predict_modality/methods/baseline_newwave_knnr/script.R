@@ -65,7 +65,7 @@ pred <- map_df(seq_len(ncol(input_train_mod2)), function(j) {
   out <- FNN::knn.reg(
     train = dr_x1_train,
     test = dr_x1_test,
-    y = input_train_mod2$X[,j],
+    y = input_train_mod2$layers[["counts"]][,j],
     k = min(15, nrow(dr_x1_test))
   )$pred
   tibble(
@@ -80,7 +80,7 @@ cat("Creating outputs object\n")
 prediction <- Matrix::sparseMatrix(
   i = pred$i,
   j = pred$j,
-  x = pred$x,
+  x = pred$layers[["counts"]],
   dimnames = list(rownames(input_test_mod1), colnames(input_train_mod2))
 )
 

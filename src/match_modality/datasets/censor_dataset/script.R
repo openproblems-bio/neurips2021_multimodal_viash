@@ -66,6 +66,7 @@ if (ncol(train_obs2) == 0) train_obs2 <- NULL
 
 output_train_mod1 <- anndata::AnnData(
   X = input_mod1$X[train_ix, , drop = FALSE],
+  layers = list(counts = input_mod1$layers[["counts"]][train_ix, , drop = FALSE]),
   obs = train_obs1,
   var = mod1_var,
   uns = common_uns
@@ -73,6 +74,8 @@ output_train_mod1 <- anndata::AnnData(
 output_train_mod2 <- anndata::AnnData(
   X = input_mod2$X[train_ix[train_mod2_ix], , drop = FALSE] %>%
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
+  layers = list(counts = input_mod2$layers[["counts"]][train_ix[train_mod2_ix], , drop = FALSE] %>%
+    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
   obs = train_obs2,
   var = mod2_var,
   uns = common_uns
@@ -90,6 +93,7 @@ if (ncol(test_obs2) == 0) test_obs2 <- NULL
 
 output_test_mod1 <- anndata::AnnData(
   X = input_mod1$X[test_ix, , drop = FALSE],
+  layers = list(counts = input_mod1$layers[["counts"]][test_ix, , drop = FALSE]),
   obs = test_obs1,
   var = mod1_var,
   uns = common_uns
@@ -97,6 +101,8 @@ output_test_mod1 <- anndata::AnnData(
 output_test_mod2 <- anndata::AnnData(
   X = input_mod2$X[test_ix[test_mod2_ix], , drop = FALSE] %>% 
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
+  layers = list(counts = input_mod2$layers[["counts"]][test_ix[test_mod2_ix], , drop = FALSE] %>% 
+    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
   obs = test_obs2,
   var = mod2_var,
   uns = common_uns
