@@ -1,0 +1,29 @@
+task	method_id	label	description	maintainer	num_authors	language	type	doi
+joint_embedding	baseline_lmds	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+joint_embedding	baseline_mnn	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+joint_embedding	baseline_newwave	NewWave	Concatenated NewWave.	Robrecht Cannoodt	1	r	baseline	10.1101/2021.08.02.453487
+joint_embedding	baseline_pca	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+joint_embedding	baseline_totalvi	totalVI	totalVI: joint probabilistic modeling with Total Variational Inference	Christopher Lance	1	python	sota	10.1038/s41592-020-01050-x
+joint_embedding	baseline_umap	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+joint_embedding	dummy_random	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+joint_embedding	dummy_zeros	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+match_modality	baseline_babel_knn	Babel+KNN	Predict test expression with BABEL and match cells with KNN.	Alejandro Granados	1	r	sota	10.1073/pnas.2023070118
+match_modality	baseline_dr_knnr_cbf	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+match_modality	baseline_dr_knnr_knn	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+match_modality	baseline_linear_knn	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+match_modality	baseline_newwave_knnr_cbf	NewWave+KNNR+CBF	Perform DR with NewWave, predict embedding with KNN regression, and matching cells with a consensus best fit algorithm.	Robrecht Cannoodt	1	r	baseline	NA
+match_modality	baseline_newwave_knnr_knn	NewWave+KNNR+KNN	Perform DR with NewWave, predict embedding with KNN regression, and match cells with a KNN.	Robrecht Cannoodt	1	r	baseline	NA
+match_modality	baseline_procrustes_knn	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+match_modality	dummy_constant	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+match_modality	dummy_random	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+match_modality	dummy_semisolution	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+match_modality	dummy_solution	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+predict_modality	baseline_babel	BABEL	Learn a deep-learning model with BABEL.	Alejandro Granados	2	r	sota	10.1073/pnas.2023070118
+predict_modality	baseline_knn	KNNR	K-nearest neighbor regression.	Robrecht Cannoodt	1	r	baseline	NA
+predict_modality	baseline_linearmodel	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+predict_modality	baseline_newwave_knnr	NewWave+KNNR	Perform DR with NewWave, predict modality with KNN regression.	Robrecht Cannoodt	1	r	baseline	NA
+predict_modality	baseline_randomforest	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+predict_modality	dummy_meanpergene	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
+predict_modality	dummy_random	Random Profiles	Returns random training profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+predict_modality	dummy_solution	Solution	Returns the ground-truth solution.	Robrecht Cannoodt	1	r	positive_control	NA
+predict_modality	dummy_zeros	Zeros	Returns a prediction consisting of all zeros.	Alex Tong	2	python	negative_control	NA

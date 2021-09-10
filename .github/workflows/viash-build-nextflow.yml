@@ -1,0 +1,45 @@
+name: viash build nextflow CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  viash-build-nextflow:
+    runs-on: ${{ matrix.config.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    strategy:
+      fail-fast: true
+      matrix:
+        config:
+        - {name: 'main', os: ubuntu-latest }
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch viash
+      run: |
+        bin/init
+        bin/viash -h
+
+    - name: Build components
+      run: |
+        # allow publishing the target folder
+        sed -i '/^target\/$/d' .gitignore
+        
+        # only build nextflow targets
+        bin/viash_build -p nextflow -m release -t main_build
+
+    - name: Deploy to target branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: main_build
+        
+    - name: Upload check results
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ matrix.config.name }}_results
+        path: check_results

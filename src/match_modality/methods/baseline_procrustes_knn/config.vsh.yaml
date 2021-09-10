@@ -2,12 +2,19 @@ functionality:
   name: baseline_procrustes_knn
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing modality matching methods against.
+  description: Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.
+  info:
+    type: baseline
+    label: Procrustes+KNN
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com
       roles: [ author, maintainer ]
       props: { github: atong01 }
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ contributor ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
     - name: "--input_train_mod1"
       type: "file"
@@ -47,6 +54,10 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: "python:3.8"
@@ -54,5 +65,4 @@ platforms:
       - type: python
         pip: [ anndata, scipy, sklearn ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

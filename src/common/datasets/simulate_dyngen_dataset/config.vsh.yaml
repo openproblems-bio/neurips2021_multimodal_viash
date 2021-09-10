@@ -20,6 +20,14 @@ functionality:
       example: "dyngen_dataset"
       description: "The id of the output dataset id"
       required: true
+    - name: "--reference_rna"
+      type: file
+      example: input_rna_reference.h5ad
+      description: A reference RNA dataset.
+    - name: "--reference_mod2"
+      type: file
+      example: input_mod2_reference.h5ad
+      description: A reference mod2 dataset.
     - name: "--output_rna"
       type: file
       example: output_rna.h5ad
@@ -39,11 +47,6 @@ functionality:
       example: "plot.pdf"
       description: "A visualisation of the simulation."
       required: true
-    - name: "--backbone"
-      alternatives: [ "-b" ]
-      type: "string"
-      default: "bifurcating"
-      description: Which dyngen backbone to use for the simulation.
     - name: "--num_cells"
       type: integer
       default: 100
@@ -72,14 +75,13 @@ functionality:
       alternatives: [ "-protein" ]
       type: boolean_true
       description: Whether or not to store protein count information.
-    - name: "--num_proteins"
-      type: integer
-      description: The number of proteins to sample.
-      default: 50
     - name: "--num_threads"
       type: integer
       default: 1
       description: Parallellisation level.
+    - name: "--seed"
+      type: integer
+      description: Seed
     - name: "--cache_dir"
       type: file
       description: "A caching directory for files that dyngen downloads."
@@ -96,5 +98,7 @@ platforms:
       - type: r
         github:
           - dynverse/dyngen@devel
+        cran: 
+          - dynwrap
   - type: nextflow
-    directive_cpus: 8
+    labels: [ vhighmem, hightime, vhighcpu ]

@@ -6,7 +6,6 @@ out <- processx::run(
   command = "./simulate_dyngen_dataset",
   args = c(
     "--id", "mytest",
-    "--backbone", "bifurcating",
     "--output_rna", "dataset_rna.h5ad",
     "--output_mod2", "dataset_mod2.h5ad",
     "--plot", "plot.pdf",

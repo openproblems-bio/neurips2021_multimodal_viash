@@ -1,4 +1,0 @@
-metric_id	metric_min	metric_max	metric_higherisbetter
-auroc	0	1	true
-aupr	0	1	true
-F1	0	1	true

@@ -31,7 +31,10 @@ h5ad_temp.close()
 ###############################################################################
 ###                     CREATE H5AD FOR BOTH MODALITIES                     ###
 ###############################################################################
-new_obs = adata.obs.rename(columns = {'cell_types': 'cell_type', 'batch_indices': 'batch'}, inplace = False)
+new_obs = pd.DataFrame({
+    "cell_type": adata.obs.cell_types,
+    "batch": "batch" + (adata.obs.batch_indices+1).astype(str)
+})
 uns = { "dataset_id" : par["id"], "organism" : par["organism"] }
 
 print("Extracting RNA counts")

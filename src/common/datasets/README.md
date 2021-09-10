@@ -27,9 +27,9 @@ The AnnData files should contain:
   * `.obs['organism']`: Organism the cell was taken from (only for `"GEX"` features). ³
   * `.obs['S_score']`: Cell cycle score on S-phase genes (only for `"GEX"` features). ³
   * `.obs['G2M_score']`: Cell cycle score on G2-phase & M-phase genes (only for `"GEX"` features). ³
-  * `.obs['RNA_trajectory']`: Pseudotime values for `"GEX"` features. ⁴
-  * `.obs['ATAC_trajectory']`: Pseudotime values for `"ATAC"` features. ⁴
-  * `.obs['ADT_trajectory']`: Pseudotime values for `"ADT"` features. ⁴
+  * `.obs['pseudotime_order_GEX']`: Pseudotime values for `"GEX"` features. ⁴
+  * `.obs['pseudotime_order_ATAC']`: Pseudotime values for `"ATAC"` features. ⁴
+  * `.obs['pseudotime_order_ADT']`: Pseudotime values for `"ADT"` features. ⁴
 
 ¹: Used in the 'predict modality' and 'match modality' tasks to make train/test splits.
 ²: Used in the 'joint embedding' task to compute various metrics.

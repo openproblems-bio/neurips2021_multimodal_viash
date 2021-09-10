@@ -1,0 +1,74 @@
+functionality:
+  name: baseline_newwave_knnr_knn
+  namespace: match_modality_methods
+  version: dev
+  description: Perform DR with NewWave, predict embedding with KNN regression, and match cells with a KNN.
+  info:
+    type: baseline
+    label: NewWave+KNNR+KNN
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_train_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod1 profiles."
+      required: true
+    - name: "--input_train_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled train mod2 profiles."
+      required: true
+    - name: "--input_train_sol"
+      type: "file"
+      example: "dataset_solution.h5ad"
+      description: "The pairing of train mod1&mod2 profiles."
+      required: true
+    - name: "--input_test_mod1"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod1 profiles."
+      required: true
+    - name: "--input_test_mod2"
+      type: "file"
+      example: "dataset_censored.h5ad"
+      description: "The censored shuffled test mod2 profiles."
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: "The predicted pairing of test mod1&mod2 profiles."
+      required: true
+    - name: "--newwave_maxiter"
+      type: "integer"
+      default: 40
+      description: Maximum number of NewWave iterations.
+    - name: "--newwave_ngene"
+      type: "integer"
+      default: 200
+      description: Setting of the n_gene_par NewWave parameter.
+    - name: "--newwave_ncell"
+      type: "integer"
+      default: 200
+  resources:
+    - type: r_script
+      path: script.R
+  tests:
+    - type: r_script
+      path: ../../unit_tests/test_method.R
+    - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        packages: [ lmds, dynutils, FNN ]
+        bioc: [ SingleCellExperiment, NewWave ]
+      - type: python
+        packages: [ tensorflow ]
+  - type: nextflow
+    labels: [ highmem, midtime, highcpu ]

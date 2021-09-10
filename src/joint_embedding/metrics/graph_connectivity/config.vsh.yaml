@@ -1,0 +1,44 @@
+functionality:
+  name: graph_connectivity
+  namespace: joint_embedding_metrics
+  version: dev
+  description: Graph connectivity
+  authors:
+    - name: Michaela Mueller
+      roles: [ maintainer, author ]
+      props: { github: mumichae }
+  arguments:
+    - name: --output
+      alternatives: [ -o ]
+      type: file
+      direction: output
+      description: Metric scores by comparing the prediction to the gold standard solution.
+      required: true
+    - name: --input_prediction
+      type: file
+      description: Prediction by a method
+      required: true
+    - name: --input_solution
+      type: file
+      description: Gold standard solution.
+      required: true
+    - name: --debug
+      type: boolean
+      description: Verbose output for debugging.
+      default: False
+      required: false
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_metric.py
+    - path: ../../../../resources_test
+    - path: metric_meta_graph_connectivity.tsv
+      dest: metric_meta.tsv
+platforms:
+  - type: docker
+    image: mumichae/scib-base:0.1.1
+  - type: native
+  - type: nextflow
+    labels: [ lowmem, lowtime, lowcpu ]

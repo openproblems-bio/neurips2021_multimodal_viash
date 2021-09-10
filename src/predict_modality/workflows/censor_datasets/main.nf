@@ -1,11 +1,10 @@
 nextflow.enable.dsl=2
 
+srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 
-include  { censor_dataset } from "$targetDir/predict_modality_datasets/censor_dataset/main.nf" params(params)
-
-// params.censor_dataset__max_mod1_columns = 1000
-params.censor_dataset__max_mod2_columns = 1000
+include  { censor_dataset }             from "$targetDir/predict_modality_datasets/censor_dataset/main.nf" params(params)
+include  { overrideOptionValue }        from "$srcDir/common/workflows/utils.nf"
 
 workflow {
   main:

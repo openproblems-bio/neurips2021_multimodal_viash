@@ -6,16 +6,17 @@
 cat("Loading dependencies\n")
 library(anndata, warn.conflicts = FALSE, quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-# sc <- reticulate::import("scanpy")
+library(readr, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  input_rna = "resources_test/common/test_resource.tmp.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.tmp.output_mod2.h5ad",
+  input_rna = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.tmp.output_rna.h5ad",
+  input_mod2 = "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.tmp.output_mod2.h5ad",
   output_rna = "output_rna.h5ad",
   output_mod2 = "output_mod2.h5ad",
   min_counts_per_cell = 10000,
-  min_counts_per_gene = 150000
+  min_counts_per_gene = 150000,
+  keep_genes = "src/common/resources/all_genes_tirosh.txt"
 )
 ## VIASH END
 
@@ -29,10 +30,13 @@ var_mod2 <- ad_mod2$var
 mat_rna <- as(ad_rna$X, "CsparseMatrix")
 mat_mod2 <- as(ad_mod2$X, "CsparseMatrix")
 
+# read in which genes are supposed to be kept. multiple files are supported.
+keep_genes <- unlist(lapply(par$keep_genes, readr::read_lines))
+
 cat("Filtering genes and cells\n")
-fil_rna_genes <- colSums(mat_rna) >= par$min_counts_per_gene
-fil_mod2_genes <- colSums(mat_mod2) >= par$min_counts_per_gene
-fil_cells <- rowSums(mat_rna) + rowSums(mat_mod2) >= par$min_counts_per_cell
+fil_rna_genes <- colSums(mat_rna) >= par$min_counts_per_gene | colnames(mat_rna) %in% keep_genes
+fil_mod2_genes <- colSums(mat_mod2) >= par$min_counts_per_gene | colnames(mat_mod2) %in% keep_genes
+fil_cells <- rowSums(mat_rna) >= par$min_counts_per_cell & rowSums(mat_mod2) >= par$min_counts_per_cell
 
 obs <- obs[fil_cells, , drop = FALSE]
 var_rna <- var_rna[fil_rna_genes, , drop = FALSE]

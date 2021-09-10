@@ -2,7 +2,10 @@ functionality:
   name: baseline_pca
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: PCA dimensionality reduction.
+  info:
+    type: baseline
+    label: "PCA"
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -34,7 +37,7 @@ functionality:
       path: script.R
   tests:
     - type: r_script
-      path: test.R
+      path: ../../unit_tests/test_method.R
     - path: ../../../../resources_test
 platforms:
   - type: docker
@@ -43,4 +46,4 @@ platforms:
       - type: r
         packages: [ irlba ]
   - type: nextflow
-    directive_time: 10m
+    labels: [ lowmem, lowtime, lowcpu ]

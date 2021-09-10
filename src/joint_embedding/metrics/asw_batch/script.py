@@ -1,8 +1,8 @@
 ## VIASH START
 par = dict(
-    input_prediction="resources_test/joint_embedding/test_resource.prediction.h5ad",
-    input_solution="resources_test/joint_embedding/test_resource.solution.h5ad",
-    output="resources_test/joint_embedding/test_resource.asw_batch.tsv",
+    input_prediction="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
+    input_solution="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.solution.h5ad",
+    output="resources_test/joint_embedding/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.asw_batch.tsv",
     debug=True
 )
 
@@ -37,7 +37,6 @@ adata.obs['cell_type'] = adata_solution.obs['cell_type'][adata.obs_names]
 
 print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
-sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Compute score')
 _, sil_clus = silhouette_batch(

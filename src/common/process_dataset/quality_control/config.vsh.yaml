@@ -40,6 +40,12 @@ functionality:
       type: integer
       default: 100
       description: "Minimum counts per cell."
+    - name: "--keep_genes"
+      type: "file"
+      multiple: true
+      example: "all_genes_tirosh.txt"
+      description: File with genes to keep during filtering.
+      required: false
   resources:
     - type: r_script
       path: script.R
@@ -51,10 +57,8 @@ platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
-      - type: python
-        packages:
-          - scanpy
       - type: r
         cran: 
           - anndata
   - type: nextflow
+    labels: [ midmem, lowcpu ]

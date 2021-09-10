@@ -2,12 +2,19 @@ functionality:
   name: dummy_zeros
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against. Predicts mean training value for mod2 for all test points.
+  description: Returns a prediction consisting of all zeros.
+  info:
+    type: negative_control
+    label: Zeros
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com
       roles: [ author, maintainer ]
       props: { github: atong01 }
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ author ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
     - name: "--input_train_mod1"
       type: "file"
@@ -33,6 +40,10 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: "python:3.8"
@@ -40,4 +51,4 @@ platforms:
       - type: python
         pip: [ anndata, scipy ]
   - type: nextflow
-    directive_time: 10m
+    labels: [ lowmem, lowtime, lowcpu ]

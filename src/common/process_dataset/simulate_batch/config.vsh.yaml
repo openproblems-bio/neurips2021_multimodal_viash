@@ -1,0 +1,54 @@
+functionality:
+  name: "simulate_batch"
+  namespace: "common_process_dataset"
+  version: "dev"
+  description: |
+    Simulate batch effects if no batch effects 
+  authors:
+    - name: Robrecht Cannoodt
+      email: rcannood@gmail.com
+      roles: [ maintainer ]
+      props: { github: rcannood, orcid: "0000-0003-3641-729X" }
+  arguments:
+    - name: "--input_rna"
+      type: file
+      description: "Raw dataset in a h5ad file."
+      required: true
+      example: "input.h5ad"
+    - name: "--input_mod2"
+      type: file
+      description: "Raw dataset in a h5ad file."
+      required: true
+      example: "input.h5ad"
+    - name: "--output_rna"
+      type: file
+      example: "output.h5ad"
+      required: true
+      direction: output
+      description: Normalized h5ad file.
+    - name: "--output_mod2"
+      type: file
+      example: "output.h5ad"
+      required: true
+      direction: output
+      description: Normalized h5ad file.
+    - name: "--num_batches"
+      type: integer
+      default: 2
+      description: Number of batches to simulate when dataset doesn't contain any batches.
+    - name: "--batch_sd"
+      type: double
+      default: 0.4
+      description: Noise generator for generating the batch effects.
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
+    setup:
+      - type: r
+        cran: 
+          - anndata
+  - type: nextflow
+    labels: [ midmem, lowcpu ]

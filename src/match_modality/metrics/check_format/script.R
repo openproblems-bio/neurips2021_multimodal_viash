@@ -5,9 +5,9 @@ requireNamespace("anndata", quietly = TRUE)
 ## VIASH START
 task <- "match_modality"
 par <- list(
-  input_solution = paste0("resources_test/", task, "/test_resource.test_sol.h5ad"),
-  input_prediction = paste0("resources_test/", task, "/test_resource.prediction.h5ad"),
-  output = paste0("resources_test/", task, "/test_resource.scores.h5ad")
+  input_solution = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_sol.h5ad"),
+  input_prediction = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad"),
+  output = paste0("resources_test/", task, "/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad")
 )
 ## VIASH END
 
@@ -35,10 +35,8 @@ correct_format <- tryCatch({
     is(ad_pred$X, "sparseMatrix"),
     ad_pred$n_obs == ad_sol$n_obs,
     ad_pred$n_vars == ad_sol$n_vars,
-    !is.null(ad_pred$obs_names),
-    all(ad_pred$obs_names == ad_sol$obs_names),
-    !is.null(ad_pred$var_names),
-    all(ad_pred$var_names == ad_sol$var_names)
+    length(ad_pred$X@x) <= 1000 * ad_sol$n_obs,
+    all.equal(Matrix::rowSums(ad_pred$X), rep(1, ad_pred$n_obs), check.attributes = FALSE)
   )
 
   1

@@ -1,0 +1,64 @@
+functionality:
+  name: baseline_totalvi
+  namespace: joint_embedding_methods
+  version: dev
+  description: "totalVI: joint probabilistic modeling with Total Variational Inference"
+  info:
+    type: sota
+    label: totalVI
+    doi: 10.1038/s41592-020-01050-x
+  usage: |
+    baseline_totalvi \
+      --input_mod1 spleen_lymph_111.mod1.h5ad \
+      --input_mod2 spleen_lymph_111.mod2.h5ad \
+      --output spleen_lymph_111.predict.h5ad \
+      --hvg_number 4000 \
+      --max_epochs 400
+  authors:
+    - name: Christopher Lance
+      email: clance.connect@gmail.com
+      roles: [ author, maintainer ]
+      props: { github: xlancelottx }
+  arguments:
+    - name: --input_mod1
+      type: file
+      example: dataset_mod1.h5ad
+      description: Censored dataset.
+      required: true
+    - name: --input_mod2
+      type: file
+      example: dataset_mod2.h5ad
+      description: Censored dataset.
+      required: true
+    - name: --output
+      type: file
+      direction: output
+      example: output.h5ad
+      description: Dataset containing integrated embedding
+      required: true
+    - name: --hvg_number
+      type: integer
+      default: 4000
+      description: Number of HVG to include in totalVI
+    - name: --max_epochs
+      type: integer
+      default: 400
+      description: Number of max epochs to run totalVI
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, scanpy, scikit-misc, scipy, scikit-learn, scvi-tools]
+  - type: nextflow
+    labels: [ lowmem, lowtime, lowcpu ]
+
+
+

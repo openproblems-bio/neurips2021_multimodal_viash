@@ -2,8 +2,8 @@
 #   python: anndata
 #   r: anndata, lmds, FNN
 #
-# R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# R starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #
@@ -20,16 +20,16 @@ library(FNN, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_train_mod1 = "sample_data/test_resource.train_mod1.h5ad",
-  input_test_mod1 = "sample_data/test_resource.test_mod1.h5ad",
-  input_train_mod2 = "sample_data/test_resource.train_mod2.h5ad",
+  input_train_mod1 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
+  input_test_mod1 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
+  input_train_mod2 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
   output = "output.h5ad",
   n_pcs = 4L,
   n_neighbors = 3
 )
 ## VIASH END
 
-method_id <- "mymethod" # fill in the name of your method here
+method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 ad1_train <- anndata::read_h5ad(par$input_train_mod1)

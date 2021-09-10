@@ -6,67 +6,80 @@ library(assertthat, quietly = TRUE, warn.conflicts = FALSE)
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
+data_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
+# data_path <- "output/public_datasets/common/dyngen_citeseq_1/dyngen_citeseq_1.split_traintest."
+out_path <- data_path %>% gsub("/common/", "/predict_modality/", .) %>% gsub("[^\\.]*\\.$", "censor_dataset\\.", .)
 par <- list(
-  input_mod1 = "resources_test/common/test_resource.output_rna.h5ad",
-  input_mod2 = "resources_test/common/test_resource.output_mod2.h5ad",
-  output_train_mod1 = "output_train_mod1.h5ad",
-  output_train_mod2 = "output_train_mod2.h5ad",
-  output_test_mod1 = "output_test_mod1.h5ad",
-  output_test_mod2 = "output_test_mod2.h5ad",
-  seed = 1L,
-  max_mod2_columns = 5000L
+  input_mod1 = paste0(data_path, "output_rna.h5ad"),
+  input_mod2 = paste0(data_path, "output_mod2.h5ad"),
+  output_train_mod1 = paste0(out_path, "output_train_mod1.h5ad"),
+  output_train_mod2 = paste0(out_path, "output_train_mod2.h5ad"),
+  output_test_mod1 = paste0(out_path, "output_test_mod1.h5ad"),
+  output_test_mod2 = paste0(out_path, "output_test_mod2.h5ad"),
+  seed = 1L
 )
 ## VIASH END
 
+set.seed(par$seed)
+
 cat("Reading input data\n")
-ad1_raw <- anndata::read_h5ad(par$input_mod1)
-ad2_raw <- anndata::read_h5ad(par$input_mod2)
-ad1_mod <- unique(ad1_raw$var[["feature_types"]])
-ad2_mod <- unique(ad2_raw$var[["feature_types"]])
-new_dataset_id <- paste0(ad1_raw$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
+input_mod1 <- anndata::read_h5ad(par$input_mod1)
+input_mod2 <- anndata::read_h5ad(par$input_mod2)
+ad1_mod <- unique(input_mod1$var[["feature_types"]])
+ad2_mod <- unique(input_mod2$var[["feature_types"]])
+new_dataset_id <- paste0(input_mod1$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
 common_uns <- list(dataset_id = new_dataset_id)
 
-if (!is.null(par$max_mod1_columns) && par$max_mod1_columns < ncol(ad1_raw)) {
-  cat("Sampling mod1 columns\n")
-  ad1_ix <- sample.int(ncol(ad1_raw), par$max_mod1_columns)
-  ad1_raw <- ad1_raw[, ad1_ix, drop = FALSE]
+
+if (ad2_mod == "ATAC") {
+  if (ncol(input_mod2) > 10000) {
+    poss_ix <- which(Matrix::colSums(input_mod2$X) > 0)
+    input_mod2 <- input_mod2[, sort(sample(poss_ix, 10000))]$copy()
+  }
+  input_mod2$X@x <- (input_mod2$X@x > 0) + 0
 }
-if (!is.null(par$max_mod2_columns) && par$max_mod2_columns < ncol(ad2_raw)) {
-  cat("Sampling mod2 columns\n")
-  ad2_ix <- sample.int(ncol(ad2_raw), par$max_mod2_columns)
-  ad2_raw <- ad2_raw[, ad2_ix, drop = FALSE]
-}
+
 
 cat("Creating train objects\n")
-ad1_var <- ad1_raw$var %>% select(one_of("gene_ids"), feature_types)
-ad2_var <- ad2_raw$var %>% select(one_of("gene_ids"), feature_types)
-is_train <- ad1_raw$obs[["is_train"]]
+ad1_var <- input_mod1$var %>% select(one_of("gene_ids"), feature_types)
+ad2_var <- input_mod2$var %>% select(one_of("gene_ids"), feature_types)
+is_train <- input_mod1$obs[["is_train"]]
+train_obs <- input_mod1$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
+test_obs <- input_mod1$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
 
-out_train_mod1 <- anndata::AnnData(
-  X = ad1_raw$X[is_train, , drop = FALSE],
+output_train_mod1 <- anndata::AnnData(
+  X = input_mod1$X[is_train, , drop = FALSE],
+  layers = list(counts = input_mod1$layers[["counts"]][is_train, , drop = FALSE]),
+  obs = train_obs,
   var = ad1_var,
   uns = common_uns
 )
-out_train_mod2 <- anndata::AnnData(
-  X = ad2_raw$X[is_train, , drop = FALSE],
+output_train_mod2 <- anndata::AnnData(
+  X = input_mod2$X[is_train, , drop = FALSE],
+  layers = list(counts = input_mod2$layers[["counts"]][is_train, , drop = FALSE]),
+  obs = train_obs,
   var = ad2_var,
   uns = common_uns
 )
 
 cat("Create test objects\n")
-out_test_mod1 <- anndata::AnnData(
-  X = ad1_raw$X[!is_train, , drop = FALSE],
+output_test_mod1 <- anndata::AnnData(
+  X = input_mod1$X[!is_train, , drop = FALSE],
+  layers = list(counts = input_mod1$layers[["counts"]][!is_train, , drop = FALSE]),
+  obs = test_obs,
   var = ad1_var,
   uns = common_uns
 )
-out_test_mod2 <- anndata::AnnData(
-  X = ad2_raw$X[!is_train, , drop = FALSE],
+output_test_mod2 <- anndata::AnnData(
+  X = input_mod2$X[!is_train, , drop = FALSE],
+  layers = list(counts = input_mod2$layers[["counts"]][!is_train, , drop = FALSE]),
+  obs = test_obs,
   var = ad2_var,
   uns = common_uns
 )
 
 cat("Saving output files as h5ad\n")
-zzz <- out_train_mod1$write_h5ad(par$output_train_mod1, compression = "gzip")
-zzz <- out_train_mod2$write_h5ad(par$output_train_mod2, compression = "gzip")
-zzz <- out_test_mod1$write_h5ad(par$output_test_mod1, compression = "gzip")
-zzz <- out_test_mod2$write_h5ad(par$output_test_mod2, compression = "gzip")
+zzz <- output_train_mod1$write_h5ad(par$output_train_mod1, compression = "gzip")
+zzz <- output_train_mod2$write_h5ad(par$output_train_mod2, compression = "gzip")
+zzz <- output_test_mod1$write_h5ad(par$output_test_mod1, compression = "gzip")
+zzz <- output_test_mod2$write_h5ad(par$output_test_mod2, compression = "gzip")

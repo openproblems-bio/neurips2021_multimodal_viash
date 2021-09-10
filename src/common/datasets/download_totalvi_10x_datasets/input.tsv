@@ -1,4 +1,0 @@
-id	organism	input
-totalvi_10x_malt_10k	human	https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/malt_10k_protein_v3.h5ad
-totalvi_10x_pbmc_10k	human	https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/pbmc_10k_protein_v3.h5ad
-totalvi_10x_pbmc_5k	human	https://github.com/YosefLab/totalVI_reproducibility/raw/master/data/pbmc_5k_protein_v3.h5ad

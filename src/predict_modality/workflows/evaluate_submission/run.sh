@@ -28,6 +28,6 @@ NXF_VER=21.04.1 nextflow run \
   -main-script src/predict_modality/workflows/evaluate_submission/main.nf \
   -work-dir /tmp/neurips2021_work \
   --solutions 'output/public_datasets/predict_modality/**.output_test_mod2.h5ad' \
-  --predictions '/home/rcannood/Downloads/starter_kits/starter_kit-predict_modality-r/output/predictions/predict_modality/**.h5ad' \
+  --predictions '/home/rcannood/Downloads/starter_kits/starter_kit-predict_modality-python/output/predictions/predict_modality/**.h5ad' \
   --publishDir /home/rcannood/Downloads/starter_kits/starter_kit-predict_modality-r/output \
   -resume

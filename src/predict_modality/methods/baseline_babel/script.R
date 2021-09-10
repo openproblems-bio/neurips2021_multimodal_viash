@@ -12,31 +12,36 @@ babel_location <- "/babel/bin/"
 conda_bin <- "/opt/conda/bin/conda"
 
 ## VIASH START
+# data_path <- "output/public_datasets/predict_modality/totalvispleenlymph_spleen_lymph_111_rna/totalvispleenlymph_spleen_lymph_111_rna.censor_dataset.output_"
+# data_path <- "output/public_datasets/predict_modality/babel_GM12878_rna/babel_GM12878_rna.censor_dataset.output_"
+# data_path <- "output/public_datasets/predict_modality/dyngen_atac_1_rna/dyngen_atac_1_rna.censor_dataset.output_"
+data_path <- "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 par <- list(
-  input_train_mod1 = "resources_test/predict_modality/test_resource.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/predict_modality/test_resource.train_mod2.h5ad",
-  input_test_mod1 = "resources_test/predict_modality/test_resource.test_mod1.h5ad",
+  input_train_mod1 = paste0(data_path, "train_mod1.h5ad"),
+  input_train_mod2 = paste0(data_path, "train_mod2.h5ad"),
+  input_test_mod1 = paste0(data_path, "test_mod1.h5ad"),
   output = "output.h5ad"
 )
 conda_bin <- "conda"
 babel_location <- "../babel/bin/"
 ## VIASH END
 
+# check modalities first, and exit if it is not ATAC
+mod1 <- anndata::read_h5ad(par$input_train_mod1, backed = TRUE)$var$feature_types[[1]]
+mod2 <- anndata::read_h5ad(par$input_train_mod2, backed = TRUE)$var$feature_types[[1]]
 
-cat("Reading h5ad files\n")
-input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
-input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
-input_train_sol <- anndata::read_h5ad(par$input_train_sol)
-input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
-input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
+if (mod2 != "ATAC") {
+  cat("Error: babel only runs on GEX to ATAC datasets\n")
+  quit(save = "no", status = 42)
+}
 
 cat(">> Reading h5ad files\n")
+input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
+input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
+input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 if (is.null(input_train_mod1$var$gene_ids)) input_train_mod1$var$gene_ids <- colnames(input_train_mod1)
 if (is.null(input_train_mod2$var$gene_ids)) input_train_mod2$var$gene_ids <- colnames(input_train_mod2)
 if (is.null(input_test_mod1$var$gene_ids)) input_test_mod1$var$gene_ids <- colnames(input_test_mod1)
-if (is.null(input_test_mod2$var$gene_ids)) input_test_mod2$var$gene_ids <- colnames(input_test_mod2)
-
-mod1 <- unique(input_test_mod1$var$feature_types)
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(input_train_mod1$X, input_train_mod2$X)
@@ -94,12 +99,26 @@ DropletUtils::write10xCounts(
 
 
 cat(">> Babel: train model\n")
-babel_train_cmd <- paste0(
-  conda_bin, " run -n babel ",
-  "python ", babel_location, "train_model.py ",
-  "--data ", dir_data, "train_input.h5 ",
-  "--outdir ", dir_model
-)
+# bad attempt at getting the protein predictor to work
+babel_train_cmd <- 
+  # if (mod2 == "ATAC") { 
+    paste0(
+      conda_bin, " run -n babel ",
+      "python ", babel_location, "train_model.py ",
+      "--data ", dir_data, "train_input.h5 ",
+      "--outdir ", dir_model, " ",
+      "--nofilter"
+    )
+  # } else if (mod2 == "ADT") {
+  #   paste0(
+  #     conda_bin, " run -n babel ",
+  #     "python ", babel_location, "train_protein_predictor.py ",
+  #     "--rnaCounts ", dir_data, "train_input.h5 ",
+  #     "--outdir ", dir_model, " ",
+  #     "--nofilter"
+  #   )
+  # }
+
 out1 <- system(babel_train_cmd)
 
 # check whether training succeeded
@@ -111,7 +130,8 @@ babel_pred_cmd <- paste0(
   "python ", babel_location, "predict_model.py ",
   "--checkpoint ", dir_model, " ",
   "--data ", dir_data, "test_input.h5 ",
-  "--outdir ", dir_pred
+  "--outdir ", dir_pred, " ",
+  "--nofilter"
 )
 out2 <- system(babel_pred_cmd)
 
@@ -125,16 +145,16 @@ cat(">> Creating output object\n")
 pred_long <-
   summary(pred$X) %>%
   mutate(
-    i = match(rownames(pred), rownames(ad1_test))[i],
-    j = match(colnames(pred), colnames(ad2))[j]
+    i = match(rownames(pred), rownames(input_test_mod1))[i],
+    j = match(colnames(pred), colnames(input_train_mod2))[j]
   )
 pred_expanded <-
   Matrix::sparseMatrix(
     i = pred_long$i,
     j = pred_long$j,
     x = pred_long$x,
-    dims = c(nrow(ad1_test), ncol(ad2)),
-    dimnames = list(rownames(ad1_test), colnames(ad2))
+    dims = c(nrow(input_test_mod1), ncol(input_train_mod2)),
+    dimnames = list(rownames(input_test_mod1), colnames(input_train_mod2))
   ) %>%
   as("CsparseMatrix")
 

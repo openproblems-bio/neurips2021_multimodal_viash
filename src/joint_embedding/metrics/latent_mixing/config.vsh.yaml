@@ -1,0 +1,48 @@
+functionality:
+  name: latent_mixing
+  namespace: joint_embedding_metrics
+  version: dev
+  description: Calculate latent mixing metric for joint embedding task.
+  authors:
+    - name: Ann Chen
+      email: ann.chen@czbiohub.org
+      roles: [ author, maintainer ]
+      props: { github: atchen}
+  arguments:
+    - name: "--input_prediction"
+      type: "file"
+      example: "prediction.h5ad"
+      description: Prediction by a method
+      required: true
+    - name: "--input_solution"
+      type: "file"
+      example: "solution.h5ad"
+      description: Gold standard solution
+      required: true
+    - name: "--output"
+      type: "file"
+      direction: "output"
+      example: "output.h5ad"
+      description: Latent mixing metric measures how well the latent cell representations are mixed between batches relative to the global frequency of batches.
+      required: true
+    - name: "--n_neighbors"
+      type: integer
+      default: 100
+      description: Number of neighbors for the entropy_batch_mixing metric.
+  resources:
+    - type: python_script
+      path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_metric.py
+    - path: ../../../../resources_test
+    - path: metric_meta_latent_mixing.tsv
+      dest: metric_meta.tsv
+platforms:
+  - type: docker
+    image: "python:3.8"
+    setup:
+      - type: python
+        pip: [ anndata, sklearn, scipy ]
+  - type: nextflow
+    labels: [ lowmem, lowtime, lowcpu ]

@@ -2,7 +2,10 @@ functionality:
   name: baseline_umap
   namespace: joint_embedding_methods
   version: dev
-  description: A baseline method for comparing joint embedding methods against.
+  description: UMAP dimensionality reduction on the Euclidean distance.
+  info:
+    type: baseline
+    label: UMAP
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -46,7 +49,7 @@ functionality:
       path: script.R
   tests:
     - type: r_script
-      path: test.R
+      path: ../../unit_tests/test_method.R
     - path: ../../../../resources_test
 platforms:
   - type: docker
@@ -55,5 +58,4 @@ platforms:
       - type: r
         packages: [ uwot, irlba ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

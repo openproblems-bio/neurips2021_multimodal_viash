@@ -2,7 +2,10 @@ functionality:
   name: baseline_linearmodel
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against.
+  description: Linear model regression.
+  info:
+    type: baseline
+    label: Linear Models
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -36,14 +39,14 @@ functionality:
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 50
       description: Number of principal components to use.
   resources:
     - type: r_script
       path: script.R
   tests:
     - type: r_script
-      path: test.R
+      path: ../../unit_tests/test_method.R
     - path: ../../../../resources_test
 platforms:
   - type: docker
@@ -52,5 +55,4 @@ platforms:
       - type: r
         packages: [ lmds ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "10 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

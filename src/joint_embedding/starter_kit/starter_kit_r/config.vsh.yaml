@@ -1,5 +1,6 @@
 functionality:
-  name: method
+  name: r_starter_kit
+  namespace: joint_embedding_starter_kits
   
   # metadata for your method
   version: dev
@@ -44,6 +45,12 @@ functionality:
   resources:
     - type: r_script
       path: script.R
+  
+  # resources for unit testing your component
+  tests:
+    - type: r_script
+      path: test.R
+    - path: sample_data
       
 # target platforms
 platforms:

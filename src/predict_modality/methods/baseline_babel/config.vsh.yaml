@@ -2,7 +2,11 @@ functionality:
   name: baseline_babel
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against.
+  description: Learn a deep-learning model with BABEL.
+  info:
+    type: sota
+    label: BABEL
+    doi: "10.1073/pnas.2023070118"
   authors:
     - name: Alejandro Granados
       email: alejandro.granados@czbiohub.org
@@ -37,6 +41,11 @@ functionality:
   resources:
     - type: r_script
       path: script.R
+  # babel doesn't work on the resources_test data
+  # tests:
+  #   - type: r_script
+  #     path: ../../unit_tests/test_method.R
+  #   - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
@@ -46,10 +55,12 @@ platforms:
       - type: docker
         run: 
           - wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && /bin/bash ~/miniconda.sh -b -p /opt/conda && /opt/conda/bin/conda -V
-          - cd / && git clone --depth 1 https://github.com/wukevin/babel.git
+          - cd / && git clone --depth 1 https://github.com/rcannood/babel.git
           - cd /babel && /opt/conda/bin/conda env create -f environment.yml
       - type: r
         bioc: [ DropletUtils ]
+      - type: docker
+        env: 
+          - PATH=/opt/conda/bin/:$PATH
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ midmem, lowtime, lowcpu ]

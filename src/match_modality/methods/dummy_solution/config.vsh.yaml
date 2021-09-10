@@ -2,7 +2,10 @@ functionality:
   name: dummy_solution
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing match modality methods against.
+  description: Returns the ground-truth pairing.
+  info:
+    type: positive_control
+    label: Solution
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -25,11 +28,10 @@ functionality:
       path: script.R
   tests:
     - type: r_script
-      path: test.R
+      path: test_method.R
     - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

@@ -13,11 +13,11 @@ conda_bin <- "/opt/conda/bin/conda"
 
 ## VIASH START
 par <- list(
-  input_train_mod1 = "resources_test/match_modality/test_resource.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/match_modality/test_resource.train_mod2.h5ad",
-  input_train_sol = "resources_test/match_modality/test_resource.train_sol.h5ad",
-  input_test_mod1 = "resources_test/match_modality/test_resource.test_mod1.h5ad",
-  input_test_mod2 = "resources_test/match_modality/test_resource.test_mod2.h5ad",
+  input_train_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
+  input_train_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
+  input_train_sol = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_sol.h5ad",
+  input_test_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
+  input_test_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
   output = "output.h5ad",
   n_dims = 10,
   n_neighs = 10
@@ -25,6 +25,12 @@ par <- list(
 conda_bin <- "conda"
 babel_location <- "../babel/bin/"
 ## VIASH END
+
+input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2, backed = TRUE)
+if (input_train_mod2$var$feature_types[[1]] != "ATAC") {
+  cat("Error: babel only runs on GEX to ATAC datasets\n")
+  quit(save = "no", status = 42)
+}
 
 cat("Reading h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
@@ -39,7 +45,8 @@ if (is.null(input_train_mod2$var$gene_ids)) input_train_mod2$var$gene_ids <- col
 if (is.null(input_test_mod1$var$gene_ids)) input_test_mod1$var$gene_ids <- colnames(input_test_mod1)
 if (is.null(input_test_mod2$var$gene_ids)) input_test_mod2$var$gene_ids <- colnames(input_test_mod2)
 
-mod1 <- unique(input_test_mod1$var$feature_types)
+mod1 <- as.character(unique(input_train_mod1$var$feature_types))
+mod2 <- as.character(unique(input_train_mod2$var$feature_types))
 
 # multiome_matrix for export to Babel's input format
 multiome_matrix <- cbind(input_train_mod1$X, input_train_mod2$X)
@@ -101,8 +108,12 @@ babel_train_cmd <- paste0(
   conda_bin, " run -n babel ",
   "python ", babel_location, "train_model.py ",
   "--data ", dir_data, "train_input.h5 ",
-  "--outdir ", dir_model
+  "--outdir ", dir_model, " ",
+  "--nofilter"
 )
+# stringent filtering causes babel to sometimes fail
+# reason: https://github.com/wukevin/babel/blob/main/babel/sc_data_loaders.py#L168-L190
+
 out1 <- system(babel_train_cmd)
 
 # check whether training succeeded
@@ -114,7 +125,8 @@ babel_pred_cmd <- paste0(
   "python ", babel_location, "predict_model.py ",
   "--checkpoint ", dir_model, " ",
   "--data ", dir_data, "test_input.h5 ",
-  "--outdir ", dir_pred
+  "--outdir ", dir_pred, " ",
+  "--nofilter"
 )
 out2 <- system(babel_pred_cmd)
 
@@ -124,7 +136,6 @@ expect_equal(out2, 0, info = paste0("Prediction failed with exit code ", out1))
 cat(">> Read predictions\n")
 pred <- anndata::read_h5ad(paste0(dir_pred, "/rna_atac_adata.h5ad"))
 
-
 #######################################
 #####  KNN
 
@@ -133,41 +144,49 @@ input_test_mod2_filter <- input_test_mod2[, row.names(input_test_mod2$var) %in% 
 
 # Dimensional reduction of both predicted and test profiles
 pred_profiles <- pred[, row.names(input_test_mod2_filter$var)]$X
-train_X <- rbind(pred_profiles, input_test_mod2_filter$X)
 
 cat("Performing DR on test values\n")
 dr <- lmds::lmds(
-  train_X,
+  rbind(pred_profiles, input_test_mod2_filter$X),
   ndim = par$n_dims,
   distance_method = par$distance_method
 )
 
-n_cells <- dim(dr)[1]
+train_ix <- seq_len(nrow(pred_profiles))
+dr_preds <- dr[train_ix, , drop = FALSE]
+dr_test_mod2 <- dr[-train_ix, , drop = FAPSE]
 
-dr_knn <- dr[1:n_cells, ]
-dr_y <- dr[(n_cells + 1):dim(dr)[1], ]
 
+cat("Performing KNN between test mod2 DR and predicted test mod2\n")
+knn_out <- FNN::get.knnx(
+  dr_preds,
+  dr_test_mod2,
+  k = min(1000, nrow(dr_preds))
+)
 
-cat("Predicting for each cell profile in mod2 2\n")
-knn_indexes  <- apply(dr_y, 1, function(yi) {
-	FNN::get.knnx(dr_knn,
-    query = t(yi),
-    k=par$n_neigh
-  )$nn.index
-})
+cat("Creating output data structures\n")
+df <- tibble(
+  i = as.vector(row(knn_out$nn.index)),
+  j = as.vector(knn_out$nn.index),
+  x = max(knn_out$nn.dist) * 2 - as.vector(knn_out$nn.dist)
+)
+knn_mat <- Matrix::sparseMatrix(
+  i = df$i,
+  j = df$j,
+  x = df$x,
+  dims = list(nrow(input_test_mod1), nrow(input_test_mod2))
+)
 
-# matrix of matched cells
-matched_cells <- matrix(0, dim(knn_indexes)[2], dim(knn_indexes)[2])
-# assing probabilities
-for (i in 1:dim(matched_cells)[1]) {
-	matched_cells[i, knn_indexes[, i]] <- 1/par$n_neigh # assign equal probability to the k nearest neighbors
-}
-# make sparse matrix
+# normalise to make rows sum to 1
+rs <- Matrix::rowSums(knn_mat)
+knn_mat@x <- knn_mat@x / rs[knn_mat@i + 1]
+
+cat("Creating output anndata\n")
 out <- anndata::AnnData(
-  X = as(matched_cells, "CsparseMatrix"),
+  X = as(knn_mat, "CsparseMatrix"),
   uns = list(
-    dataset_id = ad1$uns[["dataset_id"]],
-    method_id = "babel_knn"
+    dataset_id = input_train_mod1$uns[["dataset_id"]],
+    method_id = "baseline_babel_knn"
   )
 )
 

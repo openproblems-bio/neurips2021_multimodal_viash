@@ -1,0 +1,3 @@
+metric_id	metric_min	metric_max	metric_higherisbetter
+pairing_auroc	0	1	true
+pairing_aupr	0	1	true

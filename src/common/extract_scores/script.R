@@ -6,7 +6,7 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 par <- list(
-  # input = "resources_test/predict_modality/test_resource.scores.h5ad",
+  # input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
   input = list.files("work/f2/76020c558a40e0d469f18dc56bb258", pattern = "*.(h5ad|output)$", full.names = TRUE),
   output = "output/pilot/joint_embedding/output.extract_scores.output.tsv",
   summary = "output/pilot/joint_embedding/output.extract_scores.summary.tsv",
@@ -45,15 +45,16 @@ scores <- map_df(par$input, function(inp) {
   }
 
   as_tibble(ad$uns[c("dataset_id", "method_id", "metric_ids", "metric_values")])
-})
+}) %>%
+  rename(metric_id = metric_ids, value = metric_values)
 
 expect_true(
-  all(unique(scores$metric_ids) %in% metric_meta$metric_id),
+  all(unique(scores$metric_id) %in% metric_meta$metric_id),
   info = "All metric_ids in h5ad should be mentioned in the metric_meta"
 )
 
 # create method meta
-method_meta <- 
+method_meta <-
   if (is.null(par$method_meta)) {
     cat("No method meta found, defaulting to all method ids present in the h5ads.\n")
     tibble(
@@ -100,8 +101,8 @@ missing_values <- crossing(
   dataset_meta %>% select(dataset_id),
   method_meta %>% select(method_id),
   metric_meta %>% transmute(
-    metric_ids = metric_id,
-    metric_values = ifelse(metric_higherisbetter, metric_min, metric_max)
+    metric_id = metric_id,
+    value = ifelse(metric_higherisbetter, metric_min, metric_max)
   )
 )
 
@@ -110,20 +111,8 @@ final_scores <- bind_rows(
   scores %>%
     inner_join(method_meta, by = "method_id") %>%
     inner_join(dataset_meta, by = "dataset_id") %>%
-    inner_join(metric_meta %>% select(metric_ids = metric_id), by = "metric_ids"),
-  anti_join(missing_values, scores, by = c("method_id", "dataset_id", "metric_ids"))
+    inner_join(metric_meta %>% select(metric_id), by = "metric_id"),
+  anti_join(missing_values, scores, by = c("method_id", "dataset_id", "metric_id"))
 )
-
-cat("Computing summary scores\n")
-summary <-
-  final_scores %>% 
-  group_by(method_id, metric_ids) %>% 
-  summarise(metric_values = mean(metric_values), .groups = "drop") %>% 
-  inner_join(method_meta, by = "method_id")
-
-score_spread <- final_scores %>% spread(metric_ids, metric_values)
-summary_spread <- summary %>% spread(metric_ids, metric_values)
-
 cat("Writing results to tsv files\n")
-write_tsv(score_spread, par$output)
-write_tsv(summary_spread, par$summary)
+write_tsv(final_scores, par$output)

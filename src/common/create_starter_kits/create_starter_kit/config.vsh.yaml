@@ -9,10 +9,9 @@ functionality:
       roles: [ maintainer ]
       props: { github: rcannood, orcid: "0000-0003-3641-729X" }
   arguments:
-    - name: "--input_dir"
+    - name: "--src"
       type: "file"
-      required: true
-      example: "src/predict_modality/starter_kit/starter_kit_r/"
+      default: "src"
     - name: "--task"
       type: "string"
       required: true
@@ -26,6 +25,10 @@ functionality:
       example: "r"
       required: true
     - name: "--language_name"
+      type: "string"
+      example: "R"
+      required: true
+    - name: "--language_ext"
       type: "string"
       example: "R"
       required: true
@@ -63,6 +66,7 @@ functionality:
     - type: file
       path: ../../../../resources_test
 platforms:
+  - type: native
   - type: docker
     image: ubuntu:21.04
     setup:

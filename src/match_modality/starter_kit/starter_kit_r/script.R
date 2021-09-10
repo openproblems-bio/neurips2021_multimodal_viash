@@ -2,8 +2,8 @@
 #   python: anndata
 #   r: anndata, lmds
 #
-# R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# R starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #
@@ -21,17 +21,17 @@ library(keras, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_train_mod1 = "resources_test/match_modality/test_resource.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/match_modality/test_resource.train_mod2.h5ad",
-  input_train_sol = "resources_test/match_modality/test_resource.train_sol.h5ad",
-  input_test_mod1 = "resources_test/match_modality/test_resource.test_mod1.h5ad",
-  input_test_mod2 = "resources_test/match_modality/test_resource.test_mod2.h5ad",
+  input_train_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
+  input_train_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
+  input_train_sol = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_sol.h5ad",
+  input_test_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
+  input_test_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
   output = "output.h5ad",
   distance_method = "pearson"
 )
 ## VIASH END
 
-method_id <- "mymethod" # fill in the name of your method here
+method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
@@ -44,7 +44,14 @@ match_train <- apply(input_train_sol$X, 1, function(x) which(x > 0)) %>% unname
 
 # TODO: implement own method
 
-cat("Running LMDS on input data\n")
+# This starter kit is split up into several steps.
+# * compute dimensionality reduction on [train_mod1, test_mod1] data
+# * train regression model to predict the train_mod2 data from the dr_mod1 values
+# * predict test_mod2 matrix from model and test_mod1
+# * calculate k nearest neighbors between test_mod2 and predicted test_mod2
+# * transform k nearest neighbors into a pairing matrix
+
+cat("compute dimensionality reduction on [train_mod1, test_mod1] data\n")
 # merge input matrices
 mod1_X <- rbind(input_train_mod1$X, input_test_mod1$X)
 mod2_X <- rbind(input_train_mod2$X[match_train, , drop = FALSE], input_test_mod2$X)
@@ -59,7 +66,7 @@ dr_x2_train <- dr_x2[seq_len(nrow(input_train_mod1)), , drop = FALSE]
 dr_x1_test <- dr_x1[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
 dr_x2_test <- dr_x2[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
 
-cat("Training neural network to predict mod2 dr\n")
+cat("train regression model to predict the train_mod2 data from the dr_mod1 values\n")
 model <-
   keras_model_sequential() %>%
   layer_dense(100, "relu", input_shape = ncol(dr_x1)) %>%
@@ -70,36 +77,40 @@ model %>% compile(
   loss = "mse",
   optimizer = "adam"
 )
-
 model %>% fit(dr_x1_train, dr_x2_train, epochs = 200, verbose = FALSE)
+
+cat("predict test_mod2 matrix from model and test_mod1\n")
 preds <- predict(model, dr_x1_test)
 colnames(preds) <- colnames(dr_x2_test)
 
 
-cat("Performing KNN between test mod2 DR and predicted test mod2\n")
+cat("calculate k nearest neighbors between test_mod2 and predicted test_mod2\n")
 par_frac <- 1
 knn_out <- FNN::get.knnx(
   preds,
   dr_x2_test,
-  k = min(100, ceiling(par_frac * nrow(preds)))
+  k = min(1000, ceiling(par_frac * nrow(preds)))
 )
 
-cat("Creating output data structures\n")
+cat("transform k nearest neighbors into a pairing matrix\n")
 df <- tibble(
   i = as.vector(row(knn_out$nn.index)),
   j = as.vector(knn_out$nn.index),
   x = max(knn_out$nn.dist) * 2 - as.vector(knn_out$nn.dist)
 )
-knn_mat <- Matrix::sparseMatrix(i = df$i, j = df$j, x = df$x)
+knn_mat <- Matrix::sparseMatrix(
+  i = df$i,
+  j = df$j,
+  x = df$x,
+  dims = list(nrow(input_test_mod1), nrow(input_test_mod2))
+)
 
-cat("Creating output anndata\n")
+cat("write prediction output\n")
 out <- anndata::AnnData(
   X = as(knn_mat, "CsparseMatrix"),
   uns = list(
     dataset_id = input_train_mod1$uns[["dataset_id"]],
-    method_id = "baseline_dr_nn_knn"
+    method_id = method_id
   )
 )
-
-cat("Writing predictions to file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")

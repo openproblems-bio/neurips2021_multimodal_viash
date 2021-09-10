@@ -2,7 +2,10 @@ functionality:
   name: dummy_random
   namespace: match_modality_methods
   version: dev
-  description: A baseline method for comparing modality matching methods against. Outputs a random matrix with a single non-zero per row.
+  description: Generates random pairings weights drawn from a uniform distribution.
+  info:
+    type: negative_control
+    label: Random Pairing
   authors:
     - name: Alex Tong
       email: alexandertongdev@gmail.com
@@ -43,12 +46,15 @@ functionality:
   resources:
     - type: python_script
       path: script.py
+  tests:
+    - type: python_script
+      path: ../../unit_tests/test_method.py
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: "python:3.8"
     setup:
       - type: python
-        pip: [ anndata, numpy ]
+        pip: [ anndata, numpy, sklearn ]
   - type: nextflow
-    directive_time: 10m
-    directive_memory: "20 GB"
+    labels: [ lowmem, lowtime, lowcpu ]

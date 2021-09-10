@@ -2,8 +2,8 @@
 #   python: anndata
 #   r: anndata, lmds
 #
-# R starter kit for the NeurIPS 2021 Single-Cell Competition. Parts
-# with `TODO` are supposed to be changed by you.
+# R starter kit for the NeurIPS 2021 Single-Cell Competition.
+# Parts with `TODO` are supposed to be changed by you.
 #
 # More documentation:
 #
@@ -19,15 +19,15 @@ library(lmds, warn.conflicts = FALSE, quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 par <- list(
-  input_mod1 = "sample_data/test_resource.mod1.h5ad",
-  input_mod2 = "sample_data/test_resource.mod2.h5ad",
+  input_mod1 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad",
+  input_mod2 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad",
   output = "output.h5ad",
   distance_method = "spearman",
   n_pcs = 4L
 )
 ## VIASH END
 
-method_id <- "mymethod" # fill in the name of your method here
+method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading h5ad files\n")
 ad1 <- read_h5ad(par$input_mod1)

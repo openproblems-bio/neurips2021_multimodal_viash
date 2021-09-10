@@ -2,7 +2,10 @@ functionality:
   name: dummy_solution
   namespace: predict_modality_methods
   version: dev
-  description: A baseline method for comparing modality prediction methods against.
+  description: Returns the ground-truth solution.
+  info:
+    type: positive_control
+    label: Solution
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -23,6 +26,10 @@ functionality:
   resources:
     - type: r_script
       path: script.R
+  tests:
+    - type: r_script
+      path: test_method.R
+    - path: ../../../../resources_test
 platforms:
   - type: docker
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
@@ -30,4 +37,4 @@ platforms:
       - type: r
         packages: [ lmds ]
   - type: nextflow
-    directive_time: 10m
+    labels: [ lowmem, lowtime, lowcpu ]

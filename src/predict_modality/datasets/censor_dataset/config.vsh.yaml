@@ -48,12 +48,6 @@ functionality:
     - name: "--seed"
       type: integer
       description: "The seed for determining the train/test split."
-    - name: "--max_mod1_columns"
-      type: integer
-      description: "The maximum number of columns in mod1."
-    - name: "--max_mod2_columns"
-      type: integer
-      description: "The maximum number of columns in mod2."
   resources:
     - type: r_script
       path: script.R
@@ -66,6 +60,7 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ GA ]
+        cran: [ Seurat, proxyC ]
   - type: nextflow
     publish: true
+    labels: [ midmem, lowtime, lowcpu ]

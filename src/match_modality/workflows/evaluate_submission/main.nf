@@ -4,10 +4,10 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "match_modality"
 
-include  { calculate_auroc }             from "$targetDir/${task}_metrics/calculate_auroc/main.nf"             params(params)
+include  { aupr }                        from "$targetDir/${task}_metrics/aupr/main.nf"                        params(params)
+include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
-include  { extract_scores }            from "$targetDir/common/extract_scores/main.nf"                     params(params)
-include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
+include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"                params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 params.solutions = "output/public_datasets/$task/**.output_test_sol.h5ad"
@@ -17,14 +17,13 @@ workflow {
   def predictions = Channel.fromPath(params.predictions) | get_id_predictions
   def solutions = Channel.fromPath(params.solutions) | get_id_solutions
 
-  // create solutions meta
-  def solutionsMeta = solutions
-    | map{ it[0] }
-    | collectFile(name: "solutions_meta.tsv", newLine: true, seed: "dataset_id")
+  // fetch dataset ids in predictions and in solutions
+  def datasetsMeta = 
+    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
   
   // create metrics meta
   def metricsMeta = 
-    Channel.fromPath("$srcDir/$task/**/metric_meta_*.tsv")
+    Channel.fromPath("$srcDir/$task/**/metric_meta*.tsv")
       | toList()
       | map{ [ "meta", it, params ] }
       | bind_tsv_rows
@@ -32,13 +31,13 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | (calculate_auroc & check_format)
+    | (aupr & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
     | combine(metricsMeta)
-    | combine(solutionsMeta)
+    | combine(datasetsMeta)
     | map{ [ "output", [ input: it[0], metric_meta: it[1], dataset_meta: it[2] ], params ] }
-    | extract_scores
+    | final_scores
 }
 

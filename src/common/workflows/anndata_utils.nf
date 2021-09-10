@@ -1,6 +1,6 @@
 // read the dataset id from an anndata file
 process getDatasetId {
-  container 'mumichae/scib-base:0.1'
+  container 'mumichae/scib-base:0.1.1'
   cache 'deep'
 
   input:
@@ -21,7 +21,7 @@ process getDatasetId {
 
 // read the method id from an anndata file
 process getMethodId {
-  container 'mumichae/scib-base:0.1'
+  container 'mumichae/scib-base:0.1.1'
   cache 'deep'
   
   input:

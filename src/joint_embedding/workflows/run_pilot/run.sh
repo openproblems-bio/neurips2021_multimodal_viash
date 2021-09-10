@@ -18,3 +18,19 @@ bin/nextflow \
   -entry pilot_wf \
   --publishDir output/pilot/joint_embedding/ \
   -resume
+
+bin/nextflow \
+  run . \
+  -main-script src/joint_embedding/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/joint_embedding/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config
+
+bin/nextflow \
+  run . \
+  -main-script src/joint_embedding/workflows/run_pilot/main.nf \
+  -entry pilot_wf \
+  --publishDir output/pilot/joint_embedding/ \
+  -resume \
+  -c src/common/workflows/resource_labels_vhighmem.config

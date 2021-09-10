@@ -1,5 +1,6 @@
 functionality:
-  name: method
+  name: r_starter_kit
+  namespace: predict_modality_starter_kits
   
   # metadata for your method
   version: dev
@@ -42,17 +43,23 @@ functionality:
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 50
       description: Number of principal components to use.
     - name: "--n_neighbors"
       type: "integer"
-      default: 5
+      default: 50
       description: Number of neighbors to use.
       
   # files your script needs
   resources:
     - type: r_script
       path: script.R
+  
+  # resources for unit testing your component
+  tests:
+    - type: r_script
+      path: test.R
+    - path: sample_data
       
 # target platforms
 platforms:
