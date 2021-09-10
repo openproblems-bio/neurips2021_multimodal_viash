@@ -145,8 +145,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process dummy_constant_process {
-  time '10 m'
-  memory '10GB'
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

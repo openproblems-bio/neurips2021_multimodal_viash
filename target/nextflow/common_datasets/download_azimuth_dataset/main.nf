@@ -145,8 +145,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_azimuth_dataset_process {
-  time '10 m'
-  memory '10GB'
+  label 'midmem'
+  label 'midcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

@@ -145,8 +145,6 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process bind_tsv_rows_process {
-  time '10 m'
-  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

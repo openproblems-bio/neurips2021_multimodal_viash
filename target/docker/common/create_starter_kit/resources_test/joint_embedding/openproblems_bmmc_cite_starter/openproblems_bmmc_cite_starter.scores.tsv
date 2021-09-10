@@ -1,0 +1,5 @@
+dataset_id	method_id	metric_id	value
+openproblems_bmmc_cite_starter_JE	baseline_lmds	rfoob_celltype_accuracy	0.5483333333333333
+openproblems_bmmc_cite_starter_JE	baseline_lmds	rfoob_pseudotimegex_rsq	0.8019848098127709
+openproblems_bmmc_cite_starter_JE	baseline_lmds	rfoob_pseudotimeadt_rsq	0.8776503626672149
+openproblems_bmmc_cite_starter_JE	baseline_lmds	rfoob_batch_error	0.295

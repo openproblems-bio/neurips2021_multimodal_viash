@@ -145,9 +145,10 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process download_10x_dataset_process {
+  label 'midmem'
+  label 'lowtime'
+  label 'lowcpu'
   maxForks 1
-  time '10 m'
-  memory '10GB'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
