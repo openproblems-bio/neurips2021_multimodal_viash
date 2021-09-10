@@ -5,7 +5,7 @@ requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
-path <- "output/public_datasets/predict_modality/openproblems_bmmc_multiome_mod2/openproblems_bmmc_multiome_mod2.censor_dataset.output_"
+path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_mod2/openproblems_bmmc_multiome_phase1_mod2.censor_dataset.output_"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),
@@ -16,6 +16,8 @@ par <- list(
   distance_method = "pearson"
 )
 ## VIASH END
+
+n_cores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
 
 cat("Reading mod1 files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
@@ -29,33 +31,49 @@ dr <- lmds::lmds(
   ndim = par$n_pcs,
   distance_method = par$distance_method
 )
+ix <- seq_len(nrow(input_train_mod1))
+dr_train <- dr[ix, , drop = FALSE]
+dr_test <- dr[-ix, , drop = FALSE]
 
-rm(input_train_mod1)
-rm(input_test_mod1)
+# free memory
+rm(input_train_mod1, input_test_mod1)
+rm()
+gc()
 
 cat("Reading mod2 files\n")
 input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
 
-ix <- seq_len(nrow(input_train_mod2))
-dr_train <- dr[ix, , drop = FALSE]
-dr_test <- dr[-ix, , drop = FALSE]
-responses_train <- input_train_mod2$X
-
 cat("Predicting for each column in modality 2\n")
-preds <- apply(responses_train, 2, function(yi) {
-  FNN::knn.reg(
-    train = dr_train,
-    test = dr_test,
-    y = yi,
-    k = par$n_neighbors
-  )$pred
-})
+pred_df <- bind_rows(pbapply::pblapply(
+  seq_len(ncol(input_train_mod2)),
+  cl = n_cores,
+  function(j) {
+    out <- FNN::knn.reg(
+      train = dr_train,
+      test = dr_test,
+      y = input_train_mod2$X[,j],
+      k = par$n_neighbors
+    )$pred
+    ix <- which(out != 0)
+    if (length(ix) > 0) {
+      tibble(
+        i = ix,
+        j = j,
+        x = out[ix]
+      )
+    } else {
+      NULL
+    }
+  }
+))
 
 cat("Creating outputs object\n")
 # store prediction as a sparse matrix
-prediction <- Matrix::Matrix(
-  preds,
-  sparse = TRUE,
+prediction <- Matrix::sparseMatrix(
+  i = pred_df$i,
+  j = pred_df$j,
+  x = pred_df$x,
+  dim = c(nrow(dr_test), ncol(input_train_mod2)),
   dimnames = list(rownames(dr_test), colnames(input_train_mod2))
 )
 
