@@ -19,12 +19,7 @@ dataset_metadata_h5ad <-
   map_df(par$input_h5ads, function(x) {
     cat("Reading ", x, "\n", sep = "")
     ad <- anndata::read_h5ad(x, backed = TRUE)
-    num_batches <-
-      if (ad$uns[["organism"]] == "synthetic" || ad$uns[["batch_type"]] == "real") {
-        length(unique(ad$obs$batch))
-      } else {
-        1
-      }
+    num_batches <- length(unique(ad$obs$batch))
     tibble(
       dataset_id = ad$uns$dataset_id,
       organism = ad$uns$organism,
