@@ -89,6 +89,4 @@ platforms:
   # which uses the docker container built above to also be able to 
   # run your method as part of a nextflow pipeline.
   - type: nextflow
-    publish: true
-    directive_time: 5m
-    directive_memory: 10 GB
+    labels: [ lowmem, lowtime, lowcpu ]
