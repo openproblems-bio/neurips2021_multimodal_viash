@@ -145,14 +145,15 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process python_starter_kit_process {
-  time '5m'
-  memory '10 GB'
+  label 'lowmem'
+  label 'lowtime'
+  label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
   stageInMode "symlink"
   container "${container}"
-  publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
+
   input:
     tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
   output:

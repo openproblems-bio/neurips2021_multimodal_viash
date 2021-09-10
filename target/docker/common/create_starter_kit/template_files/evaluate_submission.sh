@@ -22,7 +22,7 @@ function ViashSourceDir {
 # cd to root dir of starter kit
 cd `ViashSourceDir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
+[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
 
 
 echo ""
@@ -36,12 +36,11 @@ nextflow run \
   openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/evaluate_submission/main.nf \
-  --solutions 'output/datasets/$par_task/**.output_solution.h5ad' \
+  --solutionDir 'output/datasets/$par_task' \
   --predictions 'output/predictions/$par_task/**.h5ad' \
   --publishDir 'output/evaluation/$par_task' \
   -resume \
-  -latest \
-  -c scripts/nextflow.config
+  -latest
 
 
 # print message

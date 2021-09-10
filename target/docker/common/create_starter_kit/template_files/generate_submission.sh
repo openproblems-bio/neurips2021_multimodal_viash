@@ -3,9 +3,6 @@
 set -e
 
 # change these parameters if need be
-MAX_MEMORY="$par_memory"
-MAX_TIME="$par_time"
-MAX_CPUS="$par_cpus"
 PIPELINE_VERSION="$par_pipeline_version"
 
 # helper functions
@@ -31,7 +28,7 @@ function get_latest_release {
 # cd to root dir of starter kit
 cd `get_script_dir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
+[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
 
 LATEST_RELEASE=`get_latest_release openproblems-bio/neurips2021_multimodal_viash`
 if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
@@ -62,10 +59,7 @@ echo "######################################################################"
 # change the max time, max cpu and max memory usage to suit your needs.
 bin/viash build config.vsh.yaml -o target/nextflow -p nextflow \
   -c '.functionality.name := "method"' \
-  -c '.platforms[.type == "nextflow"].publish := true' \
-  -c ".platforms[.type == 'nextflow'].directive_time := '$MAX_TIME'" \
-  -c ".platforms[.type == 'nextflow'].directive_memory := '$MAX_MEMORY'" \
-  -c ".platforms[.type == 'nextflow'].directive_cpus := '$MAX_CPUS'"
+  -c '.platforms[.type == "nextflow"].publish := true'
 
 
 echo ""
@@ -111,7 +105,8 @@ bin/nextflow \
   --datasets 'output/datasets/$par_task/**.h5ad' \
   --publishDir output/predictions/$par_task/ \
   -resume \
-  -latest
+  -latest \
+  -c scripts/nextflow.config
 
 echo ""
 echo "######################################################################"
@@ -124,8 +119,9 @@ zip -9 -r submission.zip . \
   --exclude=*work* \
   --exclude=*.DS_Store* \
   --exclude=nextflow.config \
-  --exclude=output/public_datasets/* \
-  --exclude=bin/*
+  --exclude=output/datasets/* \
+  --exclude=bin/* \
+  --exclude=sample_data/*
 
 # print message
 echo ""
