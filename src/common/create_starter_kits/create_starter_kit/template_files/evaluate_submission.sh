@@ -22,7 +22,7 @@ function ViashSourceDir {
 # cd to root dir of starter kit
 cd `ViashSourceDir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Couldn't find 'config.vsh.yaml!" && exit 1
+[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
 
 
 echo ""

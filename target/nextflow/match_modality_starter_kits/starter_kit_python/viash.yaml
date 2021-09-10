@@ -910,14 +910,15 @@ functionality:
       }
       
       process python_starter_kit_process {
-        time '5m'
-        memory '10 GB'
+        label 'lowmem'
+        label 'lowtime'
+        label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
         stageInMode "symlink"
         container "${container}"
-        publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
+      
         input:
           tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
         output:
@@ -1095,11 +1096,11 @@ platform:
   id: "nextflow"
   registry: "openproblems"
   namespace_separator: "_"
-  publish: true
   separate_multiple_outputs: true
-  labels: []
-  directive_time: "5m"
-  directive_memory: "10 GB"
+  labels:
+  - "lowmem"
+  - "lowtime"
+  - "lowcpu"
 platforms: []
 info:
   config: "src/match_modality/starter_kit/starter_kit_python/config.vsh.yaml"
@@ -1107,5 +1108,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_python"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_python/python_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "0b2ba77e7ecad1ae24f485ad19926f65cce6ed74"
+  git_commit: "45bf044e78de59e13cdb329bf82195288f21a92b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
