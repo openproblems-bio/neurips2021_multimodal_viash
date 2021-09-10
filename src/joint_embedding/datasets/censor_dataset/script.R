@@ -26,6 +26,7 @@ common_uns <- list(
 cat("Creating mod1 object\n")
 out_mod1 <- anndata::AnnData(
   X = ad1_raw$X,
+  layers = list(counts = ad1_raw$layers[["counts"]]),
   var = ad1_raw$var %>% select(one_of("gene_ids"), feature_types),
   obs = ad1_raw$obs %>% select(one_of("batch", "size_factors")),
   uns = common_uns
@@ -34,6 +35,7 @@ out_mod1 <- anndata::AnnData(
 cat("Creating mod2 object\n")
 out_mod2 <- anndata::AnnData(
   X = ad2_raw$X,
+  layers = list(counts = ad2_raw$layers[["counts"]]),
   var = ad2_raw$var %>% select(one_of("gene_ids"), feature_types),
   obs = ad2_raw$obs %>% select(one_of("batch")),
   uns = common_uns

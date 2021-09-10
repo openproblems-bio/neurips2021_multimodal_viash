@@ -53,7 +53,7 @@ batch2 <- c(as.character(input_train_mod1$obs$batch), rep("unknownbatch", nrow(i
 
 cat("Running NewWave\n")
 data1 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = cbind(t(input_train_mod1$X), t(input_test_mod1$X))),
+  assays = list(counts = cbind(t(input_train_mod1$layers[["counts"]]), t(input_test_mod1$layers[["counts"]]))),
   colData = data.frame(batch = factor(batch1))
 )
 data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
@@ -75,7 +75,7 @@ res1 <- NewWave::newWave(
 dr_x1 <- SingleCellExperiment::reducedDim(res1)
 
 data2 <- SummarizedExperiment::SummarizedExperiment(
-  assays = list(counts = cbind(t(input_train_mod2$X[order(match_train), , drop = FALSE]), t(input_test_mod2$X))),
+  assays = list(counts = cbind(t(input_train_mod2$layers[["counts"]][order(match_train), , drop = FALSE]), t(input_test_mod2$layers[["counts"]]))),
   colData = data.frame(batch = factor(batch2))
 )
 data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
