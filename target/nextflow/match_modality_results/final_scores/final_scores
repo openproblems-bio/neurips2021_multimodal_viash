@@ -396,7 +396,7 @@ dataset_meta <-
   transmute(
     dataset_orig_id = dataset_id, 
     dataset_id = paste0(dataset_orig_id, "_MM"), 
-    dataset_subtask = mod2_modality
+    dataset_subtask = paste0(mod1_modality, "2", mod2_modality)
   )
 
 cat("Reading metric meta files\\n")

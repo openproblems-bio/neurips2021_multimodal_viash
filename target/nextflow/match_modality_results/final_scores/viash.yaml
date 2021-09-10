@@ -484,7 +484,7 @@ functionality:
         transmute(
           dataset_orig_id = dataset_id, 
           dataset_id = paste0(dataset_orig_id, "_MM"), 
-          dataset_subtask = mod2_modality
+          dataset_subtask = paste0(mod1_modality, "2", mod2_modality)
         )
       
       cat("Reading metric meta files\\n")
@@ -1135,5 +1135,5 @@ info:
   output: "target/nextflow/match_modality_results/final_scores"
   executable: "target/nextflow/match_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "af038dd453db791c9ab7e2214f153c83551218fd"
+  git_commit: "8d74754c5f37db7f80d7a9f1f9da238c40920449"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
