@@ -102,7 +102,7 @@ output_test_mod2 <- anndata::AnnData(
   X = input_mod2$X[test_ix[test_mod2_ix], , drop = FALSE] %>% 
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
   layers = list(counts = input_mod2$layers[["counts"]][test_ix[test_mod2_ix], , drop = FALSE] %>% 
-    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))))
+    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
   obs = test_obs2,
   var = mod2_var,
   uns = common_uns
