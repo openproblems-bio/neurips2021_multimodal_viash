@@ -36,7 +36,7 @@ nextflow run \
   openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/evaluate_submission/main.nf \
-  --solutions 'output/datasets/$par_task/**.output_solution.h5ad' \
+  --solutionDir 'output/datasets/$par_task' \
   --predictions 'output/predictions/$par_task/**.h5ad' \
   --publishDir 'output/evaluation/$par_task' \
   -resume \
