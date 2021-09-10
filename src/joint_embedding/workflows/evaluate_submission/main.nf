@@ -15,12 +15,12 @@ include  { final_scores }               from "$targetDir/${task}_results/final_s
 include  { bind_tsv_rows }              from "$targetDir/common/bind_tsv_rows/main.nf"                         params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
-params.solutions = "output/public_datasets/$task/**.output_solution.h5ad"
+params.solutionDir = "output/public_datasets/$task"
 
 workflow {
   main:
   def predictions = Channel.fromPath(params.predictions) | get_id_predictions
-  def solutions = Channel.fromPath(params.solutions) | get_id_solutions
+  def solutions = Channel.fromPath(params.solutionDir + "/**.output_solution.h5ad") | get_id_solutions
 
   // create datasets meta
   def datasetsMeta = 

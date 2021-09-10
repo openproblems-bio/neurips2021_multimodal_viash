@@ -8,14 +8,15 @@ include  { aupr }                        from "$targetDir/${task}_metrics/aupr/m
 include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"                params(params)
+include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
-params.solutions = "output/public_datasets/$task/**.output_test_sol.h5ad"
+params.solutionDir = "output/public_datasets/$task"
 
 workflow {
   main:
   def predictions = Channel.fromPath(params.predictions) | get_id_predictions
-  def solutions = Channel.fromPath(params.solutions) | get_id_solutions
+  def solutions = Channel.fromPath(params.solutionDir + "/**.output_test_sol.h5ad") | get_id_solutions
 
   // fetch dataset ids in predictions and in solutions
   def datasetsMeta = 
