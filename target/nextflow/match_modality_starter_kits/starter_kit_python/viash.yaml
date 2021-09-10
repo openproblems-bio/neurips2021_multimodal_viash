@@ -582,7 +582,7 @@ functionality:
       ind_x = 2 * max(ind_dist) - ind_dist
       pairing_matrix = scipy.sparse.csr_matrix(
           (ind_x, (ind_i, ind_j)),
-          dims=(input_test_mod1.n_obs, input_test_mod2.n_obs)
+          shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
       )
       
       logging.info('write prediction output')
@@ -1108,5 +1108,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_python"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_python/python_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "1e6ffb6ca03297c5dc5a8276b05bd321d6debba8"
+  git_commit: "af038dd453db791c9ab7e2214f153c83551218fd"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
