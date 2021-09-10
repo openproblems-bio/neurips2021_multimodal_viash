@@ -8,6 +8,7 @@ include  { aupr }                        from "$targetDir/${task}_metrics/aupr/m
 include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"                params(params)
+include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
 params.solutions = "output/public_datasets/$task/**.output_test_sol.h5ad"
