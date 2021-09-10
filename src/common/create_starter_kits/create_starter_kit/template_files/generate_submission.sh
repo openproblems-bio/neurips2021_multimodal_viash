@@ -48,7 +48,8 @@ echo ""
 echo "######################################################################"
 echo "##              Build docker executable and container               ##"
 echo "######################################################################"
-bin/viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild
+bin/viash build config.vsh.yaml -o target/docker -p docker --setup cachedbuild \
+  -c '.functionality.name := "method"'
 
 
 echo ""
@@ -56,7 +57,8 @@ echo "######################################################################"
 echo "##                      Build nextflow module                       ##"
 echo "######################################################################"
 # change the max time, max cpu and max memory usage to suit your needs.
-bin/viash build config.vsh.yaml -o target/nextflow -p nextflow
+bin/viash build config.vsh.yaml -o target/nextflow -p nextflow \
+  -c '.functionality.name := "method"' \
   -c '.platforms[.type == "nextflow"].publish := true'
 
 
