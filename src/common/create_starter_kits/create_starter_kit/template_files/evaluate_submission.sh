@@ -40,8 +40,7 @@ nextflow run \
   --predictions 'output/predictions/$par_task/**.h5ad' \
   --publishDir 'output/evaluation/$par_task' \
   -resume \
-  -latest \
-  -c scripts/nextflow.config
+  -latest
 
 
 # print message
