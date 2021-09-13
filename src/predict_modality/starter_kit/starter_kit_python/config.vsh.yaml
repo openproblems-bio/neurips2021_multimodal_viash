@@ -45,10 +45,6 @@ functionality:
       type: "integer"
       default: 50
       description: Number of components to use for dimensionality reduction.
-    - name: "--n_neighbors"
-      type: "integer"
-      default: 100
-      description: Number of neighbors to use.
       
   # files your script needs
   resources:
