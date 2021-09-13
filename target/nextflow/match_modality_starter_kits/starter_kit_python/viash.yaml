@@ -490,9 +490,9 @@ functionality:
       import scipy
       
       from sklearn.decomposition import TruncatedSVD
-      from sklearn.neighbors import KNeighborsRegressor
+      from sklearn.linear_model import LinearRegression
       from sklearn.neighbors import NearestNeighbors
-      
+      from sklearn.preprocessing import normalize
       logging.basicConfig(level=logging.INFO)
       
       ## VIASH START
@@ -532,12 +532,11 @@ functionality:
       
       # This starter kit is split up into several steps.
       # * compute dimensionality reduction on [train_mod1, test_mod1] data
-      # * train regression model to predict the train_mod2 data from the dr_mod1 values
+      # * train linear model to predict the train_mod2 data from the dr_mod1 values
       # * predict test_mod2 matrix from model and test_mod1
       # * calculate k nearest neighbors between test_mod2 and predicted test_mod2
       # * transform k nearest neighbors into a pairing matrix
       
-      logging.info('Compute dimensionality reduction on [train_mod1, test_mod1] data')
       input_train = ad.concat(
           {"train": input_train_mod1, "test": input_test_mod1},
           axis=0,
@@ -546,31 +545,40 @@ functionality:
           fill_value=0,
           index_unique="-"
       )
-      embedder = TruncatedSVD(n_components=par['n_pcs'])
-      dr_mod1 = embedder.fit_transform(input_train.X)
+      
+      # TODO: implement own method
+      # Do PCA on the input data
+      logging.info('Performing dimensionality reduction on modality 1 values...')
+      embedder_mod1 = TruncatedSVD(n_components=50)
+      mod1_pca = embedder_mod1.fit_transform(input_train.X)
+      
+      logging.info('Performing dimensionality reduction on modality 2 values...')
+      embedder_mod2 = TruncatedSVD(n_components=50)
+      mod2_pca = embedder_mod2.fit_transform(input_train_mod2.X)
       
       # split dimred back up
-      dr_train_mod1 = dr_mod1[input_train.obs['group'] == 'train']
-      dr_test_mod1 = dr_mod1[input_train.obs['group'] == 'test']
+      X_train = mod1_pca[input_train.obs['group'] == 'train']
+      X_test = mod1_pca[input_train.obs['group'] == 'test']
+      y_train = mod2_pca
       
+      assert len(X_train) + len(X_test) == len(mod1_pca)
       
-      logging.info('train regression model to predict the train_mod2 data from the dr_mod1 values')
-      reg = KNeighborsRegressor(
-          n_neighbors=par['n_neighbors'],
-          metric=par['distance_method']
-      )
-      reg.fit(dr_train_mod1, input_train_mod2.X.toarray())
+      logging.info('Running Linear regression...')
+      reg = LinearRegression()
       
+      # Train the model on the PCA reduced modality 1 and 2 data
+      reg.fit(X_train, y_train)
+      y_pred = reg.predict(X_test)
       
-      logging.info('predict test_mod2 matrix from model and test_mod1')
-      pred_test_mod2 = reg.predict(dr_test_mod1)
+      # Project the predictions back to the modality 2 feature space
+      y_pred = y_pred @ embedder_mod2.components_
       
       
       logging.info('calculate k nearest neighbors between test_mod2 and predicted test_mod2')
       # To get the matching matrix, for each point in mod1_test, we take the 1000 nearest neighbors of that
       # point in the transformed mod2_test dataset
-      n_neighbors = min(1000, input_test_mod1.n_obs)
-      nn = NearestNeighbors(n_neighbors=n_neighbors).fit(pred_test_mod2)
+      n_neighbors = min(par["n_neighbors"], input_test_mod1.n_obs)
+      nn = NearestNeighbors(n_neighbors=n_neighbors).fit(y_pred)
       distances, indices = nn.kneighbors(X=input_test_mod2.X)
       
       logging.info('transform k nearest neighbors into a pairing matrix')
@@ -585,6 +593,10 @@ functionality:
           shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
       )
       
+      # Normalize values to sum to 1
+      pairing_matrix = normalize(pairing_matrix, norm="l1", axis=1)
+      
+      
       logging.info('write prediction output')
       out = ad.AnnData(
           X=pairing_matrix,
@@ -593,7 +605,7 @@ functionality:
               "method_id": method_id
           }
       )
-      out.write_h5ad(par['output'], compression = "gzip")
+      out.write_h5ad(par['output'], compression="gzip")
       VIASHMAIN
       PATH="$VIASH_RESOURCES_DIR:\$PATH"
       
@@ -1108,5 +1120,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_python"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_python/python_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "b0fa2d3a84bd0d06f79911915bd307c7aeaf4fbd"
+  git_commit: "376d937d5509b9af323e05179f94242fdcb5fe85"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

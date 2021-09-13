@@ -188,13 +188,6 @@ function ViashHelp {
   echo "        Number of components to use for dimensionality reduction."
   echo ""
 
-
-  echo "   --n_neighbors"
-  echo "        type: integer"
-  echo "        default: 100"
-  echo "        Number of neighbors to use."
-  echo ""
-
 }
 
 # initialise array
@@ -274,14 +267,6 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_N_PCS=$(ViashRemoveFlags "$1")
             shift 1
             ;;
-        --n_neighbors)
-            VIASH_PAR_N_NEIGHBORS="$2"
-            shift 2
-            ;;
-        --n_neighbors=*)
-            VIASH_PAR_N_NEIGHBORS=$(ViashRemoveFlags "$1")
-            shift 1
-            ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
             VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -318,9 +303,6 @@ fi
 if [ -z "$VIASH_PAR_N_PCS" ]; then
   VIASH_PAR_N_PCS="50"
 fi
-if [ -z "$VIASH_PAR_N_NEIGHBORS" ]; then
-  VIASH_PAR_N_NEIGHBORS="100"
-fi
 
 
 cat << VIASHEOF | bash
@@ -347,7 +329,7 @@ import anndata as ad
 from scipy.sparse import csc_matrix
 
 from sklearn.decomposition import TruncatedSVD
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.linear_model import LinearRegression
 
 logging.basicConfig(level=logging.INFO)
 
@@ -359,8 +341,7 @@ par = {
   'input_train_mod2': $( if [ ! -z ${VIASH_PAR_INPUT_TRAIN_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_TRAIN_MOD2'"; else echo None; fi ),
   'output': $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo None; fi ),
   'distance_method': $( if [ ! -z ${VIASH_PAR_DISTANCE_METHOD+x} ]; then echo "'$VIASH_PAR_DISTANCE_METHOD'"; else echo None; fi ),
-  'n_pcs': $( if [ ! -z ${VIASH_PAR_N_PCS+x} ]; then echo "int('$VIASH_PAR_N_PCS')"; else echo None; fi ),
-  'n_neighbors': $( if [ ! -z ${VIASH_PAR_N_NEIGHBORS+x} ]; then echo "int('$VIASH_PAR_N_NEIGHBORS')"; else echo None; fi )
+  'n_pcs': $( if [ ! -z ${VIASH_PAR_N_PCS+x} ]; then echo "int('$VIASH_PAR_N_PCS')"; else echo None; fi )
 }
 meta = {
   'functionality_name': '$VIASH_META_FUNCTIONALITY_NAME',
@@ -390,16 +371,21 @@ input_train = ad.concat(
 
 # TODO: implement own method
 
+# Do PCA on the input data
 logging.info('Performing dimensionality reduction on modality 1 values...')
-embedder = TruncatedSVD(n_components=par['n_pcs'])
-X = embedder.fit_transform(input_train.X)
+embedder_mod1 = TruncatedSVD(n_components=50)
+mod1_pca = embedder_mod1.fit_transform(input_train.X)
+
+logging.info('Performing dimensionality reduction on modality 2 values...')
+embedder_mod2 = TruncatedSVD(n_components=50)
+mod2_pca = embedder_mod2.fit_transform(input_train_mod2.X)
 
 # split dimred back up
-X_train = X[input_train.obs['group'] == 'train']
-X_test = X[input_train.obs['group'] == 'test']
-y_train = input_train_mod2.X.toarray()
+X_train = mod1_pca[input_train.obs['group'] == 'train']
+X_test = mod1_pca[input_train.obs['group'] == 'test']
+y_train = mod2_pca
 
-assert len(X_train) + len(X_test) == len(X)
+assert len(X_train) + len(X_test) == len(mod1_pca)
 
 # Get all responses of the training data set to fit the
 # KNN regressor later on.
@@ -407,15 +393,16 @@ assert len(X_train) + len(X_test) == len(X)
 # Make sure to use \`toarray()\` because the output might
 # be sparse and \`KNeighborsRegressor\` cannot handle it.
 
-logging.info('Running KNN regression...')
+logging.info('Running Linear regression...')
 
-reg = KNeighborsRegressor(
-    n_neighbors=par['n_neighbors'],
-    metric=par['distance_method']
-)
+reg = LinearRegression()
 
+# Train the model on the PCA reduced modality 1 and 2 data
 reg.fit(X_train, y_train)
 y_pred = reg.predict(X_test)
+
+# Project the predictions back to the modality 2 feature space
+y_pred = y_pred @ embedder_mod2.components_
 
 # Store as sparse matrix to be efficient. Note that this might require
 # different classifiers/embedders before-hand. Not every class is able
