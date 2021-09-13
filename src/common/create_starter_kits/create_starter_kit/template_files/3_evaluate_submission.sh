@@ -24,6 +24,12 @@ cd `ViashSourceDir ${BASH_SOURCE[0]}`/..
 
 [ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
 
+# check docker availability
+if ! docker info > /dev/null 2>&1; then
+  echo "Docker doesn't seem to be running. Try running 'docker run hello-world'."
+  exit 1
+fi
+
 
 echo ""
 echo "######################################################################"
@@ -32,7 +38,7 @@ echo "######################################################################"
 
 export NXF_VER=21.04.1
 
-nextflow run \
+bin/nextflow run \
   openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/evaluate_submission/main.nf \

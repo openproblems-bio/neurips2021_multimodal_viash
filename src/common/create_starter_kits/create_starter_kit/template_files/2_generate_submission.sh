@@ -42,7 +42,11 @@ if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
   sleep 10
 fi
 
-# TODO: add more checks
+# check docker availability
+if ! docker info > /dev/null 2>&1; then
+  echo "Docker doesn't seem to be running. Try running 'docker run hello-world'."
+  exit 1
+fi
 
 echo ""
 echo "######################################################################"
