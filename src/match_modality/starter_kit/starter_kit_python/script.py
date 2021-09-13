@@ -16,6 +16,7 @@ import scipy
 from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neighbors import NearestNeighbors
+from sklearn.preprocessing import normalize
 
 logging.basicConfig(level=logging.INFO)
 
@@ -102,6 +103,9 @@ pairing_matrix = scipy.sparse.csr_matrix(
     (ind_x, (ind_i, ind_j)),
     shape=(input_test_mod1.n_obs, input_test_mod2.n_obs)
 )
+
+# Normalize values to sum to 1
+pairing_matrix = normalize(pairing_matrix, norm="l1", axis=1)
 
 logging.info('write prediction output')
 out = ad.AnnData(
