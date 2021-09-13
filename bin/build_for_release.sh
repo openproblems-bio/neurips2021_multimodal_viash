@@ -2,7 +2,7 @@
 
 echo "This script is not meant to be run! Run the commands separately, please."
 
-TAG=0.5.0
+TAG=1.0.0
 
 rm -r target
 git fetch origin
@@ -19,7 +19,8 @@ bin/viash_build --max_threads 4 --config_mod '.platforms[.type == "nextflow"].se
 bin/viash_test -m release -t $TAG
 
 # push docker containers to docker hub
-bin/viash_push -m release -t $TAG
+bin/viash_push -m release -t $TAG --max_threads 10
+bin/viash_push -m release -t $TAG --max_threads 4
 
 # commit current code to release branch
 git add target

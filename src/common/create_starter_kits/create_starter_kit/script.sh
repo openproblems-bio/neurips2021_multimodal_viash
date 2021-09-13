@@ -30,8 +30,9 @@ mkdir -p $output_dir/scripts
 
 echo "  Copy template files"
 cp $resources_dir/template_files/README.md $output_dir/
-cp $resources_dir/template_files/generate_submission.sh $output_dir/scripts/
-cp $resources_dir/template_files/evaluate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/1_unit_test.sh $output_dir/scripts/
+cp $resources_dir/template_files/2_generate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/3_evaluate_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/nextflow.config $output_dir/scripts/
 cp $resources_dir/template_files/LICENSE $output_dir/
 cp $resources_dir/template_files/.gitignore $output_dir/

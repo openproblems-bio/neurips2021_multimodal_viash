@@ -13,7 +13,7 @@ cd "$REPO_ROOT"
 
 # TODO: replace evalai phase numbers!
 
-pipeline_version=main_build
+pipeline_version=1.0.0
 
 # bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- ---setup cb
 
