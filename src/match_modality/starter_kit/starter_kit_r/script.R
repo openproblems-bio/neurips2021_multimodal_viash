@@ -1,6 +1,6 @@
 # Dependencies:
 #   python: anndata
-#   r: anndata, lmds
+#   r: anndata, lmds, FNN
 #
 # R starter kit for the NeurIPS 2021 Single-Cell Competition.
 # Parts with `TODO` are supposed to be changed by you.
@@ -12,84 +12,96 @@
 cat("Loading dependencies\n")
 options(tidyverse.quiet = TRUE)
 library(tidyverse)
-requireNamespace("anndata", quietly = TRUE)
 library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
-library(keras, warn.conflicts = FALSE, quietly = TRUE)
+requireNamespace("anndata", quietly = TRUE)
+requireNamespace("lmds", quietly = TRUE)
+requireNamespace("FNN", quietly = TRUE)
 
 ## VIASH START
 # Anything within this block will be removed by viash
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
+
+dataset_path <- "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
+# dataset_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
+
 par <- list(
-  input_train_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
-  input_train_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
-  input_train_sol = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_sol.h5ad",
-  input_test_mod1 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
-  input_test_mod2 = "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
+  input_train_mod1 = paste0(dataset_path, "train_mod1.h5ad"),
+  input_train_mod2 = paste0(dataset_path, "train_mod2.h5ad"),
+  input_train_sol = paste0(dataset_path, "train_sol.h5ad"),
+  input_test_mod1 = paste0(dataset_path, "test_mod1.h5ad"),
+  input_test_mod2 = paste0(dataset_path, "test_mod2.h5ad"),
   output = "output.h5ad",
-  distance_method = "pearson"
+  n_neighbors = 5L
 )
 ## VIASH END
 
 method_id <- "r_starter_kit" # fill in the name of your method here
 
-cat("Reading h5ad files\n")
-input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
-input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
-input_train_sol <- anndata::read_h5ad(par$input_train_sol)
-input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
-input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
-
-match_train <- apply(input_train_sol$X, 1, function(x) which(x > 0)) %>% unname
-
 # TODO: implement own method
 
 # This starter kit is split up into several steps.
 # * compute dimensionality reduction on [train_mod1, test_mod1] data
-# * train regression model to predict the train_mod2 data from the dr_mod1 values
-# * predict test_mod2 matrix from model and test_mod1
-# * calculate k nearest neighbors between test_mod2 and predicted test_mod2
+# * compute dimensionality reduction on [train_mod2, test_mod2] data
+# * predict test_dr2 from [train_dr1, train_dr2, test_dr1]
+# * calculate k nearest neighbors between test_dr2 and predicted pred_dr2
 # * transform k nearest neighbors into a pairing matrix
 
+cat("read train solution\n")
+input_train_sol <- anndata::read_h5ad(par$input_train_sol)
+match_train <- input_train_sol$uns$pairing_ix + 1
+rm(input_train_sol)
+gc()
+
 cat("compute dimensionality reduction on [train_mod1, test_mod1] data\n")
-# merge input matrices
-mod1_X <- rbind(input_train_mod1$X, input_test_mod1$X)
-mod2_X <- rbind(input_train_mod2$X[match_train, , drop = FALSE], input_test_mod2$X)
-
-# perform DR
-dr_x1 <- lmds::lmds(mod1_X, ndim = 10, distance_method = par$distance_method)
-dr_x2 <- lmds::lmds(mod2_X, ndim = 3, distance_method = par$distance_method)
-
-# split input matrices
-dr_x1_train <- dr_x1[seq_len(nrow(input_train_mod1)), , drop = FALSE]
-dr_x2_train <- dr_x2[seq_len(nrow(input_train_mod1)), , drop = FALSE]
-dr_x1_test <- dr_x1[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
-dr_x2_test <- dr_x2[-seq_len(nrow(input_train_mod1)), , drop = FALSE]
-
-cat("train regression model to predict the train_mod2 data from the dr_mod1 values\n")
-model <-
-  keras_model_sequential() %>%
-  layer_dense(100, "relu", input_shape = ncol(dr_x1)) %>%
-  layer_dense(32, "relu") %>%
-  layer_dense(ncol(dr_x2), "linear")
-
-model %>% compile(
-  loss = "mse",
-  optimizer = "adam"
+input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
+input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
+dr_mod1 <- lmds::lmds(
+  rbind(input_train_mod1$X, input_test_mod1$X),
+  ndim = 10,
+  distance_method = "pearson"
 )
-model %>% fit(dr_x1_train, dr_x2_train, epochs = 200, verbose = FALSE)
+train_mod1_uns <- input_train_mod1$uns
 
-cat("predict test_mod2 matrix from model and test_mod1\n")
-preds <- predict(model, dr_x1_test)
-colnames(preds) <- colnames(dr_x2_test)
+# clear memory
+rm(input_train_mod1, input_test_mod1)
+gc()
+
+cat("compute dimensionality reduction on [train_mod2, test_mod2] data\n")
+input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
+input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
+
+dr_mod2 <- lmds::lmds(
+  rbind(input_train_mod2$X[order(match_train), , drop = FALSE], input_test_mod2$X),
+  ndim = 10,
+  distance_method = "pearson"
+)
+# clear memory
+rm(input_train_mod2, input_test_mod2)
+gc()
+
+# split DR matrices
+dr_mod1_train <- dr_mod1[seq_along(match_train), , drop = FALSE]
+dr_mod2_train <- dr_mod2[seq_along(match_train), , drop = FALSE]
+dr_mod1_test <- dr_mod1[-seq_along(match_train), , drop = FALSE]
+dr_mod2_test <- dr_mod2[-seq_along(match_train), , drop = FALSE]
 
 
-cat("calculate k nearest neighbors between test_mod2 and predicted test_mod2\n")
-par_frac <- 1
+cat("predict test_dr2 from [train_dr1, train_dr2, test_dr1]\n")
+dr_mod2_test_pred <- apply(dr_mod2_train, 2, function(yi) {
+  FNN::knn.reg(
+    train = dr_mod1_train,
+    test = dr_mod1_test,
+    y = yi,
+    k = min(15, nrow(dr_mod1_test))
+  )$pred
+})
+
+cat("calculate k nearest neighbors between test_dr2 and predicted pred_dr2\n")
 knn_out <- FNN::get.knnx(
-  preds,
-  dr_x2_test,
-  k = min(1000, ceiling(par_frac * nrow(preds)))
+  dr_mod2_test_pred,
+  dr_mod2_test,
+  k = min(par$n_neighbors, nrow(dr_mod1_test))
 )
 
 cat("transform k nearest neighbors into a pairing matrix\n")
@@ -102,15 +114,21 @@ knn_mat <- Matrix::sparseMatrix(
   i = df$i,
   j = df$j,
   x = df$x,
-  dims = list(nrow(input_test_mod1), nrow(input_test_mod2))
+  dims = list(nrow(dr_mod1_test), nrow(dr_mod2_test))
 )
 
-cat("write prediction output\n")
+# normalise to make rows sum to 1
+rs <- Matrix::rowSums(knn_mat)
+knn_mat@x <- knn_mat@x / rs[knn_mat@i + 1]
+
+cat("creating output anndata\n")
 out <- anndata::AnnData(
   X = as(knn_mat, "CsparseMatrix"),
   uns = list(
-    dataset_id = input_train_mod1$uns[["dataset_id"]],
+    dataset_id = train_mod1_uns[["dataset_id"]],
     method_id = method_id
   )
 )
+
+cat("writing predictions to file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")

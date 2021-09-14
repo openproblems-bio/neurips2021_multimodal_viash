@@ -34,11 +34,11 @@ functionality:
     # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
     - name: "--distance_method"
       type: "string"
-      default: "spearman"
+      default: "euclidean"
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 50
       description: Number of principal components to use.
       
   # files your script needs
@@ -73,6 +73,7 @@ platforms:
       #     - scanpy
       - type: r
         packages:
+          - anndata
           - lmds
 
   # By specifying a 'nextflow', viash will also build a viash module

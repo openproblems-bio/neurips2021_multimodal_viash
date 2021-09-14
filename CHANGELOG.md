@@ -3,6 +3,9 @@
 ## MINOR CHANGES
 
 * Reduce default memory consumption for starter kits to 10GB.
+
+* Rewrite starter kit code so it clears memory more quickly.
+
 ## BUG FIXES
 
 * Fix Match Modality method unit test.

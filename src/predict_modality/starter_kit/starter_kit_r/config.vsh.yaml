@@ -82,6 +82,7 @@ platforms:
       #     - scanpy
       - type: r
         packages:
+          - anndata
           - lmds
           - FNN
 
