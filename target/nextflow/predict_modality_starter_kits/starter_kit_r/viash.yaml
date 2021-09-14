@@ -462,8 +462,18 @@ functionality:
       
       cat("Reading mod1 h5ad files\\n")
       input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
-      input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
       train_mod1_uns <- input_train_mod1\$uns
+      
+      # subset to HVG to reduce memory consumption
+      train_mod1_sd <- proxyC::colSds(input_train_mod1\$X)
+      ix <- order(train_mod1_sd, decreasing = TRUE)[seq_len(min(1000, length(train_mod1_sd)))]
+      input_train_mod1 <- input_train_mod1[,ix]\$copy()
+      gc()
+      
+      # subset to HVG to reduce memory consumption
+      input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
+      input_test_mod1 <- input_test_mod1[,ix]\$copy()
+      gc()
       
       cat("Performing DR on the mod1 values\\n")
       # LMDS is more efficient than regular MDS because
@@ -804,7 +814,7 @@ functionality:
       
       process r_starter_kit_process {
         label 'lowmem'
-        label 'lowtime'
+        label 'midtime'
         label 'lowcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
@@ -992,7 +1002,7 @@ platform:
   separate_multiple_outputs: true
   labels:
   - "lowmem"
-  - "lowtime"
+  - "midtime"
   - "lowcpu"
 platforms: []
 info:
@@ -1001,5 +1011,5 @@ info:
   output: "target/nextflow/predict_modality_starter_kits/starter_kit_r"
   executable: "target/nextflow/predict_modality_starter_kits/starter_kit_r/r_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "e5009cb38a80ec994ec6054935996b73b7b1e06e"
+  git_commit: "d8b7354561dd0a34ce7955973477e3d1f4812b15"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
