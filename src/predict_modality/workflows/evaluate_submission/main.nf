@@ -4,7 +4,6 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "predict_modality"
 
-include  { correlation }                 from "$targetDir/${task}_metrics/correlation/main.nf"                params(params)
 include  { mse }                         from "$targetDir/${task}_metrics/mse/main.nf"                        params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"               params(params)
 include  { collect_solution_metadata }   from "$targetDir/${task}_results/collect_solution_metadata/main.nf"  params(params)
@@ -37,7 +36,7 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | (correlation & check_format)
+    | (mse & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
