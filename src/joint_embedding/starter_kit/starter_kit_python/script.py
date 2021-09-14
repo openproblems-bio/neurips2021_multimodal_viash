@@ -42,14 +42,14 @@ ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
 # TODO: implement your own method
 logging.info('Performing dimensionality reduction on modality 1 values...')
-embedder_mod1 = TruncatedSVD(n_components=par["n_dim"]/2)
+embedder_mod1 = TruncatedSVD(n_components=int(par["n_dim"]/2))
 mod1_pca = embedder_mod1.fit_transform(ad_mod1.X)
 mod1_obs = ad_mod1.obs
 mod1_uns = ad_mod1.uns
 del ad_mod1
 
 logging.info('Performing dimensionality reduction on modality 2 values...')
-embedder_mod1 = TruncatedSVD(n_components=par["n_dim"]/2)
+embedder_mod1 = TruncatedSVD(n_components=int(par["n_dim"]/2))
 mod2_pca = embedder_mod1.fit_transform(ad_mod2.X)
 del ad_mod2
 
