@@ -6,6 +6,8 @@
 
 * Rewrite starter kit code so it clears memory more quickly.
 
+* Add separate system check script to starter kits.
+
 ## BUG FIXES
 
 * Fix Match Modality method unit test.
