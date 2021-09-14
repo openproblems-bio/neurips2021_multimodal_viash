@@ -24,6 +24,7 @@ function get_latest_release {
     grep '"tag_name":' |                                            # Get tag line
     sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
 }
+LATEST_RELEASE=`get_latest_release openproblems-bio/neurips2021_multimodal_viash`
 
 # cd to root dir of starter kit
 cd `get_script_dir ${BASH_SOURCE[0]}`/..
@@ -100,7 +101,7 @@ echo "######################################################################"
 echo "##                      Creating submission zip                     ##"
 echo "######################################################################"
 [ -f submission.zip ] && rm submission.zip
-zip -9 -r submission.zip . \
+zip -9 -r -q submission.zip . \
   --exclude=*.git* \
   --exclude=*.nextflow* \
   --exclude=*work* \
