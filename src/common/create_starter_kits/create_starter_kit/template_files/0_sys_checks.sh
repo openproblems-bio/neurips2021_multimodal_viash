@@ -45,7 +45,11 @@ if ! docker info > /dev/null 2>&1; then
   exit 1
 fi
 
-if [ -z ${JAVA_HOME+x} ]; then
-  echo "Error: JAVA_HOME does not seem to be set."
+if type -p java > /dev/null; then
+  :
+elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+  :
+else
+  echo "Error: Java was not found."
   exit 1
 fi

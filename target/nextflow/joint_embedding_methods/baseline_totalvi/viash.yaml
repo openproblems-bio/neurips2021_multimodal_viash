@@ -889,5 +889,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_totalvi"
   executable: "target/nextflow/joint_embedding_methods/baseline_totalvi/baseline_totalvi"
   viash_version: "0.5.3"
-  git_commit: "209be28977fc9d524456711af41a26cdcd1f3c24"
+  git_commit: "7d9a59fbac4ea1bc0a83f54edc1bbc081657552b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
