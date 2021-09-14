@@ -47,10 +47,10 @@ functionality:
       description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
     # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
-    - name: "--distance_method"
-      type: "string"
-      default: "pearson"
-      description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 5
+      description: Number of neighbors to use.
       
   # files your script needs
   resources:
@@ -83,9 +83,11 @@ platforms:
       #   packages:
       #     - scanpy
       - type: r
-        packages: [ lmds, dynutils, keras ]
-      - type: python
-        packages: [ tensorflow ]
+        packages: 
+          - anndata
+          - lmds
+          - dynutils
+          - FNN
 
   # By specifying a 'nextflow', viash will also build a viash module
   # which uses the docker container built above to also be able to 

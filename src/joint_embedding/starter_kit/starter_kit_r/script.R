@@ -18,39 +18,49 @@ library(lmds, warn.conflicts = FALSE, quietly = TRUE)
 # Anything within this block will be removed by viash
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
+
+dataset_path <- "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
+# dataset_path <- "output/datasets/joint_embedding/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset.output_"
+
 par <- list(
-  input_mod1 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad",
-  input_mod2 = "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad",
+  input_mod1 = paste0(dataset_path, "mod1.h5ad"),
+  input_mod2 = paste0(dataset_path, "mod2.h5ad"),
   output = "output.h5ad",
   distance_method = "spearman",
-  n_pcs = 4L
+  n_pcs = 50L
 )
 ## VIASH END
 
 method_id <- "r_starter_kit" # fill in the name of your method here
 
-cat("Reading h5ad files\n")
-ad1 <- read_h5ad(par$input_mod1)
-ad2 <- read_h5ad(par$input_mod2)
+cat("Reading mod1 h5ad file\n")
+input_mod1 <- read_h5ad(par$input_mod1)
 
-ad_merge <- anndata::concat(list(ad1, ad2), axis = 1L)
+cat("Performing DR on mod1\n")
+dr_mod1 <- lmds(input_mod1$X, ndim = par$n_pcs / 2, distance_method = par$distance_method)
+input_mod1_obs <- input_mod1$obs
+input_mod1_uns <- input_mod1$uns
 
-# TODO: implement own method
+cat("Clearing mod1 from memory\n")
+rm(input_mod1)
+gc()
 
-cat("Performing dimensionality reduction on the mod1 values\n")
-# LMDS is more efficient than regular MDS because
-# it does not compure a square distance matrix.
-dr <- lmds(
-  as(ad_merge$X, "CsparseMatrix"),
-  ndim = par$n_pcs,
-  distance_method = par$distance_method
-)
+cat("Reading mod2 h5ad file\n")
+input_mod2 <- read_h5ad(par$input_mod2)
+
+cat("Performing DR on mod2\n")
+dr_mod2 <- lmds(input_mod2$X, ndim = par$n_pcs / 2, distance_method = par$distance_method)
+
+cat("Clearing mod2 from memory\n")
+rm(input_mod2)
+gc()
 
 cat("Creating output AnnData\n")
+dr <- cbind(dr_mod1, dr_mod2)
 out <- anndata::AnnData(
   X = dr,
   uns = list(
-    dataset_id = ad1$uns[["dataset_id"]],
+    dataset_id = input_mod1_uns[["dataset_id"]],
     method_id = method_id
   )
 )

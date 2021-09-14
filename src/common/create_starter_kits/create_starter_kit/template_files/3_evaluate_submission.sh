@@ -22,7 +22,8 @@ function ViashSourceDir {
 # cd to root dir of starter kit
 cd `ViashSourceDir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
+# checking environment
+scripts/0_sys_checks.sh
 
 
 echo ""
@@ -32,7 +33,7 @@ echo "######################################################################"
 
 export NXF_VER=21.04.1
 
-nextflow run \
+bin/nextflow run \
   openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/evaluate_submission/main.nf \

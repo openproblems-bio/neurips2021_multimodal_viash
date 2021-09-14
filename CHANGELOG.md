@@ -1,4 +1,19 @@
-# neurips2021_multimodal_viash 0.6.0
+# neurips2021_multimodal_viash 1.0.1
+
+## MINOR CHANGES
+
+* Reduce default memory consumption for starter kits to 10GB.
+
+* Rewrite starter kit code so it clears memory more quickly.
+
+* Add separate system check script to starter kits.
+
+## BUG FIXES
+
+* Fix Match Modality method unit test.
+
+
+# neurips2021_multimodal_viash 1.0.0
 
 ## NEW FEATURES
 

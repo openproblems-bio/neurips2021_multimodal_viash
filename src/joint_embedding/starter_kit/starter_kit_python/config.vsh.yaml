@@ -33,7 +33,7 @@ functionality:
     # Method-specific parameters. Change these to expose parameters of your method to Nextflow (optional)
     - name: "--n_dim"
       type: "integer"
-      default: 100
+      default: 50
       description: Number of dimensions to use for dimensionality reduction.
 
 

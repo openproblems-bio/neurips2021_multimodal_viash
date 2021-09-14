@@ -10,7 +10,9 @@
 
 import logging
 import anndata as ad
-import umap.umap_ as umap
+import numpy as np
+
+from sklearn.decomposition import TruncatedSVD
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,11 +21,14 @@ logging.basicConfig(level=logging.INFO)
 # Anything within this block will be removed by `viash` and will be
 # replaced with the parameters as specified in your config.vsh.yaml.
 
+dataset_path = 'sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.'
+# dataset_path = 'output/datasets/joint_embedding/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset.output_'
+
 par = {
-    'input_mod1': 'sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod1.h5ad',
-    'input_mod2': 'sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.mod2.h5ad',
+    'input_mod1': dataset_path + 'mod1.h5ad',
+    'input_mod2': dataset_path + 'mod2.h5ad',
     'output': 'output.h5ad',
-    'n_dim': 100,
+    'n_dim': 50,
 }
 
 ## VIASH END
@@ -36,19 +41,27 @@ ad_mod1 = ad.read_h5ad(par['input_mod1'])
 ad_mod2 = ad.read_h5ad(par['input_mod2'])
 
 # TODO: implement your own method
-logging.info('Concatenating modality 1 and modality 2')
-ad_combined = ad.concat([ad_mod1, ad_mod2], axis=1)
+logging.info('Performing dimensionality reduction on modality 1 values...')
+embedder_mod1 = TruncatedSVD(n_components=int(par["n_dim"]/2))
+mod1_pca = embedder_mod1.fit_transform(ad_mod1.X)
+mod1_obs = ad_mod1.obs
+mod1_uns = ad_mod1.uns
+del ad_mod1
 
-logging.info('Performing dimensionality reduction on concatenated datasets')
-embedder = umap.UMAP(n_components=par['n_dim'])
-X_umap = embedder.fit_transform(ad_combined.X)
+logging.info('Performing dimensionality reduction on modality 2 values...')
+embedder_mod1 = TruncatedSVD(n_components=int(par["n_dim"]/2))
+mod2_pca = embedder_mod1.fit_transform(ad_mod2.X)
+del ad_mod2
+
+logging.info('Concatenating datasets')
+pca_combined = np.concatenate([mod1_pca, mod2_pca], axis=1)
 
 logging.info('Storing output to file')
 adata = ad.AnnData(
-    X=X_umap,
-    obs=ad_mod1.obs,
+    X=pca_combined,
+    obs=mod1_obs,
     uns={
-        'dataset_id': ad_mod1.uns['dataset_id'],
+        'dataset_id': mod1_uns['dataset_id'],
         'method_id': method_id,
     },
 )
