@@ -24,7 +24,7 @@ expect_equal(
   info = "Prediction and solution have differing dataset_ids"
 )
 expect_true(
-  all.equal(dim(ad_sol), dim(ad_pred)),
+  isTRUE(all.equal(dim(ad_sol), dim(ad_pred))),
   info = "Dataset and prediction anndata objects should have the same shape / dimensions."
 )
 

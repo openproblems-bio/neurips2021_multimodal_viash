@@ -54,7 +54,12 @@ assert_that(
   length(ad_pred$X@x) <= 1000 * ad_sol$n_obs,
   ad_pred$n_obs == ad_sol$n_obs,
   ad_pred$n_vars == ad_sol$n_vars,
-  all.equal(Matrix::rowSums(ad_pred$X), rep(1, ad_pred$n_obs), check.attributes = FALSE)
+  isTRUE(all.equal(
+    Matrix::rowSums(ad_pred$X),
+    rep(1, ad_pred$n_obs),
+    check.attributes = FALSE,
+    tolerance = 1e-5
+  ))
 )
 
 cat("> Test succeeded!\n")
