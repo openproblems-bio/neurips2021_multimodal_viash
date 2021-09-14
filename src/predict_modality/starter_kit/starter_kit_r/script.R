@@ -21,8 +21,8 @@ requireNamespace("FNN", quietly = TRUE)
 # and will be replaced with the parameters as specified in
 # your config.vsh.yaml.
 
-dataset_path <- "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
-# dataset_path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
+# dataset_path <- "sample_data/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
+dataset_path <- "output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
 
 par <- list(
   input_train_mod1 = paste0(dataset_path, "train_mod1.h5ad"),
@@ -39,8 +39,18 @@ method_id <- "r_starter_kit" # fill in the name of your method here
 
 cat("Reading mod1 h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
-input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
 train_mod1_uns <- input_train_mod1$uns
+
+# subset to HVG to reduce memory consumption
+train_mod1_sd <- proxyC::colSds(input_train_mod1$X)
+ix <- order(train_mod1_sd, decreasing = TRUE)[seq_len(min(1000, length(train_mod1_sd)))]
+input_train_mod1 <- input_train_mod1[,ix]$copy()
+gc()
+
+# subset to HVG to reduce memory consumption
+input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
+input_test_mod1 <- input_test_mod1[,ix]$copy()
+gc()
 
 cat("Performing DR on the mod1 values\n")
 # LMDS is more efficient than regular MDS because

@@ -84,6 +84,6 @@ rsync -avzr $resources_dir/resources_test/$par_task/ $output_dir/sample_data/ \
 
 echo "  Zipping starter kit"
 [ -f ${output_dir}.zip ] && rm ${output_dir}.zip
-cd  ${output_dir} && zip -9 -r ../$(basename $output_dir).zip *
+cd  ${output_dir} && zip -9 -q -r ../$(basename $output_dir).zip *
 
 echo "  Starter kit is done!"
