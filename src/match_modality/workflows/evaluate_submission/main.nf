@@ -4,7 +4,6 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "match_modality"
 
-include  { aupr }                        from "$targetDir/${task}_metrics/aupr/main.nf"                        params(params)
 include  { match_probability }           from "$targetDir/${task}_metrics/match_probability/main.nf"           params(params)
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"                params(params)
 include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"                params(params)
@@ -32,7 +31,7 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | (aupr & check_format)
+    | (match_probability & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
