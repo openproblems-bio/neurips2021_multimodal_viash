@@ -15,13 +15,7 @@ function get_script_dir {
 # cd to root dir of starter kit
 cd `get_script_dir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
-
-
-# check docker availability
-if ! docker info > /dev/null 2>&1; then
-  echo "Docker doesn't seem to be running. Try running 'docker run hello-world'."
-  exit 1
-fi
+# checking environment
+scripts/0_sys_checks.sh
 
 bin/viash test -p docker config.vsh.yaml
