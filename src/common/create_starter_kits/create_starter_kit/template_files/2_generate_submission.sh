@@ -28,25 +28,8 @@ function get_latest_release {
 # cd to root dir of starter kit
 cd `get_script_dir ${BASH_SOURCE[0]}`/..
 
-[ ! -f config.vsh.yaml ] && echo "Error: Couldn't find 'config.vsh.yaml!" && exit 1
-
-LATEST_RELEASE=`get_latest_release openproblems-bio/neurips2021_multimodal_viash`
-if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
-  echo ""
-  echo "######################################################################"
-  echo "##                             WARNING                              ##"
-  echo "######################################################################"
-  echo "A newer version of this starter kit is available! Updating to the"
-  echo "latest version is strongly recommended. See README.md for more info."
-  echo "Continuing in 10 seconds."
-  sleep 10
-fi
-
-# check docker availability
-if ! docker info > /dev/null 2>&1; then
-  echo "Docker doesn't seem to be running. Try running 'docker run hello-world'."
-  exit 1
-fi
+# checking environment
+scripts/0_sys_checks.sh
 
 echo ""
 echo "######################################################################"
