@@ -53,3 +53,11 @@ else
   echo "Error: Java was not found."
   exit 1
 fi
+
+if command -v realpath &>/dev/null; then
+  :
+else
+  echo "Error: realpath was not found."
+  echo "On Mac OS X, run 'brew install coreutils' to resolve this issue."
+  exit 1
+fi
