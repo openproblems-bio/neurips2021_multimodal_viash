@@ -146,7 +146,7 @@ def overrideIO(_params, inputs, outputs) {
 
 process r_starter_kit_process {
   label 'lowmem'
-  label 'lowtime'
+  label 'midtime'
   label 'lowcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
