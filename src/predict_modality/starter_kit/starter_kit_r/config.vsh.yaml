@@ -86,6 +86,7 @@ platforms:
           - lmds
           - FNN
           - proxyC
+          - pbapply
 
   # By specifying a 'nextflow', viash will also build a viash module
   # which uses the docker container built above to also be able to
