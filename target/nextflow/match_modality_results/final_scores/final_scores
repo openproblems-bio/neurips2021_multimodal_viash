@@ -391,12 +391,13 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 json_metric <- "match_probability"
 
 cat("Reading solution meta files\\n")
-dataset_meta <- 
-  readr::read_tsv(par\$dataset_meta) %>% 
+dm <- readr::read_tsv(par\$dataset_meta)
+dataset_meta <-
+  bind_rows(dm, dm %>% rename(mod1_modality = mod2_modality, mod2_modality = mod1_modality)) %>% 
   transmute(
-    dataset_orig_id = dataset_id, 
-    dataset_id = paste0(dataset_orig_id, "_MM"), 
-    dataset_subtask = paste0(mod1_modality, "2", mod2_modality)
+    dataset_orig_id = dataset_id,
+    dataset_subtask = paste0(mod1_modality, "2", mod2_modality),
+    dataset_id = paste0(dataset_orig_id, "_MM_", tolower(dataset_subtask))
   )
 
 cat("Reading metric meta files\\n")
@@ -441,7 +442,7 @@ scores <- map_df(par\$input, function(inp) {
     value = metric_values
   ) %>%
   mutate(
-    dataset_orig_id = gsub("_MM\$", "", dataset_id)
+    dataset_orig_id = gsub("_MM.*\$", "", dataset_id)
   )
 
 expect_true(

@@ -479,12 +479,13 @@ functionality:
       json_metric <- "match_probability"
       
       cat("Reading solution meta files\\n")
-      dataset_meta <- 
-        readr::read_tsv(par\$dataset_meta) %>% 
+      dm <- readr::read_tsv(par\$dataset_meta)
+      dataset_meta <-
+        bind_rows(dm, dm %>% rename(mod1_modality = mod2_modality, mod2_modality = mod1_modality)) %>% 
         transmute(
-          dataset_orig_id = dataset_id, 
-          dataset_id = paste0(dataset_orig_id, "_MM"), 
-          dataset_subtask = paste0(mod1_modality, "2", mod2_modality)
+          dataset_orig_id = dataset_id,
+          dataset_subtask = paste0(mod1_modality, "2", mod2_modality),
+          dataset_id = paste0(dataset_orig_id, "_MM_", tolower(dataset_subtask))
         )
       
       cat("Reading metric meta files\\n")
@@ -529,7 +530,7 @@ functionality:
           value = metric_values
         ) %>%
         mutate(
-          dataset_orig_id = gsub("_MM\$", "", dataset_id)
+          dataset_orig_id = gsub("_MM.*\$", "", dataset_id)
         )
       
       expect_true(
@@ -1128,5 +1129,5 @@ info:
   output: "target/nextflow/match_modality_results/final_scores"
   executable: "target/nextflow/match_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "981c300f6678cb68d2a3698e1d8ddaa96c53918e"
+  git_commit: "931e00c246578493acaa9e75ac447ea7a13d0d3b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
