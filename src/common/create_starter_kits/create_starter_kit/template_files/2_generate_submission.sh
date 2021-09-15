@@ -108,8 +108,7 @@ zip -9 -r -q submission.zip . \
   --exclude=*.DS_Store* \
   --exclude=nextflow.config \
   --exclude=output/datasets/* \
-  --exclude=bin/* \
-  --exclude=sample_data/*
+  --exclude=bin/*
 
 # print message
 echo ""

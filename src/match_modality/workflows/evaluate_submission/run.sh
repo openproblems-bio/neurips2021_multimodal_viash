@@ -26,7 +26,7 @@ NXF_VER=21.04.1 nextflow run \
   . \
   -main-script src/match_modality/workflows/evaluate_submission/main.nf \
   -work-dir /tmp/neurips2021_work \
-  --solutions 'output/public_datasets/match_modality/**.output_test_sol.h5ad' \
-  --predictions '/home/rcannood/Downloads/starter_kits/starter_kit-match_modality-r/output/predictions/match_modality/**.h5ad' \
-  --publishDir /home/rcannood/Downloads/starter_kits/starter_kit-match_modality-r/output \
+  --solutionDir 'output/datasets/match_modality' \
+  --predictions '/home/rcannood/Downloads/starter_kits/starter_kit-match_modality-python/output/predictions/match_modality/**.h5ad' \
+  --publishDir /home/rcannood/Downloads/starter_kits/starter_kit-match_modality-python/output/evaluation/match_modality/ \
   -resume
