@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 1.0.2
+
+## MINOR CHANGES
+
+* Remove 'realpath' dependency by using Java to resolve the path.
+
 # neurips2021_multimodal_viash 1.0.1
 
 ## MINOR CHANGES
