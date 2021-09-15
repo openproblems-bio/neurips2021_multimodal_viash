@@ -4,6 +4,8 @@
 
 * Remove 'realpath' dependency by using Java to resolve the path.
 
+* Reimplement the mse metric in Python to speed up the computation.
+
 # neurips2021_multimodal_viash 1.0.1
 
 ## MINOR CHANGES
