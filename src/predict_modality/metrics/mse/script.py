@@ -27,9 +27,9 @@ if not ad_sol.shape == ad_pred.shape:
 
 logging.info("Computing MSE metrics")
 
-mse = mean_squared_error(ad_sol.X, ad_pred.X)
+mse = ((ad_sol.X - ad_pred.X) ** 2).mean()
 rmse = np.sqrt(mse)
-mae = mean_absolute_error(ad_sol.X, ad_pred.X)
+mae = (np.abs(ad_sol.X - ad_pred.X)).mean()
 
 logging.info("Create output object")
 out = ad.AnnData(
