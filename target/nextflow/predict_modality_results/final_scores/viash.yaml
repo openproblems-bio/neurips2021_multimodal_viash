@@ -610,14 +610,7 @@ functionality:
         filter(metric_id == json_metric) %>%
         select(-var, -metric_id) %>%
         spread(dataset_subtask, mean) %>%
-        arrange(Overall) %>%
-        dynutils::tibble_as_list()
-      
-      # if there is only one method, output the json as {} instead of [{}].
-      if (length(json_out) == 1) {
-        json_out <- json_out[[1]]
-        json_out <- json_out[names(json_out) != "method_id"]
-      }
+        arrange(Overall) 
       
       cat("Writing output\\n")
       final_scores <- final_scores %>% map(as.vector) %>% as_tibble
@@ -1154,5 +1147,5 @@ info:
   output: "target/nextflow/predict_modality_results/final_scores"
   executable: "target/nextflow/predict_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "cfba107908447d3a4b138446459f5bf8970a7684"
+  git_commit: "981c300f6678cb68d2a3698e1d8ddaa96c53918e"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -522,14 +522,7 @@ json_out <- summary %>%
   mutate(comb_id = paste0(metric_id, "_", dataset_subtask)) %>%
   select(-var, -metric_id, -dataset_subtask) %>%
   spread(comb_id, mean) %>%
-  arrange(asw_label_ADT) %>%
-  dynutils::tibble_as_list()
-
-# if there is only one method, output the json as {} instead of [{}].
-if (length(json_out) == 1) {
-  json_out <- json_out[[1]]
-  json_out <- json_out[names(json_out) != "method_id"]
-}
+  arrange(asw_label_ADT)
 
 cat("Writing output\\n")
 final_scores <- final_scores %>% map(as.vector) %>% as_tibble
