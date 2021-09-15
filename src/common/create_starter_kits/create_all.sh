@@ -13,7 +13,7 @@ cd "$REPO_ROOT"
 
 # TODO: replace evalai phase numbers!
 
-pipeline_version=1.0.1
+pipeline_version=${1:-main_build}
 
 # bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- ---setup cb
 
@@ -77,18 +77,18 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --evalai_phase 2278 \
   --pipeline_version $pipeline_version
 
-# if [ $USER == "rcannood" ]; then
-#   echo "Moving starter kits to Downloads dir"
-#   COPY_DIR="$HOME/Downloads/starter_kits"
-#   [ -d $COPY_DIR ] && rm -r $COPY_DIR
-#   cp -r output/starter_kits `dirname $COPY_DIR`
+if [ $USER == "rcannood" ]; then
+  echo "Moving starter kits to Downloads dir"
+  COPY_DIR="$HOME/Downloads/starter_kits"
+  [ -d $COPY_DIR ] && rm -rf $COPY_DIR
+  cp -r output/starter_kits `dirname $COPY_DIR`
 
-#   for name in $COPY_DIR/*; do
-#     if [ -d $name ]; then
-#       out_dir="$name/output"
-#       echo copying to $out_dir
-#       mkdir -p $out_dir
-#       cp -r output/datasets $out_dir
-#     fi
-#   done
-# fi
+  for name in $COPY_DIR/*; do
+    if [ -d $name ]; then
+      out_dir="$name/output"
+      echo copying to $out_dir
+      mkdir -p $out_dir
+      cp -r output/datasets $out_dir
+    fi
+  done
+fi

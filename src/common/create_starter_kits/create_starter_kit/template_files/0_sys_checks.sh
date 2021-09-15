@@ -32,7 +32,9 @@ if [ ! -f config.vsh.yaml ]; then
 fi
 
 LATEST_RELEASE=`get_latest_release openproblems-bio/neurips2021_multimodal_viash`
-if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
+if [ $PIPELINE_VERSION == "main_build" ]; then
+  echo "Warning: Running dev build pipelines. Only do this if you know what you're doing!"
+elif [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
   echo "Warning: A newer version of this starter kit is available! Updating to"
   echo "the latest version is strongly recommended. See README.md for more info."
   echo "Continuing in 10 seconds."

@@ -37,14 +37,14 @@ bin/viash run src/match_modality/methods/baseline_newwave_knnr_cbf/config.vsh.ya
   --input_test_mod2 ${out_file}.test_mod2.h5ad \
   --output ${out_file}.prediction.h5ad
 
-bin/viash run src/match_modality/metrics/aupr/config.vsh.yaml -- \
+bin/viash run src/match_modality/metrics/match_probability/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.test_sol.h5ad \
   --output ${out_file}.scores.h5ad
 
 bin/viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/match_modality/metrics/aupr/metric_meta_aupr.tsv \
+  --metric_meta src/match_modality/metrics/match_probability/metric_meta_match_probability.tsv \
   --output ${out_file}.scores.tsv
 
 
@@ -75,12 +75,12 @@ bin/viash run src/match_modality/methods/baseline_newwave_knnr_cbf/config.vsh.ya
   --input_test_mod2 ${out_file}.test_mod2.h5ad \
   --output ${out_file}.prediction.h5ad
 
-bin/viash run src/match_modality/metrics/aupr/config.vsh.yaml -- \
+bin/viash run src/match_modality/metrics/match_probability/config.vsh.yaml -- \
   --input_prediction ${out_file}.prediction.h5ad \
   --input_solution ${out_file}.test_sol.h5ad \
   --output ${out_file}.scores.h5ad
 
 bin/viash run src/common/extract_scores/config.vsh.yaml -- \
   --input ${out_file}.scores.h5ad \
-  --metric_meta src/match_modality/metrics/aupr/metric_meta_aupr.tsv \
+  --metric_meta src/match_modality/metrics/match_probability/metric_meta_match_probability.tsv \
   --output ${out_file}.scores.tsv
