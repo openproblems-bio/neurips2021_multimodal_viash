@@ -8,10 +8,10 @@ include  { mse }                         from "$targetDir/${task}_metrics/mse/ma
 include  { check_format }                from "$targetDir/${task}_metrics/check_format/main.nf"               params(params)
 include  { collect_solution_metadata }   from "$targetDir/${task}_results/collect_solution_metadata/main.nf"  params(params)
 include  { final_scores }                from "$targetDir/${task}_results/final_scores/main.nf"               params(params)
-include  { bind_tsv_rows }             from "$targetDir/common/bind_tsv_rows/main.nf"                      params(params)
+include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                       params(params)
 include  { getDatasetId as get_id_predictions; getDatasetId as get_id_solutions } from "$srcDir/common/workflows/anndata_utils.nf"
 
-params.solutionDir = "output/public_datasets/$task"
+params.solutionDir = "output/datasets/$task"
 
 workflow {
   main:
