@@ -8,15 +8,13 @@ library(rlang)
 ## VIASH START
 out_path <- "output/pilot_inhouse/predict_modality/output.final_scores.output_"
 par <- list(
-  # input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
-  input = list.files("work/16/d7c9c6d5776084c2b7cd6f1b4fe39b", pattern = "*.h5ad$", full.names = TRUE),
+  input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv",
   output_scores = paste0(out_path, "scores.tsv"),
   output_summary = paste0(out_path, "summary.tsv"),
   output_json = paste0(out_path, "json.json")
-  
 )
 ## VIASH END
 
@@ -28,21 +26,16 @@ solution_meta <- readr::read_tsv(
   col_types = cols(
     dataset_id = "c",
     modality = "c",
-    default_mse = "d",
+    default_rmse = "d",
     default_mae = "d"
   )
 )
 dataset_meta <- solution_meta %>% transmute(
-  dataset_id, 
+  dataset_id,
   dataset_subtask = toupper(gsub(".*_", "", dataset_id))
 )
 dataset_specific_defaults <- solution_meta %>%
-  select(dataset_id, mse = default_mse, mae = default_mae) %>%
-  mutate(
-    rmse = sqrt(mse),
-    logp1_mse = log10(mse + 1),
-    logp1_rmse = log10(rmse + 1)
-  ) %>%
+  select(dataset_id, rmse = default_rmse, mae = default_mae) %>%
   gather(metric_id, missing_value, -dataset_id)
 
 cat("Reading metric meta files\n")
@@ -157,14 +150,7 @@ json_out <- summary %>%
   filter(metric_id == json_metric) %>%
   select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall) %>%
-  dynutils::tibble_as_list()
-
-# if there is only one method, output the json as {} instead of [{}].
-if (length(json_out) == 1) {
-  json_out <- json_out[[1]]
-  json_out <- json_out[names(json_out) != "method_id"]
-}
+  arrange(Overall) 
 
 cat("Writing output\n")
 final_scores <- final_scores %>% map(as.vector) %>% as_tibble

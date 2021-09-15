@@ -6,7 +6,7 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 out_path <- "output/pilot_inhouse/match_modality/output.final_scores.output_"
 par <- list(
-  input = list.files("work/97/b44fbcc347e6fbd5080464ff8df4f4", pattern = "*.h5ad$", full.names = TRUE),
+  input = list.files("/tmp/neurips2021_work/d0/a319268c0a70d0890301ad3dd8628d/", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/match_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   #solution_meta = "output/pilot/match_modality/meta_solution.collect_solution_metadata.output.tsv"
@@ -20,12 +20,13 @@ par <- list(
 json_metric <- "match_probability"
 
 cat("Reading solution meta files\n")
-dataset_meta <- 
-  readr::read_tsv(par$dataset_meta) %>% 
+dm <- readr::read_tsv(par$dataset_meta)
+dataset_meta <-
+  bind_rows(dm, dm %>% rename(mod1_modality = mod2_modality, mod2_modality = mod1_modality)) %>% 
   transmute(
-    dataset_orig_id = dataset_id, 
-    dataset_id = paste0(dataset_orig_id, "_MM"), 
-    dataset_subtask = paste0(mod1_modality, "2", mod2_modality)
+    dataset_orig_id = dataset_id,
+    dataset_subtask = paste0(mod1_modality, "2", mod2_modality),
+    dataset_id = paste0(dataset_orig_id, "_MM_", tolower(dataset_subtask))
   )
 
 cat("Reading metric meta files\n")
@@ -70,7 +71,7 @@ scores <- map_df(par$input, function(inp) {
     value = metric_values
   ) %>%
   mutate(
-    dataset_orig_id = gsub("_MM$", "", dataset_id)
+    dataset_orig_id = gsub("_MM.*$", "", dataset_id)
   )
 
 expect_true(
@@ -134,14 +135,7 @@ json_out <- summary %>%
   filter(metric_id == json_metric) %>%
   select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall) %>%
-  dynutils::tibble_as_list()
-
-# if there is only one method, output the json as {} instead of [{}].
-if (length(json_out) == 1) {
-  json_out <- json_out[[1]]
-  json_out <- json_out[names(json_out) != "method_id"]
-}
+  arrange(Overall)
 
 cat("Writing output\n")
 final_scores <- final_scores %>% map(as.vector) %>% as_tibble

@@ -1,3 +1,16 @@
+# neurips2021_multimodal_viash 1.0.2
+
+## MINOR CHANGES
+
+* Remove 'realpath' dependency by using Java to resolve the path.
+
+* Reimplement the mse metric in Python to speed up the computation.
+
+* Small changes to the predict modality R starter kit to make better
+  use of the available resources.
+
+* Various refactoring to evaluation workflow components.
+
 # neurips2021_multimodal_viash 1.0.1
 
 ## MINOR CHANGES
