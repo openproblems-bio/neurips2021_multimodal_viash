@@ -42,7 +42,6 @@ platforms:
     setup:
       - type: python
         packages:
-          - scikit-learn
           - anndata
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

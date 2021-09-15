@@ -315,7 +315,7 @@ functionality:
           df <- tibble(
             dataset_id = ad\$uns\$dataset_id,
             modality = unique(ad\$var\$feature_types),
-            default_mse = sum(ad\$X@x^2) / length(ad\$X),
+            default_rmse = sqrt(sum(ad\$X@x^2) / length(ad\$X)),
             default_mae = sum(abs(ad\$X@x)) / length(ad\$X)
           )
           rm(ad)
@@ -744,5 +744,5 @@ info:
   output: "target/nextflow/predict_modality_results/collect_solution_metadata"
   executable: "target/nextflow/predict_modality_results/collect_solution_metadata/collect_solution_metadata"
   viash_version: "0.5.3"
-  git_commit: "157e11ad861d528ee1504b9079c13e96dde5faf6"
+  git_commit: "05babe6d575e844605925eec2d90459929f6710b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

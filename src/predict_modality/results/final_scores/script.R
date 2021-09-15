@@ -28,21 +28,16 @@ solution_meta <- readr::read_tsv(
   col_types = cols(
     dataset_id = "c",
     modality = "c",
-    default_mse = "d",
+    default_rmse = "d",
     default_mae = "d"
   )
 )
 dataset_meta <- solution_meta %>% transmute(
-  dataset_id, 
+  dataset_id,
   dataset_subtask = toupper(gsub(".*_", "", dataset_id))
 )
 dataset_specific_defaults <- solution_meta %>%
-  select(dataset_id, mse = default_mse, mae = default_mae) %>%
-  mutate(
-    rmse = sqrt(mse),
-    logp1_mse = log10(mse + 1),
-    logp1_rmse = log10(rmse + 1)
-  ) %>%
+  select(dataset_id, rmse = default_rmse, mae = default_mae) %>%
   gather(metric_id, missing_value, -dataset_id)
 
 cat("Reading metric meta files\n")
