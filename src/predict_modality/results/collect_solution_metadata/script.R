@@ -17,7 +17,7 @@ output <-
     df <- tibble(
       dataset_id = ad$uns$dataset_id,
       modality = unique(ad$var$feature_types),
-      default_mse = sum(ad$X@x^2) / length(ad$X),
+      default_rmse = sqrt(sum(ad$X@x^2) / length(ad$X)),
       default_mae = sum(abs(ad$X@x)) / length(ad$X)
     )
     rm(ad)
