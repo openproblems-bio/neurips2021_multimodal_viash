@@ -9,6 +9,8 @@
 * Small changes to the predict modality R starter kit to make better
   use of the available resources.
 
+* Various refactoring to evaluation workflow components.
+
 # neurips2021_multimodal_viash 1.0.1
 
 ## MINOR CHANGES
