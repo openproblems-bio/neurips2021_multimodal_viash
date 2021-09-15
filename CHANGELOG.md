@@ -6,6 +6,9 @@
 
 * Reimplement the mse metric in Python to speed up the computation.
 
+* Small changes to the predict modality R starter kit to make better
+  use of the available resources.
+
 # neurips2021_multimodal_viash 1.0.1
 
 ## MINOR CHANGES
