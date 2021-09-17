@@ -210,6 +210,7 @@ functionality:
         echo
         echo "Usage: download_10x_dataset \\"
         echo "Usage:   --id pbmc_1k_protein_v3 \\"
+        echo "Usage:   --organism human \\ "
         echo "Usage:   --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \\"
         echo "Usage:   --output_rna output_rna.h5ad \\"
         echo "Usage:   --output_mod2 output_mod2.h5ad"
@@ -904,7 +905,8 @@ functionality:
     dest: "main.nf"
   description: "Download a CellRanger h5 file from the 10x genomics website (or someplace\
     \ else).\n"
-  usage: "download_10x_dataset \\\n  --id pbmc_1k_protein_v3 \\\n  --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5\
+  usage: "download_10x_dataset \\\n  --id pbmc_1k_protein_v3 \\\n  --organism human\
+    \ \\ \n  --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5\
     \ \\\n  --output_rna output_rna.h5ad \\\n  --output_mod2 output_mod2.h5ad\n"
   tests:
   - type: "r_script"
@@ -929,5 +931,5 @@ info:
   output: "target/nextflow/common_datasets/download_10x_dataset"
   executable: "target/nextflow/common_datasets/download_10x_dataset/download_10x_dataset"
   viash_version: "0.5.3"
-  git_commit: "81a3bb28dcfa3fe2233d49bff2bd206a0a44e4c3"
+  git_commit: "58fde9c6c8dce67dfc9b9627a72d356acdbe67e1"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -147,6 +147,7 @@ function ViashHelp {
   echo
   echo "Usage: download_10x_dataset \\"
   echo "Usage:   --id pbmc_1k_protein_v3 \\"
+  echo "Usage:   --organism human \\ "
   echo "Usage:   --input https://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_protein_v3/pbmc_1k_protein_v3_raw_feature_bc_matrix.h5 \\"
   echo "Usage:   --output_rna output_rna.h5ad \\"
   echo "Usage:   --output_mod2 output_mod2.h5ad"
