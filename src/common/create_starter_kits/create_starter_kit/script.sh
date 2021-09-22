@@ -56,9 +56,6 @@ for file in $(find $output_dir/ -type f); do
 done
 
 
-
-
-
 echo "  Copy executables"
 mkdir $output_dir/bin
 cp $par_bin/viash $output_dir/bin/
