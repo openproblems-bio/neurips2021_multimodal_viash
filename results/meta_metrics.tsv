@@ -19,7 +19,7 @@ match_modality	aupr	pairing_auroc	0	1	TRUE
 match_modality	aupr	pairing_aupr	0	1	TRUE
 match_modality	check_format	finished	0	1	TRUE
 match_modality	check_format	correct_format	0	1	TRUE
-match_modality	match_probability	match_probability	0	1	TRUE
+match_modality	match_probability	match_probability	0	100	TRUE
 predict_modality	check_format	finished	0	1	TRUE
 predict_modality	check_format	correct_format	0	1	TRUE
 predict_modality	correlation	mean_pearson_per_cell	-1	1	TRUE
@@ -28,8 +28,5 @@ predict_modality	correlation	mean_pearson_per_gene	-1	1	TRUE
 predict_modality	correlation	mean_spearman_per_gene	-1	1	TRUE
 predict_modality	correlation	overall_pearson	-1	1	TRUE
 predict_modality	correlation	overall_spearman	-1	1	TRUE
-predict_modality	mse	mse	0	+Inf	FALSE
 predict_modality	mse	rmse	0	+Inf	FALSE
-predict_modality	mse	logp1_mse	0	+Inf	FALSE
-predict_modality	mse	logp1_rmse	0	+Inf	FALSE
 predict_modality	mse	mae	0	+Inf	FALSE

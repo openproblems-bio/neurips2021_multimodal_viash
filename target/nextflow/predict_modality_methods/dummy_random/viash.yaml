@@ -833,5 +833,5 @@ info:
   output: "target/nextflow/predict_modality_methods/dummy_random"
   executable: "target/nextflow/predict_modality_methods/dummy_random/dummy_random"
   viash_version: "0.5.3"
-  git_commit: "57f59fd097ac42da082e8c6f8e7fb6acc928dd1d"
+  git_commit: "e30e57c9569d600d7466e872be664cb8f6717fd2"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
