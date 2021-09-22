@@ -350,7 +350,7 @@ functionality:
       cat("Computing the match modality score\\n")
       match_probability_vec <- diag(X_pred) / rowSum
       
-      match_probability <- mean(match_probability_vec)
+      match_probability <- mean(match_probability_vec) * 100
       
       cat("Create output object\\n")
       out <- anndata::AnnData(
@@ -786,5 +786,5 @@ info:
   output: "target/nextflow/match_modality_metrics/match_probability"
   executable: "target/nextflow/match_modality_metrics/match_probability/match_probability"
   viash_version: "0.5.2"
-  git_commit: "3e32b30dbec00f948c68d3a524dc79180e9c3276"
+  git_commit: "12c413efda2d0b5c8f4da5412c23c546fb9ea0f9"
   git_remote: "git@github.com:openproblems-bio/neurips2021_multimodal_viash.git"
