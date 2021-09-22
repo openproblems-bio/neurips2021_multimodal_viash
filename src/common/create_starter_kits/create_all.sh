@@ -11,8 +11,6 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 # ensure that the command below is run from the root of the repository
 cd "$REPO_ROOT"
 
-# TODO: replace evalai phase numbers!
-
 pipeline_version=${1:-main_build}
 
 # bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- ---setup cb

@@ -55,24 +55,33 @@ echo "######################################################################"
 echo "##                      Sync datasets from S3                       ##"
 echo "######################################################################"
 
-if [ ! -d output/datasets/$par_task/ ]; then
-  mkdir -p output/datasets/$par_task/
+# don't sync data when testing the development starter kits
+if [[ $PIPELINE_VERSION != "main_build" ]]; then
+  VERSION_FILE="output/datasets/$par_task/VERSION"
 
-  # use aws cli if installed
-  if command -v aws &> /dev/null; then
-    aws s3 sync --no-sign-request \
-      s3://openproblems-bio/public/phase1-data/$par_task/ \
-      output/datasets/$par_task/
-  # else use aws docker container instead
-  else
-    docker run \
-      --user $(id -u):$(id -g) \
-      --rm -it \
-      -v $(pwd)/output:/output \
-      amazon/aws-cli \
-      s3 sync --no-sign-request \
-      s3://openproblems-bio/public/phase1-data/$par_task/ \
-      /output/datasets/$par_task/
+  # if the data is not found or is from a previous version starter kit,
+  # sync from aws to local
+  if [[ ! -f $VERSION_FILE || `cat $VERSION_FILE` != $PIPELINE_VERSION ]]; then
+    mkdir -p output/datasets/$par_task/
+
+    # use aws cli if installed
+    if command -v aws &> /dev/null; then
+      aws s3 sync --no-sign-request \
+        s3://openproblems-bio/public/phase1-data/$par_task/ \
+        output/datasets/$par_task/
+    # else use aws docker container instead
+    else
+      docker run \
+        --user $(id -u):$(id -g) \
+        --rm -it \
+        -v $(pwd)/output:/output \
+        amazon/aws-cli \
+        s3 sync --no-sign-request \
+        s3://openproblems-bio/public/phase1-data/$par_task/ \
+        /output/datasets/$par_task/
+    fi
+
+    echo "$PIPELINE_VERSION" > $VERSION_FILE
   fi
 fi
 
