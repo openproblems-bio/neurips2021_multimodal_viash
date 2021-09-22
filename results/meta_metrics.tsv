@@ -19,7 +19,7 @@ match_modality	aupr	pairing_auroc	0	1	TRUE
 match_modality	aupr	pairing_aupr	0	1	TRUE
 match_modality	check_format	finished	0	1	TRUE
 match_modality	check_format	correct_format	0	1	TRUE
-match_modality	match_probability	match_probability	0	100	TRUE
+match_modality	match_probability	match_probability	0	1000	TRUE
 predict_modality	check_format	finished	0	1	TRUE
 predict_modality	check_format	correct_format	0	1	TRUE
 predict_modality	correlation	mean_pearson_per_cell	-1	1	TRUE

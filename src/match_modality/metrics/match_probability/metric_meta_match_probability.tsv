@@ -1,2 +1,2 @@
 metric_id	metric_min	metric_max	metric_higherisbetter
-match_probability	0	100	true
+match_probability	0	1000	true
