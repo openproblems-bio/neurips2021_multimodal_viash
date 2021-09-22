@@ -2,7 +2,7 @@
 
 echo "This script is not meant to be run! Run the commands separately, please."
 
-TAG=1.0.2
+TAG=1.1.0
 
 rm -r target
 git fetch origin
@@ -13,7 +13,11 @@ bin/viash_build -m release -t $TAG --max_threads 4 --config_mod '.platforms[.typ
 
 # when building for a not-release  
 bin/viash_build --max_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
-  
+
+# # build datasets for starter kits & 
+# Rscript src/common/datasets/process_inhouse_datasets/script.R
+# src/joint_embedding/workflows/censor_datasets/run.sh; src/predict_modality/workflows/censor_datasets/run.sh; src/match_modality/workflows/censor_datasets/run.sh
+# resources_test/run_joint_embedding.sh; resources_test/run_match_modality.sh; resources_test/run_predict_modality.sh
 
 # run unit tests (when done right, these should all pass)
 bin/viash_test -m release -t $TAG

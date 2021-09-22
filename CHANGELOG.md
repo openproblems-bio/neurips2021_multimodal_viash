@@ -1,3 +1,13 @@
+# neurips2021_multimodal_viash 1.1.0
+
+## MAJOR CHANGES
+
+* Release of full phase 1 datasets.
+
+## MINOR CHANGES
+
+* Starter kit submission script can now update the datasets if needed.
+
 # neurips2021_multimodal_viash 1.0.2
 
 ## MINOR CHANGES
