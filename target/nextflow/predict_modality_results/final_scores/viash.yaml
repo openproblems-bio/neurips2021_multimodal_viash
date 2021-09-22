@@ -1147,5 +1147,5 @@ info:
   output: "target/nextflow/predict_modality_results/final_scores"
   executable: "target/nextflow/predict_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "9d987bdd3b35f4fe66de9d5f64b810573d67b6e2"
+  git_commit: "53b5b2eacf1659088880ef5d00bf731d49501517"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

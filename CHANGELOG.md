@@ -8,6 +8,8 @@
 
 * Starter kit submission script can now update the datasets if needed.
 
+* Optimised Predict Modality R starter kit to reduce memory usage and time consumption.
+
 # neurips2021_multimodal_viash 1.0.2
 
 ## MINOR CHANGES
