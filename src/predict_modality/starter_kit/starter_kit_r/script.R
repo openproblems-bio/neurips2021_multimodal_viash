@@ -75,44 +75,23 @@ gc()
 cat("Reading mod2 h5ad files\n")
 input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
 
-# calculate column means
-colmean <- Matrix::colSums(input_train_mod2$X) / nrow(input_train_mod2)
-allmean <- sum(input_train_mod2$X@x) / length(input_train_mod2$X)
-
 cat("Predicting for each column in modality 2\n")
 # precompute knn indices
 knn_ix <- FNN::get.knnx(
   dr_mod1_train,
   dr_mod1_test,
   k = par$n_neighbors
-)
-preds <- dplyr::bind_rows(pbapply::pblapply(
-  seq_len(ncol(input_train_mod2)),
-  cl = n_cores,
-  function(i) {
-    if (colmean[[i]] < allmean) {
-      # to reduce execution time for starter kit,
-      # return no predictions when the column mean < overall mean
-      NULL
-    } else {
-      ix <- cbind(as.vector(knn_ix$nn.index), rep(i, length(knn_ix$nn.index)))
-      out <- rowMeans(matrix(input_train_mod2$X[ix], ncol = par$n_neighbors))
-      ix <- which(out != 0)
-      data.frame(i = ix, j = i, x = out[ix])
-    }
-  }
-))
+)$nn.index
+
+pred <- Reduce("+", lapply(seq_len(par$n_neighbors), function(k) {
+  input_train_mod2$X[knn_ix[, k], , drop = FALSE]
+}))
+rownames(pred) <- rownames(dr_mod1_test)
 
 cat("Creating outputs object\n")
 # store prediction as a sparse matrix
 out <- anndata::AnnData(
-  X = Matrix::sparseMatrix(
-    i = preds$i,
-    j = preds$j,
-    x = preds$x,
-    dim = c(nrow(dr_mod1_test), ncol(input_train_mod2)),
-    dimnames = list(rownames(dr_mod1_test), colnames(input_train_mod2))
-  ),
+  X = pred,
   uns = list(
     dataset_id = train_mod1_uns[["dataset_id"]],
     method_id = method_id
