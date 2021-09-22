@@ -10,6 +10,8 @@
 
 * Optimised Predict Modality R starter kit to reduce memory usage and time consumption.
 
+* Multiplied match probability score by 100 to be able to see something on EvalAI.
+
 # neurips2021_multimodal_viash 1.0.2
 
 ## MINOR CHANGES
