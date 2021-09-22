@@ -311,7 +311,7 @@ rowSum <- Matrix::rowSums(X_pred)
 cat("Computing the match modality score\\n")
 match_probability_vec <- diag(X_pred) / rowSum
 
-match_probability <- mean(match_probability_vec) * 100
+match_probability <- mean(match_probability_vec) * 1000
 
 cat("Create output object\\n")
 out <- anndata::AnnData(

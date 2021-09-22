@@ -943,5 +943,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_linearmodel"
   executable: "target/nextflow/predict_modality_methods/baseline_linearmodel/baseline_linearmodel"
   viash_version: "0.5.3"
-  git_commit: "e30e57c9569d600d7466e872be664cb8f6717fd2"
+  git_commit: "8e61c3136baa93a7562e0b8c8eb6f29d501c4a26"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
