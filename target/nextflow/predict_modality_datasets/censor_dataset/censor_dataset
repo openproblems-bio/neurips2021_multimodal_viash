@@ -381,13 +381,13 @@ if (ad2_mod == "ATAC") {
   input_mod2\$X@x <- (input_mod2\$X@x > 0) + 0
 }
 
-
 cat("Creating train objects\\n")
 ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
 ad2_var <- input_mod2\$var %>% select(one_of("gene_ids"), feature_types)
-is_train <- input_mod1\$obs[["is_train"]]
+is_train <- which(input_mod1\$obs[["is_train"]])
+is_test <- which(!input_mod1\$obs[["is_train"]]) %>% head(1000) # sample test cells
 train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
-test_obs <- input_mod1\$obs[!is_train, , drop = FALSE]  %>% select(one_of("batch"))
+test_obs <- input_mod1\$obs[is_test, , drop = FALSE]  %>% select(one_of("batch"))
 
 output_train_mod1 <- anndata::AnnData(
   X = input_mod1\$X[is_train, , drop = FALSE],
@@ -406,15 +406,15 @@ output_train_mod2 <- anndata::AnnData(
 
 cat("Create test objects\\n")
 output_test_mod1 <- anndata::AnnData(
-  X = input_mod1\$X[!is_train, , drop = FALSE],
-  layers = list(counts = input_mod1\$layers[["counts"]][!is_train, , drop = FALSE]),
+  X = input_mod1\$X[is_test, , drop = FALSE],
+  layers = list(counts = input_mod1\$layers[["counts"]][is_test, , drop = FALSE]),
   obs = test_obs,
   var = ad1_var,
   uns = common_uns
 )
 output_test_mod2 <- anndata::AnnData(
-  X = input_mod2\$X[!is_train, , drop = FALSE],
-  layers = list(counts = input_mod2\$layers[["counts"]][!is_train, , drop = FALSE]),
+  X = input_mod2\$X[is_test, , drop = FALSE],
+  layers = list(counts = input_mod2\$layers[["counts"]][is_test, , drop = FALSE]),
   obs = test_obs,
   var = ad2_var,
   uns = common_uns
