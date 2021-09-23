@@ -47,7 +47,7 @@ functionality:
       description: Number of principal components to use.
     - name: "--n_neighbors"
       type: "integer"
-      default: 4 # intentionally set to a low number to reduce memory consumption
+      default: 20
       description: Number of neighbors to use.
 
   # files your script needs
@@ -92,4 +92,4 @@ platforms:
   # which uses the docker container built above to also be able to
   # run your method as part of a nextflow pipeline.
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]
