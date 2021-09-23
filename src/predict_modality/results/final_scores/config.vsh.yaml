@@ -20,10 +20,10 @@ functionality:
       example: "method_meta.tsv"
       description: "A method metadata file. Must contain column 'method_id'."
       multiple: true
-    - name: "--solution_meta"
+    - name: "--dataset_meta"
       type: file
-      example: "solution.tsv"
-      description: "A solution metadata file."
+      example: "dataset_meta.tsv"
+      description: "A dataset metadata file."
       multiple: true
     - name: "--metric_meta"
       type: file
