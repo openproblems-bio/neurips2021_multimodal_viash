@@ -6,12 +6,12 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 library(rlang)
 
 ## VIASH START
-out_path <- "output/pilot_inhouse/predict_modality/output.final_scores.output_"
+out_path <- "output/pilot/predict_modality/output.final_scores.output_"
 par <- list(
   input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  solution_meta = "output/pilot_inhouse/predict_modality/meta_solution.collect_solution_metadata.output.tsv",
+  dataset_meta = "results/meta_datasets.tsv",
   output_scores = paste0(out_path, "scores.tsv"),
   output_summary = paste0(out_path, "summary.tsv"),
   output_json = paste0(out_path, "json.json")
@@ -21,25 +21,17 @@ par <- list(
 json_metric <- "rmse"
 
 cat("Reading solution meta files\n")
-solution_meta <- readr::read_tsv(
-  par$solution_meta,
-  col_types = cols(
-    dataset_id = "c",
-    modality = "c",
-    default_rmse = "d",
-    default_mae = "d"
+dm <- readr::read_tsv(par$dataset_meta)
+dataset_meta <-
+  bind_rows(dm, dm %>% rename(mod1_modality = mod2_modality, mod2_modality = mod1_modality)) %>%
+  transmute(
+    dataset_orig_id = dataset_id,
+    dataset_subtask = paste0(mod1_modality, "2", mod2_modality),
+    dataset_id = paste0(dataset_orig_id, "_PM_", tolower(dataset_subtask))
   )
-)
-dataset_meta <- solution_meta %>% transmute(
-  dataset_id,
-  dataset_subtask = toupper(gsub(".*_", "", dataset_id))
-)
-dataset_specific_defaults <- solution_meta %>%
-  select(dataset_id, rmse = default_rmse, mae = default_mae) %>%
-  gather(metric_id, missing_value, -dataset_id)
 
 cat("Reading metric meta files\n")
-overall_metric_defaults <-
+metric_defaults <-
   map_df(
     par$metric_meta,
     read_tsv,
@@ -53,15 +45,11 @@ overall_metric_defaults <-
   mutate(
     metric_min = as.numeric(metric_min),
     metric_max = as.numeric(metric_max)
-  ) %>% 
+  ) %>%
   transmute(
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
   )
-metric_defaults <- bind_rows(
-  dataset_specific_defaults,
-  crossing(overall_metric_defaults, dataset_id = dataset_meta$dataset_id) %>% anti_join(dataset_specific_defaults, by = "metric_id")
-)
 
 cat("Reading input h5ad files\n")
 scores <- map_df(par$input, function(inp) {
@@ -80,7 +68,10 @@ scores <- map_df(par$input, function(inp) {
   out
 }) %>%
   rename(metric_id = metric_ids, value = metric_values) %>%
-  filter(!is.na(value))
+  filter(!is.na(value)) %>%
+  mutate(
+    dataset_orig_id = gsub("_PM.*$", "", dataset_id)
+  )
 
 expect_true(
   all(unique(scores$metric_id) %in% metric_defaults$metric_id),
@@ -111,17 +102,16 @@ colnames(method_meta) <- paste0("method_", gsub("^method_", "", colnames(method_
 
 cat("Creating default scores for missing entries based on metrics meta\n")
 default_scores <- crossing(
-  method_id = method_meta$method_id,
-  metric_defaults
-) %>% 
-  mutate(value = NA_real_) %>% 
-  rename(value_after_default = missing_value)
+  method_id = method_meta$method_id, 
+  dataset_meta %>% select(dataset_id, dataset_orig_id),
+  metric_defaults %>% mutate(value = NA_real_, value_after_default = missing_value) %>% select(-missing_value)
+)
 
 final_scores <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
-) %>%
-  left_join(dataset_meta, by = "dataset_id")
+) %>% 
+  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
 
 summary <-
   bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
@@ -150,7 +140,7 @@ json_out <- summary %>%
   filter(metric_id == json_metric) %>%
   select(-var, -metric_id) %>%
   spread(dataset_subtask, mean) %>%
-  arrange(Overall) 
+  arrange(Overall)
 
 cat("Writing output\n")
 final_scores <- final_scores %>% map(as.vector) %>% as_tibble

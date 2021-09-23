@@ -34,7 +34,7 @@ par <- list(
   output = "output.h5ad",
   n_pcs = 4L,
   distance_method = "pearson",
-  n_neighbors = 3
+  n_neighbors = 20
 )
 ## VIASH END
 
@@ -83,9 +83,14 @@ knn_ix <- FNN::get.knnx(
   k = par$n_neighbors
 )$nn.index
 
-pred <- Reduce("+", lapply(seq_len(par$n_neighbors), function(k) {
-  input_train_mod2$X[knn_ix[, k], , drop = FALSE]
-}))
+# perform knn regression.
+pred <- input_train_mod2$X[knn_ix[, 1], , drop = FALSE]
+if (par$n_neighbors > 1) {
+  for (k in seq(2, par$n_neighbors)) {
+    pred <- pred + input_train_mod2$X[knn_ix[, k], , drop = FALSE]
+  }
+}
+pred <- pred / par$n_neighbors
 rownames(pred) <- rownames(dr_mod1_test)
 
 cat("Creating outputs object\n")
