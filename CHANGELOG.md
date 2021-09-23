@@ -7,11 +7,13 @@
 
 * Optimise R starter kit for memory consumption once more.
 
+* Subsample number of cells for the Predict Modality task to 1000.
+
 ## BUG FIXES
 
 * Fix R starter kit which would return the sum of all neighbors rather than the mean.
 
-* Use log norm GEX counts instead of the non-log norm counts.
+* For RNA AnnData files, store the log normalized expression values in X instead of the non-log normalized values.
 
 # neurips2021_multimodal_viash 1.1.0
 
