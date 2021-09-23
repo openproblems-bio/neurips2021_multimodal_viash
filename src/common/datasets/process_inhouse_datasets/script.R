@@ -41,12 +41,15 @@ head(ad1$var)
 head(ad2$var)
 
 # process gex
-ad1$X <- as(ad1$X, "CsparseMatrix")
+ad1$X <- as(ad1$layers[["log_norm"]], "CsparseMatrix")
 ad1$layers <- list(counts = as(ad1$layers[["counts"]], "CsparseMatrix"))
 
 # process atac
 ad2$X <- as(ad2$X, "CsparseMatrix")
 ad2$layers <- list(counts = as(ad2$layers[["counts"]], "CsparseMatrix"))
+
+assert_that(max(ad1$X) < 100)
+assert_that(max(ad2$X) < 100)
 
 # copy over data
 ad1$obs[["pseudotime_order_ATAC"]] <- ad2$obs[["pseudotime_order_ATAC"]]
@@ -140,12 +143,15 @@ head(bd1$var)
 head(bd2$var)
 
 # process gex
-bd1$X <- as(bd1$X, "CsparseMatrix")
+bd1$X <- as(bd1$layers[["log_norm"]], "CsparseMatrix")
 bd1$layers <- list(counts = as(bd1$layers[["counts"]], "CsparseMatrix"))
 
 # process atac
 bd2$X <- as(bd2$X, "CsparseMatrix")
 bd2$layers <- list(counts = as(bd2$layers[["counts"]], "CsparseMatrix"))
+
+assert_that(max(bd1$X) < 100)
+assert_that(max(bd2$X) < 100)
 
 # copy over data
 bd1$obs[["pseudotime_order_ADT"]] <- bd2$obs[["pseudotime_order_ADT"]]

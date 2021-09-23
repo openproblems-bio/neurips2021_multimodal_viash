@@ -11,6 +11,8 @@
 
 * Fix R starter kit which would return the sum of all neighbors rather than the mean.
 
+* Use log norm GEX counts instead of the non-log norm counts.
+
 # neurips2021_multimodal_viash 1.1.0
 
 ## MAJOR CHANGES

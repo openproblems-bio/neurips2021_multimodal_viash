@@ -191,7 +191,7 @@ function ViashHelp {
 
   echo "   --n_neighbors"
   echo "        type: integer"
-  echo "        default: 4"
+  echo "        default: 20"
   echo "        Number of neighbors to use."
   echo ""
 
@@ -319,7 +319,7 @@ if [ -z "$VIASH_PAR_N_PCS" ]; then
   VIASH_PAR_N_PCS="50"
 fi
 if [ -z "$VIASH_PAR_N_NEIGHBORS" ]; then
-  VIASH_PAR_N_NEIGHBORS="4"
+  VIASH_PAR_N_NEIGHBORS="20"
 fi
 
 
@@ -383,7 +383,15 @@ input_train_mod1 <- anndata::read_h5ad(par\$input_train_mod1)
 train_mod1_uns <- input_train_mod1\$uns
 
 # subset to HVG to reduce memory consumption
+train_mod1_sd <- proxyC::colSds(input_train_mod1\$X)
+ix <- order(train_mod1_sd, decreasing = TRUE)[seq_len(min(1000, length(train_mod1_sd)))]
+input_train_mod1 <- input_train_mod1[,ix]\$copy()
+gc()
+
+# subset to HVG to reduce memory consumption
 input_test_mod1 <- anndata::read_h5ad(par\$input_test_mod1)
+input_test_mod1 <- input_test_mod1[,ix]\$copy()
+gc()
 
 cat("Performing DR on the mod1 values\\n")
 # LMDS is more efficient than regular MDS because

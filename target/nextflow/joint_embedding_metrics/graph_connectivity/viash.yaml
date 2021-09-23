@@ -849,5 +849,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/graph_connectivity"
   executable: "target/nextflow/joint_embedding_metrics/graph_connectivity/graph_connectivity"
   viash_version: "0.5.3"
-  git_commit: "9a0dda117c40a01521f247b320fe4bf59806b6cb"
+  git_commit: "022ca1ec0903c2335712431f123c44d6b2ed0a16"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
