@@ -5,6 +5,12 @@
 * Set the maximum of the RMSE metric to 99999 as this seems to be a practical upper bound
   for the datasets in question.
 
+* Optimise R starter kit for memory consumption once more.
+
+## BUG FIXES
+
+* Fix R starter kit which would return the sum of all neighbors rather than the mean.
+
 # neurips2021_multimodal_viash 1.1.0
 
 ## MAJOR CHANGES

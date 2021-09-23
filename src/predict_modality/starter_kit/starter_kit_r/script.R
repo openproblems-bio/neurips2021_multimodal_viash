@@ -34,7 +34,7 @@ par <- list(
   output = "output.h5ad",
   n_pcs = 4L,
   distance_method = "pearson",
-  n_neighbors = 3
+  n_neighbors = 20
 )
 ## VIASH END
 
@@ -45,15 +45,7 @@ input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
 train_mod1_uns <- input_train_mod1$uns
 
 # subset to HVG to reduce memory consumption
-train_mod1_sd <- proxyC::colSds(input_train_mod1$X)
-ix <- order(train_mod1_sd, decreasing = TRUE)[seq_len(min(1000, length(train_mod1_sd)))]
-input_train_mod1 <- input_train_mod1[,ix]$copy()
-gc()
-
-# subset to HVG to reduce memory consumption
 input_test_mod1 <- anndata::read_h5ad(par$input_test_mod1)
-input_test_mod1 <- input_test_mod1[,ix]$copy()
-gc()
 
 cat("Performing DR on the mod1 values\n")
 # LMDS is more efficient than regular MDS because
@@ -83,9 +75,14 @@ knn_ix <- FNN::get.knnx(
   k = par$n_neighbors
 )$nn.index
 
-pred <- Reduce("+", lapply(seq_len(par$n_neighbors), function(k) {
-  input_train_mod2$X[knn_ix[, k], , drop = FALSE]
-}))
+# perform knn regression.
+pred <- input_train_mod2$X[knn_ix[, 1], , drop = FALSE]
+if (par$n_neighbors > 1) {
+  for (k in seq(2, par$n_neighbors)) {
+    pred <- pred + input_train_mod2$X[knn_ix[, k], , drop = FALSE]
+  }
+}
+pred <- pred / par$n_neighbors
 rownames(pred) <- rownames(dr_mod1_test)
 
 cat("Creating outputs object\n")
