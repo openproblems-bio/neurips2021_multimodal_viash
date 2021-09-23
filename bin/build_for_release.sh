@@ -2,14 +2,8 @@
 
 echo "This script is not meant to be run! Run the commands separately, please."
 
-TAG=1.1.0
+TAG=1.1.1
 
-rm -r target
-git fetch origin
-git merge origin/main
-
-# build target folder and docker containers
-bin/viash_build -m release -t $TAG --max_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
 
 # when building for a not-release  
 bin/viash_build --max_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
@@ -20,6 +14,15 @@ bin/viash_build --max_threads 4 --config_mod '.platforms[.type == "nextflow"].se
 # resources_test/run_joint_embedding.sh; resources_test/run_match_modality.sh; resources_test/run_predict_modality.sh
 # src/common/create_starter_kits/create_all.sh $TAG
 # aws s3 sync --delete --profile op2 output/datasets/ s3://openproblems-bio/public/phase1-data --dryrun
+
+
+
+rm -r target
+git fetch origin
+git merge origin/main
+
+# build target folder and docker containers
+bin/viash_build -m release -t $TAG --max_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
 
 # run unit tests (when done right, these should all pass)
 bin/viash_test -m release -t $TAG
