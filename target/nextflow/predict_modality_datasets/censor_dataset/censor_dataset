@@ -385,7 +385,17 @@ cat("Creating train objects\\n")
 ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
 ad2_var <- input_mod2\$var %>% select(one_of("gene_ids"), feature_types)
 is_train <- which(input_mod1\$obs[["is_train"]])
-is_test <- which(!input_mod1\$obs[["is_train"]]) %>% head(1000) # sample test cells
+is_test <- which(!input_mod1\$obs[["is_train"]])
+
+# sample cells
+if (length(is_test) > 1000) {
+  ct <- input_mod1\$obs[["cell_type"]][is_test] %>% as.character()
+  ct_tab <- table(ct)
+  ct_freq <- setNames(as.vector(ct_tab) / sum(ct_tab), names(ct_tab))
+  is_test <- sample(is_test, 1000, prob = sqrt(1 / ct_freq[ct]))
+  # table(input_mod1\$obs[["cell_type"]][is_test])
+}
+
 train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
 test_obs <- input_mod1\$obs[is_test, , drop = FALSE]  %>% select(one_of("batch"))
 
