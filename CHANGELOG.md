@@ -1,12 +1,20 @@
-# neurips2021_multimodal_viash 1.1.2
+# neurips2021_multimodal_viash 1.2.0
 
-## MINOR CHANGE
+## MAJOR CHANGES
+
+* Update to phase 1 datasets
+
+## MINOR CHANGES
+
+* Predict Modality: Perform weighted sampling for subsampling the cells based on cell type.
+
+## BUG FIX
 
 * Fix obs_names in phase 1 multiome data.
 
 # neurips2021_multimodal_viash 1.1.1
 
-## MINOR CHANGE
+## MINOR CHANGES
 
 * Set the maximum of the RMSE metric to 99999 as this seems to be a practical upper bound
   for the datasets in question.
