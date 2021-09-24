@@ -5,9 +5,11 @@ library(assertthat)
 
 set.seed(1)
 
-# sync to local folder
-# system("aws s3 sync s3://openproblems-bio/neurips2021/processed/atac/ output/manual_formatting/multiome/ --exclude '*' --include '*_train.h5ad' --include '*_test*.h5ad' --profile op2")
-# system("aws s3 sync s3://openproblems-bio/neurips2021/processed/cite/ output/manual_formatting/cite/ --exclude '*' --include '*_train.h5ad' --include '*_test*.h5ad' --profile op2")
+# sync to local folder, run in bash
+# aws s3 sync s3://openproblems-bio/neurips2021/processed/atac/ output/manual_formatting/multiome/ --exclude '*' --include '*_train.h5ad' --include '*_test*.h5ad' --profile op2 --delete
+# aws s3 sync s3://openproblems-bio/neurips2021/processed/cite/ output/manual_formatting/cite/ --exclude '*' --include '*_train.h5ad' --include '*_test*.h5ad' --profile op2 --delete
+# aws s3 sync s3://openproblems-bio/neurips2021/processed/atac/ output/manual_formatting/multiome/ --profile op2 --delete
+# aws s3 sync s3://openproblems-bio/neurips2021/processed/cite/ output/manual_formatting/cite/ --profile op2 --delete
 
 starter_dev <- c("s1d1", "s1d2")
 train <- c("s1d1", "s2d1", "s2d4", "s3d6", "s3d1")
@@ -25,6 +27,7 @@ output_dir <- "output/datasets/common/"
 ad1 <- read_h5ad("output/manual_formatting/multiome/Multiome_gex_processed_train.h5ad")
 ad2 <- read_h5ad("output/manual_formatting/multiome/Multiome_atac_processed_train.h5ad")
 adid <- "openproblems_bmmc_multiome"
+assert_that(all(rownames(ad1) == rownames(ad2)))
 
 levels(ad1$obs$batch)
 assert_that(length(setdiff(ad1$obs$batch, c(train, valid, backup_test))) == 0)
@@ -127,6 +130,7 @@ ad2_starter$write_h5ad(paste0(resources_test, adid_starter, "/", adid_starter, "
 bd1 <- read_h5ad("output/manual_formatting/cite/Cite_gex_processed_train.h5ad")
 bd2 <- read_h5ad("output/manual_formatting/cite/Cite_adt_processed_train.h5ad")
 bdid <- "openproblems_bmmc_cite"
+assert_that(all(rownames(bd1) == rownames(bd2)))
 
 levels(bd1$obs$batch)
 assert_that(!any(backup_test %in% levels(bd1$obs$batch)))

@@ -92,4 +92,4 @@ platforms:
   # which uses the docker container built above to also be able to
   # run your method as part of a nextflow pipeline.
   - type: nextflow
-    labels: [ midmem, lowtime, lowcpu ]
+    labels: [ lowmem, lowtime, lowcpu ]
