@@ -2,7 +2,7 @@
 
 echo "This script is not meant to be run! Run the commands separately, please."
 
-TAG=1.1.2
+TAG=1.2.0
 
 
 # when building for a not-release  
