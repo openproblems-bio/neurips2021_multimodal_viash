@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 1.1.2
+
+## MINOR CHANGE
+
+* Fix obs_names in phase 1 multiome data.
+
 # neurips2021_multimodal_viash 1.1.1
 
 ## MINOR CHANGE

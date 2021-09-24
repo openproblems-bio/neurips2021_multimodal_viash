@@ -2,7 +2,7 @@
 
 echo "This script is not meant to be run! Run the commands separately, please."
 
-TAG=1.1.1
+TAG=1.1.2
 
 
 # when building for a not-release  
@@ -22,7 +22,7 @@ git fetch origin
 git merge origin/main
 
 # build target folder and docker containers
-bin/viash_build -m release -t $TAG --max_threads 4 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
+bin/viash_build -m release -t $TAG --max_threads 10 --config_mod '.platforms[.type == "nextflow"].separate_multiple_outputs := false'
 
 # run unit tests (when done right, these should all pass)
 bin/viash_test -m release -t $TAG

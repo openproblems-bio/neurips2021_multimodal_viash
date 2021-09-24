@@ -158,7 +158,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process r_starter_kit_process {
-  label 'midmem'
+  label 'lowmem'
   label 'lowtime'
   label 'lowcpu'
   tag "${id}"
