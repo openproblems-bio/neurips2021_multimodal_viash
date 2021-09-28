@@ -1,3 +1,10 @@
+# neurips2021_multimodal_viash 1.2.1
+
+## MINOR CHANGES
+
+* Joint Embedding: Optimise execution and memory requirements for baseline methods.
+
+
 # neurips2021_multimodal_viash 1.2.0
 
 ## MAJOR CHANGES

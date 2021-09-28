@@ -44,6 +44,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        bioc: [ SingleCellExperiment, batchelor ]
+        bioc: [ SingleCellExperiment, batchelor, proxyC ]
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]
