@@ -39,8 +39,12 @@ functionality:
       description: The distance method to use. Possible values are euclidean, pearson, spearman and others.
     - name: "--n_pcs"
       type: "integer"
-      default: 4
+      default: 20
       description: Number of principal components to use.
+    - name: "--n_trees"
+      type: "integer"
+      default: 50
+      description: Number of trees to use.
   resources:
     - type: r_script
       path: script.R
@@ -55,4 +59,4 @@ platforms:
       - type: r
         packages: [ ranger, lmds ]
   - type: nextflow
-    labels: [ midmem, lowtime, lowcpu ]
+    labels: [ highmem, lowtime, highcpu ]

@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component baseline_linearmodel")
+      println("[ERROR] option --${it.name} not specified in component baseline_lm")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "baseline_linearmodel." + it.name + "." + extOrName
+          ? "baseline_lm." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -157,10 +157,10 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process baseline_linearmodel_process {
-  label 'lowmem'
+process baseline_lm_process {
+  label 'highmem'
   label 'lowtime'
-  label 'lowcpu'
+  label 'highcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -188,7 +188,7 @@ process baseline_linearmodel_process {
       export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.baseline_linearmodel.tests.testScript} | tee $output
+      ./${params.baseline_lm.tests.testScript} | tee $output
       """
     else
       """
@@ -203,14 +203,14 @@ process baseline_linearmodel_process {
       """
 }
 
-workflow baseline_linearmodel {
+workflow baseline_lm {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "baseline_linearmodel"
+  def key = "baseline_lm"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -255,7 +255,7 @@ workflow baseline_linearmodel {
       )
     }
 
-  result_ = baseline_linearmodel_process(id_input_output_function_cli_params_)
+  result_ = baseline_lm_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -283,7 +283,7 @@ workflow baseline_linearmodel {
 
 workflow {
   def id = params.id
-  def fname = "baseline_linearmodel"
+  def fname = "baseline_lm"
 
   def _params = params
 
@@ -295,14 +295,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.baseline_linearmodel
+  def inputFiles = params.baseline_lm
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = baseline_linearmodel(ch_)
+  result = baseline_lm(ch_)
   result.view{ it[1] }
 }
 
@@ -315,17 +315,17 @@ workflow test {
 
   main:
   params.test = true
-  params.baseline_linearmodel.output = "baseline_linearmodel.log"
+  params.baseline_lm.output = "baseline_lm.log"
 
   Channel.from(rootDir) \
-    | filter { params.baseline_linearmodel.tests.isDefined } \
+    | filter { params.baseline_lm.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.baseline_linearmodel.tests.testResources.collect{ file( p + it ) },
+        params.baseline_lm.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | baseline_linearmodel
+    | baseline_lm
 
   emit:
-  baseline_linearmodel.out
+  baseline_lm.out
 }

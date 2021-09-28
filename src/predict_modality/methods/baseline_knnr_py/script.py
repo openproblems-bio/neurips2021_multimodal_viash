@@ -30,10 +30,8 @@ par = {
     'n_pcs': 4,
     'n_neighbors': 5,
 }
+meta = { 'functionality_name': 'foo' }
 ## VIASH END
-
-# TODO: change this to the name of your method
-method_id = "python_starter_kit"
 
 logging.info('Reading `h5ad` files...')
 input_train_mod1 = ad.read_h5ad(par['input_train_mod1'])
@@ -49,8 +47,6 @@ input_train = ad.concat(
     index_unique="-"
 )
 
-# TODO: implement own method
-
 logging.info('Performing dimensionality reduction on modality 1 values...')
 embedder = TruncatedSVD(n_components=par['n_pcs'])
 X = embedder.fit_transform(input_train.X)
@@ -62,12 +58,6 @@ y_train = input_train_mod2.X.toarray()
 
 assert len(X_train) + len(X_test) == len(X)
 
-# Get all responses of the training data set to fit the
-# KNN regressor later on.
-#
-# Make sure to use `toarray()` because the output might
-# be sparse and `KNeighborsRegressor` cannot handle it.
-
 logging.info('Running KNN regression...')
 
 reg = KNeighborsRegressor(
@@ -78,9 +68,6 @@ reg = KNeighborsRegressor(
 reg.fit(X_train, y_train)
 y_pred = reg.predict(X_test)
 
-# Store as sparse matrix to be efficient. Note that this might require
-# different classifiers/embedders before-hand. Not every class is able
-# to support such data structures.
 y_pred = csc_matrix(y_pred)
 
 adata = ad.AnnData(
@@ -89,7 +76,7 @@ adata = ad.AnnData(
     var=input_train_mod2.var,
     uns={
         'dataset_id': input_train_mod1.uns['dataset_id'],
-        'method_id': method_id,
+        'method_id': meta["functionality_name"],
     },
 )
 

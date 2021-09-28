@@ -39,6 +39,10 @@ functionality:
       type: "integer"
       default: 200
       description: Setting of the n_cell_par NewWave parameter.
+    - name: "--n_neighbors"
+      type: "integer"
+      default: 20
+      description: Number of neighbors to use in the knn regression.
     - name: "--output"
       type: "file"
       direction: "output"

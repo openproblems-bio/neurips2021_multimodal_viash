@@ -3,7 +3,11 @@
 ## MINOR CHANGES
 
 * Joint Embedding: Optimise execution and memory requirements for baseline methods.
-
+* Joint Embedding: Update pilot results.
+* Match Modality: Optimise execution and memory requirements for baseline methods.
+* Match Modality: Update pilot results.
+* Predict Modality: Optimise execution and memory requirements for baseline methods.
+* Predict Modality: Update pilot results.
 
 # neurips2021_multimodal_viash 1.2.0
 

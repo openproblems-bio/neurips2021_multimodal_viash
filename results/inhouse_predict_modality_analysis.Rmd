@@ -29,14 +29,14 @@ colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
-    "output/pilot_inhouse/predict_modality/output.final_scores.output_scores.tsv",
+    "output/pilot/predict_modality/output.final_scores.output_scores.tsv",
     col_types = c(dataset_id = "c", method_id = "c", metric_id = "c", dataset_subtask = "c", value = "d", value_after_default = "d")
   ) %>%
   mutate(
-    dataset_id_orig = gsub("_PM_[^_]*$", "", dataset_id),
-    dataset_phase = gsub(".*_", "", dataset_id_orig)
+    dataset_orig_id = gsub("_PM_[^_]*$", "", dataset_id),
+    dataset_phase = gsub(".*_", "", dataset_orig_id)
   ) %>% 
-  left_join(meta_ds, by = c("dataset_id_orig" = "dataset_id")) %>%
+  left_join(meta_ds, by = c("dataset_orig_id" = "dataset_id")) %>%
   left_join(meta_ms, by = "method_id") %>%
   # left_join(meta_metrics, by = "metric_id") %>%
   select(-value) %>%
