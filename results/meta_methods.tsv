@@ -21,7 +21,7 @@ match_modality	dummy_solution	Solution	Returns the ground-truth pairing.	Robrech
 predict_modality	baseline_babel	BABEL	Learn a deep-learning model with BABEL.	Alejandro Granados	2	r	sota	10.1073/pnas.2023070118
 predict_modality	baseline_knnr_py	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
 predict_modality	baseline_knnr_r	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-predict_modality	baseline_linearmodel	Linear Models	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+predict_modality	baseline_lm	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 predict_modality	baseline_newwave_knnr	NewWave+KNNR	Perform DR with NewWave, predict modality with KNN regression.	Robrecht Cannoodt	1	r	baseline	NA
 predict_modality	baseline_randomforest	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
 predict_modality	dummy_meanpergene	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
