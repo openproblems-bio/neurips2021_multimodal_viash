@@ -16,7 +16,7 @@ bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot_inhouse/match_modality/ \
+  --publishDir output/pilot/match_modality/ \
   -resume \
   -c src/common/workflows/resource_labels.config \
   --datasets 'output/datasets/match_modality/**.h5ad'
@@ -25,7 +25,7 @@ bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot_inhouse/match_modality/ \
+  --publishDir output/pilot/match_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
   --datasets 'output/datasets/match_modality/**.h5ad'
