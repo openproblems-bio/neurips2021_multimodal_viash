@@ -1,11 +1,11 @@
 functionality:
-  name: baseline_linearmodel
+  name: baseline_lm
   namespace: predict_modality_methods
   version: dev
   description: Linear model regression.
   info:
     type: baseline
-    label: Linear Models
+    label: Linear Model
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -53,6 +53,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ lmds ]
+        packages: [ lmds, RcppArmadillo ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ highmem, lowtime, highcpu ]

@@ -12,8 +12,7 @@ par <- list(
   input_test_mod1 = paste0(path, "test_mod1.h5ad"),
   input_train_mod2 = paste0(path, "train_mod2.h5ad"),
   output = "output.h5ad",
-  n_pcs = 20L,
-  n_trees = 50L
+  n_pcs = 4L
 )
 meta <- list(functionality_name = "foo")
 ## VIASH END
@@ -34,8 +33,6 @@ dr <- lmds::lmds(
 )
 
 ix <- seq_len(nrow(input_train_mod1))
-dr_train <- as.data.frame(dr[ix, , drop = FALSE])
-dr_test <- as.data.frame(dr[-ix, , drop = FALSE])
 dr_train <- dr[ix, , drop = FALSE]
 dr_test <- dr[-ix, , drop = FALSE]
 
@@ -49,17 +46,13 @@ X_mod2 <- anndata::read_h5ad(par$input_train_mod2)$X
 cat("Predicting for each column in modality 2\n")
 preds <- pbapply::pblapply(
   seq_len(ncol(X_mod2)),
-  cl = n_cores,
   function(i) {
     y <- X_mod2[, i]
     uy <- unique(y)
     if (length(uy) > 1) {
-      rf <- ranger::ranger(
-        x = dr_train,
-        y = y,
-        num.trees = par$n_trees
-      )
-      stats::predict(rf, dr_test)$prediction
+      fit <- RcppArmadillo::fastLm(dr_train, y)
+      # fit <- lm(y ~ ., dr_train)
+      stats::predict(fit, dr_test)
     } else {
       rep(uy, nrow(dr_test))
     }
@@ -78,7 +71,6 @@ out <- anndata::AnnData(
     method_id = meta$functionality_name
   )
 )
-
 
 cat("Writing predictions to file\n")
 zzz <- out$write_h5ad(par$output, compression = "gzip")
