@@ -42,6 +42,33 @@ functionality:
     direction: "Output"
     multiple: false
     multiple_sep: ":"
+  - type: "integer"
+    name: "--maxiter"
+    alternatives: []
+    description: "Maximum number of NewWave iterations."
+    default: 100
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "integer"
+    name: "--k"
+    alternatives: []
+    description: "NewWave K parameter."
+    default: 10
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
+  - type: "integer"
+    name: "--hvg_sel"
+    alternatives: []
+    description: "Number of features per modality to use."
+    default: 1000
+    required: false
+    direction: "Input"
+    multiple: false
+    multiple_sep: ":"
   resources:
   - type: "bash_script"
     text: |
@@ -214,6 +241,27 @@ functionality:
         echo "        The predicted pairing of test mod1&mod2 profiles."
         echo ""
       
+      
+        echo "   --maxiter"
+        echo "        type: integer"
+        echo "        default: 100"
+        echo "        Maximum number of NewWave iterations."
+        echo ""
+      
+      
+        echo "   --k"
+        echo "        type: integer"
+        echo "        default: 10"
+        echo "        NewWave K parameter."
+        echo ""
+      
+      
+        echo "   --hvg_sel"
+        echo "        type: integer"
+        echo "        default: 1000"
+        echo "        Number of features per modality to use."
+        echo ""
+      
       }
       
       # initialise array
@@ -269,6 +317,30 @@ functionality:
                   VIASH_PAR_OUTPUT=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --maxiter)
+                  VIASH_PAR_MAXITER="$2"
+                  shift 2
+                  ;;
+              --maxiter=*)
+                  VIASH_PAR_MAXITER=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --k)
+                  VIASH_PAR_K="$2"
+                  shift 2
+                  ;;
+              --k=*)
+                  VIASH_PAR_K=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
+              --hvg_sel)
+                  VIASH_PAR_HVG_SEL="$2"
+                  shift 2
+                  ;;
+              --hvg_sel=*)
+                  VIASH_PAR_HVG_SEL=$(ViashRemoveFlags "$1")
+                  shift 1
+                  ;;
               *)  # positional arg or unknown option
                   # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
                   VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -295,7 +367,15 @@ functionality:
         ViashError '--output' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
-      
+      if [ -z "$VIASH_PAR_MAXITER" ]; then
+        VIASH_PAR_MAXITER="100"
+      fi
+      if [ -z "$VIASH_PAR_K" ]; then
+        VIASH_PAR_K="10"
+      fi
+      if [ -z "$VIASH_PAR_HVG_SEL" ]; then
+        VIASH_PAR_HVG_SEL="1000"
+      fi
       
       
       cat << VIASHEOF | bash
@@ -320,7 +400,10 @@ functionality:
       par <- list(
         "input_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_MOD1'"; else echo NULL; fi ),
         "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
-        "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi )
+        "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
+        "maxiter" = $( if [ ! -z ${VIASH_PAR_MAXITER+x} ]; then echo "as.integer($VIASH_PAR_MAXITER)"; else echo NULL; fi ),
+        "k" = $( if [ ! -z ${VIASH_PAR_K+x} ]; then echo "as.integer($VIASH_PAR_K)"; else echo NULL; fi ),
+        "hvg_sel" = $( if [ ! -z ${VIASH_PAR_HVG_SEL+x} ]; then echo "as.integer($VIASH_PAR_HVG_SEL)"; else echo NULL; fi )
       )
       
       # get meta parameters
@@ -336,60 +419,84 @@ functionality:
       
       method_id <- meta\$functionality_name
       
-      cat("Reading h5ad files\\n")
+      cat("Reading mod1 h5ad\\n")
       input_mod1 <- anndata::read_h5ad(par\$input_mod1)
-      input_mod2 <- anndata::read_h5ad(par\$input_mod2)
-      batch <- as.character(input_mod1\$obs\$batch)
       
-      cat("Running NewWave on mod1\\n")
+      rn <- rownames(input_mod1)
+      batch <- input_mod1\$obs\$batch
+      dataset_id <- input_mod1\$uns[["dataset_id"]]
+      
+      sd1 <- proxyC::colSds(input_mod1\$X)
+      fil1 <-
+        if (!is.null(par\$hvg_sel) && ncol(input_mod1) > par\$hvg_sel) {
+          head(order(sd1, decreasing = TRUE), par\$hvg_sel)
+        } else {
+          which(sd1 > 0)
+        }
       data1 <- SummarizedExperiment::SummarizedExperiment(
-        assays = list(counts = t(input_mod1\$layers[["counts"]])),
+        assays = list(counts = t(input_mod1\$layers[["counts"]][, fil1])),
         colData = data.frame(batch = factor(batch))
       )
-      data1 <- data1[Matrix::rowSums(SummarizedExperiment::assay(data1)) > 0, ]
+      rm(input_mod1)
+      gc()
+      
+      cat("Running NewWave on mod1\\n")
       res1 <- NewWave::newWave(
         data1,
         X = "~batch",
         verbose = TRUE,
-        K = 10,
-        maxiter_optimize = 100,
+        K = par\$k,
+        maxiter_optimize = par\$maxiter,
         n_gene_par = min(300, nrow(data1)),
         n_cell_par = min(300, ncol(data1)),
         commondispersion = FALSE
       )
+      rm(data1)
+      
       dr_x1 <- SingleCellExperiment::reducedDim(res1)
       
-      cat("Running NewWave on mod2\\n")
+      cat("Reading mod2 anndata\\n")
+      input_mod2 <- anndata::read_h5ad(par\$input_mod2)
+      sd2 <- proxyC::colSds(input_mod2\$X)
+      fil2 <-
+        if (!is.null(par\$hvg_sel) && ncol(input_mod2) > par\$hvg_sel) {
+          head(order(sd2, decreasing = TRUE), par\$hvg_sel)
+        } else {
+          which(sd2 > 0)
+        }
       data2 <- SummarizedExperiment::SummarizedExperiment(
-        assays = list(counts = t(input_mod2\$layers[["counts"]])),
+        assays = list(counts = t(input_mod2\$layers[["counts"]][, fil2])),
         colData = data.frame(batch = factor(batch))
       )
-      data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
+      rm(input_mod2)
+      gc()
+      
+      cat("Running NewWave on mod2\\n")
       res2 <- NewWave::newWave(
         data2,
         X = "~batch",
         verbose = TRUE,
-        K = 10,
-        maxiter_optimize = 100,
+        K = par\$k,
+        maxiter_optimize = par\$maxiter,
         n_gene_par = min(300, nrow(data2)),
         n_cell_par = min(300, ncol(data2)),
         commondispersion = FALSE
       )
       dr_x2 <- SingleCellExperiment::reducedDim(res2)
+      rm(data2)
       
+      cat("Spline separate DRs\\n")
       dr <- do.call(cbind, lapply(seq_len(ncol(dr_x1)), function(i) {
-        cbind(dr_x1[,i], dr_x2[,i])
+        cbind(dr_x1[, i], dr_x2[, i])
       }))
       
-      # qplot(dr[,1], dr[,2], colour = batch)
-      
-      rownames(dr) <- rownames(input_mod1)
+      rownames(dr) <- rn
       colnames(dr) <- paste0("comp_", seq_len(ncol(dr)))
       
       out <- anndata::AnnData(
         X = dr,
         uns = list(
-          dataset_id = input_mod1\$uns[["dataset_id"]],
+          dataset_id = dataset_id,
           method_id = meta\$functionality_name
         )
       )
@@ -416,6 +523,9 @@ functionality:
           baseline_newwave__input_mod1 = "viash_no_value"
           baseline_newwave__input_mod2 = "viash_no_value"
           baseline_newwave__output = "viash_no_value"
+          baseline_newwave__maxiter = "100"
+          baseline_newwave__k = "10"
+          baseline_newwave__hvg_sel = "1000"
           id = ""
           testScript = "test_method.R"
           testResources = [ "../../unit_tests/test_method.R", "../../../../resources_test" ]
@@ -466,6 +576,42 @@ functionality:
                 value = "${params.baseline_newwave__output}"
                 example = "output.h5ad"
                 description = "The predicted pairing of test mod1&mod2 profiles."
+              }
+              maxiter {
+                name = "maxiter"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave__maxiter}"
+                dflt = "100"
+                description = "Maximum number of NewWave iterations."
+              }
+              k {
+                name = "k"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave__k}"
+                dflt = "10"
+                description = "NewWave K parameter."
+              }
+              hvg_sel {
+                name = "hvg_sel"
+                otype = "--"
+                required = false
+                type = "integer"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.baseline_newwave__hvg_sel}"
+                dflt = "1000"
+                description = "Number of features per modality to use."
               }
             }
           }
@@ -635,7 +781,7 @@ functionality:
       
       process baseline_newwave_process {
         label 'highmem'
-        label 'midtime'
+        label 'hightime'
         label 'highcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
@@ -826,7 +972,7 @@ platform:
   separate_multiple_outputs: true
   labels:
   - "highmem"
-  - "midtime"
+  - "hightime"
   - "highcpu"
 platforms: []
 info:
@@ -835,5 +981,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_newwave"
   executable: "target/nextflow/joint_embedding_methods/baseline_newwave/baseline_newwave"
   viash_version: "0.5.3"
-  git_commit: "8aab86d85905e06f9aba40aa04815c7ebdf88f18"
+  git_commit: "d8a1fc48e69ce0669a18b52dc2945450f08f443a"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

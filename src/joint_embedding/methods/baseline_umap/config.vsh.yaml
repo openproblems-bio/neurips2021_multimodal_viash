@@ -44,6 +44,10 @@ functionality:
       type: "integer"
       default: 50
       description: Number of principal components to use in the PCA step.
+    - name: "--hvg_sel"
+      type: "integer"
+      default: 1000
+      description: Number of features per modality to use.
   resources:
     - type: r_script
       path: script.R
@@ -56,6 +60,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ uwot, irlba ]
+        packages: [ uwot, irlba, proxyC ]
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

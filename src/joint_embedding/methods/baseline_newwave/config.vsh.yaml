@@ -29,6 +29,18 @@ functionality:
       example: "output.h5ad"
       description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
+    - name: "--maxiter"
+      type: "integer"
+      default: 100
+      description: Maximum number of NewWave iterations.
+    - name: "--k"
+      type: "integer"
+      default: 10
+      description: NewWave K parameter.
+    - name: "--hvg_sel"
+      type: "integer"
+      default: 1000
+      description: Number of features per modality to use.
   resources:
     - type: r_script
       path: script.R
@@ -41,6 +53,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        bioc: [ SingleCellExperiment, NewWave ]
+        bioc: [ SingleCellExperiment, NewWave, proxyC ]
   - type: nextflow
-    labels: [ highmem, midtime, highcpu ]
+    labels: [ highmem, hightime, highcpu ]

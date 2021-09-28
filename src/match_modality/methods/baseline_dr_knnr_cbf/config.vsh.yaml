@@ -61,4 +61,4 @@ platforms:
       - type: r
         packages: [ lmds, dynutils, proxy, FNN ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, midtime, midcpu ]

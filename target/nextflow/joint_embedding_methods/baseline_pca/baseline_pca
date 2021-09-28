@@ -174,6 +174,13 @@ function ViashHelp {
   echo "        Number of dimensions to output."
   echo ""
 
+
+  echo "   --hvg_sel"
+  echo "        type: integer"
+  echo "        default: 1000"
+  echo "        Number of features per modality to use."
+  echo ""
+
 }
 
 # initialise array
@@ -237,6 +244,14 @@ while [[ $# -gt 0 ]]; do
             VIASH_PAR_N_DIMS=$(ViashRemoveFlags "$1")
             shift 1
             ;;
+        --hvg_sel)
+            VIASH_PAR_HVG_SEL="$2"
+            shift 2
+            ;;
+        --hvg_sel=*)
+            VIASH_PAR_HVG_SEL=$(ViashRemoveFlags "$1")
+            shift 1
+            ;;
         *)  # positional arg or unknown option
             # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
             VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -266,6 +281,9 @@ fi
 if [ -z "$VIASH_PAR_N_DIMS" ]; then
   VIASH_PAR_N_DIMS="10"
 fi
+if [ -z "$VIASH_PAR_HVG_SEL" ]; then
+  VIASH_PAR_HVG_SEL="1000"
+fi
 
 
 cat << VIASHEOF | bash
@@ -289,7 +307,8 @@ par <- list(
   "input_mod1" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD1+x} ]; then echo "'$VIASH_PAR_INPUT_MOD1'"; else echo NULL; fi ),
   "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
   "output" = $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "'$VIASH_PAR_OUTPUT'"; else echo NULL; fi ),
-  "n_dims" = $( if [ ! -z ${VIASH_PAR_N_DIMS+x} ]; then echo "as.integer($VIASH_PAR_N_DIMS)"; else echo NULL; fi )
+  "n_dims" = $( if [ ! -z ${VIASH_PAR_N_DIMS+x} ]; then echo "as.integer($VIASH_PAR_N_DIMS)"; else echo NULL; fi ),
+  "hvg_sel" = $( if [ ! -z ${VIASH_PAR_HVG_SEL+x} ]; then echo "as.integer($VIASH_PAR_HVG_SEL)"; else echo NULL; fi )
 )
 
 # get meta parameters
@@ -304,23 +323,42 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 ## VIASH END
 
 cat("Reading h5ad files\\n")
-ad1 <- anndata::read_h5ad(par\$input_mod1)
-ad2 <- anndata::read_h5ad(par\$input_mod2)
+input_mod1 <- anndata::read_h5ad(par\$input_mod1)
+
+rn <- rownames(input_mod1)
+batch <- input_mod1\$obs\$batch
+dataset_id <- input_mod1\$uns[["dataset_id"]]
+X_mod1 <- input_mod1\$X
+
+# select hvg
+if (!is.null(par\$hvg_sel) && ncol(X_mod1) > par\$hvg_sel) {
+  sd_mod1 <- proxyC::colSds(X_mod1)
+  X_mod1 <- X_mod1[, head(order(sd_mod1, decreasing = TRUE), par\$hvg_sel)]
+}
+
+rm(input_mod1)
+gc()
+
+X_mod2 <- anndata::read_h5ad(par\$input_mod2)\$X
+if (!is.null(par\$hvg_sel) && ncol(X_mod2) > par\$hvg_sel) {
+  sd_mod2 <- proxyC::colSds(X_mod2)
+  X_mod2 <- X_mod2[, head(order(sd_mod2, decreasing = TRUE), par\$hvg_sel)]
+}
 
 cat("Performing DR\\n")
 dr <- irlba::prcomp_irlba(
-  cbind(ad1\$X, ad2\$X),
+  cbind(X_mod1, X_mod2),
   n = par\$n_dims
 )\$x
 
-rownames(dr) <- rownames(ad1)
+rownames(dr) <- rn
 colnames(dr) <- paste0("comp_", seq_len(par\$n_dims))
 
 out <- anndata::AnnData(
   X = dr,
   uns = list(
-    dataset_id = ad1\$uns[["dataset_id"]],
-    method_id = "baseline_pca"
+    dataset_id = dataset_id,
+    method_id = meta\$functionality_name
   )
 )
 
