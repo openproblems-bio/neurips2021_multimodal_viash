@@ -570,7 +570,7 @@ functionality:
       final_scores <- bind_rows(
         scores %>% mutate(value_after_default = value),
         anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
-      ) %>% 
+      ) %>%
         left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
       
       summary <-
@@ -593,6 +593,7 @@ functionality:
       json_out <- summary %>%
         filter(metric_id == json_metric) %>%
         select(-var, -metric_id) %>%
+        mutate(mean = mean * 1000) %>% # multiply mean by 1000 to obtain final score
         spread(dataset_subtask, mean) %>%
         arrange(Overall)
       
@@ -1129,5 +1130,5 @@ info:
   output: "target/nextflow/match_modality_results/final_scores"
   executable: "target/nextflow/match_modality_results/final_scores/final_scores"
   viash_version: "0.5.3"
-  git_commit: "d8a1fc48e69ce0669a18b52dc2945450f08f443a"
+  git_commit: "e140537144ad6627b9a8dbb2ff46d8da738809cc"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

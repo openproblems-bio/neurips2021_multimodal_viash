@@ -482,7 +482,7 @@ default_scores <- crossing(
 final_scores <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
-) %>% 
+) %>%
   left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
 
 summary <-
@@ -505,6 +505,7 @@ summary <-
 json_out <- summary %>%
   filter(metric_id == json_metric) %>%
   select(-var, -metric_id) %>%
+  mutate(mean = mean * 1000) %>% # multiply mean by 1000 to obtain final score
   spread(dataset_subtask, mean) %>%
   arrange(Overall)
 

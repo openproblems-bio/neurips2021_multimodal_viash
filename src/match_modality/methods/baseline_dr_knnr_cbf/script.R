@@ -6,6 +6,7 @@ library(Matrix, warn.conflicts = FALSE, quietly = TRUE)
 
 ## VIASH START
 path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_"
+path <- "output/datasets/match_modality/openproblems_bmmc_cite_phase1_rna/openproblems_bmmc_cite_phase1_rna.censor_dataset.output_"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_train_mod2 = paste0(path, "train_mod2.h5ad"),

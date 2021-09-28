@@ -191,7 +191,7 @@ function ViashHelp {
 
   echo "   --n_pop"
   echo "        type: integer"
-  echo "        default: 300"
+  echo "        default: 100"
   echo "        Population size."
   echo ""
 
@@ -321,7 +321,7 @@ if [ -z "$VIASH_PAR_OUTPUT" ]; then
   exit 1
 fi
 if [ -z "$VIASH_PAR_N_POP" ]; then
-  VIASH_PAR_N_POP="300"
+  VIASH_PAR_N_POP="100"
 fi
 
 

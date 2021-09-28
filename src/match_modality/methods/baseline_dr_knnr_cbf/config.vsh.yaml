@@ -45,7 +45,7 @@ functionality:
       required: true
     - name: "--n_pop"
       type: "integer"
-      default: 300
+      default: 100
       description: Population size.
   resources:
     - type: r_script
