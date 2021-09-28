@@ -28,6 +28,10 @@ functionality:
       example: "output.h5ad"
       description: "The predicted pairing of test mod1&mod2 profiles."
       required: true
+    - name: "--hvg_sel"
+      type: "integer"
+      default: 1000
+      description: Number of features per modality to use.
   resources:
     - type: r_script
       path: script.R
