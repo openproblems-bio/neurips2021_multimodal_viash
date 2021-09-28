@@ -13,7 +13,8 @@ include  { baseline_umap }              from "$targetDir/${task}_methods/baselin
 include  { baseline_newwave }           from "$targetDir/${task}_methods/baseline_newwave/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
-include  { rfoob }                      from "$targetDir/${task}_metrics/rfoob/main.nf"                        params(params)
+// takes too long
+// include  { rfoob }                      from "$targetDir/${task}_metrics/rfoob/main.nf"                        params(params)
 // fails on more than 2 batches
 // include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
@@ -99,7 +100,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (rfoob & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
+    | (ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }

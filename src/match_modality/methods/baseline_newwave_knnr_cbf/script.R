@@ -9,7 +9,7 @@ requireNamespace("FNN", quietly = TRUE)
 requireNamespace("SingleCellExperiment", quietly = TRUE)
 
 ## VIASH START
-path <- "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
+path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset.output_"
 par <- list(
   input_train_mod1 = paste0(path, "train_mod1.h5ad"),
   input_train_mod2 = paste0(path, "train_mod2.h5ad"),
@@ -30,6 +30,9 @@ meta <- list(functionality_name = "foo")
 n_cores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
 
 method_id <- meta$functionality_name
+
+input_train_sol <- anndata::read_h5ad(par$input_train_sol)
+match_train <- input_train_sol$uns$pairing_ix + 1
 
 cat("Reading h5ad files\n")
 input_train_mod1 <- anndata::read_h5ad(par$input_train_mod1)
@@ -63,15 +66,14 @@ res1 <- NewWave::newWave(
   n_cell_par = min(par$newwave_ncell, ncol(data1)),
   commondispersion = FALSE
 )
+rm(data1)
 dr_x1 <- SingleCellExperiment::reducedDim(res1)
 
 cat("Reading h5ad files\n")
 input_train_mod2 <- anndata::read_h5ad(par$input_train_mod2)
 input_test_mod2 <- anndata::read_h5ad(par$input_test_mod2)
-input_train_sol <- anndata::read_h5ad(par$input_train_sol)
 
 # don't know batch ordering in input_test_mod2
-match_train <- input_train_sol$uns$pairing_ix + 1
 batch2 <- c(as.character(input_train_sol$obs$batch), rep("unknownbatch", nrow(input_test_mod2)))
 
 data2 <- SummarizedExperiment::SummarizedExperiment(
@@ -82,7 +84,7 @@ data2 <- data2[Matrix::rowSums(SummarizedExperiment::assay(data2)) > 0, ]
 # data2 <- data2[order(proxyC::rowSds(SummarizedExperiment::assay(data2)), decreasing = TRUE)[1:100], ]
 
 # remove large unneeded dataset objects
-rm(input_train_mod2, input_test_mod2, input_train_sol)
+rm(input_train_mod2, input_test_mod2)
 gc()
 
 cat("Running NewWave\n")
