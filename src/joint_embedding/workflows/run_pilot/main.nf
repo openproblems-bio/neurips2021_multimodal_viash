@@ -8,12 +8,14 @@ include  { baseline_lmds }              from "$targetDir/${task}_methods/baselin
 include  { baseline_pca }               from "$targetDir/${task}_methods/baseline_pca/main.nf"                 params(params)
 include  { baseline_mnn }               from "$targetDir/${task}_methods/baseline_mnn/main.nf"                 params(params)
 include  { baseline_umap }              from "$targetDir/${task}_methods/baseline_umap/main.nf"                params(params)
-include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
+// needs gpu:
+//include  { baseline_totalvi }           from "$targetDir/${task}_methods/baseline_totalvi/main.nf"             params(params)
 include  { baseline_newwave }           from "$targetDir/${task}_methods/baseline_newwave/main.nf"             params(params)
 include  { dummy_random }               from "$targetDir/${task}_methods/dummy_random/main.nf"                 params(params)
 include  { dummy_zeros }                from "$targetDir/${task}_methods/dummy_zeros/main.nf"                  params(params)
 include  { rfoob }                      from "$targetDir/${task}_metrics/rfoob/main.nf"                        params(params)
-include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
+// fails on more than 2 batches
+// include  { latent_mixing }              from "$targetDir/${task}_metrics/latent_mixing/main.nf"                params(params)
 include  { ari }                        from "$targetDir/${task}_metrics/ari/main.nf"                          params(params)
 include  { asw_batch }                  from "$targetDir/${task}_metrics/asw_batch/main.nf"                    params(params)
 include  { asw_label }                  from "$targetDir/${task}_metrics/asw_label/main.nf"                    params(params)
@@ -59,10 +61,10 @@ workflow pilot_wf {
     | baseline_umap
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_umap", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b3 = inputs 
-    | baseline_totalvi
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b3 = inputs 
+  //   | baseline_totalvi
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_totalvi", [ input_prediction: pred, input_solution: sol ], params ]}
   def b4 = inputs 
     | baseline_mnn
     | join(solution) 
@@ -81,7 +83,7 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, b5, d0, d1)
+  def predictions = b0.mix(b1, b2, b4, b5, d0, d1)
 
   // create datasets meta
   def datasetsMeta = 
@@ -97,7 +99,7 @@ workflow pilot_wf {
 
   // compute metrics & combine results
   predictions
-    | (rfoob & latent_mixing & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
+    | (rfoob & ari & asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
