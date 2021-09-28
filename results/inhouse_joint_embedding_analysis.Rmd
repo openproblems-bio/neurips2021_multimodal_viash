@@ -26,21 +26,22 @@ colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
-    "output/pilot_inhouse/joint_embedding/output.final_scores.output_scores.tsv",
+    "output/pilot/joint_embedding/output.final_scores.output_scores.tsv",
     col_types = c(dataset_id = "c", method_id = "c", metric_id = "c", dataset_subtask = "c", value = "d", value_after_default = "d")
   ) %>%
   mutate(
     # extract meta info
-    dataset_id_orig = gsub("_JE$", "", dataset_id),
-    dataset_phase = gsub(".*_", "", dataset_id_orig)
+    dataset_orig_id = gsub("_JE$", "", dataset_id),
+    dataset_phase = gsub(".*_", "", dataset_orig_id)
   ) %>% 
-  left_join(meta_ds, by = c("dataset_id_orig" = "dataset_id")) %>%
+  left_join(meta_ds, by = c("dataset_orig_id" = "dataset_id")) %>%
   left_join(meta_ms, by = "method_id") %>%
   select(-value) %>%
   spread(metric_id, value_after_default) %>% 
   mutate(
     format_check = (correct_format + finished) / 2
-  )
+  ) %>%
+  filter(method_id != "dummy_solution")
 write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_")), "results/inhouse_joint_embedding_scores.tsv")
 ```
 
@@ -141,8 +142,6 @@ patchwork::wrap_plots(
 Comparing most interesting metrics.
 
 ```{r scatter2, fig.width=10, fig.height=10}
-# TODO: check NA values, check negative values in selexted metrics
-
 selected_metrics <- c("geometric_mean", "ari", "nmi", "asw_label", "ti_cons_mean", "cc_cons", "asw_batch", "graph_conn")
 GGally::ggpairs(
   df,

@@ -1,127 +1,109 @@
 method_id	metric_id	mean	var	method_task	method_label	method_description	method_maintainer	method_num_authors	method_language	method_type	method_doi
-baseline_lmds	ari	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	asw_batch	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	asw_label	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	cc_cons	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	correct_format	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	finished	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	format_check	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	geometric_mean	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	graph_conn	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	latent_mixing	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	nmi	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	rfoob_batch_error	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	rfoob_celltype_accuracy	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	ti_cons_ADT_ATAC	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	ti_cons_mean	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lmds	ti_cons_RNA	NA	NA	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	ari	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	asw_batch	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	asw_label	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	cc_cons	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	correct_format	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	finished	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	format_check	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	geometric_mean	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	graph_conn	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	latent_mixing	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	nmi	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	rfoob_batch_error	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	rfoob_celltype_accuracy	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	ti_cons_ADT_ATAC	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	ti_cons_mean	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_mnn	ti_cons_RNA	NA	NA	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	ari	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	asw_batch	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	asw_label	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	cc_cons	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	correct_format	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	finished	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	format_check	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	geometric_mean	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	graph_conn	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	latent_mixing	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	nmi	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	rfoob_batch_error	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	rfoob_celltype_accuracy	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	ti_cons_ADT_ATAC	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	ti_cons_mean	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_pca	ti_cons_RNA	NA	NA	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	ari	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	asw_batch	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	asw_label	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	cc_cons	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	correct_format	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	finished	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	format_check	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	geometric_mean	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	graph_conn	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	latent_mixing	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	nmi	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	rfoob_batch_error	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	rfoob_celltype_accuracy	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	ti_cons_ADT_ATAC	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	ti_cons_mean	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_umap	ti_cons_RNA	NA	NA	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
-dummy_random	ari	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	asw_batch	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	asw_label	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	cc_cons	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	correct_format	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	finished	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	format_check	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	geometric_mean	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	graph_conn	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	latent_mixing	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	nmi	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	rfoob_batch_error	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	rfoob_celltype_accuracy	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	ti_cons_ADT_ATAC	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	ti_cons_mean	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_random	ti_cons_RNA	NA	NA	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
-dummy_solution	ari	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	asw_batch	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	asw_label	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	cc_cons	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	correct_format	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	finished	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	format_check	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	geometric_mean	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	graph_conn	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	latent_mixing	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	nmi	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	rfoob_batch_error	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	rfoob_celltype_accuracy	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	ti_cons_ADT_ATAC	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	ti_cons_mean	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_solution	ti_cons_RNA	NA	NA	joint_embedding	SolutionEmbedding	Generate an embedding from the solution object.	Robrecht Cannoodt	1	r	positive_control	NA
-dummy_zeros	ari	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	asw_batch	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	asw_label	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+baseline_lmds	ari	0.41351222386502373	9.862434165614936e-4	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	asw_batch	0.8433525622871514	8.670986793455996e-5	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	asw_label	0.5214509922079742	8.335196641793456e-5	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	cc_cons	0.7235453669609364	0.1048616048572141	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	correct_format	1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	finished	1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	format_check	1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	geometric_mean	0.7075563286859323	0.003981576048643917	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	graph_conn	0.7808479906812678	0.013635688894839737	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	latent_mixing	-1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	nmi	0.6516712585725766	0.001178000148911717	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	rfoob_batch_error	0	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	rfoob_celltype_accuracy	0	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	ti_cons_ADT_ATAC	0.749059650260921	0.007913078180713514	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	ti_cons_mean	0.8125195722504912	2.287699678537739e-4	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lmds	ti_cons_RNA	0.8759794942400614	0.014210015933605944	joint_embedding	LMDS	Landmark MDS dimensionality reduction on the Spearman distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	ari	0.6647242011780594	0.042293649412009957	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	asw_batch	0.9024309587915681	5.584319175915009e-7	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	asw_label	0.5651327483355999	4.858755873660414e-4	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	cc_cons	0.9582391446350519	4.2541839573410466e-4	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	correct_format	1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	finished	1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	format_check	1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	geometric_mean	0.7879416198644209	5.022379372121576e-4	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	graph_conn	0.8917814143375536	0.01209798475794234	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	latent_mixing	-1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	nmi	0.7409703551878017	0.005535767748712542	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	rfoob_batch_error	0	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	rfoob_celltype_accuracy	0	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	ti_cons_ADT_ATAC	0.7987675363359716	9.859033153342867e-4	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	ti_cons_mean	0.7532870852011734	0.02404359177283622	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_mnn	ti_cons_RNA	0.7078066340663752	0.07768529904695352	joint_embedding	MNN	Mutual nearest neighbors correction followed by PCA.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	ari	0.3709219179557429	0.004761858617546546	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	asw_batch	0.8088687601372151	0.002519909994403006	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	asw_label	0.527532571926713	2.617340695287851e-5	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	cc_cons	0.8983824813586077	1.8388223757478367e-4	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	correct_format	1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	finished	1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	format_check	1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	geometric_mean	0.7131232657083065	0.003139146590514251	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	graph_conn	0.7699226510356805	0.022640129763935396	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	latent_mixing	-1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	nmi	0.6114172816300383	5.864524519735232e-5	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	rfoob_batch_error	0	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	rfoob_celltype_accuracy	0	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	ti_cons_ADT_ATAC	0.7803227200536169	2.391701275519974e-4	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	ti_cons_mean	0.7372397081505376	0.02163081201156958	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_pca	ti_cons_RNA	0.6941566962474583	0.07766433567883359	joint_embedding	PCA	PCA dimensionality reduction.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	ari	0.39419003721675117	0.009171373159581801	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	asw_batch	0.5667638716671255	0.02500189071766579	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	asw_label	0.48842262849211693	0.006256098065773569	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	cc_cons	0.6972406053174918	0.013891326925451348	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	correct_format	1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	finished	1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	format_check	1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	geometric_mean	0.2414223295914372	0.11656948245071307	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	graph_conn	0.4374529762535856	0.03997456823589706	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	latent_mixing	-1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	nmi	0.6625513226611548	6.997399462222554e-5	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	rfoob_batch_error	0	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	rfoob_celltype_accuracy	0	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	ti_cons_ADT_ATAC	0.344785974281159	0.23775473612201603	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	ti_cons_mean	0.2650232829782784	0.14047468104116922	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_umap	ti_cons_RNA	0.18526059167539777	0.06864297365583692	joint_embedding	UMAP	UMAP dimensionality reduction on the Euclidean distance.	Robrecht Cannoodt	1	r	baseline	NA
+dummy_random	ari	2.1150831982246977e-5	5.595862861100989e-9	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	asw_batch	0.9892063231393857	2.4700510391418567e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	asw_label	0.49468688562046736	8.998941091721801e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	cc_cons	0.004779447698240535	6.322865505106039e-7	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	correct_format	1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	finished	1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	format_check	1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	geometric_mean	0.11466786436454099	3.239089497548999e-4	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	graph_conn	0.1280919214507032	0.010835379696467582	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	latent_mixing	-1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	nmi	0.017967141480958453	7.241560014348191e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	rfoob_batch_error	0	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	rfoob_celltype_accuracy	0	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	ti_cons_ADT_ATAC	0.5005083337613857	4.5672698487275905e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	ti_cons_mean	0.5035178787039774	4.712879861428643e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_random	ti_cons_RNA	0.5065274236465691	4.86077470590288e-6	joint_embedding	Normal Dist.	Generate a random embedding from a normal distribution.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	ari	1.8549496405464712e-6	1.4544889608676606e-10	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	asw_batch	1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	asw_label	0.5	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
 dummy_zeros	cc_cons	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	correct_format	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	finished	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	format_check	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	correct_format	1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	finished	1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	format_check	1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
 dummy_zeros	geometric_mean	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	graph_conn	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	latent_mixing	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	nmi	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	rfoob_batch_error	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	rfoob_celltype_accuracy	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	rfoob_pseudotimeadt_rsq	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	rfoob_pseudotimegex_rsq	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	ti_cons_ADT_ATAC	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	ti_cons_mean	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
-dummy_zeros	ti_cons_RNA	NA	NA	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	graph_conn	0.03616857716719257	9.166608872545923e-5	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	latent_mixing	-1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	nmi	0.030021493907627785	2.7931303590118997e-5	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rfoob_batch_error	0	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rfoob_celltype_accuracy	0	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rfoob_pseudotimeadt_rsq	-1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	rfoob_pseudotimegex_rsq	-1	0	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	ti_cons_ADT_ATAC	0.50254655688646	2.0816757932507813e-4	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	ti_cons_mean	0.5014325130435935	5.9149685275764274e-5	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
+dummy_zeros	ti_cons_RNA	0.5003184692007271	9.096444310999922e-7	joint_embedding	Zeros	Generate an embedding containing only zero values.	Alex Tong	2	python	negative_control	NA
