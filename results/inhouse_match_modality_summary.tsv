@@ -1,10 +1,10 @@
 method_id	metric_id	mean	var	method_task	method_label	method_description	method_maintainer	method_num_authors	method_language	method_type	method_doi
-baseline_dr_knnr_cbf	correct_format	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_dr_knnr_cbf	finished	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_dr_knnr_cbf	format_check	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_dr_knnr_cbf	match_probability	0.0012753159660034746	1.5706761082128627e-7	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_dr_knnr_cbf	pairing_aupr	1.6554079821035073e-4	8.40063197449728e-9	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_dr_knnr_cbf	pairing_auroc	0.5112199634956482	2.7893639561137532e-5	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	correct_format	1	0	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	finished	1	0	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	format_check	1	0	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	match_probability	0.0012753159660034746	1.5706761082128627e-7	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	pairing_aupr	1.6554079821035073e-4	8.40063197449728e-9	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	pairing_auroc	0.5112199634956482	2.7893639561137532e-5	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_dr_knnr_knn	correct_format	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_dr_knnr_knn	finished	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_dr_knnr_knn	format_check	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
