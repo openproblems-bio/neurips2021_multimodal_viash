@@ -10,7 +10,7 @@ summ_pm <- read_tsv("results/inhouse_predict_modality_scores.tsv") %>%
     mt = mt_map[method_type],
     mt2 = mt_map2[method_type],
     ml = paste0(mt, " - ", method_label),
-    dataset_subtask = gsub("2", "→", dataset_subtask)
+    dataset_subtask = gsub("2", "->", dataset_subtask)
   )
 
 summ_mm <- read_tsv("results/inhouse_match_modality_scores.tsv") %>%
@@ -21,7 +21,7 @@ summ_mm <- read_tsv("results/inhouse_match_modality_scores.tsv") %>%
     mt = mt_map[method_type],
     mt2 = mt_map2[method_type],
     ml = paste0(mt, " - ", method_label),
-    dataset_subtask = gsub("2", "→", dataset_subtask)
+    dataset_subtask = gsub("2", "->", dataset_subtask)
   )
 summ_je <- read_tsv("results/inhouse_joint_embedding_scores.tsv") %>%
   filter(metric_id == "geometric_mean") %>%
