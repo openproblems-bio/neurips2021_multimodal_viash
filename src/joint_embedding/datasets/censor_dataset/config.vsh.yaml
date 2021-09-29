@@ -51,4 +51,4 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
   - type: nextflow
     publish: true
-    labels: [ medmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]
