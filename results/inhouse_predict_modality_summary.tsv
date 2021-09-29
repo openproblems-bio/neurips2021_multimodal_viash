@@ -21,28 +21,28 @@ baseline_knnr_r	mean_spearman_per_gene	0.17580033106715368	0.05293955237381119	p
 baseline_knnr_r	overall_pearson	0.610249587706576	0.06442445807754385	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_knnr_r	overall_spearman	0.45648756343697483	0.0765933947348834	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_knnr_r	rmse	0.3095279037952423	0.01746591672231605	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	correct_format	0.5	0.3333333333333333	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	finished	0.5	0.3333333333333333	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	format_check	0.5	0.3333333333333333	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	mae	49999.60193687864	3333253075.5816936	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	mean_pearson_per_cell	-0.19373421711607275	0.909182396330167	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	mean_pearson_per_gene	-0.320394652635077	0.6650621036900443	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	mean_spearman_per_cell	-0.23591077448930894	0.8403016336627688	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	mean_spearman_per_gene	-0.36882199427578044	0.556436666188896	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	overall_pearson	-0.19343765561806475	0.9049581192991429	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	overall_spearman	-0.2357751607368464	0.8371211388887402	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_lm	rmse	49999.67451348901	3333243398.832017	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	correct_format	0.5	0.3333333333333333	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	finished	0.5	0.3333333333333333	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	format_check	0.5	0.3333333333333333	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mae	49999.59139966685	3333254480.520957	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_pearson_per_cell	-0.19437571232564732	0.9186939912326346	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_pearson_per_gene	-0.311902535882899	0.7006285920769278	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_spearman_per_cell	-0.2273999310402175	0.8633723181701536	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	mean_spearman_per_gene	-0.3576457757484291	0.587660172747038	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	overall_pearson	-0.19643700090381006	0.9114076032068031	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	overall_spearman	-0.22807151269270187	0.8613636901576981	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_randomforest	rmse	49999.66122954711	3333245169.993413	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	correct_format	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	finished	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	format_check	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	mae	0.17404603399336338	0.01695347971435325	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	mean_pearson_per_cell	0.6317429689863316	0.04845670298955005	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	mean_pearson_per_gene	0.23920302034777569	0.068746095011273	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	mean_spearman_per_cell	0.453136688302238	0.07031817501046769	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	mean_spearman_per_gene	0.1817520645943066	0.034026013805336354	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	overall_pearson	0.6245874062467269	0.042116360067664255	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	overall_spearman	0.4507564672117361	0.06704460001689065	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_lm	rmse	0.32643503695726395	0.02520790010212341	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	correct_format	0.75	0.25	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	finished	0.75	0.25	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	format_check	0.75	0.25	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mae	24999.87797395978	2499941468.755771	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_cell	0.19293163874143476	0.6866573711564786	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_pearson_per_gene	-0.04298599039963419	0.49645091113243106	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_cell	0.10524210203036069	0.6206438529934615	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	mean_spearman_per_gene	-0.09032436667796037	0.415596352138594	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_pearson	0.18875160341633895	0.6794931531854216	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	overall_spearman	0.10381781067727522	0.6187795864458119	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_randomforest	rmse	24999.981025312096	2499934598.75741	predict_modality	Random Forests	Random forest regression.	Robrecht Cannoodt	1	r	baseline	NA
 dummy_meanpergene	correct_format	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
 dummy_meanpergene	finished	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
 dummy_meanpergene	format_check	1	0	predict_modality	Mean per gene	Returns the mean expression value per gene.	Alex Tong	2	python	negative_control	NA
