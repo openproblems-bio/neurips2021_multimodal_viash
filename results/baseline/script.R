@@ -64,3 +64,5 @@ gje <-
 g <- patchwork::wrap_plots(gpm, gmm, gje, ncol = 1, heights = c(8, 7, 6))
 
 ggsave("results/baseline/figure_baseline.pdf", height = 8, width = 8)
+
+system2(command = "pdfcrop", args = c("results/baseline/figure_baseline.pdf", "results/baseline/figure_baseline.pdf"))
