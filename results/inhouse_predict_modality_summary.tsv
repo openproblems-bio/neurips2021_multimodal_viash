@@ -1,26 +1,26 @@
 method_id	metric_id	mean	var	method_task	method_label	method_description	method_maintainer	method_num_authors	method_language	method_type	method_doi
-baseline_knnr_py	correct_format	1	0	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	finished	1	0	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	format_check	1	0	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	mae	0.15293617360293865	0.009877914427465231	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	mean_pearson_per_cell	0.6515406140632252	0.05763008007242969	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	mean_pearson_per_gene	0.2699804739978849	0.08870991639004087	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	mean_spearman_per_cell	0.4711826747435733	0.07600339184269016	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	mean_spearman_per_gene	0.2123321146903075	0.047935750865814274	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	overall_pearson	0.6510123829723983	0.05317234891835181	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	overall_spearman	0.4757715294322242	0.07391477740583087	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_py	rmse	0.2953077480196953	0.015046876236166998	predict_modality	NA	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	NA	NA
-baseline_knnr_r	correct_format	1	0	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	finished	1	0	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	format_check	1	0	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	mae	0.160694882273674	0.011147547475218733	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	mean_pearson_per_cell	0.6117254686070926	0.07032704838928623	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	mean_pearson_per_gene	0.22262705407920658	0.09821576181663726	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	mean_spearman_per_cell	0.45409620339455037	0.07823421453726762	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	mean_spearman_per_gene	0.17580033106715368	0.05293955237381119	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	overall_pearson	0.610249587706576	0.06442445807754385	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	overall_spearman	0.45648756343697483	0.0765933947348834	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
-baseline_knnr_r	rmse	0.3095279037952423	0.01746591672231605	predict_modality	KNNR	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_py	correct_format	1	0	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	finished	1	0	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	format_check	1	0	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	mae	0.15293617360293865	0.009877914427465231	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	mean_pearson_per_cell	0.6515406140632252	0.05763008007242969	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	mean_pearson_per_gene	0.2699804739978849	0.08870991639004087	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	mean_spearman_per_cell	0.4711826747435733	0.07600339184269016	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	mean_spearman_per_gene	0.2123321146903075	0.047935750865814274	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	overall_pearson	0.6510123829723983	0.05317234891835181	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	overall_spearman	0.4757715294322242	0.07391477740583087	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_py	rmse	0.2953077480196953	0.015046876236166998	predict_modality	KNNR (Py)	K-nearest neighbor regression in Python.	Bastian Rieck	1	python	baseline	NA
+baseline_knnr_r	correct_format	1	0	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	finished	1	0	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	format_check	1	0	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	mae	0.160694882273674	0.011147547475218733	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	mean_pearson_per_cell	0.6117254686070926	0.07032704838928623	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	mean_pearson_per_gene	0.22262705407920658	0.09821576181663726	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	mean_spearman_per_cell	0.45409620339455037	0.07823421453726762	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	mean_spearman_per_gene	0.17580033106715368	0.05293955237381119	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	overall_pearson	0.610249587706576	0.06442445807754385	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	overall_spearman	0.45648756343697483	0.0765933947348834	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_knnr_r	rmse	0.3095279037952423	0.01746591672231605	predict_modality	KNNR (R)	K-nearest neighbor regression in R.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_lm	correct_format	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_lm	finished	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
 baseline_lm	format_check	1	0	predict_modality	Linear Model	Linear model regression.	Robrecht Cannoodt	1	r	baseline	NA
