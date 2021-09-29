@@ -30,8 +30,6 @@ df <-
     col_types = c(dataset_id = "c", method_id = "c", metric_id = "c", dataset_subtask = "c", value = "d", value_after_default = "d")
   ) %>%
   mutate(
-    # extract meta info
-    dataset_orig_id = gsub("_MM$", "", dataset_id),
     dataset_phase = gsub(".*_", "", dataset_orig_id)
   ) %>% 
   left_join(meta_ds, by = c("dataset_orig_id" = "dataset_id")) %>%

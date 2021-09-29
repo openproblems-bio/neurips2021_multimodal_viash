@@ -5,7 +5,7 @@ functionality:
   description: K-nearest neighbor regression in R.
   info:
     type: baseline
-    label: KNNR
+    label: KNNR (R)
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

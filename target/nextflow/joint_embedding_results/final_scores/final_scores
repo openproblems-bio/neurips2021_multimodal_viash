@@ -414,7 +414,7 @@ metric_defaults <-
   mutate(
     metric_min = as.numeric(metric_min),
     metric_max = as.numeric(metric_max)
-  ) %>% 
+  ) %>%
   transmute(
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
@@ -437,7 +437,7 @@ scores <- map_df(par\$input, function(inp) {
   out
 }) %>%
   rename(
-    metric_id = metric_ids, 
+    metric_id = metric_ids,
     value = metric_values
   ) %>%
   mutate(
@@ -482,13 +482,14 @@ scores1 <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
 ) %>% 
-  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
+  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id")) %>%
+  filter(metric_id != "latent_mixing", !grepl("rfoob_", metric_id))
 
 cat("Calculating geometric mean\\n")
 geomean <- scores1 %>%
   filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
-  group_by(dataset_id, method_id, dataset_subtask) %>%
-  summarise_if(is.numeric, dynutils::calculate_geometric_mean) %>%
+  group_by(dataset_id, dataset_orig_id, method_id, dataset_subtask) %>%
+  summarise_if(is.numeric, function(x) dynutils::calculate_geometric_mean(pmax(x, 0) + 1) - 1) %>%
   ungroup() %>%
   mutate(metric_id = "geometric_mean")
 final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)

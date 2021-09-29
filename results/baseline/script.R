@@ -39,7 +39,7 @@ gpm <-
   geom_point(aes(colour = dataset_subtask), function(df) df %>% group_by(ml) %>% summarise(value = mean(value), dataset_subtask = "Mean") %>% filter(is.finite(value)), size = 4) +
   ggrepel::geom_label_repel(aes(label = "DNF"), function(df) df %>% filter(!is.finite(value)), nudge_x = -1, box.padding = 1, direction = "x") +
   theme_bw() +
-  labs(x = "RMSE (lower is better)", y = NULL, colour = "Subtask", tag = "a") +
+  labs(x = "RMSE (lower is better)", y = NULL, colour = "Subtask", tag = "a.") +
   scale_colour_manual(values = c(RColorBrewer::brewer.pal(4, "Set2"), "#222222")) +
   xlim(0, 1.5)
 
@@ -50,7 +50,7 @@ gmm <-
   ggrepel::geom_label_repel(aes(label = "Score = 1"), function(df) df %>% filter(!is.finite(value)) %>% select(value, ml) %>% unique(), box.padding = 1, direction = "x") +
   xlim(0, .002) +
   theme_bw() +
-  labs(x = "Match Probability (higher is better)", y = NULL, colour = "Subtask", tag = "b") +
+  labs(x = "Match Probability (higher is better)", y = NULL, colour = "Subtask", tag = "b.") +
   scale_colour_manual(values = c(RColorBrewer::brewer.pal(4, "Set2"), "#222222"))
 
 gje <-
@@ -58,7 +58,7 @@ gje <-
   geom_point(aes(value, ml, colour = dataset_subtask)) +
   geom_point(aes(value, ml, colour = "Mean"), function(df) df %>% group_by(ml) %>% summarise(value = mean(value), dataset_subtask = "Mean"), size = 4) +
   theme_bw() +
-  labs(x = "Geometric Mean (higher is better)", y = NULL, colour = "Subtask", tag = "c") +
+  labs(x = "Geometric Mean (higher is better)", y = NULL, colour = "Subtask", tag = "c.") +
   scale_colour_manual(values = c(RColorBrewer::brewer.pal(4, "Set2")[1:2], "#222222"))
 
 g <- patchwork::wrap_plots(gpm, gmm, gje, ncol = 1, heights = c(8, 7, 6))

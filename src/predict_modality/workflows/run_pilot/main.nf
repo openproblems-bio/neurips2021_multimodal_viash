@@ -21,6 +21,7 @@ include  { final_scores }                from "$targetDir/${task}_results/final_
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                       params(params)
 
 params.datasets = "output/public_datasets/$task/**.h5ad"
+params.meta_datasets = "${params.rootDir}/results/meta_datasets.tsv"
 
 workflow pilot_wf {
   main:
@@ -90,7 +91,7 @@ workflow pilot_wf {
 
   // fetch dataset ids in predictions and in solutions
   def datasetsMeta = 
-    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
+    Channel.fromPath(params.meta_datasets)
   
   // create metrics meta
   def metricsMeta = 

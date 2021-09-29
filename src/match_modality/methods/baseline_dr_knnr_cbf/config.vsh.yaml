@@ -5,7 +5,7 @@ functionality:
   description: Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.
   info:
     type: baseline
-    label: LMDS+KNNR+KNN
+    label: LMDS+KNNR+CBF
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com

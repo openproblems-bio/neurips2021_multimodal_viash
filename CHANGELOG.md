@@ -8,6 +8,8 @@
 * Match Modality: Update pilot results.
 * Predict Modality: Optimise execution and memory requirements for baseline methods.
 * Predict Modality: Update pilot results.
+* Fixed the metadata description of several methods.
+* Update pilot results and figure.
 
 # neurips2021_multimodal_viash 1.2.0
 
