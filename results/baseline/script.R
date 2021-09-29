@@ -47,7 +47,7 @@ gmm <-
   geom_point(aes(value, ml, colour = dataset_subtask)) +
   geom_point(aes(value, ml, colour = "Mean"), summ_mm %>% group_by(ml) %>% summarise(value = mean(value), dataset_subtask = "Mean"), size = 4) +
   # ggforce::facet_zoom(xlim = c(0, .0025)) +
-  xlim(0, .0025) +
+  xlim(0, .002) +
   theme_bw() +
   labs(x = "Match Probability", y = NULL, colour = "Subtask", tag = "B") +
   scale_colour_manual(values = c(RColorBrewer::brewer.pal(4, "Set2"), "#222222"))
