@@ -891,5 +891,5 @@ info:
   output: "target/nextflow/common_process_dataset/normalize"
   executable: "target/nextflow/common_process_dataset/normalize/normalize"
   viash_version: "0.5.3"
-  git_commit: "b24ad052019e71f0439987f54da1bd4dc4728213"
+  git_commit: "f57fab627776c00092621c7d2e800656b078e3bf"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
