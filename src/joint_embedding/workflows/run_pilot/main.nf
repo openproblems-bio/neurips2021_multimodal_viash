@@ -29,6 +29,8 @@ include  { final_scores }               from "$targetDir/${task}_results/final_s
 include  { bind_tsv_rows }              from "$targetDir/common/bind_tsv_rows/main.nf"                         params(params)
 
 params.datasets = "output/public_datasets/$task/**.h5ad"
+params.meta_datasets = "${params.rootDir}/results/meta_datasets.tsv"
+
 workflow pilot_wf {
   main:
 
@@ -70,10 +72,10 @@ workflow pilot_wf {
     | baseline_mnn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_mnn", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b5 = inputs 
-    | baseline_newwave
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_newwave", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b5 = inputs 
+  //   | baseline_newwave
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_newwave", [ input_prediction: pred, input_solution: sol ], params ]}
 
   def d0 = inputs 
     | dummy_random
@@ -84,11 +86,11 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_zeros", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b4, b5, d0, d1)
+  def predictions = b0.mix(b1, b2, b4, d0, d1)
 
   // create datasets meta
   def datasetsMeta = 
-    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
+    Channel.fromPath(params.meta_datasets)
   
   // create metrics meta
   def metricsMeta = 
