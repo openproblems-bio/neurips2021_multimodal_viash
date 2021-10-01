@@ -22,3 +22,10 @@ bin/nextflow \
   --datasets 'output/datasets/common/**.h5ad' \
   --publishDir output/datasets/joint_embedding/ \
   -resume
+
+bin/nextflow \
+  run . \
+  -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
+  --datasets 'output/datasets_loocv/common/**.h5ad' \
+  --publishDir output/datasets_loocv/joint_embedding/ \
+  -resume

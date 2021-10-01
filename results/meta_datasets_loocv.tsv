@@ -1,0 +1,12 @@
+source	dataset_id	geo_id	organism	num_cells	num_features_mod1	mod1_modality	num_batches	num_cell_types	num_features_mod2	mod2_modality
+openproblems	openproblems_bmmc_cite_loocv_s1d1	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_cite_loocv_s1d2	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_cite_loocv_s2d1	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_cite_loocv_s2d4	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_cite_loocv_s3d6	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_cite_loocv_s3d7	NA	human	43890	13953	GEX	6	45	134	ADT
+openproblems	openproblems_bmmc_multiome_loocv_s1d1	NA	human	22463	13431	GEX	5	21	116490	ATAC
+openproblems	openproblems_bmmc_multiome_loocv_s1d2	NA	human	22463	13431	GEX	5	21	116490	ATAC
+openproblems	openproblems_bmmc_multiome_loocv_s2d1	NA	human	22463	13431	GEX	5	21	116490	ATAC
+openproblems	openproblems_bmmc_multiome_loocv_s2d4	NA	human	22463	13431	GEX	5	21	116490	ATAC
+openproblems	openproblems_bmmc_multiome_loocv_s3d6	NA	human	22463	13431	GEX	5	21	116490	ATAC

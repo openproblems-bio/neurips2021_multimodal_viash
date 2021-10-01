@@ -32,3 +32,12 @@ bin/nextflow \
   --publishDir output/datasets/match_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config
+
+
+bin/nextflow \
+  run . \
+  -main-script src/match_modality/workflows/censor_datasets/main.nf \
+  --datasets 'output/datasets_loocv/common/**.h5ad' \
+  --publishDir output/datasets_loocv/match_modality/ \
+  -resume \
+  -c src/common/workflows/resource_labels_highmem.config
