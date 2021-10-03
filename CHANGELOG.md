@@ -11,6 +11,10 @@
 * Fixed the metadata description of several methods.
 * Update pilot results and figure.
 
+## BUG FIXES
+
+* Match Modality: Assert that all values must be non negative. Thanks @akhiadber!
+
 # neurips2021_multimodal_viash 1.2.0
 
 ## MAJOR CHANGES
