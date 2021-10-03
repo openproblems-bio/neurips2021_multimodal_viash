@@ -355,6 +355,9 @@ functionality:
       X_pred <- as(ad_pred\$X, "CsparseMatrix")[, order(pairing_ix)]
       dimnames(X_pred) <- list(NULL, NULL)
       
+      # set negative values to 0
+      X_pred\$X@x <- ifelse(X_pred\$X@x < 0, 0, X_pred\$X@x)
+      
       cat("Calculating normalisation factors\\n")
       rowSum <- Matrix::rowSums(X_pred)
       
@@ -820,5 +823,5 @@ info:
   output: "target/nextflow/match_modality_metrics/match_probability"
   executable: "target/nextflow/match_modality_metrics/match_probability/match_probability"
   viash_version: "0.5.3"
-  git_commit: "0d6deb8143a8d7e5604090abe68632f8c5bbbbdc"
+  git_commit: "4313331b8b946d3050e11006ee5d0076477b834c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -20,7 +20,7 @@ testpar = {
     "input_test_mod1": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod1.h5ad",
     "input_test_mod2": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_mod2.h5ad",
     "input_test_sol": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.test_sol.h5ad",
-    "output": "output.h5ad",
+    "output": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.prediction.h5ad",
 }
 
 print("> Running method")
@@ -49,6 +49,7 @@ assert ad_pred.uns['method_id'] == method_id
 
 print("> Checking X")
 assert issparse(ad_pred.X)
+assert np.all([x >= 0 for x in ad_pred.X.nonzero()]), "Values must be strictly non-negative."
 assert ad_pred.X.nonzero()[0].size <= 1000 * ad_sol.n_obs
 assert ad_pred.n_obs == ad_sol.n_obs
 assert ad_pred.n_vars == ad_sol.n_vars

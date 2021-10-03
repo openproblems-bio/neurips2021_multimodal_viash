@@ -935,5 +935,5 @@ info:
   output: "target/nextflow/match_modality_methods/dummy_constant"
   executable: "target/nextflow/match_modality_methods/dummy_constant/dummy_constant"
   viash_version: "0.5.3"
-  git_commit: "0d6deb8143a8d7e5604090abe68632f8c5bbbbdc"
+  git_commit: "4313331b8b946d3050e11006ee5d0076477b834c"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
