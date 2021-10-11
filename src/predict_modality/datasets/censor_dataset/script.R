@@ -54,8 +54,8 @@ if (length(is_test) > 1000) {
   # table(input_mod1$obs[["cell_type"]][is_test])
 }
 
-train_obs <- input_mod1$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
-test_obs <- input_mod1$obs[is_test, , drop = FALSE]  %>% select(one_of("batch"))
+train_obs <- input_mod1$obs[is_train, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+test_obs <- input_mod1$obs[is_test, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
 
 output_train_mod1 <- anndata::AnnData(
   X = input_mod1$X[is_train, , drop = FALSE],

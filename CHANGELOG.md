@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 1.2.2
+
+## MINOR CHANGES
+
+* Predict Modality: Also store the size factors in the censored datasets.
+
 # neurips2021_multimodal_viash 1.2.1
 
 ## MINOR CHANGES

@@ -481,8 +481,8 @@ functionality:
         # table(input_mod1\$obs[["cell_type"]][is_test])
       }
       
-      train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch"))
-      test_obs <- input_mod1\$obs[is_test, , drop = FALSE]  %>% select(one_of("batch"))
+      train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+      test_obs <- input_mod1\$obs[is_test, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
       
       output_train_mod1 <- anndata::AnnData(
         X = input_mod1\$X[is_train, , drop = FALSE],
@@ -1070,5 +1070,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "4313331b8b946d3050e11006ee5d0076477b834c"
+  git_commit: "aaecab4691aa035b421c6907dfe5e565f65618f9"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
