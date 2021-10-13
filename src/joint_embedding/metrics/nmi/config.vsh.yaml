@@ -5,8 +5,9 @@ functionality:
   description: Normalised mutual information (NMI)
   authors:
     - name: Michaela Mueller
-      roles: [ maintainer, author ]
-      props: { github: mumichae }
+      email: mumichae@in.tum.de
+      roles: [ author, maintainer ]
+      props: { github: mumichae, orcid: "0000-0002-1401-1785" }
   arguments:
     - name: --input_prediction
       type: file
