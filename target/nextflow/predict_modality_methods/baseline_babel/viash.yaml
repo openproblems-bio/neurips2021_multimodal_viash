@@ -964,5 +964,5 @@ info:
   output: "target/nextflow/predict_modality_methods/baseline_babel"
   executable: "target/nextflow/predict_modality_methods/baseline_babel/baseline_babel"
   viash_version: "0.5.3"
-  git_commit: "70be7f25567835e8cdcafb6b90cd17337557be34"
+  git_commit: "52b4bbda8296f3e6de3876ecdbefc8c35e319305"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

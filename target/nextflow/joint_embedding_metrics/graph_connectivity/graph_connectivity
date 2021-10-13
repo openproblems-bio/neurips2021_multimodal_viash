@@ -12,7 +12,7 @@
 # licenses of all included files.
 #
 # Component authors:
-# * Michaela Mueller (maintainer, author) {github: mumichae}
+# * Michaela Mueller <mumichae@in.tum.de> (author, maintainer) {github: mumichae, orcid: 0000-0002-1401-1785}
 
 set -e
 

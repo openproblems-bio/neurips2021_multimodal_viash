@@ -4,11 +4,13 @@ functionality:
   version: "main_build"
   authors:
   - name: "Michaela Mueller"
+    email: "mumichae@in.tum.de"
     roles:
-    - "maintainer"
     - "author"
+    - "maintainer"
     props:
       github: "mumichae"
+      orcid: "0000-0002-1401-1785"
   arguments:
   - type: "file"
     name: "--output"
@@ -64,7 +66,7 @@ functionality:
       # licenses of all included files.
       #
       # Component authors:
-      # * Michaela Mueller (maintainer, author) {github: mumichae}
+      # * Michaela Mueller <mumichae@in.tum.de> (author, maintainer) {github: mumichae, orcid: 0000-0002-1401-1785}
       
       set -e
       
@@ -875,5 +877,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ti_cons"
   executable: "target/nextflow/joint_embedding_metrics/ti_cons/ti_cons"
   viash_version: "0.5.3"
-  git_commit: "70be7f25567835e8cdcafb6b90cd17337557be34"
+  git_commit: "52b4bbda8296f3e6de3876ecdbefc8c35e319305"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
