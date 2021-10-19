@@ -896,5 +896,5 @@ info:
   output: "target/nextflow/joint_embedding_starter_kits/starter_kit_r"
   executable: "target/nextflow/joint_embedding_starter_kits/starter_kit_r/r_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "52b4bbda8296f3e6de3876ecdbefc8c35e319305"
+  git_commit: "a6667ff098e89e6d4da2287dbdaf775802d3e347"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
