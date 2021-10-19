@@ -38,7 +38,7 @@ jobs:
       run: |
         # create check_results folder
         sed -i '/^check_results\/$/d' .gitignore
-        mkdir check_results
+        [ ! -d "check_results" ] && mkdir check_results
 
         # run tests
         # bin/viash_test -p docker -m release -t main_build
