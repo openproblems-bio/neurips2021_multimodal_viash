@@ -12,8 +12,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.clustering import opt_louvain
-from scIB.metrics import ari
+import scib
 
 if par['debug']:
     pprint.pprint(par)
@@ -41,7 +40,7 @@ adata.obsm['X_emb'] = adata.X
 sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Clustering')
-opt_louvain(
+scib.cl.opt_louvain(
     adata,
     label_key='cell_type',
     cluster_key='cluster',
@@ -51,7 +50,7 @@ opt_louvain(
 )
 
 print('Compute score')
-score = ari(adata, group1='cluster', group2='cell_type')
+score = scib.me.ari(adata, group1='cluster', group2='cell_type')
 
 # store adata with metrics
 print("Create output object")
