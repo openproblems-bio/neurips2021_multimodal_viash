@@ -8,11 +8,9 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 ## VIASH START
 # input_path <- "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
-# input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase2/openproblems_bmmc_multiome_phase2.manual_formatting."
 input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
 output_path <- ""
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset."
-# output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase2/openproblems_bmmc_multiome_phase2.censor_dataset."
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_iid/openproblems_bmmc_multiome_iid.censor_dataset."
 dir.create(dirname(output_path), recursive = TRUE)
 
@@ -55,11 +53,11 @@ relevel <- function(x) as.character(x)
 cat("Creating train objects\n")
 mod1_var <- input_mod1$var %>% select(one_of("gene_ids", "feature_types"))
 mod2_var <- input_mod2$var %>% select(one_of("gene_ids", "feature_types"))
-train_obs1 <- input_mod1$obs[train_ix, , drop = FALSE] %>% 
-  select(one_of("batch", "size_factors")) %>% 
+train_obs1 <- input_mod1$obs[train_ix, , drop = FALSE] %>%
+  select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
-train_obs2 <- input_mod2$obs[train_ix, , drop = FALSE] %>% 
-  select(one_of("size_factors")) %>% 
+train_obs2 <- input_mod2$obs[train_ix, , drop = FALSE] %>%
+  select(one_of("size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(train_obs2) <- NULL
 if (ncol(train_obs2) == 0) train_obs2 <- NULL
@@ -82,11 +80,11 @@ output_train_mod2 <- anndata::AnnData(
 )
 
 cat("Create test objects\n")
-test_obs1 <- input_mod1$obs[test_ix, , drop = FALSE] %>% 
-  select(one_of("batch", "size_factors")) %>% 
+test_obs1 <- input_mod1$obs[test_ix, , drop = FALSE] %>%
+  select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
-test_obs2 <- input_mod1$obs[test_ix, , drop = FALSE] %>% 
-  select(one_of("size_factors")) %>% 
+test_obs2 <- input_mod2$obs[test_ix, , drop = FALSE] %>%
+  select(one_of("size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(test_obs2) <- NULL
 if (ncol(test_obs2) == 0) test_obs2 <- NULL
@@ -99,9 +97,9 @@ output_test_mod1 <- anndata::AnnData(
   uns = common_uns
 )
 output_test_mod2 <- anndata::AnnData(
-  X = input_mod2$X[test_ix[test_mod2_ix], , drop = FALSE] %>% 
+  X = input_mod2$X[test_ix[test_mod2_ix], , drop = FALSE] %>%
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
-  layers = list(counts = input_mod2$layers[["counts"]][test_ix[test_mod2_ix], , drop = FALSE] %>% 
+  layers = list(counts = input_mod2$layers[["counts"]][test_ix[test_mod2_ix], , drop = FALSE] %>%
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
   obs = test_obs2,
   var = mod2_var,

@@ -4,6 +4,7 @@
 
 * Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.
 
+* Match Modality Censoring Component: Don't store mod1 size factors in mod2.
 
 # neurips2021_multimodal_viash 1.2.2
 
