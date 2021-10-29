@@ -1,3 +1,10 @@
+# neurips2021_multimodal_viash 1.3.0
+
+## BUG FIXES
+
+* Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.
+
+
 # neurips2021_multimodal_viash 1.2.2
 
 ## MINOR CHANGES
