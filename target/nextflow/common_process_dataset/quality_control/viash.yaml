@@ -1030,5 +1030,5 @@ info:
   output: "target/nextflow/common_process_dataset/quality_control"
   executable: "target/nextflow/common_process_dataset/quality_control/quality_control"
   viash_version: "0.5.3"
-  git_commit: "9da3f9af55b9f11137b10cde1ec6c6d6f827b289"
+  git_commit: "133e24d8ce8e17d7e0c2e212fb105f2865aaa727"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

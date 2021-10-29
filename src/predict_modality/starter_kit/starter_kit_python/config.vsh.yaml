@@ -86,3 +86,6 @@ platforms:
   # run your method as part of a nextflow pipeline.
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]
+
+  # used for saturn cloud
+  - type: native

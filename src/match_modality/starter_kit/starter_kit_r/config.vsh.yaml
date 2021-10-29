@@ -95,3 +95,5 @@ platforms:
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]
 
+  # used for saturn cloud
+  - type: native

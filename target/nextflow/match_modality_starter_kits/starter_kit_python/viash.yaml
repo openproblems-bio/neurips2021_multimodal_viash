@@ -527,6 +527,10 @@ functionality:
       input_test_mod1 = ad.read_h5ad(par['input_test_mod1'])
       input_test_mod2 = ad.read_h5ad(par['input_test_mod2'])
       
+      # unscramble training cells
+      ord = np.argsort(input_train_sol.uns['pairing_ix'])
+      input_train_mod2 = input_train_mod2[ord, :]
+      
       
       # TODO: implement own method
       
@@ -537,6 +541,7 @@ functionality:
       # * calculate k nearest neighbors between test_mod2 and predicted test_mod2
       # * transform k nearest neighbors into a pairing matrix
       
+      # TODO: implement own method
       input_train = ad.concat(
           {"train": input_train_mod1, "test": input_test_mod1},
           axis=0,
@@ -546,39 +551,38 @@ functionality:
           index_unique="-"
       )
       
-      # TODO: implement own method
       # Do PCA on the input data
       logging.info('Performing dimensionality reduction on modality 1 values...')
       embedder_mod1 = TruncatedSVD(n_components=50)
-      mod1_pca = embedder_mod1.fit_transform(input_train.X)
+      pca_mod1 = embedder_mod1.fit_transform(input_train.X)
       
       logging.info('Performing dimensionality reduction on modality 2 values...')
       embedder_mod2 = TruncatedSVD(n_components=50)
-      mod2_pca = embedder_mod2.fit_transform(input_train_mod2.X)
+      # input_train_mod2\$X[order(match_train)
+      pca_train_mod2 = embedder_mod2.fit_transform(input_train_mod2.X)
       
       # split dimred back up
-      X_train = mod1_pca[input_train.obs['group'] == 'train']
-      X_test = mod1_pca[input_train.obs['group'] == 'test']
-      y_train = mod2_pca
+      pca_train_mod1 = pca_mod1[input_train.obs['group'] == 'train']
+      pca_test_mod1 = pca_mod1[input_train.obs['group'] == 'test']
       
-      assert len(X_train) + len(X_test) == len(mod1_pca)
+      assert len(pca_train_mod1) + len(pca_test_mod1) == len(pca_mod1)
       
       logging.info('Running Linear regression...')
       reg = LinearRegression()
       
       # Train the model on the PCA reduced modality 1 and 2 data
-      reg.fit(X_train, y_train)
-      y_pred = reg.predict(X_test)
+      reg.fit(pca_train_mod1, pca_train_mod2)
+      pca_test_mod2_pred = reg.predict(pca_test_mod1)
       
       # Project the predictions back to the modality 2 feature space
-      y_pred = y_pred @ embedder_mod2.components_
+      input_test_mod2_pred = pca_test_mod2_pred @ embedder_mod2.components_
       
       
       logging.info('calculate k nearest neighbors between test_mod2 and predicted test_mod2')
       # To get the matching matrix, for each point in mod1_test, we take the 1000 nearest neighbors of that
       # point in the transformed mod2_test dataset
       n_neighbors = min(par["n_neighbors"], input_test_mod1.n_obs)
-      nn = NearestNeighbors(n_neighbors=n_neighbors).fit(y_pred)
+      nn = NearestNeighbors(n_neighbors=n_neighbors).fit(input_test_mod2_pred)
       distances, indices = nn.kneighbors(X=input_test_mod2.X)
       
       logging.info('transform k nearest neighbors into a pairing matrix')
@@ -1120,5 +1124,5 @@ info:
   output: "target/nextflow/match_modality_starter_kits/starter_kit_python"
   executable: "target/nextflow/match_modality_starter_kits/starter_kit_python/python_starter_kit"
   viash_version: "0.5.3"
-  git_commit: "9da3f9af55b9f11137b10cde1ec6c6d6f827b289"
+  git_commit: "133e24d8ce8e17d7e0c2e212fb105f2865aaa727"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

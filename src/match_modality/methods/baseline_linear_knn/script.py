@@ -8,11 +8,10 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.neighbors import NearestNeighbors
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import normalize
-## VIASH START
 
+## VIASH START
 # Anything within this block will be removed by `viash` and will be
 # replaced with the parameters as specified in your config.vsh.yaml.
-
 par = {
     "input_train_mod1": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod1.h5ad",
     "input_train_mod2": "resources_test/match_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.train_mod2.h5ad",
@@ -37,11 +36,9 @@ input_test_mod2 = ad.read_h5ad(par["input_test_mod2"])
 # This method runs PCA on each modality individually, then runs linear regression to predict mod2
 # from mod1 and finally performs kNN to match modalities
 
-# Sort training data
-input_train_mod2_sorted = []
-for i, j in np.argwhere(input_train_sol.X == 1):
-    input_train_mod2_sorted.append(input_train_mod2.obs_names[j])
-input_train_mod2[input_train_mod2_sorted]
+# unscramble training cells
+ord = np.argsort(input_train_sol.uns['pairing_ix'])
+input_train_mod2 = input_train_mod2[ord, :]
 
 # concatenate train and test data
 mod1 = ad.concat(
