@@ -20,7 +20,7 @@ if debug:
     pprint.pprint(par)
 
 OUTPUT_TYPE = 'graph'
-METRIC = 'ti_cons'
+METRIC = 'ti_cons_batch'
 
 input_prediction = par['input_prediction']
 input_solution = par['input_solution']
@@ -50,6 +50,7 @@ if 'pseudotime_order_GEX' in obs_keys:
         adata_pre=adata_solution,
         adata_post=adata,
         label_key='cell_type',
+        batch_key='batch',
         pseudotime_key='pseudotime_order_GEX'
     )
 else:
@@ -60,6 +61,7 @@ if adt_atac_trajectory in obs_keys:
         adata_pre=adata_solution,
         adata_post=adata,
         label_key='cell_type',
+        batch_key='batch',
         pseudotime_key=adt_atac_trajectory
     )
 else:
@@ -73,7 +75,7 @@ out = anndata.AnnData(
     uns=dict(
         dataset_id=adata.uns['dataset_id'],
         method_id=adata.uns['method_id'],
-        metric_ids=['ti_cons_RNA', 'ti_cons_ADT_ATAC', 'ti_cons_mean'],
+        metric_ids=['ti_cons_batch_RNA', 'ti_cons_batch_ADT_ATAC', 'ti_cons_batch_mean'],
         metric_values=[score_rna, score_adt_atac, score_mean]
     )
 )

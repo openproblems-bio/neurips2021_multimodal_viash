@@ -12,7 +12,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.metrics import silhouette
+import scib
 
 if par['debug']:
     pprint.pprint(par)
@@ -39,7 +39,7 @@ print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-score = silhouette(adata, group_key='cell_type', embed='X_emb')
+score = scib.me.silhouette(adata, group_key='cell_type', embed='X_emb')
 
 # store adata with metrics
 print("Create output object")
