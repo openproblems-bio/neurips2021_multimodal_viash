@@ -353,8 +353,7 @@ functionality:
       import pprint
       import scanpy as sc
       import anndata
-      from scIB.clustering import opt_louvain
-      from scIB.metrics import nmi
+      import scib
       
       if par['debug']:
           pprint.pprint(par)
@@ -382,7 +381,7 @@ functionality:
       sc.pp.neighbors(adata, use_rep='X_emb')
       
       print('Clustering')
-      opt_louvain(
+      scib.cl.opt_louvain(
           adata,
           label_key='cell_type',
           cluster_key='cluster',
@@ -392,7 +391,7 @@ functionality:
       )
       
       print('Compute score')
-      score = nmi(adata, group1='cluster', group2='cell_type')
+      score = scib.me.nmi(adata, group1='cluster', group2='cell_type')
       
       # store adata with metrics
       print("Create output object")
@@ -866,5 +865,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/nmi"
   executable: "target/nextflow/joint_embedding_metrics/nmi/nmi"
   viash_version: "0.5.3"
-  git_commit: "133e24d8ce8e17d7e0c2e212fb105f2865aaa727"
+  git_commit: "9b96fde75f0f7866e0aa6b836f43a66b138819f4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

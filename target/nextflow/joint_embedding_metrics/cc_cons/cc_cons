@@ -301,7 +301,7 @@ import pprint
 import scanpy as sc
 import anndata
 import numpy as np
-from scIB.metrics import cell_cycle
+import scib
 
 if debug:
     pprint.pprint(par)
@@ -331,7 +331,7 @@ print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-score = cell_cycle(
+score = scib.me.cell_cycle(
     adata_pre=adata_solution,
     adata_post=adata,
     batch_key='batch',

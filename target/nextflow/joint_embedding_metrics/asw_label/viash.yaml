@@ -353,7 +353,7 @@ functionality:
       import pprint
       import scanpy as sc
       import anndata
-      from scIB.metrics import silhouette
+      import scib
       
       if par['debug']:
           pprint.pprint(par)
@@ -380,7 +380,7 @@ functionality:
       adata.obsm['X_emb'] = adata.X
       
       print('Compute score')
-      score = silhouette(adata, group_key='cell_type', embed='X_emb')
+      score = scib.me.silhouette(adata, group_key='cell_type', embed='X_emb')
       
       # store adata with metrics
       print("Create output object")
@@ -854,5 +854,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/asw_label"
   executable: "target/nextflow/joint_embedding_metrics/asw_label/asw_label"
   viash_version: "0.5.3"
-  git_commit: "133e24d8ce8e17d7e0c2e212fb105f2865aaa727"
+  git_commit: "9b96fde75f0f7866e0aa6b836f43a66b138819f4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

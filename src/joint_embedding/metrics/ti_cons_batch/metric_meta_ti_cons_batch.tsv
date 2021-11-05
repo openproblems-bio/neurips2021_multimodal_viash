@@ -1,0 +1,4 @@
+metric_id	metric_min	metric_max	metric_higherisbetter
+ti_cons_batch_RNA	0	1	true
+ti_cons_batch_ADT_ATAC	0	1	true
+ti_cons_batch_mean	0	1	true

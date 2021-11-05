@@ -298,7 +298,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.metrics import graph_connectivity
+import scib
 
 if par['debug']:
     pprint.pprint(par)
@@ -326,7 +326,7 @@ adata.obsm['X_emb'] = adata.X
 sc.pp.neighbors(adata, use_rep='X_emb')
 
 print('Compute score')
-score = graph_connectivity(adata, label_key='cell_type')
+score = scib.me.graph_connectivity(adata, label_key='cell_type')
 
 # store adata with metrics
 print("Create output object")

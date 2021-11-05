@@ -355,7 +355,7 @@ functionality:
       import numpy as np
       import scanpy as sc
       import anndata
-      from scIB.metrics import trajectory_conservation
+      import scib
       
       if debug:
           pprint.pprint(par)
@@ -387,7 +387,7 @@ functionality:
       obs_keys = adata_solution.obs_keys()
       
       if 'pseudotime_order_GEX' in obs_keys:
-          score_rna = trajectory_conservation(
+          score_rna = scib.me.trajectory_conservation(
               adata_pre=adata_solution,
               adata_post=adata,
               label_key='cell_type',
@@ -397,7 +397,7 @@ functionality:
           score_rna = np.nan
       
       if adt_atac_trajectory in obs_keys:
-          score_adt_atac = trajectory_conservation(
+          score_adt_atac = scib.me.trajectory_conservation(
               adata_pre=adata_solution,
               adata_post=adata,
               label_key='cell_type',
@@ -877,5 +877,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ti_cons"
   executable: "target/nextflow/joint_embedding_metrics/ti_cons/ti_cons"
   viash_version: "0.5.3"
-  git_commit: "133e24d8ce8e17d7e0c2e212fb105f2865aaa727"
+  git_commit: "9b96fde75f0f7866e0aa6b836f43a66b138819f4"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

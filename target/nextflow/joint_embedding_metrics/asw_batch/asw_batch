@@ -297,7 +297,7 @@ print('Importing libraries')
 import pprint
 import scanpy as sc
 import anndata
-from scIB.metrics import silhouette_batch
+import scib
 
 if par['debug']:
     pprint.pprint(par)
@@ -324,14 +324,13 @@ print('Preprocessing')
 adata.obsm['X_emb'] = adata.X
 
 print('Compute score')
-_, sil_clus = silhouette_batch(
+score = scib.me.silhouette_batch(
     adata,
     batch_key='batch',
     group_key='cell_type',
     embed='X_emb',
     verbose=False
 )
-score = sil_clus['silhouette_score'].mean()
 
 # store adata with metrics
 print("Create output object")

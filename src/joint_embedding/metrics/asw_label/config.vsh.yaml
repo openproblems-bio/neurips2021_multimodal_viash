@@ -41,7 +41,7 @@ functionality:
       dest: metric_meta.tsv
 platforms:
   - type: docker
-    image: mumichae/scib-base:0.1.1
+    image: mumichae/scib-base:1.0.0
   - type: native
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

@@ -301,7 +301,7 @@ import pprint
 import numpy as np
 import scanpy as sc
 import anndata
-from scIB.metrics import trajectory_conservation
+import scib
 
 if debug:
     pprint.pprint(par)
@@ -333,7 +333,7 @@ print('Compute scores')
 obs_keys = adata_solution.obs_keys()
 
 if 'pseudotime_order_GEX' in obs_keys:
-    score_rna = trajectory_conservation(
+    score_rna = scib.me.trajectory_conservation(
         adata_pre=adata_solution,
         adata_post=adata,
         label_key='cell_type',
@@ -343,7 +343,7 @@ else:
     score_rna = np.nan
 
 if adt_atac_trajectory in obs_keys:
-    score_adt_atac = trajectory_conservation(
+    score_adt_atac = scib.me.trajectory_conservation(
         adata_pre=adata_solution,
         adata_post=adata,
         label_key='cell_type',
