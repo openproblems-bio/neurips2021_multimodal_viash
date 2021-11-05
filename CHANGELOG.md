@@ -1,5 +1,13 @@
 # neurips2021_multimodal_viash 1.3.0
 
+## NEW FEATURES
+
+* Joint Embedding Metrics: Added a `ti_cons_batch` metric which computes the ti_cons score per batch.
+
+## MINOR CHANGES
+
+* Joint Embedding Metrics: The scib package has been renamed from scIB to scib.
+
 ## BUG FIXES
 
 * Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.
