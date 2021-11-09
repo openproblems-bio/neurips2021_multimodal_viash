@@ -953,5 +953,5 @@ info:
   output: "target/nextflow/common_process_dataset/simulate_batch"
   executable: "target/nextflow/common_process_dataset/simulate_batch/simulate_batch"
   viash_version: "0.5.3"
-  git_commit: "00a2799aa00d46104009a6e641c73ea46af6d653"
+  git_commit: "df69695b3e1782e915fff73ab88ba9b5bcc3e17f"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

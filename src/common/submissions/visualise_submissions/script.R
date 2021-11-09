@@ -1,115 +1,8 @@
 library(tidyverse)
 
 dir <- "output/submissions"
+df <- read_rds(paste0(dir, "/all_submissions_read.rds"))
 
-dir.create(dir, showWarnings = FALSE)
-
-all_submissions <- read_csv("output/submissions/all_submissions.csv") %>%
-  mutate(
-    dest_zip = paste0(dir, "/", basename(`Submitted File`)),
-    dest_json = paste0(dir, "/", basename(`Submission Result File`))
-  )
-
-# dest_zip <- "data/submissions/0baa38bf-119d-4907-8018-7d1f07b18193.zip"
-# dest_zip <- "data/submissions/f923d5ff-8f63-4e58-8093-9954144a8bd3.zip"
-valid_zip <- function(dest_zip) {
-  check_out <- system(paste0("zip -T '", dest_zip, "'"), ignore.stderr = TRUE, ignore.stdout = TRUE)
-  check_out == 0
-}
-options(timeout = max(10000, getOption("timeout")))
-
-out <- pbapply::pblapply(seq_len(nrow(all_submissions)), cl = 10, function(i) {
-  id <- all_submissions$id[[i]]
-  dest_zip <- all_submissions$dest_zip[[i]]
-  dest_json <- all_submissions$dest_json[[i]]
-  status <- all_submissions$Status[[i]]
-
-  df <- tibble(
-    id = id
-  )
-
-  df2 <-
-    tryCatch({
-      # check if already downloaded
-      # if (!file.exists(dest_zip) || !valid_zip(dest_zip)) {
-      #   download.file(all_submissions$`Submitted File`[[i]], dest_zip, quiet = TRUE)
-      # }
-
-      # check if yaml exists
-      if (!valid_zip(dest_zip)) {
-        stop("Zip file was not valid")
-      } else {
-        conn <- unz(dest_zip, "config.vsh.yaml")
-        yaml_obj <-
-          tryCatch({
-            yaml::yaml.load(readLines(conn))
-          }, finally = {
-            close(conn)
-          })
-
-        authors_df <- map_df(yaml_obj$functionality$authors, function(aut) {
-          aut$roles <- paste(aut$roles, collapse = ", ")
-          props <- aut$props
-          aut[names(props)] <- unlist(props)
-          aut$props <- NULL
-          as.data.frame(aut)
-        })
-        resources <- yaml_obj$functionality$resources
-        script <- resources[[grep("script", map_chr(resources, "type"))]]
-
-        len1 <- function(x) {
-          if (length(x) == 0) {
-            z <- NA
-            class(z) <- class(x)
-            z
-          } else if (length(x) > 1) {
-            stop("Length of ", paste0(x, collapse = ", "), " is >1")
-          } else {
-            x
-          }
-        }
-
-        df. <- tibble(
-          task = gsub("_methods", "", yaml_obj$functionality$namespace) %>% len1,
-          method_id = yaml_obj$functionality$name %>% len1,
-          description = yaml_obj$functionality$description %>% len1,
-          maintainer = authors_df %>% filter(grepl("maintainer", roles)) %>% pull(name) %>% len1,
-          authors = list(authors_df),
-          num_authors = nrow(authors_df) %>% len1,
-          language = gsub("_script", "", script$type) %>% len1,
-        )
-
-        info <- yaml_obj$functionality$info
-        if (length(info) > 0) {
-          df.[names(info)] <- info
-        }
-        df.
-      }
-    }, error = function(e) {
-      tibble(zip_error = e$message)
-    })
-
-  df3 <-
-    tryCatch({
-      # check if already downloaded
-      if (!file.exists(dest_json)) {
-        download.file(all_submissions$`Submission Result File`[[i]], dest_json, quiet = TRUE)
-      }
-      scores <-
-        if (status == "finished") {
-          jsonlite::parse_json(gsub("'", '"', readLines(dest_json, warn = FALSE)), simplifyVector = TRUE)
-        } else {
-          tibble(a = 1)[,-1]
-        }
-      tibble(scores = list(scores))
-    }, error = function(e) {
-      tibble(score_error = e$message)
-    })
-
-  bind_cols(df, df2, df3)
-})
-
-df <- all_submissions %>% left_join(bind_rows(out), by = "id")
 
 
 
@@ -126,9 +19,9 @@ je_scores <- df %>%
     -`Submitted File`, -`Stdout File`, -`Stderr File`, -dest_zip, -dest_json
   )
 
-je_scores %>% select(id, language, Status, graph_conn_ADT:asw_label_ADT)
+je_scores %>% select(id, language, Status, ends_with("_ADT"), ends_with("_ATAC"))
 
-je_scores_g <- je_scores %>% gather(metric, value, graph_conn_ADT:asw_label_ADT)
+je_scores_g <- je_scores %>% gather(metric, value, ends_with("_ADT"), ends_with("_ATAC"))
 
 je_baseline <- read_tsv("results/inhouse_joint_embedding_scores.tsv") %>%
   mutate(metric = paste0(metric_id, "_", dataset_subtask)) %>%
@@ -235,9 +128,9 @@ mm_scores <- df %>%
     -`Submitted File`, -`Stdout File`, -`Stderr File`, -dest_zip, -dest_json
   )
 
-mm_scores %>% select(id, language, Status, ADT2GEX:Overall)
+mm_scores %>% select(id, language, Status, ADT2GEX, GEX2ADT, ATAC2GEX, GEX2ATAC, Overall)
 
-mm_scores_g <- mm_scores %>% gather(metric, value, ADT2GEX:Overall)
+mm_scores_g <- mm_scores %>% gather(metric, value, ADT2GEX, GEX2ADT, ATAC2GEX, GEX2ATAC, Overall)
 
 mm_baseline <- read_tsv("results/inhouse_match_modality_scores.tsv") %>%
   filter(metric_id == "match_probability") %>%
@@ -302,9 +195,9 @@ pm_scores <- df %>%
     -`Submitted File`, -`Stdout File`, -`Stderr File`, -dest_zip, -dest_json
   )
 
-pm_scores %>% select(id, language, Status, ADT2GEX:Overall)
+pm_scores %>% select(id, language, Status, ADT2GEX, GEX2ADT, ATAC2GEX, GEX2ATAC, Overall)
 
-pm_scores_g <- pm_scores %>% gather(metric, value, ADT2GEX:Overall)
+pm_scores_g <- pm_scores %>% gather(metric, value, ADT2GEX, GEX2ADT, ATAC2GEX, GEX2ATAC, Overall)
 
 pm_baseline <- read_tsv("results/inhouse_predict_modality_scores.tsv") %>%
   filter(metric_id == "rmse") %>%
