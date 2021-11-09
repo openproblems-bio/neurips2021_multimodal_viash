@@ -9,6 +9,7 @@ include  { asw_label }                  from "$targetDir/${task}_metrics/asw_lab
 include  { nmi }                        from "$targetDir/${task}_metrics/nmi/main.nf"                          params(params)
 include  { cc_cons }                    from "$targetDir/${task}_metrics/cc_cons/main.nf"                      params(params)
 include  { ti_cons }                    from "$targetDir/${task}_metrics/ti_cons/main.nf"                      params(params)
+include  { ti_cons_batch }              from "$targetDir/${task}_metrics/ti_cons_batch/main.nf"                params(params)
 include  { graph_connectivity }         from "$targetDir/${task}_metrics/graph_connectivity/main.nf"           params(params)
 include  { check_format }               from "$targetDir/${task}_metrics/check_format/main.nf"                 params(params)
 include  { final_scores }               from "$targetDir/${task}_results/final_scores/main.nf"                 params(params)
