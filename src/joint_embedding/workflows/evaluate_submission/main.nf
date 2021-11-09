@@ -37,7 +37,7 @@ workflow {
 
   solutions.join(predictions)
     | map{ [ it[0], [ input_solution: it[1], input_prediction: it[2] ] , params ] }
-    | ( asw_batch & asw_label & nmi & cc_cons & ti_cons & graph_connectivity & check_format)
+    | ( asw_batch & asw_label & nmi & cc_cons & ti_cons & ti_cons_batch & graph_connectivity & check_format)
     | mix
     | toList()
     | map{ [ it.collect{it[1]} ] }
