@@ -662,9 +662,9 @@ functionality:
       }
       
       process cc_cons_process {
-        label 'lowmem'
+        label 'midmem'
         label 'lowtime'
-        label 'lowcpu'
+        label 'midcpu'
         tag "${id}"
         echo { (params.debug == true) ? true : false }
         cache 'deep'
@@ -853,9 +853,9 @@ platform:
   namespace_separator: "_"
   separate_multiple_outputs: true
   labels:
-  - "lowmem"
+  - "midmem"
   - "lowtime"
-  - "lowcpu"
+  - "midcpu"
 platforms: []
 info:
   config: "src/joint_embedding/metrics/cc_cons/config.vsh.yaml"
@@ -863,5 +863,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/cc_cons"
   executable: "target/nextflow/joint_embedding_metrics/cc_cons/cc_cons"
   viash_version: "0.5.3"
-  git_commit: "df69695b3e1782e915fff73ab88ba9b5bcc3e17f"
+  git_commit: "30a4ce5a102489364c109975281c22633bf83c4d"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

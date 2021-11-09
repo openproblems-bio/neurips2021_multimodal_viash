@@ -4,14 +4,16 @@ dir <- "output/submissions"
 df <- read_rds(paste0(dir, "/all_submissions_read.rds")) %>%
   mutate(
     task_id = `Challenge Phase` %>% gsub(" - .*", "", .) %>% gsub(" ", "_", .) %>% tolower(),
-    dest_scores = gsub("\\.zip$", "_scores_1.2.0.rds", dest_zip)
+    # dest_scores = gsub("\\.zip$", "_scores_1.2.0.rds", dest_zip)
+    dest_scores = gsub("\\.zip$", "_scores_mainbuild.rds", dest_zip)
   )
 
 df <- df %>% filter(task_id == "joint_embedding", zip_valid)
 
 # fixed params
 pipeline_repo <- "openproblems-bio/neurips2021_multimodal_viash"
-pipeline_version <- "1.2.0"
+# pipeline_version <- "1.2.0"
+pipeline_version <- "main_build"
 pipeline_tmp_dir <- paste0(Sys.getenv("VIASH_TEMP"), "/neurips2021_work")
 data_loc <- Sys.getenv("NEURIPS_DATA_DIR")
 
@@ -40,7 +42,7 @@ zzz <- pbapply::pblapply(seq_len(nrow(df)), function(i) {
         system2(
           "viash",
           args = c(
-            "build", conf_path,
+            "build", config_path,
             "--config_mod", ".functionality.name := 'method'",
             "--platform", "docker",
             "--output", target_docker_path,
@@ -53,7 +55,7 @@ zzz <- pbapply::pblapply(seq_len(nrow(df)), function(i) {
         system2(
           "viash",
           args = c(
-            "build", conf_path,
+            "build", config_path,
             "--config_mod", ".functionality.name := 'method'",
             "--platform", "nextflow",
             "--output", target_nextflow_path

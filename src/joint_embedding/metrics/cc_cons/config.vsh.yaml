@@ -42,4 +42,4 @@ platforms:
     image: mumichae/scib-base:1.0.0
   - type: native
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, midcpu ]
