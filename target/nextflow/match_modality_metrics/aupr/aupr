@@ -297,7 +297,7 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 ## VIASH END
 
 cat("Read solution h5ad\\n")
-ad_sol <- anndata::read_h5ad(par\$input_solution)
+ad_sol <- anndata::read_h5ad(par\$input_solution, backed = "r")
 
 cat("Read prediction h5ad\\n")
 expect_true(
@@ -313,7 +313,7 @@ ad_pred <-
 expect_true(
   ad_sol\$uns\$dataset_id == ad_pred\$uns\$dataset_id
 )
-X_pred <- as(ad_pred\$X, "CsparseMatrix")[,order(ad_sol\$uns\$pairing_ix)]
+X_pred <- as(ad_pred\$X, "CsparseMatrix")[, order(ad_sol\$uns\$pairing_ix)]
 dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\\n")
