@@ -14,6 +14,8 @@
 
 * Match Modality Censoring Component: Don't store mod1 size factors in mod2.
 
+* Match Modality Scores: Fix refactoring bug in match_probability score.
+
 # neurips2021_multimodal_viash 1.2.2
 
 ## MINOR CHANGES
