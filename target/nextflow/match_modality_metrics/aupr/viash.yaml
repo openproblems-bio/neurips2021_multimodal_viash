@@ -378,11 +378,6 @@ functionality:
         mutate(gold = i == j) %>%
         arrange(desc(x))
       
-      expect_true(
-        nrow(pred_summ) <= 1000 * nrow(ad_sol),
-        info = "Number of non-zero values for the prediction should be less or equal to 1000 times the number of cells in the dataset."
-      )
-      
       # helper function
       calculate_au <- function(values, are_true, num_positive_interactions, num_possible_interactions, extend_by = 10000) {
         ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)
@@ -918,5 +913,5 @@ info:
   output: "target/nextflow/match_modality_metrics/aupr"
   executable: "target/nextflow/match_modality_metrics/aupr/aupr"
   viash_version: "0.5.3"
-  git_commit: "d86f48910260c7b063ba8ebeba205b6f60f3b695"
+  git_commit: "47936678f60fbcd0260092b8172a5c43bf3c38e6"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -322,11 +322,6 @@ pred_summ <- summary(X_pred) %>%
   mutate(gold = i == j) %>%
   arrange(desc(x))
 
-expect_true(
-  nrow(pred_summ) <= 1000 * nrow(ad_sol),
-  info = "Number of non-zero values for the prediction should be less or equal to 1000 times the number of cells in the dataset."
-)
-
 # helper function
 calculate_au <- function(values, are_true, num_positive_interactions, num_possible_interactions, extend_by = 10000) {
   ord <- order(rank(values, ties.method = "random"), decreasing = TRUE)

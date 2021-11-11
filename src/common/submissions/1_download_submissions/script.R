@@ -24,8 +24,8 @@ all_submissions <- read_csv(paste0(dir, "/all_submissions.csv")) %>%
   mutate(
     url_zip = `Submitted File`,
     url_json = `Submission Result File`,
-    dest_zip = paste0(dir, "/", basename(url_zip)),
-    dest_json = ifelse(is.na(url_json), NA_character_, paste0(dir, "/", basename(url_json))),
+    dest_zip = paste0(dir, "/submission_", id, ".zip"),
+    dest_json = ifelse(is.na(url_json), NA_character_, paste0(dir, "/submission_", id, ".json")),
     zip_exists = file.exists(dest_zip),
     zip_valid = map2_lgl(zip_exists, dest_zip, function(a, b) a && valid_zip(b)),
     json_exists = !is.na(url_json) & file.exists(dest_json),
