@@ -7,6 +7,7 @@ set.seed(1)
 
 # sync to local folder, run in bash
 # aws s3 sync s3://openproblems-bio/neurips2021/processed/phase2/ output/manual_formatting_2021-11-08/ --profile op2 --delete
+# aws s3 sync s3://openproblems-bio/public/phase1-data/ output/datasets/ --profile op2 --delete --dryrun
 
 starter_dev <- c("s1d1", "s1d2")
 train <- c("s1d1", "s1d3", "s2d1", "s2d4", "s2d5", "s3d3", "s3d6", "s3d10")
@@ -14,7 +15,7 @@ valid <- c("s1d2", "s3d7")
 test <- c("s4d1", "s4d8", "s4d9")
 
 resources_test <- "resources_test/common/"
-output_dir <- "output/datasets/common/"
+output_dir <- "output/datasets_2021-11-08/common/"
 
 
 #############################
@@ -27,12 +28,12 @@ ad1te <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_gex_proces
 ad2te <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_atac_processed_test_donors.h5ad")
 ad1 <- anndata::concat(list(ad1tr, ad1te))
 ad1$obs <- ad1$obs %>% mutate_if(is.character, factor)
-ad1$var <- ad1tr$var %>% select(-starts_with("highly_variable"), -starts_with("n_cells"))
+ad1$var <- ad1tr$var %>% select(-contains("-s4d"))
 ad1$uns <- ad1tr$uns
 ad2 <- anndata::concat(list(ad2tr, ad2te))
 ad2$obs <- ad2$obs %>% mutate_if(is.character, factor)
 ad2$uns <- ad2tr$uns
-ad2$var <- ad2tr$var %>% select(-starts_with("highly_variable"), -starts_with("n_cells"))
+ad2$var <- ad2tr$var %>% select(-contains("-s4d"))
 adid <- "openproblems_bmmc_multiome"
 assert_that(all(rownames(ad1) == rownames(ad2)))
 
@@ -81,22 +82,22 @@ ad1_phase1$write_h5ad(paste0(output_dir, adid_phase1, "/", adid_phase1, ".manual
 ad2_phase1$write_h5ad(paste0(output_dir, adid_phase1, "/", adid_phase1, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
-# #############
-# # create phase 2
+#############
+# create phase 2
 
-# ad1_phase2 <- ad1$copy()
-# ad2_phase2 <- ad2$copy()
+ad1_phase2 <- ad1$copy()
+ad2_phase2 <- ad2$copy()
 
-# ad1_phase2$obs[["is_train"]] <- ad1_phase2$obs[["batch"]] %in% c(train, valid)
-# ad2_phase2$obs[["is_train"]] <- ad1_phase2$obs[["batch"]] %in% c(train, valid)
+ad1_phase2$obs[["is_train"]] <- ad1_phase2$obs[["batch"]] %in% c(train, valid)
+ad2_phase2$obs[["is_train"]] <- ad1_phase2$obs[["batch"]] %in% c(train, valid)
 
-# adid_phase2 <- paste0(adid, "_phase2")
-# ad1_phase2$uns[["dataset_id"]] <- adid_phase2
-# ad2_phase2$uns[["dataset_id"]] <- adid_phase2
+adid_phase2 <- paste0(adid, "_phase2")
+ad1_phase2$uns[["dataset_id"]] <- adid_phase2
+ad2_phase2$uns[["dataset_id"]] <- adid_phase2
 
-# dir.create(paste0(output_dir, adid_phase2), recursive = TRUE)
-# ad1_phase2$write_h5ad(paste0(output_dir, adid_phase2, "/", adid_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
-# ad2_phase2$write_h5ad(paste0(output_dir, adid_phase2, "/", adid_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
+dir.create(paste0(output_dir, adid_phase2), recursive = TRUE)
+ad1_phase2$write_h5ad(paste0(output_dir, adid_phase2, "/", adid_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
+ad2_phase2$write_h5ad(paste0(output_dir, adid_phase2, "/", adid_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
 #############
@@ -130,18 +131,24 @@ ad2_starter$write_h5ad(paste0(resources_test, adid_starter, "/", adid_starter, "
 
 #############################
 # Process cite
-
-# read data
-bd1 <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_train.h5ad")
-bd2 <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_train.h5ad")
+bd1tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_train.h5ad")
+bd2tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_train.h5ad")
+bd1te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_test_donors.h5ad")
+bd2te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_test_donors.h5ad")
+bd1 <- anndata::concat(list(bd1tr, bd1te))
+bd1$obs <- bd1$obs %>% mutate_if(is.character, factor)
+bd1$var <- bd1tr$var %>% select(-contains("-s4d"))
+bd1$uns <- bd1tr$uns
+bd2 <- anndata::concat(list(bd2tr, bd2te))
+bd2$obs <- bd2$obs %>% mutate_if(is.character, factor)
+bd2$uns <- bd2tr$uns
+bd2$var <- bd2tr$var %>% select(-contains("-s4d"))
 bdid <- "openproblems_bmmc_cite"
 assert_that(all(rownames(bd1) == rownames(bd2)))
 
 levels(bd1$obs$batch)
-assert_that(!any(backup_test %in% levels(bd1$obs$batch)))
-assert_that(!any(backup_test %in% levels(bd2$obs$batch)))
-testthat::expect_length(setdiff(bd1$obs$batch, c(train, valid, backup_test)), 0)
-setdiff(c(train, valid, backup_test), unique(bd1$obs$batch))
+testthat::expect_length(setdiff(bd1$obs$batch, c(train, valid, test)), 0)
+setdiff(c(train, valid, test), unique(bd1$obs$batch))
 
 # check reads
 bd1$layers[["counts"]][1:10, 1:10]
@@ -184,22 +191,22 @@ bd1_phase1$write_h5ad(paste0(output_dir, bdid_phase1, "/", bdid_phase1, ".manual
 bd2_phase1$write_h5ad(paste0(output_dir, bdid_phase1, "/", bdid_phase1, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
-# #############
-# # create phase 2
+#############
+# create phase 2
 
-# bd1_phase2 <- bd1$copy()
-# bd2_phase2 <- bd2$copy()
+bd1_phase2 <- bd1$copy()
+bd2_phase2 <- bd2$copy()
 
-# bd1_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
-# bd2_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
+bd1_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
+bd2_phase2$obs[["is_train"]] <- bd1_phase2$obs[["batch"]] %in% c(train, valid)
 
-# bdid_phase2 <- paste0(bdid, "_phase2")
-# bd1_phase2$uns[["dataset_id"]] <- bdid_phase2
-# bd2_phase2$uns[["dataset_id"]] <- bdid_phase2
+bdid_phase2 <- paste0(bdid, "_phase2")
+bd1_phase2$uns[["dataset_id"]] <- bdid_phase2
+bd2_phase2$uns[["dataset_id"]] <- bdid_phase2
 
-# dir.create(paste0(output_dir, bdid_phase2), recursive = TRUE)
-# bd1_phase2$write_h5ad(paste0(output_dir, bdid_phase2, "/", bdid_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
-# bd2_phase2$write_h5ad(paste0(output_dir, bdid_phase2, "/", bdid_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
+dir.create(paste0(output_dir, bdid_phase2), recursive = TRUE)
+bd1_phase2$write_h5ad(paste0(output_dir, bdid_phase2, "/", bdid_phase2, ".manual_formatting.output_rna.h5ad"), compression = "gzip")
+bd2_phase2$write_h5ad(paste0(output_dir, bdid_phase2, "/", bdid_phase2, ".manual_formatting.output_mod2.h5ad"), compression = "gzip")
 
 
 
