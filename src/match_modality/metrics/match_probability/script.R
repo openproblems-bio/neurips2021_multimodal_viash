@@ -25,7 +25,7 @@ X_pred <- as(ad_pred$X, "CsparseMatrix")[, order(pairing_ix)]
 dimnames(X_pred) <- list(NULL, NULL)
 
 # set negative values to 0
-X_pred$X@x <- ifelse(X_pred$X@x < 0, 0, X_pred$X@x)
+X_pred@x <- ifelse(X_pred@x < 0, 0, X_pred@x)
 
 cat("Calculating normalisation factors\n")
 rowSum <- Matrix::rowSums(X_pred)
