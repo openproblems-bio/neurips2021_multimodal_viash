@@ -14,7 +14,7 @@ par <- list(
 ## VIASH END
 
 cat("Read solution h5ad\n")
-ad_sol <- anndata::read_h5ad(par$input_solution, backed = TRUE)
+ad_sol <- anndata::read_h5ad(par$input_solution, backed = "r")
 
 cat("Read prediction h5ad\n")
 ad_pred <- anndata::read_h5ad(par$input_prediction)

@@ -12,7 +12,7 @@ par <- list(
 ## VIASH END
 
 cat("Read prediction h5ad\n")
-ad_sol <- anndata::read_h5ad(par$input_solution)
+ad_sol <- anndata::read_h5ad(par$input_solution, backed = "r")
 
 cat("Checking solution h5ad\n")
 correct_format <- tryCatch({
