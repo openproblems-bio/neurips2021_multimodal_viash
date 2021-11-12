@@ -16,7 +16,7 @@ par <- list(
 )
 ## VIASH END
 
-json_metrics <- c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")
+json_metrics <- c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean", "arithmetic_mean")
 
 cat("Reading solution meta files\n")
 dataset_meta <- 
@@ -114,13 +114,13 @@ scores1 <- bind_rows(
   filter(metric_id != "latent_mixing", !grepl("rfoob_", metric_id))
 
 cat("Calculating geometric mean\n")
-geomean <- scores1 %>%
-  filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
+arimean <- scores1 %>%
+  filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean")) %>%
   group_by(dataset_id, dataset_orig_id, method_id, dataset_subtask) %>%
-  summarise_if(is.numeric, function(x) dynutils::calculate_geometric_mean(pmax(x, 0) + 1) - 1) %>%
+  summarise_if(is.numeric, function(x) dynutils::calculate_arithmetic_mean(x)) %>%
   ungroup() %>%
-  mutate(metric_id = "geometric_mean")
-final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)
+  mutate(metric_id = "arithmetic_mean")
+final_scores <- bind_rows(scores1 %>% filter(metric_id != "arithmetic_mean"), arimean)
 
 summary <-
   final_scores %>%
@@ -133,18 +133,6 @@ summary <-
   )
 
 # unique(scores$metric_id)
-
-# summary %>%
-#   filter(metric_id == "mean_spearman_per_cell") %>%
-#   select(-var) %>%
-#   spread(subtask, mean) %>%
-#   arrange(Overall)
-
-# summary %>%
-#   filter(metric_id == "mse") %>%
-#   select(-var) %>%
-#   spread(subtask, mean) %>%
-#   arrange(Overall)
 
 json_out <- summary %>%
   filter(metric_id %in% json_metrics) %>%
