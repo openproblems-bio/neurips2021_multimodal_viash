@@ -11,25 +11,33 @@ set.seed(1)
 
 starter_dev <- c("s1d1", "s1d2")
 train <- c(
-  "s1d1", "s1d3", 
-  "s2d1", "s2d4", "s2d5", 
+  "s1d1", "s1d3",
+  "s2d1", "s2d4", "s2d5",
   "s3d3", "s3d6", "s3d10"
 )
 valid <- c("s1d2", "s3d7")
 test <- c("s4d1", "s4d8", "s4d9")
 
 resources_test <- "resources_test/common/"
-output_dir <- "output/datasets_2021-11-08/common/"
+output_dir <- "output/datasets_2021-11-08/private/common/"
 
+
+## process previous samplings
+# prev <- anndata::read_h5ad("output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_train_mod2.h5ad", backed = "r")
+# readr::write_lines(prev$var_names, "src/common/datasets/process_inhouse_datasets/sample_pm_atac_varnames.txt")
 
 #############################
 # Process multiome
 
 # read data
+
+ad1old <- read_h5ad("output/manual_formatting/multiome/Multiome_gex_processed_train.h5ad", backed = "r")
+ad2old <- read_h5ad("output/manual_formatting/multiome/Multiome_atac_processed_train.h5ad", backed = "r")
 ad1tr <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_gex_processed_train.h5ad")
 ad2tr <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_atac_processed_train.h5ad")
 ad1te <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_gex_processed_test_donors.h5ad")
 ad2te <- read_h5ad("output/manual_formatting_2021-11-08/atac/Multiome_atac_processed_test_donors.h5ad")
+# TODO: subset adatas
 ad1 <- anndata::concat(list(ad1tr, ad1te))
 ad1$obs <- ad1$obs %>% mutate_if(is.character, factor)
 ad1$var <- ad1tr$var %>% select(-contains("-s4d"))
@@ -69,8 +77,6 @@ ad1$obs[["pseudotime_order_ATAC"]] <- ad2$obs[["pseudotime_order_ATAC"]]
 ad2$obs[["pseudotime_order_GEX"]] <- ad1$obs[["pseudotime_order_GEX"]]
 
 # # create samplings
-# # prev <- anndata::read_h5ad("output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_train_mod2.h5ad")
-# # readr::write_lines(prev$var_names, "src/common/datasets/process_inhouse_datasets/sample_pm_atac_varnames.txt")
 # ad2$uns$sample_pm_varnames <- readr::read_lines("src/common/datasets/process_inhouse_datasets/sample_pm_atac_varnames.txt")
 
 # ad1$uns$sample_pm_obs # sample 1000
@@ -126,7 +132,7 @@ ad1_starter <- ad1[row_sel, col_sel1]$copy()
 ad2_starter <- ad2[row_sel, col_sel2]$copy()
 
 ad1_starter$obsm <- NULL
-ad2_starter$obsm <- NULL
+ad2_starter$obsm <- ad2_starter$obsm["gene_activity"]
 
 ad1_starter$obs[["is_train"]] <- ad1_starter$obs[["batch"]] %in% train
 ad2_starter$obs[["is_train"]] <- ad2_starter$obs[["batch"]] %in% train
@@ -142,13 +148,15 @@ ad2_starter$write_h5ad(paste0(resources_test, adid_starter, "/", adid_starter, "
 
 
 
-
 #############################
 # Process cite
+bd1old <- read_h5ad("output/manual_formatting/cite/Cite_gex_processed_train.h5ad", backed = "r")
+bd2old <- read_h5ad("output/manual_formatting/cite/Cite_adt_processed_train.h5ad", backed = "r")
 bd1tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_train.h5ad")
 bd2tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_train.h5ad")
 bd1te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_test_donors.h5ad")
 bd2te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_test_donors.h5ad")
+# TODO: subset adatas
 bd1 <- anndata::concat(list(bd1tr, bd1te))
 bd1$obs <- bd1$obs %>% mutate_if(is.character, factor)
 bd1$var <- bd1tr$var %>% select(-contains("-s4d"))
