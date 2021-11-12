@@ -39,6 +39,9 @@ functionality:
       example: "dataset_solution.h5ad"
       description: The solution file.
       required: true
+    - name: "--train_only"
+      type: "boolean_true"
+      description: Whether or not to only omit the train cells.
   resources:
     - type: r_script
       path: script.R

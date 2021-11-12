@@ -14,7 +14,8 @@ par <- list(
   input_mod2 = paste0(input_path, "output_mod2.h5ad"),
   output_mod1 = paste0(output_path, "output_mod1.h5ad"),
   output_mod2 = paste0(output_path, "output_mod2.h5ad"),
-  output_solution = paste0(output_path, "solution.h5ad")
+  output_solution = paste0(output_path, "solution.h5ad"),
+  train_only = TRUE
 )
 ## VIASH END
 
@@ -61,6 +62,13 @@ out_solution <- anndata::AnnData(
   ),
   uns = ad1_uns
 )
+
+if (par$train_only) {
+  cat("Filtering out test cells\n", sep = "")
+  out_mod1 <- out_mod1[input_mod1$obs$is_train, ]$copy()
+  out_mod2 <- out_mod2[input_mod1$obs$is_train, ]$copy()
+  out_solution <- out_solution[input_mod1$obs$is_train, ]$copy()
+}
 
 cat("Saving output files as h5ad\n")
 cat("output_mod1:")

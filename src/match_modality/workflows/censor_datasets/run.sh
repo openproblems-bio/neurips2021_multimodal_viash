@@ -36,8 +36,8 @@ bin/nextflow \
 bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/censor_datasets/main.nf \
-  --datasets 'output/datasets_2021-11-08/common/**.h5ad' \
-  --publishDir output/datasets_2021-11-08/match_modality/ \
+  --datasets 'output/datasets_2021-11-08/private/common/**.h5ad' \
+  --publishDir output/datasets_2021-11-08/private/match_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
   --censor_dataset__seed $SEED_SECRET

@@ -27,10 +27,22 @@ bin/nextflow \
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-  --datasets 'output/datasets_2021-11-08/common/**.h5ad' \
-  --publishDir output/datasets_2021-11-08/joint_embedding/ \
+  --datasets 'output/datasets_2021-11-08/private/common/**.h5ad' \
+  --publishDir output/datasets_2021-11-08/public/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
-  --censor_dataset__seed $SEED_SECRET
+  --censor_dataset__seed $SEED_SECRET \
+  --censor_dataset__train_only true
+
+
+bin/nextflow \
+  run . \
+  -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
+  --datasets 'output/datasets_2021-11-08/private/common/**.h5ad' \
+  --publishDir output/datasets_2021-11-08/private/joint_embedding/ \
+  -resume \
+  -c src/common/workflows/resource_labels_vhighmem.config \
+  --censor_dataset__seed $SEED_SECRET \
+  --censor_dataset__train_only false
 
 
