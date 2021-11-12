@@ -247,3 +247,33 @@ bd2_starter$obsm <- NULL
 dir.create(paste0(resources_test, bdid_starter), recursive = TRUE)
 bd1_starter$write_h5ad(paste0(resources_test, bdid_starter, "/", bdid_starter, ".output_rna.h5ad"), compression = "gzip")
 bd2_starter$write_h5ad(paste0(resources_test, bdid_starter, "/", bdid_starter, ".output_mod2.h5ad"), compression = "gzip")
+
+
+# compare sizes
+
+orig <- c(
+  list.files("output/datasets/common", recursive = TRUE, full.names = TRUE),
+  list.files("output/datasets_2021-11-08/common", recursive = TRUE, full.names = TRUE)
+)
+
+df <- map_df(
+  orig,
+  function(fn) {
+    ad <- anndata::read_h5ad(fn, backed = "r")
+    tibble(
+      path = fn,
+      dataset_id = ad$uns[["dataset_id"]],
+      n_obs = nrow(ad),
+      n_vars = ncol(ad),
+      modality = unique(ad$var$feature_types)
+    )
+  }
+)
+
+df %>%
+  mutate(
+    phase = gsub(".*phase([^_]*)", "\\1", dataset_id),
+    platform = gsub(".*bmmc_([^_]*)_.*", "\\1", dataset_id)
+  ) %>%
+  arrange(platform, modality, phase) %>%
+  select(-path)
