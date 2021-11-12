@@ -8,7 +8,9 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 ## VIASH START
 # input_path <- "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
-input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
+# input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
+input_path <- "output/datasets_2021-11-08/common/openproblems_bmmc_cite_phase1v2/openproblems_bmmc_cite_phase1v2.manual_formatting."
+input_path <- "output/datasets_2021-11-08/common/openproblems_bmmc_multiome_phase1v2/openproblems_bmmc_multiome_phase1v2.manual_formatting."
 output_path <- ""
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset."
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_iid/openproblems_bmmc_multiome_iid.censor_dataset."
@@ -30,13 +32,38 @@ par <- list(
 
 set.seed(par$seed)
 
+subset_mats <- function(li, obs_filt, anonymize = FALSE) {
+  out <- list()
+  for (n in names(li)) {
+    mat <- li[[n]][obs_filt, , drop = FALSE]
+    if (anonymize) {
+      rownames(mat) <- paste0("cell_", seq_len(nrow(mat)))
+    }
+    out[[n]] <- mat
+  }
+  out
+}
+
+
 cat("Reading input data\n")
 input_mod1 <- anndata::read_h5ad(par$input_mod1)
 input_mod2 <- anndata::read_h5ad(par$input_mod2)
 ad1_mod <- unique(input_mod1$var[["feature_types"]])
 ad2_mod <- unique(input_mod2$var[["feature_types"]])
 new_dataset_id <- paste0(input_mod1$uns[["dataset_id"]], "_MM_", tolower(ad1_mod), "2", tolower(ad2_mod))
-common_uns <- list(dataset_id = new_dataset_id)
+ad1_uns <- list(dataset_id = new_dataset_id)
+ad2_uns <- list(dataset_id = new_dataset_id)
+ad1_obsm <- list()
+ad2_obsm <- list()
+
+if (ad1_mod == "ATAC") {
+  ad1_uns$gene_activity_var_names <- input_mod1$uns$gene_activity_var_names
+  ad1_obsm$gene_activity <- as(input_mod1$obsm$gene_activity, "CsparseMatrix")
+}
+if (ad2_mod == "ATAC") {
+  ad2_uns$gene_activity_var_names <- input_mod2$uns$gene_activity_var_names
+  ad2_obsm$gene_activity <- as(input_mod2$obsm$gene_activity, "CsparseMatrix")
+}
 
 cat("Shuffle train cells\n")
 train_ix <- which(input_mod1$obs$is_train) %>% sort
@@ -57,26 +84,28 @@ train_obs1 <- input_mod1$obs[train_ix, , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 train_obs2 <- input_mod2$obs[train_ix, , drop = FALSE] %>%
-  select(one_of("size_factors")) %>%
+  select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(train_obs2) <- NULL
 if (ncol(train_obs2) == 0) train_obs2 <- NULL
+assert_that("size_factors" %in% colnames(train_obs1) != "size_factors" %in% colnames(train_obs2))
 
 output_train_mod1 <- anndata::AnnData(
   X = input_mod1$X[train_ix, , drop = FALSE],
-  layers = list(counts = input_mod1$layers[["counts"]][train_ix, , drop = FALSE]),
+  layers = subset_mats(input_mod1$layers, train_ix),
+  obsm = subset_mats(ad1_obsm, train_ix),
   obs = train_obs1,
   var = mod1_var,
-  uns = common_uns
+  uns = ad1_uns
 )
 output_train_mod2 <- anndata::AnnData(
   X = input_mod2$X[train_ix[train_mod2_ix], , drop = FALSE] %>%
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
-  layers = list(counts = input_mod2$layers[["counts"]][train_ix[train_mod2_ix], , drop = FALSE] %>%
-    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
+  layers = subset_mats(input_mod2$layers, train_ix[train_mod2_ix], anonymize = TRUE),
+  obsm = subset_mats(ad2_obsm, train_ix[train_mod2_ix], anonymize = TRUE),
   obs = train_obs2,
   var = mod2_var,
-  uns = common_uns
+  uns = ad2_uns
 )
 
 cat("Create test objects\n")
@@ -84,26 +113,28 @@ test_obs1 <- input_mod1$obs[test_ix, , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 test_obs2 <- input_mod2$obs[test_ix, , drop = FALSE] %>%
-  select(one_of("size_factors")) %>%
+  select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(test_obs2) <- NULL
 if (ncol(test_obs2) == 0) test_obs2 <- NULL
+assert_that("size_factors" %in% colnames(train_obs1) != "size_factors" %in% colnames(train_obs2))
 
 output_test_mod1 <- anndata::AnnData(
   X = input_mod1$X[test_ix, , drop = FALSE],
-  layers = list(counts = input_mod1$layers[["counts"]][test_ix, , drop = FALSE]),
+  layers = subset_mats(input_mod1$layers, test_ix),
+  obsm = subset_mats(ad1_obsm, test_ix),
   obs = test_obs1,
   var = mod1_var,
-  uns = common_uns
+  uns = ad1_uns
 )
 output_test_mod2 <- anndata::AnnData(
   X = input_mod2$X[test_ix[test_mod2_ix], , drop = FALSE] %>%
     magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.)))),
-  layers = list(counts = input_mod2$layers[["counts"]][test_ix[test_mod2_ix], , drop = FALSE] %>%
-    magrittr::set_rownames(., paste0("cell_", seq_len(nrow(.))))),
+  layers = subset_mats(input_mod2$layers, test_ix[test_mod2_ix], anonymize = TRUE),
+  obsm = subset_mats(ad2_obsm, test_ix[test_mod2_ix], anonymize = TRUE),
   obs = test_obs2,
   var = mod2_var,
-  uns = common_uns
+  uns = ad2_uns
 )
 
 cat("Create solution objects\n")

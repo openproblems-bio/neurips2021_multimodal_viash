@@ -447,6 +447,7 @@ functionality:
       
       ## VIASH END
       
+      cat("Using seed ", par\$seed, "\\n", sep = "")
       set.seed(par\$seed)
       
       cat("Reading input data\\n")
@@ -455,20 +456,35 @@ functionality:
       ad1_mod <- unique(input_mod1\$var[["feature_types"]])
       ad2_mod <- unique(input_mod2\$var[["feature_types"]])
       new_dataset_id <- paste0(input_mod1\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
-      common_uns <- list(dataset_id = new_dataset_id)
+      ad1_uns <- list(dataset_id = new_dataset_id)
+      ad2_uns <- list(dataset_id = new_dataset_id)
+      ad1_obsm <- list()
+      ad2_obsm <- list()
+      ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
+      ad2_var <- input_mod2\$var %>% select(one_of("gene_ids"), feature_types)
       
+      if (ad1_mod == "ATAC") {
+        input_mod1\$X@x <- (input_mod1\$X@x > 0) + 0
+        # copy gene activity in new object
+        ad1_uns\$gene_activity_var_names <- input_mod1\$uns\$gene_activity_var_names
+        ad1_obsm\$gene_activity <- as(input_mod1\$obsm\$gene_activity, "CsparseMatrix")
+      }
       
       if (ad2_mod == "ATAC") {
         if (ncol(input_mod2) > 10000) {
           poss_ix <- which(Matrix::colSums(input_mod2\$X) > 0)
-          input_mod2 <- input_mod2[, sort(sample(poss_ix, 10000))]\$copy()
+          sel_ix <- sort(sample(poss_ix, 10000))
+          input_mod2 <- input_mod2[, sel_ix]\$copy()
+          ad2_var <- ad2_var[sel_ix, , drop = FALSE]
         }
         input_mod2\$X@x <- (input_mod2\$X@x > 0) + 0
+      
+        # copy gene activity in new object
+        ad2_uns\$gene_activity_var_names <- input_mod2\$uns\$gene_activity_var_names
+        ad2_obsm\$gene_activity <- as(input_mod2\$obsm\$gene_activity, "CsparseMatrix")
       }
       
-      cat("Creating train objects\\n")
-      ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
-      ad2_var <- input_mod2\$var %>% select(one_of("gene_ids"), feature_types)
+      cat("Creating train/test split\\n")
       is_train <- which(input_mod1\$obs[["is_train"]])
       is_test <- which(!input_mod1\$obs[["is_train"]])
       
@@ -483,36 +499,48 @@ functionality:
       
       train_obs <- input_mod1\$obs[is_train, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
       test_obs <- input_mod1\$obs[is_test, , drop = FALSE] %>% select(one_of("batch", "size_factors"))
+      subset_mats <- function(li, obs_filt) {
+        out <- list()
+        for (n in names(li)) {
+          out[[n]] <- li[[n]][obs_filt, , drop = FALSE]
+        }
+        out
+      }
       
+      cat("Create train objects\\n")
       output_train_mod1 <- anndata::AnnData(
         X = input_mod1\$X[is_train, , drop = FALSE],
-        layers = list(counts = input_mod1\$layers[["counts"]][is_train, , drop = FALSE]),
+        layers = subset_mats(input_mod1\$layers, is_train),
+        obsm = subset_mats(ad1_obsm, is_train),
         obs = train_obs,
         var = ad1_var,
-        uns = common_uns
+        uns = ad1_uns
       )
       output_train_mod2 <- anndata::AnnData(
         X = input_mod2\$X[is_train, , drop = FALSE],
-        layers = list(counts = input_mod2\$layers[["counts"]][is_train, , drop = FALSE]),
+        layers = subset_mats(input_mod2\$layers, is_train),
+        obsm = subset_mats(ad2_obsm, is_train),
         obs = train_obs,
         var = ad2_var,
-        uns = common_uns
+        uns = ad2_uns
       )
       
       cat("Create test objects\\n")
       output_test_mod1 <- anndata::AnnData(
         X = input_mod1\$X[is_test, , drop = FALSE],
-        layers = list(counts = input_mod1\$layers[["counts"]][is_test, , drop = FALSE]),
+        layers = subset_mats(input_mod1\$layers, is_test),
+        obsm = subset_mats(ad1_obsm, is_test),
         obs = test_obs,
         var = ad1_var,
-        uns = common_uns
+        uns = ad1_uns
       )
       output_test_mod2 <- anndata::AnnData(
         X = input_mod2\$X[is_test, , drop = FALSE],
-        layers = list(counts = input_mod2\$layers[["counts"]][is_test, , drop = FALSE]),
+        layers = subset_mats(input_mod2\$layers, is_test),
+        obsm = subset_mats(ad2_obsm, is_test),
         obs = test_obs,
         var = ad2_var,
-        uns = common_uns
+        uns = ad2_uns
       )
       
       cat("Saving output files as h5ad\\n")
@@ -1070,5 +1098,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "47936678f60fbcd0260092b8172a5c43bf3c38e6"
+  git_commit: "381f6757d8de48886528dc6492b1d41103b5d28b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
