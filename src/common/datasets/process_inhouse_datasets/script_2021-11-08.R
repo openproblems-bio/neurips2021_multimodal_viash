@@ -10,7 +10,11 @@ set.seed(1)
 # aws s3 sync s3://openproblems-bio/public/phase1-data/ output/datasets/ --profile op2 --delete --dryrun
 
 starter_dev <- c("s1d1", "s1d2")
-train <- c("s1d1", "s1d3", "s2d1", "s2d4", "s2d5", "s3d3", "s3d6", "s3d10")
+train <- c(
+  "s1d1", "s1d3", 
+  "s2d1", "s2d4", "s2d5", 
+  "s3d3", "s3d6", "s3d10"
+)
 valid <- c("s1d2", "s3d7")
 test <- c("s4d1", "s4d8", "s4d9")
 
@@ -39,7 +43,7 @@ assert_that(all(rownames(ad1) == rownames(ad2)))
 
 unique(ad1$obs$batch)
 assert_that(length(setdiff(ad1$obs$batch, c(train, valid, test))) == 0)
-sort(setdiff(c(train, valid, backup_test), unique(ad1$obs$batch)))
+sort(setdiff(c(train, valid, test), unique(ad1$obs$batch)))
 
 # check reads
 ad1$layers[["counts"]][1:10, 1:10]
@@ -64,6 +68,16 @@ assert_that(max(ad2$X) < 100)
 ad1$obs[["pseudotime_order_ATAC"]] <- ad2$obs[["pseudotime_order_ATAC"]]
 ad2$obs[["pseudotime_order_GEX"]] <- ad1$obs[["pseudotime_order_GEX"]]
 
+# # create samplings
+# # prev <- anndata::read_h5ad("output/datasets/predict_modality/openproblems_bmmc_multiome_phase1_rna/openproblems_bmmc_multiome_phase1_rna.censor_dataset.output_train_mod2.h5ad")
+# # readr::write_lines(prev$var_names, "src/common/datasets/process_inhouse_datasets/sample_pm_atac_varnames.txt")
+# ad2$uns$sample_pm_varnames <- readr::read_lines("src/common/datasets/process_inhouse_datasets/sample_pm_atac_varnames.txt")
+
+# ad1$uns$sample_pm_obs # sample 1000
+# ad2$uns$sample_pm_obs # sample 1000
+# ad1$uns$sample_mm_train_obs # shuff
+# ad1$uns$sample_mm_test_obs # shuff
+
 #############
 # create phase 1
 
@@ -73,7 +87,7 @@ ad2_phase1 <- ad2[ad2$obs$batch %in% c(train, valid), ]$copy()
 ad1_phase1$obs[["is_train"]] <- ad1_phase1$obs[["batch"]] %in% train
 ad2_phase1$obs[["is_train"]] <- ad1_phase1$obs[["batch"]] %in% train
 
-adid_phase1 <- paste0(adid, "_phase1")
+adid_phase1 <- paste0(adid, "_phase1v2")
 ad1_phase1$uns[["dataset_id"]] <- adid_phase1
 ad2_phase1$uns[["dataset_id"]] <- adid_phase1
 
@@ -182,7 +196,7 @@ bd2_phase1 <- bd2[bd2$obs$batch %in% c(train, valid), ]$copy()
 bd1_phase1$obs[["is_train"]] <- bd1_phase1$obs[["batch"]] %in% train
 bd2_phase1$obs[["is_train"]] <- bd1_phase1$obs[["batch"]] %in% train
 
-bdid_phase1 <- paste0(bdid, "_phase1")
+bdid_phase1 <- paste0(bdid, "_phase1v2")
 bd1_phase1$uns[["dataset_id"]] <- bdid_phase1
 bd2_phase1$uns[["dataset_id"]] <- bdid_phase1
 

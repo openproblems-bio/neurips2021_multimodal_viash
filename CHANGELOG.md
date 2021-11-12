@@ -8,6 +8,14 @@
 
 * Joint Embedding Metrics: The scib package has been renamed from scIB to scib.
 
+* Predict Modality Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
+* Match Modality Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
+* Match Modality Censor: Store batch information in `.obs["batch"]` for all cells, even test mod2 profiles.
+
+* Joint Embedding Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
 ## BUG FIXES
 
 * Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.
@@ -20,7 +28,7 @@
 
 ## MINOR CHANGES
 
-* Predict Modality: Also store the size factors in the censored datasets.
+* Predict Modality Censor: Store the size factors in `.obs["size_factor"]`.
 
 * Nextflow: Added gpu label.
 
