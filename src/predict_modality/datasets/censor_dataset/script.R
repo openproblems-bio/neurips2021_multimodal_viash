@@ -7,7 +7,7 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ## VIASH START
 # data_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
-data_path <- "output/datasets_2021-11-08/common/openproblems_bmmc_multiome_phase1v2/openproblems_bmmc_multiome_phase1v2.manual_formatting."
+data_path <- "output/datasets_2021-11-08/private/common/openproblems_bmmc_multiome_phase1v2/openproblems_bmmc_multiome_phase1v2.manual_formatting."
 # data_path <- "output/public_datasets/common/dyngen_citeseq_1/dyngen_citeseq_1.split_traintest."
 out_path <- data_path %>% gsub("/common/", "/predict_modality/", .) %>% gsub("[^\\.]*\\.$", "censor_dataset\\.", .)
 par <- list(
@@ -46,8 +46,13 @@ if (ad1_mod == "ATAC") {
 
 if (ad2_mod == "ATAC") {
   if (ncol(input_mod2) > 10000) {
-    poss_ix <- which(Matrix::colSums(input_mod2$X) > 0)
-    sel_ix <- sort(sample(poss_ix, 10000))
+    sel_ix <- if (!is.null(input_mod2$uns[["..."]])) {
+
+    } else {
+      poss_ix <- which(Matrix::colSums(input_mod2$X) > 0)
+      sort(sample(poss_ix, 10000))
+    }
+    
     input_mod2 <- input_mod2[, sel_ix]$copy()
     ad2_var <- ad2_var[sel_ix, , drop = FALSE]
   }

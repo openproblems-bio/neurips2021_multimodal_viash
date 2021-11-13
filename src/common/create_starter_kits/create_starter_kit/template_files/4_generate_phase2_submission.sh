@@ -52,61 +52,6 @@ bin/viash build config.vsh.yaml -o target/nextflow -p nextflow \
 
 echo ""
 echo "######################################################################"
-echo "##                      Sync datasets from S3                       ##"
-echo "######################################################################"
-
-# don't sync data when testing the development starter kits
-if [[ $PIPELINE_VERSION != "main_build" ]]; then
-  VERSION_FILE="output/datasets/$par_task/VERSION"
-
-  # if the data is not found or is from a previous version starter kit,
-  # sync from aws to local
-  if [[ ! -f $VERSION_FILE || `cat $VERSION_FILE` != $PIPELINE_VERSION ]]; then
-    mkdir -p output/datasets/$par_task/
-
-    # use aws cli if installed
-    if command -v aws &> /dev/null; then
-      aws s3 sync --no-sign-request \
-        s3://openproblems-bio/public/phase1v2-data/$par_task/ \
-        output/datasets/$par_task/
-    # else use aws docker container instead
-    else
-      docker run \
-        --user $(id -u):$(id -g) \
-        --rm -it \
-        -v $(pwd)/output:/output \
-        amazon/aws-cli \
-        s3 sync --no-sign-request \
-        s3://openproblems-bio/public/phase1v2-data/$par_task/ \
-        /output/datasets/$par_task/
-    fi
-
-    echo "$PIPELINE_VERSION" > $VERSION_FILE
-  fi
-fi
-
-echo ""
-echo "######################################################################"
-echo "##            Generating submission files using nextflow            ##"
-echo "######################################################################"
-
-export NXF_VER=21.04.1
-
-# removing previous output
-[ -d output/predictions/$par_task/ ] && rm -r output/predictions/$par_task/
-
-bin/nextflow \
-  run openproblems-bio/neurips2021_multimodal_viash \
-  -r $PIPELINE_VERSION \
-  -main-script src/$par_task/workflows/generate_submission/main.nf \
-  --datasets 'output/datasets/$par_task/**phase1v2**.h5ad' \
-  --publishDir output/predictions/$par_task/ \
-  -resume \
-  -latest \
-  -c scripts/nextflow.config
-
-echo ""
-echo "######################################################################"
 echo "##                      Creating submission zip                     ##"
 echo "######################################################################"
 [ -f submission.zip ] && rm submission.zip
@@ -134,6 +79,10 @@ echo "Or this command to create a public one:"
 echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --public"
 echo ""
 echo "Good luck!"
+echo ""
+echo "PLEASE NOTE: the number of submissions for the phase 2 leaderboard is limited."
+echo "Make sure your component is working using the phase 1 leaderboard before submitting"
+echo "to phase 2."
 
 if [ $PIPELINE_VERSION != $LATEST_RELEASE ]; then
   echo ""
