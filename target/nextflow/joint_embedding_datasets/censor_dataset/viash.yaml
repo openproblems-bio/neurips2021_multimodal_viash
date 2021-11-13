@@ -62,6 +62,11 @@ functionality:
     direction: "Output"
     multiple: false
     multiple_sep: ":"
+  - type: "boolean_true"
+    name: "--train_only"
+    alternatives: []
+    description: "Whether or not to only omit the train cells."
+    direction: "Input"
   resources:
   - type: "bash_script"
     text: |
@@ -249,6 +254,12 @@ functionality:
         echo "        The solution file."
         echo ""
       
+      
+        echo "   --train_only"
+        echo "        type: boolean_true"
+        echo "        Whether or not to only omit the train cells."
+        echo ""
+      
       }
       
       # initialise array
@@ -320,6 +331,10 @@ functionality:
                   VIASH_PAR_OUTPUT_SOLUTION=$(ViashRemoveFlags "$1")
                   shift 1
                   ;;
+              --train_only)
+                  VIASH_PAR_TRAIN_ONLY=true
+                  shift 1
+                  ;;
               *)  # positional arg or unknown option
                   # since the positional args will be eval'd, can we always quote, instead of using ViashQuote
                   VIASH_POSITIONAL_ARGS="$VIASH_POSITIONAL_ARGS '$1'"
@@ -354,7 +369,9 @@ functionality:
         ViashError '--output_solution' is a required argument. Use "--help" to get more information on the parameters.
         exit 1
       fi
-      
+      if [ -z "$VIASH_PAR_TRAIN_ONLY" ]; then
+        VIASH_PAR_TRAIN_ONLY="false"
+      fi
       
       
       cat << VIASHEOF | bash
@@ -380,7 +397,8 @@ functionality:
         "input_mod2" = $( if [ ! -z ${VIASH_PAR_INPUT_MOD2+x} ]; then echo "'$VIASH_PAR_INPUT_MOD2'"; else echo NULL; fi ),
         "output_mod1" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD1+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD1'"; else echo NULL; fi ),
         "output_mod2" = $( if [ ! -z ${VIASH_PAR_OUTPUT_MOD2+x} ]; then echo "'$VIASH_PAR_OUTPUT_MOD2'"; else echo NULL; fi ),
-        "output_solution" = $( if [ ! -z ${VIASH_PAR_OUTPUT_SOLUTION+x} ]; then echo "'$VIASH_PAR_OUTPUT_SOLUTION'"; else echo NULL; fi )
+        "output_solution" = $( if [ ! -z ${VIASH_PAR_OUTPUT_SOLUTION+x} ]; then echo "'$VIASH_PAR_OUTPUT_SOLUTION'"; else echo NULL; fi ),
+        "train_only" = $( if [ ! -z ${VIASH_PAR_TRAIN_ONLY+x} ]; then echo "as.logical(toupper('$VIASH_PAR_TRAIN_ONLY'))"; else echo NULL; fi )
       )
       
       # get meta parameters
@@ -438,6 +456,13 @@ functionality:
         uns = ad1_uns
       )
       
+      if (par\$train_only) {
+        cat("Filtering out test cells\\n", sep = "")
+        out_mod1 <- out_mod1[input_mod1\$obs\$is_train, ]\$copy()
+        out_mod2 <- out_mod2[input_mod1\$obs\$is_train, ]\$copy()
+        out_solution <- out_solution[input_mod1\$obs\$is_train, ]\$copy()
+      }
+      
       cat("Saving output files as h5ad\\n")
       cat("output_mod1:")
       print(out_mod1)
@@ -472,6 +497,7 @@ functionality:
           censor_dataset__output_mod1 = "viash_no_value"
           censor_dataset__output_mod2 = "viash_no_value"
           censor_dataset__output_solution = "viash_no_value"
+          censor_dataset__train_only = "no_default_value_configured"
           id = ""
           testScript = "test.R"
           testResources = [ "test.R", "../../../../resources_test" ]
@@ -546,6 +572,17 @@ functionality:
                 value = "${params.censor_dataset__output_solution}"
                 example = "dataset_solution.h5ad"
                 description = "The solution file."
+              }
+              train_only {
+                name = "train_only"
+                otype = "--"
+                required = false
+                type = "boolean_true"
+                direction = "Input"
+                multiple = false
+                multiple_sep = ":"
+                value = "${params.censor_dataset__train_only}"
+                description = "Whether or not to only omit the train cells."
               }
             }
           }
@@ -956,5 +993,5 @@ info:
   output: "target/nextflow/joint_embedding_datasets/censor_dataset"
   executable: "target/nextflow/joint_embedding_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "381f6757d8de48886528dc6492b1d41103b5d28b"
+  git_commit: "83b2de6474e4cd8db9b22d99b8596842170dd25b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

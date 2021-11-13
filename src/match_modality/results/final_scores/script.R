@@ -134,7 +134,6 @@ summary <-
 json_out <- summary %>%
   filter(metric_id == json_metric) %>%
   select(-var, -metric_id) %>%
-  mutate(mean = mean * 1000) %>% # multiply mean by 1000 to obtain final score
   spread(dataset_subtask, mean) %>%
   arrange(Overall)
 

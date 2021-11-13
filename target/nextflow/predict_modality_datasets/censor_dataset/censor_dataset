@@ -387,8 +387,13 @@ if (ad1_mod == "ATAC") {
 
 if (ad2_mod == "ATAC") {
   if (ncol(input_mod2) > 10000) {
-    poss_ix <- which(Matrix::colSums(input_mod2\$X) > 0)
-    sel_ix <- sort(sample(poss_ix, 10000))
+    sel_ix <- if (!is.null(input_mod2\$uns[["..."]])) {
+
+    } else {
+      poss_ix <- which(Matrix::colSums(input_mod2\$X) > 0)
+      sort(sample(poss_ix, 10000))
+    }
+    
     input_mod2 <- input_mod2[, sel_ix]\$copy()
     ad2_var <- ad2_var[sel_ix, , drop = FALSE]
   }

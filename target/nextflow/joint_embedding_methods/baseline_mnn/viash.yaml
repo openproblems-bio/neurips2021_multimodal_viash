@@ -857,5 +857,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_mnn"
   executable: "target/nextflow/joint_embedding_methods/baseline_mnn/baseline_mnn"
   viash_version: "0.5.3"
-  git_commit: "381f6757d8de48886528dc6492b1d41103b5d28b"
+  git_commit: "83b2de6474e4cd8db9b22d99b8596842170dd25b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

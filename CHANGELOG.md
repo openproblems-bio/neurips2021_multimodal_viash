@@ -16,6 +16,8 @@
 
 * Joint Embedding Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
 
+* Joint Embedding Metrics: Use simple arithmetic mean to aggregate the final scores.
+
 ## BUG FIXES
 
 * Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.

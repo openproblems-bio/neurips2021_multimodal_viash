@@ -472,8 +472,13 @@ functionality:
       
       if (ad2_mod == "ATAC") {
         if (ncol(input_mod2) > 10000) {
-          poss_ix <- which(Matrix::colSums(input_mod2\$X) > 0)
-          sel_ix <- sort(sample(poss_ix, 10000))
+          sel_ix <- if (!is.null(input_mod2\$uns[["..."]])) {
+      
+          } else {
+            poss_ix <- which(Matrix::colSums(input_mod2\$X) > 0)
+            sort(sample(poss_ix, 10000))
+          }
+          
           input_mod2 <- input_mod2[, sel_ix]\$copy()
           ad2_var <- ad2_var[sel_ix, , drop = FALSE]
         }
@@ -1098,5 +1103,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "381f6757d8de48886528dc6492b1d41103b5d28b"
+  git_commit: "83b2de6474e4cd8db9b22d99b8596842170dd25b"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
