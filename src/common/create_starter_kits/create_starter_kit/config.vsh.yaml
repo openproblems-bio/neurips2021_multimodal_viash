@@ -40,6 +40,10 @@ functionality:
       type: "string"
       example: "2276"
       required: true
+    - name: "--evalai_phase2"
+      type: "string"
+      example: "2276"
+      required: true
     - name: "--memory"
       type: "string"
       default: "16 GB"

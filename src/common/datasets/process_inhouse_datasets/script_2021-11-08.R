@@ -160,22 +160,22 @@ rm(ad1_starter, ad2_starter)
 
 # read and subset mod1 data
 bd1old <- read_h5ad("output/manual_formatting/cite/Cite_gex_processed_train.h5ad", backed = "r")
-bd1tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_train.h5ad")
-bd1te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_test_donors.h5ad")
+bd1tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_train_fullfeat.h5ad")
+bd1te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_gex_processed_test_donors_fullfeat.h5ad")
 bd1 <- anndata::concat(list(bd1tr[, colnames(bd1old)], bd1te[, colnames(bd1old)]))
 bd1$obs <- bd1$obs %>% mutate_if(is.character, factor)
-bd1$var <- bd1tr$var[colnames(bd1old), ] %>% select(-contains("-s4d"))
+bd1$var <- bd1tr$var[colnames(bd1old), , drop = FALSE] %>% select(-contains("-s4d"))
 bd1$uns <- bd1tr$uns
 rm(bd1tr, bd1te)
 
 # read and subset mod2 data
 bd2old <- read_h5ad("output/manual_formatting/cite/Cite_adt_processed_train.h5ad", backed = "r")
-bd2tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_train.h5ad")
-bd2te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_test_donors.h5ad")
+bd2tr <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_train_fullfeat.h5ad")
+bd2te <- read_h5ad("output/manual_formatting_2021-11-08/cite/Cite_adt_processed_test_donors_fullfeat.h5ad")
 bd2 <- anndata::concat(list(bd2tr[, colnames(bd2old)], bd2te[, colnames(bd2old)]))
 bd2$obs <- bd2$obs %>% mutate_if(is.character, factor)
 bd2$uns <- bd2tr$uns
-bd2$var <- bd2tr$var[colnames(bd2old), ] %>% select(-contains("-s4d"))
+bd2$var <- bd2tr$var[colnames(bd2old), , drop = FALSE] %>% select(-contains("-s4d"))
 rm(bd2tr, bd2te)
 
 
@@ -275,7 +275,8 @@ rm(bd1_starter, bd2_starter)
 
 orig <- c(
   list.files("output/datasets/common", recursive = TRUE, full.names = TRUE),
-  list.files("output/datasets_2021-11-08/private/common", recursive = TRUE, full.names = TRUE)
+  list.files("output/datasets_2021-11-08/phase1v2/common", recursive = TRUE, full.names = TRUE),
+  list.files("output/datasets_2021-11-08/phase2/common", recursive = TRUE, full.names = TRUE)
 )
 
 df <- map_df(
