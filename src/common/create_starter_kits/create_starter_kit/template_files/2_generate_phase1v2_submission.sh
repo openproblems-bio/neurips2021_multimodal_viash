@@ -69,6 +69,9 @@ if [[ $PIPELINE_VERSION != "main_build" ]]; then
       aws s3 sync --no-sign-request \
         s3://openproblems-bio/public/phase1v2-data/$par_task/ \
         output/datasets/$par_task/
+      aws s3 sync --no-sign-request \
+        s3://openproblems-bio/public/phase2-data/$par_task/ \
+        output/datasets/$par_task/
     # else use aws docker container instead
     else
       docker run \
@@ -78,6 +81,14 @@ if [[ $PIPELINE_VERSION != "main_build" ]]; then
         amazon/aws-cli \
         s3 sync --no-sign-request \
         s3://openproblems-bio/public/phase1v2-data/$par_task/ \
+        /output/datasets/$par_task/
+      docker run \
+        --user $(id -u):$(id -g) \
+        --rm -it \
+        -v $(pwd)/output:/output \
+        amazon/aws-cli \
+        s3 sync --no-sign-request \
+        s3://openproblems-bio/public/phase2-data/$par_task/ \
         /output/datasets/$par_task/
     fi
 
