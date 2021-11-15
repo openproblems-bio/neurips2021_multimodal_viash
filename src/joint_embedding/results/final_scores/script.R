@@ -6,10 +6,10 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 out_path <- "output/pilot_inhouse/joint_embedding/output.final_scores.output_"
 par <- list(
-  input = list.files("work/51/edcecba8b7d4631d6232a63e4c5b36/", pattern = "*.h5ad$", full.names = TRUE),
+  input = list.files("/home/rcannood/workspace/viash_temp/neurips2021_work/85/c712592b7fd4839aef50eb4671f3f2/", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  dataset_meta = "results/meta_datasets.tsv",
+  dataset_meta = "output/datasets_2021-11-08/phase2_private/meta.tsv",
   output_scores = paste0(out_path, "scores.tsv"),
   output_summary = paste0(out_path, "summary.tsv"),
   output_json = paste0(out_path, "json.json")
@@ -116,7 +116,7 @@ scores1 <- bind_rows(
 cat("Calculating geometric mean\n")
 arimean <- scores1 %>%
   filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean")) %>%
-  group_by(dataset_id, dataset_orig_id, method_id, dataset_subtask) %>%
+  group_by(dataset_id, dataset_orig_id, method_id) %>%
   summarise_if(is.numeric, function(x) dynutils::calculate_arithmetic_mean(x)) %>%
   ungroup() %>%
   mutate(metric_id = "arithmetic_mean")
@@ -136,7 +136,7 @@ summary <-
 
 json_out <- summary %>%
   filter(metric_id %in% json_metrics) %>%
-  mutate(comb_id = paste0(metric_id, "_", dataset_subtask)) %>%
+  mutate(comb_id = ifelse(metric_id == "arithmetic_mean", metric_id, paste0(metric_id, "_", dataset_subtask))) %>%
   select(-var, -metric_id, -dataset_subtask) %>%
   spread(comb_id, mean) %>%
   arrange(asw_label_ADT)

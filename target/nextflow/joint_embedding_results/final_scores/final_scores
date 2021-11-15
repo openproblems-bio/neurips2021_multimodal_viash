@@ -488,7 +488,7 @@ scores1 <- bind_rows(
 cat("Calculating geometric mean\\n")
 arimean <- scores1 %>%
   filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean")) %>%
-  group_by(dataset_id, dataset_orig_id, method_id, dataset_subtask) %>%
+  group_by(dataset_id, dataset_orig_id, method_id) %>%
   summarise_if(is.numeric, function(x) dynutils::calculate_arithmetic_mean(x)) %>%
   ungroup() %>%
   mutate(metric_id = "arithmetic_mean")
@@ -508,7 +508,7 @@ summary <-
 
 json_out <- summary %>%
   filter(metric_id %in% json_metrics) %>%
-  mutate(comb_id = paste0(metric_id, "_", dataset_subtask)) %>%
+  mutate(comb_id = ifelse(metric_id == "arithmetic_mean", metric_id, paste0(metric_id, "_", dataset_subtask))) %>%
   select(-var, -metric_id, -dataset_subtask) %>%
   spread(comb_id, mean) %>%
   arrange(asw_label_ADT)
