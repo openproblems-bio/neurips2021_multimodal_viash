@@ -852,5 +852,5 @@ info:
   output: "target/nextflow/common_process_dataset/pseudotime_order"
   executable: "target/nextflow/common_process_dataset/pseudotime_order/pseudotime_order"
   viash_version: "0.5.3"
-  git_commit: "b6879f7b5825a44fb01228342f5a696cb49f82fc"
+  git_commit: "ceb294347f56e36945c63c33ba44f70b45ba8ebf"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
