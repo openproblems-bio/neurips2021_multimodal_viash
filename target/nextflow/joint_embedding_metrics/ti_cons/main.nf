@@ -145,9 +145,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process ti_cons_process {
-  label 'lowmem'
+  label 'midmem'
   label 'lowtime'
-  label 'lowcpu'
+  label 'midcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

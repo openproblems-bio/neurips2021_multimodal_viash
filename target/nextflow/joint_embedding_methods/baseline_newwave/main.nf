@@ -146,7 +146,7 @@ def overrideIO(_params, inputs, outputs) {
 
 process baseline_newwave_process {
   label 'highmem'
-  label 'midtime'
+  label 'hightime'
   label 'highcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }

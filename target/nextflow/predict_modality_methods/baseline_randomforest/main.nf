@@ -145,9 +145,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process baseline_randomforest_process {
-  label 'midmem'
+  label 'highmem'
   label 'lowtime'
-  label 'lowcpu'
+  label 'highcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

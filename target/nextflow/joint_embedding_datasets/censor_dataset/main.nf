@@ -145,7 +145,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process censor_dataset_process {
-  label 'medmem'
+  label 'midmem'
   label 'lowtime'
   label 'lowcpu'
   tag "${id}"

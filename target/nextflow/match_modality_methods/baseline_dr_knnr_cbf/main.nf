@@ -145,9 +145,9 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process baseline_dr_knnr_cbf_process {
-  label 'lowmem'
-  label 'lowtime'
-  label 'lowcpu'
+  label 'midmem'
+  label 'midtime'
+  label 'midcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'

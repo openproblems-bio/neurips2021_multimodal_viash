@@ -8,7 +8,7 @@ params.publishDir = "./"
 def checkParams(_params) {
   _params.arguments.collect{
     if (it.value == "viash_no_value") {
-      println("[ERROR] option --${it.name} not specified in component baseline_linearmodel")
+      println("[ERROR] option --${it.name} not specified in component ti_cons_batch")
       println("exiting now...")
         exit 1
     }
@@ -91,7 +91,7 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "baseline_linearmodel." + it.name + "." + extOrName
+          ? "ti_cons_batch." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
@@ -144,10 +144,10 @@ def overrideIO(_params, inputs, outputs) {
 
 }
 
-process baseline_linearmodel_process {
-  label 'lowmem'
+process ti_cons_batch_process {
+  label 'midmem'
   label 'lowtime'
-  label 'lowcpu'
+  label 'midcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }
   cache 'deep'
@@ -172,7 +172,7 @@ process baseline_linearmodel_process {
       # Running the pre-hook when necessary
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
-      ./${params.baseline_linearmodel.tests.testScript} | tee $output
+      ./${params.ti_cons_batch.tests.testScript} | tee $output
       """
     else
       """
@@ -185,14 +185,14 @@ process baseline_linearmodel_process {
       """
 }
 
-workflow baseline_linearmodel {
+workflow ti_cons_batch {
 
   take:
   id_input_params_
 
   main:
 
-  def key = "baseline_linearmodel"
+  def key = "ti_cons_batch"
 
   def id_input_output_function_cli_params_ =
     id_input_params_.map{ id, input, _params ->
@@ -237,7 +237,7 @@ workflow baseline_linearmodel {
       )
     }
 
-  result_ = baseline_linearmodel_process(id_input_output_function_cli_params_)
+  result_ = ti_cons_batch_process(id_input_output_function_cli_params_)
     | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
@@ -261,7 +261,7 @@ workflow baseline_linearmodel {
 
 workflow {
   def id = params.id
-  def fname = "baseline_linearmodel"
+  def fname = "ti_cons_batch"
 
   def _params = params
 
@@ -273,14 +273,14 @@ workflow {
     }
   }
 
-  def inputFiles = params.baseline_linearmodel
+  def inputFiles = params.ti_cons_batch
     .arguments
     .findAll{ key, par -> par.type == "file" && par.direction == "Input" }
     .collectEntries{ key, par -> [(par.name): file(params[fname].arguments[par.name].value) ] }
 
   def ch_ = Channel.from("").map{ s -> new Tuple3(id, inputFiles, params)}
 
-  result = baseline_linearmodel(ch_)
+  result = ti_cons_batch(ch_)
   result.view{ it[1] }
 }
 
@@ -293,17 +293,17 @@ workflow test {
 
   main:
   params.test = true
-  params.baseline_linearmodel.output = "baseline_linearmodel.log"
+  params.ti_cons_batch.output = "ti_cons_batch.log"
 
   Channel.from(rootDir) \
-    | filter { params.baseline_linearmodel.tests.isDefined } \
+    | filter { params.ti_cons_batch.tests.isDefined } \
     | map{ p -> new Tuple3(
         "tests",
-        params.baseline_linearmodel.tests.testResources.collect{ file( p + it ) },
+        params.ti_cons_batch.tests.testResources.collect{ file( p + it ) },
         params
     )} \
-    | baseline_linearmodel
+    | ti_cons_batch
 
   emit:
-  baseline_linearmodel.out
+  ti_cons_batch.out
 }
