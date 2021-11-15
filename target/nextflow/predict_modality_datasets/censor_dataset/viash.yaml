@@ -456,8 +456,8 @@ functionality:
       ad1_mod <- unique(input_mod1\$var[["feature_types"]])
       ad2_mod <- unique(input_mod2\$var[["feature_types"]])
       new_dataset_id <- paste0(input_mod1\$uns[["dataset_id"]], "_PM_", tolower(ad1_mod), "2", tolower(ad2_mod))
-      ad1_uns <- list(dataset_id = new_dataset_id)
-      ad2_uns <- list(dataset_id = new_dataset_id)
+      ad1_uns <- list(dataset_id = new_dataset_id, organism = "human")
+      ad2_uns <- list(dataset_id = new_dataset_id, organism = "human")
       ad1_obsm <- list()
       ad2_obsm <- list()
       ad1_var <- input_mod1\$var %>% select(one_of("gene_ids"), feature_types)
@@ -1103,5 +1103,5 @@ info:
   output: "target/nextflow/predict_modality_datasets/censor_dataset"
   executable: "target/nextflow/predict_modality_datasets/censor_dataset/censor_dataset"
   viash_version: "0.5.3"
-  git_commit: "cec20aaba6fb8ff9378ee9f364fb9b25f4f7e062"
+  git_commit: "b6879f7b5825a44fb01228342f5a696cb49f82fc"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

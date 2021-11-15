@@ -347,7 +347,7 @@ functionality:
       
       cat("Reading input files\\n")
       dataset_metadata_tsv <- 
-        map_df(par\$input_tsvs, read_tsv) %>% 
+        map_df(par\$input_tsvs, read_tsv) %>%
         select(dataset_id = id, geo_id)
       
       dataset_metadata_h5ad <- 
@@ -801,5 +801,5 @@ info:
   output: "target/nextflow/common_process_metadata/collect_dataset_metadata"
   executable: "target/nextflow/common_process_metadata/collect_dataset_metadata/collect_dataset_metadata"
   viash_version: "0.5.3"
-  git_commit: "cec20aaba6fb8ff9378ee9f364fb9b25f4f7e062"
+  git_commit: "b6879f7b5825a44fb01228342f5a696cb49f82fc"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -301,7 +301,7 @@ resources_dir = "$VIASH_RESOURCES_DIR"
 
 cat("Reading input files\\n")
 dataset_metadata_tsv <- 
-  map_df(par\$input_tsvs, read_tsv) %>% 
+  map_df(par\$input_tsvs, read_tsv) %>%
   select(dataset_id = id, geo_id)
 
 dataset_metadata_h5ad <- 
