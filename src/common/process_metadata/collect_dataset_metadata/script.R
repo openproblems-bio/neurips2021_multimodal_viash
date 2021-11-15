@@ -6,13 +6,23 @@ library(tidyverse)
 par <- list(
   input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
   input_h5ads = list.files("output/datasets/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
-  output = "results/meta_datasets.tsv"
+  output = "results/meta_phase1_datasets.tsv"
+)
+par <- list(
+  input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
+  input_h5ads = list.files("output/datasets_2021-11-08/phase1v2/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+  output = "results/meta_phase1v2_datasets.tsv"
+)
+par <- list(
+  input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
+  input_h5ads = list.files("output/datasets_2021-11-08/phase2_private/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+  output = "results/meta_phase2_datasets.tsv"
 )
 ## VIASH END
 
 cat("Reading input files\n")
 dataset_metadata_tsv <- 
-  map_df(par$input_tsvs, read_tsv) %>% 
+  map_df(par$input_tsvs, read_tsv) %>%
   select(dataset_id = id, geo_id)
 
 dataset_metadata_h5ad <- 

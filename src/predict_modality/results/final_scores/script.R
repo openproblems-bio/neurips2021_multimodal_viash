@@ -8,10 +8,10 @@ library(rlang)
 ## VIASH START
 out_path <- "output/pilot/predict_modality/output.final_scores.output_"
 par <- list(
-  input = "resources_test/predict_modality/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter.scores.h5ad",
+  input = list.files("/home/rcannood/Downloads/starter_kits/starter_kit-predict_modality-python/work/75/568119d27d1ed899d4b5ea0bc5446a", pattern = "*.h5ad$", recursive = TRUE, full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/predict_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  dataset_meta = "results/meta_datasets.tsv",
+  dataset_meta = "results/meta_phase1v2_datasets.tsv",
   output_scores = paste0(out_path, "scores.tsv"),
   output_summary = paste0(out_path, "summary.tsv"),
   output_json = paste0(out_path, "json.json")

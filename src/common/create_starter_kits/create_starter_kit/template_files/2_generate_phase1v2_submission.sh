@@ -99,7 +99,7 @@ bin/nextflow \
   run openproblems-bio/neurips2021_multimodal_viash \
   -r $PIPELINE_VERSION \
   -main-script src/$par_task/workflows/generate_submission/main.nf \
-  --datasets 'output/datasets/$par_task/**phase1v2**.h5ad' \
+  --datasets 'output/datasets_phase1v2/$par_task/**.h5ad' \
   --publishDir output/predictions/$par_task/ \
   -resume \
   -latest \
@@ -116,7 +116,7 @@ zip -9 -r -q submission.zip . \
   --exclude=*work* \
   --exclude=*.DS_Store* \
   --exclude=nextflow.config \
-  --exclude=output/datasets/* \
+  --exclude=output/datasets*/* \
   --exclude=bin/*
 
 # print message

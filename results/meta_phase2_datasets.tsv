@@ -1,0 +1,3 @@
+source	dataset_id	geo_id	organism	num_cells	num_features_mod1	mod1_modality	num_batches	num_cell_types	num_features_mod2	mod2_modality
+openproblems	openproblems_bmmc_cite_phase2	NA	human	81241	13953	GEX	12	45	134	ADT
+openproblems	openproblems_bmmc_multiome_phase2	NA	human	62501	13431	GEX	13	22	116490	ATAC

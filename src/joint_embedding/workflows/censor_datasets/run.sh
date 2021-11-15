@@ -8,20 +8,13 @@ cd "$REPO_ROOT"
 
 export NXF_VER=21.04.1
 
+
 # bin/nextflow \
 #   run . \
 #   -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-#   --datasets 'output/public_datasets/common/**.h5ad' \
-#   --publishDir output/public_datasets/joint_embedding/ \
+#   --datasets 'output/datasets/common/**.h5ad' \
+#   --publishDir output/datasets/joint_embedding/ \
 #   -resume
-
-
-bin/nextflow \
-  run . \
-  -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-  --datasets 'output/datasets/common/**.h5ad' \
-  --publishDir output/datasets/joint_embedding/ \
-  -resume
 
 
 bin/nextflow \
@@ -36,7 +29,7 @@ bin/nextflow \
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-  --datasets 'output/datasets_2021-11-08/phase2/common/**.h5ad' \
+  --datasets 'output/datasets_2021-11-08/phase2_private/common/**.h5ad' \
   --publishDir output/datasets_2021-11-08/phase2/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
@@ -45,7 +38,7 @@ bin/nextflow \
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/censor_datasets/main.nf \
-  --datasets 'output/datasets_2021-11-08/phase2/common/**.h5ad' \
+  --datasets 'output/datasets_2021-11-08/phase2_private/common/**.h5ad' \
   --publishDir output/datasets_2021-11-08/phase2_private/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \

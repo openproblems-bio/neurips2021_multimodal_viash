@@ -20,7 +20,7 @@ test <- c("s4d1", "s4d8", "s4d9")
 
 resources_test <- "resources_test/common/"
 output_dir_p1v2 <- "output/datasets_2021-11-08/phase1v2/common/"
-output_dir_p2 <- "output/datasets_2021-11-08/phase2/common/"
+output_dir_p2 <- "output/datasets_2021-11-08/phase2_private/common/"
 
 
 ## process previous samplings
@@ -276,7 +276,7 @@ rm(bd1_starter, bd2_starter)
 orig <- c(
   list.files("output/datasets/common", recursive = TRUE, full.names = TRUE),
   list.files("output/datasets_2021-11-08/phase1v2/common", recursive = TRUE, full.names = TRUE),
-  list.files("output/datasets_2021-11-08/phase2/common", recursive = TRUE, full.names = TRUE)
+  list.files("output/datasets_2021-11-08/phase2_private/common", recursive = TRUE, full.names = TRUE)
 )
 
 df <- map_df(
@@ -288,7 +288,8 @@ df <- map_df(
       dataset_id = ad$uns[["dataset_id"]],
       n_obs = nrow(ad),
       n_vars = ncol(ad),
-      modality = unique(ad$var$feature_types)
+      modality = unique(ad$var$feature_types),
+      organism = ad$uns[["organism"]]
     )
   }
 )
