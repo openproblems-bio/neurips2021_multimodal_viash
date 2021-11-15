@@ -20,7 +20,7 @@ workflow {
 
   // fetch dataset ids in predictions and in solutions
   def datasetsMeta = 
-    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
+    Channel.fromPath("${params.solutionDir}/../meta.tsv")
   
   // create metrics meta
   def metricsMeta = 

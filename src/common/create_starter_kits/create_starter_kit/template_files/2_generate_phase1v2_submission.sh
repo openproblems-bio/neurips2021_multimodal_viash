@@ -109,8 +109,8 @@ echo ""
 echo "######################################################################"
 echo "##                      Creating submission zip                     ##"
 echo "######################################################################"
-[ -f submission.zip ] && rm submission.zip
-zip -9 -r -q submission.zip . \
+[ -f submission_phase1v2.zip ] && rm submission_phase1v2.zip
+zip -9 -r -q submission_phase1v2.zip . \
   --exclude=*.git* \
   --exclude=*.nextflow* \
   --exclude=*work* \
@@ -128,10 +128,10 @@ echo "Please upload your submission at the link below:"
 echo "  https://eval.ai/web/challenges/challenge-page/1111/submission"
 echo ""
 echo "Or use the command below create a private submission:"
-echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --private"
+echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission_phase1v2.zip --large --private"
 echo ""
 echo "Or this command to create a public one:"
-echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission.zip --large --public"
+echo "> evalai challenge 1111 phase $par_evalai_phase submit --file submission_phase1v2.zip --large --public"
 echo ""
 echo "Good luck!"
 
