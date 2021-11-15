@@ -1063,5 +1063,5 @@ info:
   output: "target/nextflow/match_modality_methods/baseline_dr_knnr_cbf"
   executable: "target/nextflow/match_modality_methods/baseline_dr_knnr_cbf/baseline_dr_knnr_cbf"
   viash_version: "0.5.3"
-  git_commit: "a763f34d2cdd97b0e5e63287d43608c4ab1cba83"
+  git_commit: "5aa3a112fc46b05f3fda403327da55731419e0e8"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

@@ -23,7 +23,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2276 \
-  --evalai_phase2 2276 \
+  --evalai_phase2 2279 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -34,7 +34,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2276 \
-  --evalai_phase2 2276 \
+  --evalai_phase2 2279 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -45,7 +45,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2277 \
-  --evalai_phase2 2277 \
+  --evalai_phase2 2280 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -56,7 +56,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2277 \
-  --evalai_phase2 2277 \
+  --evalai_phase2 2280 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -67,7 +67,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2278 \
-  --evalai_phase2 2278 \
+  --evalai_phase2 2281 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -78,7 +78,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2278 \
-  --evalai_phase2 2278 \
+  --evalai_phase2 2281 \
   --pipeline_version $pipeline_version
 
 if [ $USER == "rcannood" ]; then
