@@ -17,7 +17,7 @@ export NXF_VER=21.04.1
 #   run . \
 #   -main-script src/predict_modality/workflows/run_pilot/main.nf \
 #   -entry pilot_wf \
-#   --publishDir output/pilot_inhouse/predict_modality/ \
+#   --publishDir output/pilot/predict_modality/ \
 #   -resume \
 #   -c src/common/workflows/resource_labels.config \
 #   --datasets 'output/datasets/predict_modality/**.h5ad'
@@ -26,7 +26,7 @@ bin/nextflow \
   run . \
   -main-script src/predict_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot_inhouse/predict_modality/ \
+  --publishDir output/pilot/predict_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
   --datasets 'output/datasets/predict_modality/**.h5ad'
@@ -35,7 +35,7 @@ bin/nextflow \
   run . \
   -main-script src/predict_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot_inhouse/predict_modality/ \
+  --publishDir output/pilot/predict_modality/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
   --datasets 'output/datasets/predict_modality/**.h5ad'

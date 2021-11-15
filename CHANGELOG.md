@@ -1,3 +1,56 @@
+# neurips2021_multimodal_viash 1.3.0
+
+## NEW FEATURES
+
+* Joint Embedding Metrics: Added a `ti_cons_batch` metric which computes the ti_cons score per batch.
+
+## MINOR CHANGES
+
+* Joint Embedding Metrics: The scib package has been renamed from scIB to scib.
+
+* Predict Modality Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
+* Match Modality Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
+* Match Modality Censor: Store batch information in `.obs["batch"]` for all cells, even test mod2 profiles.
+
+* Joint Embedding Censor: Gene activity matrix of ATAC dataset is stored in `.obsm['gene_activity']` and `.uns['gene_activity_var_names']`. 
+
+* Joint Embedding Metrics: Use simple arithmetic mean to aggregate the final scores.
+
+## BUG FIXES
+
+* Match Modality Starter Kit: Unscramble mod2 training cells before performing the rest of the analysis.
+
+* Match Modality Censoring Component: Don't store mod1 size factors in mod2.
+
+* Match Modality Scores: Fix refactoring bug in match_probability score.
+
+# neurips2021_multimodal_viash 1.2.2
+
+## MINOR CHANGES
+
+* Predict Modality Censor: Store the size factors in `.obs["size_factor"]`.
+
+* Nextflow: Added gpu label.
+
+# neurips2021_multimodal_viash 1.2.1
+
+## MINOR CHANGES
+
+* Joint Embedding: Optimise execution and memory requirements for baseline methods.
+* Joint Embedding: Update pilot results.
+* Match Modality: Optimise execution and memory requirements for baseline methods.
+* Match Modality: Update pilot results.
+* Predict Modality: Optimise execution and memory requirements for baseline methods.
+* Predict Modality: Update pilot results.
+* Fixed the metadata description of several methods.
+* Update pilot results and figure.
+
+## BUG FIXES
+
+* Match Modality: Assert that all values must be non negative. Thanks @akhiadber!
+
 # neurips2021_multimodal_viash 1.2.0
 
 ## MAJOR CHANGES

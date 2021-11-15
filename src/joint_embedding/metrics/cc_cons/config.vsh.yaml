@@ -5,8 +5,9 @@ functionality:
   description: Cell cycle conservation score
   authors:
     - name: Michaela Mueller
-      roles: [ maintainer, author ]
-      props: { github: mumichae }
+      email: mumichae@in.tum.de
+      roles: [ author, maintainer ]
+      props: { github: mumichae, orcid: "0000-0002-1401-1785" }
   arguments:
     - name: --output
       alternatives: [ -o ]
@@ -38,7 +39,7 @@ functionality:
       dest: metric_meta.tsv
 platforms:
   - type: docker
-    image: mumichae/scib-base:0.1.2
+    image: mumichae/scib-base:1.0.0
   - type: native
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ highmem, lowtime, midcpu ]

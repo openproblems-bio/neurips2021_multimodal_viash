@@ -5,6 +5,9 @@ functionality:
   # metadata for your method
   version: dev
   description: K-nearest neighbor regression in Python.
+  info:
+    type: baseline
+    label: KNNR (Py)
   authors:
     - name: Bastian Rieck
       email: bastian.rieck@gmail.com

@@ -6,7 +6,7 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 out_path <- "output/pilot_inhouse/match_modality/output.final_scores.output_"
 par <- list(
-  input = list.files("/tmp/neurips2021_work/d0/a319268c0a70d0890301ad3dd8628d/", pattern = "*.h5ad$", full.names = TRUE),
+  input = list.files("work/cd/e185bb287d48c3b67cdf04d1129432//", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/match_modality/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   #solution_meta = "output/pilot/match_modality/meta_solution.collect_solution_metadata.output.tsv"
@@ -111,7 +111,7 @@ default_scores <- crossing(
 final_scores <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
-) %>% 
+) %>%
   left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
 
 summary <-

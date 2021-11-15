@@ -14,7 +14,7 @@ par <- list(
 ## VIASH END
 
 cat("Read solution h5ad\n")
-ad_sol <- anndata::read_h5ad(par$input_solution, backed = TRUE)
+ad_sol <- anndata::read_h5ad(par$input_solution, backed = "r")
 
 cat("Read prediction h5ad\n")
 ad_pred <- anndata::read_h5ad(par$input_prediction)
@@ -24,13 +24,16 @@ pairing_ix <- ad_sol$uns[["pairing_ix"]]
 X_pred <- as(ad_pred$X, "CsparseMatrix")[, order(pairing_ix)]
 dimnames(X_pred) <- list(NULL, NULL)
 
+# set negative values to 0
+X_pred@x <- ifelse(X_pred@x < 0, 0, X_pred@x)
+
 cat("Calculating normalisation factors\n")
 rowSum <- Matrix::rowSums(X_pred)
 
 cat("Computing the match modality score\n")
 match_probability_vec <- diag(X_pred) / rowSum
 
-match_probability <- mean(match_probability_vec) * 1000
+match_probability <- mean(match_probability_vec)
 
 cat("Create output object\n")
 out <- anndata::AnnData(

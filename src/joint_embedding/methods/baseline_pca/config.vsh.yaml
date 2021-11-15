@@ -32,6 +32,10 @@ functionality:
       type: "integer"
       default: 10
       description: Number of dimensions to output.
+    - name: "--hvg_sel"
+      type: "integer"
+      default: 1000
+      description: Number of features per modality to use.
   resources:
     - type: r_script
       path: script.R
@@ -44,6 +48,6 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
     setup:
       - type: r
-        packages: [ irlba ]
+        packages: [ irlba, proxyC ]
   - type: nextflow
     labels: [ lowmem, lowtime, lowcpu ]

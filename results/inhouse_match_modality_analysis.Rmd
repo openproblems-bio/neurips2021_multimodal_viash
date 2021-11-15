@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=12, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=8, warning = FALSE)
 knitr::opts_knit$set(root.dir = '..')
 
 library(tidyverse)
@@ -26,15 +26,13 @@ colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method
 df <- 
   # read in all columns as strings because of infinite values in table
   readr::read_tsv(
-    "output/pilot_inhouse/match_modality/output.final_scores.output_scores.tsv",
+    "output/pilot/match_modality/output.final_scores.output_scores.tsv",
     col_types = c(dataset_id = "c", method_id = "c", metric_id = "c", dataset_subtask = "c", value = "d", value_after_default = "d")
   ) %>%
   mutate(
-    # extract meta info
-    dataset_id_orig = gsub("_MM$", "", dataset_id),
-    dataset_phase = gsub(".*_", "", dataset_id_orig)
+    dataset_phase = gsub(".*_", "", dataset_orig_id)
   ) %>% 
-  left_join(meta_ds, by = c("dataset_id_orig" = "dataset_id")) %>%
+  left_join(meta_ds, by = c("dataset_orig_id" = "dataset_id")) %>%
   left_join(meta_ms, by = "method_id") %>%
   select(-value) %>%
   spread(metric_id, value_after_default) %>% 
@@ -143,7 +141,7 @@ Comparing most interesting metrics.
 ```{r scatter2, fig.width=10, fig.height=10}
 # TODO: check NA values, check negative values in selexted metrics
 
-selected_metrics <- c("match_probability_mod1", "match_probability_mod2", "pairing_aupr", "pairing_auroc")
+selected_metrics <- c("match_probability", "pairing_aupr", "pairing_auroc")
 GGally::ggpairs(
   df,
   mapping = aes(colour = method_type, fill = method_type), 

@@ -39,6 +39,9 @@ functionality:
       example: "dataset_solution.h5ad"
       description: The solution file.
       required: true
+    - name: "--train_only"
+      type: "boolean_true"
+      description: Whether or not to only omit the train cells.
   resources:
     - type: r_script
       path: script.R
@@ -51,4 +54,4 @@ platforms:
     image: dataintuitive/randpy:r4.0_py3.8_bioc3.12
   - type: nextflow
     publish: true
-    labels: [ medmem, lowtime, lowcpu ]
+    labels: [ midmem, lowtime, lowcpu ]

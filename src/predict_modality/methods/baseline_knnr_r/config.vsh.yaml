@@ -5,7 +5,7 @@ functionality:
   description: K-nearest neighbor regression in R.
   info:
     type: baseline
-    label: KNNR
+    label: KNNR (R)
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -43,7 +43,7 @@ functionality:
       description: Number of principal components to use.
     - name: "--n_neighbors"
       type: "integer"
-      default: 100
+      default: 20
       description: Number of neighbors to use in the knn regression.
   resources:
     - type: r_script

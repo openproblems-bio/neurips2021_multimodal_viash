@@ -6,17 +6,17 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 out_path <- "output/pilot_inhouse/joint_embedding/output.final_scores.output_"
 par <- list(
-  input = list.files("work/51/edcecba8b7d4631d6232a63e4c5b36/", pattern = "*.h5ad$", full.names = TRUE),
+  input = list.files("/home/rcannood/workspace/viash_temp/neurips2021_work/85/c712592b7fd4839aef50eb4671f3f2/", pattern = "*.h5ad$", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
-  dataset_meta = "results/meta_datasets.tsv",
+  dataset_meta = "output/datasets_2021-11-08/phase2_private/meta.tsv",
   output_scores = paste0(out_path, "scores.tsv"),
   output_summary = paste0(out_path, "summary.tsv"),
   output_json = paste0(out_path, "json.json")
 )
 ## VIASH END
 
-json_metrics <- c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")
+json_metrics <- c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean", "arithmetic_mean")
 
 cat("Reading solution meta files\n")
 dataset_meta <- 
@@ -42,7 +42,7 @@ metric_defaults <-
   mutate(
     metric_min = as.numeric(metric_min),
     metric_max = as.numeric(metric_max)
-  ) %>% 
+  ) %>%
   transmute(
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
@@ -65,7 +65,7 @@ scores <- map_df(par$input, function(inp) {
   out
 }) %>%
   rename(
-    metric_id = metric_ids, 
+    metric_id = metric_ids,
     value = metric_values
   ) %>%
   mutate(
@@ -110,16 +110,17 @@ scores1 <- bind_rows(
   scores %>% mutate(value_after_default = value),
   anti_join(default_scores, scores, by = c("method_id", "dataset_id", "metric_id"))
 ) %>% 
-  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id"))
+  left_join(dataset_meta, by = c("dataset_id", "dataset_orig_id")) %>%
+  filter(metric_id != "latent_mixing", !grepl("rfoob_", metric_id))
 
 cat("Calculating geometric mean\n")
-geomean <- scores1 %>%
-  filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_mean")) %>%
-  group_by(dataset_id, method_id, dataset_subtask) %>%
-  summarise_if(is.numeric, dynutils::calculate_geometric_mean) %>%
+arimean <- scores1 %>%
+  filter(metric_id %in% c("asw_batch", "asw_label", "cc_cons", "graph_conn", "nmi", "ti_cons_batch_mean")) %>%
+  group_by(dataset_id, dataset_orig_id, method_id) %>%
+  summarise_if(is.numeric, function(x) dynutils::calculate_arithmetic_mean(x)) %>%
   ungroup() %>%
-  mutate(metric_id = "geometric_mean")
-final_scores <- bind_rows(scores1 %>% filter(metric_id != "geometric_mean"), geomean)
+  mutate(metric_id = "arithmetic_mean")
+final_scores <- bind_rows(scores1 %>% filter(metric_id != "arithmetic_mean"), arimean)
 
 summary <-
   final_scores %>%
@@ -133,21 +134,9 @@ summary <-
 
 # unique(scores$metric_id)
 
-# summary %>%
-#   filter(metric_id == "mean_spearman_per_cell") %>%
-#   select(-var) %>%
-#   spread(subtask, mean) %>%
-#   arrange(Overall)
-
-# summary %>%
-#   filter(metric_id == "mse") %>%
-#   select(-var) %>%
-#   spread(subtask, mean) %>%
-#   arrange(Overall)
-
 json_out <- summary %>%
   filter(metric_id %in% json_metrics) %>%
-  mutate(comb_id = paste0(metric_id, "_", dataset_subtask)) %>%
+  mutate(comb_id = ifelse(metric_id == "arithmetic_mean", metric_id, paste0(metric_id, "_", dataset_subtask))) %>%
   select(-var, -metric_id, -dataset_subtask) %>%
   spread(comb_id, mean) %>%
   arrange(asw_label_ADT)

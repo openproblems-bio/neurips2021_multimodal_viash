@@ -5,7 +5,7 @@ functionality:
   description: Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.
   info:
     type: baseline
-    label: LMDS+KNNR+KNN
+    label: LMDS+KNNR+CBF
   authors:
     - name: Robrecht Cannoodt
       email: rcannood@gmail.com
@@ -45,7 +45,7 @@ functionality:
       required: true
     - name: "--n_pop"
       type: "integer"
-      default: 300
+      default: 100
       description: Population size.
   resources:
     - type: r_script
@@ -61,4 +61,4 @@ platforms:
       - type: r
         packages: [ lmds, dynutils, proxy, FNN ]
   - type: nextflow
-    labels: [ lowmem, lowtime, lowcpu ]
+    labels: [ midmem, midtime, midcpu ]

@@ -4,7 +4,8 @@ srcDir = "${params.rootDir}/src"
 targetDir = "${params.rootDir}/target/nextflow"
 task = "match_modality"
 
-include  { baseline_babel_knn }          from "$targetDir/${task}_methods/baseline_babel_knn/main.nf"          params(params)
+// always fails
+// include  { baseline_babel_knn }          from "$targetDir/${task}_methods/baseline_babel_knn/main.nf"          params(params)
 include  { baseline_dr_knnr_knn }        from "$targetDir/${task}_methods/baseline_dr_knnr_knn/main.nf"        params(params)
 include  { baseline_dr_knnr_cbf }        from "$targetDir/${task}_methods/baseline_dr_knnr_cbf/main.nf"        params(params)
 include  { baseline_newwave_knnr_cbf }   from "$targetDir/${task}_methods/baseline_newwave_knnr_cbf/main.nf"   params(params)
@@ -22,6 +23,7 @@ include  { final_scores }                from "$targetDir/${task}_results/final_
 include  { bind_tsv_rows }               from "$targetDir/common/bind_tsv_rows/main.nf"                        params(params)
 
 params.datasets = "output/public_datasets/$task/**.h5ad"
+params.meta_datasets = "${params.rootDir}/results/meta_datasets.tsv"
 
 workflow pilot_wf {
   main:
@@ -52,18 +54,18 @@ workflow pilot_wf {
     | baseline_dr_knnr_knn
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_baseline_dr_knnr_knn", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b2 = inputs 
-    | baseline_newwave_knnr_cbf
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_cbf", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b3 = inputs 
-    | baseline_newwave_knnr_knn
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_knn", [ input_prediction: pred, input_solution: sol ], params ]}
-  def b4 = inputs 
-    | baseline_babel_knn
-    | join(solution) 
-    | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b2 = inputs 
+  //   | baseline_newwave_knnr_cbf
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_cbf", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b3 = inputs 
+  //   | baseline_newwave_knnr_knn
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_newwave_knnr_knn", [ input_prediction: pred, input_solution: sol ], params ]}
+  // def b4 = inputs 
+  //   | baseline_babel_knn
+  //   | join(solution) 
+  //   | map { id, pred, params, sol -> [ id + "_baseline_babel_knn", [ input_prediction: pred, input_solution: sol ], params ]}
   def b5 = inputs 
     | baseline_linear_knn
     | join(solution) 
@@ -92,11 +94,11 @@ workflow pilot_wf {
     | join(solution) 
     | map { id, pred, params, sol -> [ id + "_dummy_semisolution", [ input_prediction: pred, input_solution: sol ], params ]}
 
-  def predictions = b0.mix(b1, b2, b3, b4, b5, b6, d0, d1, d2, d3)
+  def predictions = b0.mix(b1, b5, b6, d0, d1, d2, d3)
 
   // fetch dataset ids in predictions and in solutions
   def datasetsMeta = 
-    Channel.fromPath("${params.rootDir}/results/meta_datasets.tsv")
+    Channel.fromPath(params.meta_datasets)
   
   // create metrics meta
   def metricsMeta = 

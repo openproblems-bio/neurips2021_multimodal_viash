@@ -15,7 +15,7 @@ par <- list(
 ## VIASH END
 
 cat("Read solution h5ad\n")
-ad_sol <- anndata::read_h5ad(par$input_solution)
+ad_sol <- anndata::read_h5ad(par$input_solution, backed = "r")
 
 cat("Read prediction h5ad\n")
 expect_true(
@@ -31,7 +31,7 @@ ad_pred <-
 expect_true(
   ad_sol$uns$dataset_id == ad_pred$uns$dataset_id
 )
-X_pred <- as(ad_pred$X, "CsparseMatrix")[,order(ad_sol$uns$pairing_ix)]
+X_pred <- as(ad_pred$X, "CsparseMatrix")[, order(ad_sol$uns$pairing_ix)]
 dimnames(X_pred) <- list(NULL, NULL)
 
 cat("Data wrangling\n")
@@ -39,11 +39,6 @@ pred_summ <- summary(X_pred) %>%
   as_tibble() %>%
   mutate(gold = i == j) %>%
   arrange(desc(x))
-
-expect_true(
-  nrow(pred_summ) <= 1000 * nrow(ad_sol),
-  info = "Number of non-zero values for the prediction should be less or equal to 1000 times the number of cells in the dataset."
-)
 
 # helper function
 calculate_au <- function(values, are_true, num_positive_interactions, num_possible_interactions, extend_by = 10000) {

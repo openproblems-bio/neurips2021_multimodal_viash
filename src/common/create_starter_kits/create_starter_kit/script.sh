@@ -8,6 +8,7 @@ par_output_dir=output/starter_kits
 par_task=predict_modality
 par_language=r
 par_evalai_phase=2276
+par_evalai_phase2=2276
 par_memory="16 GB"
 par_time="10m"
 par_cpus="4"
@@ -32,8 +33,9 @@ echo "  Copy template files"
 cp $resources_dir/template_files/README.md $output_dir/
 cp $resources_dir/template_files/0_sys_checks.sh $output_dir/scripts/
 cp $resources_dir/template_files/1_unit_test.sh $output_dir/scripts/
-cp $resources_dir/template_files/2_generate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/2_generate_phase1v2_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/3_evaluate_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/4_generate_phase2_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/nextflow.config $output_dir/scripts/
 cp $resources_dir/template_files/LICENSE $output_dir/
 cp $resources_dir/template_files/.gitignore $output_dir/
@@ -47,6 +49,7 @@ for file in $(find $output_dir/ -type f); do
   sed -i "s#\\\$par_task#$par_task#g" $file
   sed -i "s#\\\$par_language_name#$par_language_name#g" $file
   sed -i "s#\\\$par_language#$par_language#g" $file
+  sed -i "s#\\\$par_evalai_phase2#$par_evalai_phase2#g" $file
   sed -i "s#\\\$par_evalai_phase#$par_evalai_phase#g" $file
   sed -i "s#\\\$par_memory#$par_memory#g" $file
   sed -i "s#\\\$par_time#$par_time#g" $file
