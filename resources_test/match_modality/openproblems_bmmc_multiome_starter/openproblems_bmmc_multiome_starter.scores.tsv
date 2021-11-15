@@ -1,2 +1,2 @@
 dataset_id	method_id	metric_id	value
-openproblems_bmmc_multiome_starter_MM_gex2atac	baseline_newwave_knnr_cbf	match_probability	4.121863805564296
+openproblems_bmmc_multiome_starter_MM_gex2atac	baseline_newwave_knnr_cbf	match_probability	0.00520908009269238
