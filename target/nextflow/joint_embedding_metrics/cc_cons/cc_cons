@@ -149,6 +149,7 @@ function ViashHelp {
 
   echo "   -o, --output"
   echo "        type: file, required parameter, output"
+  echo "        example: output.h5ad"
   echo "        Metric scores by comparing the prediction to the gold standard solution."
   echo ""
 

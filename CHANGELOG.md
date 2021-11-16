@@ -1,3 +1,13 @@
+# neurips2021_multimodal_viash 1.3.1
+
+## MINOR CHANGES
+
+* Joint Embedding Scores: Also return mean of ADT and mean of ATAC datasets.
+
+## BUG FIXES
+
+* Starter Kit: Also download the meta.tsv folder in `2_generate_submission.sh` needed to run `3_evaluate_submission.sh`.
+
 # neurips2021_multimodal_viash 1.3.0
 
 ## NEW FEATURES

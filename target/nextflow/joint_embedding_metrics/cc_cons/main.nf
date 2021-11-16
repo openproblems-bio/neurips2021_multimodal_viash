@@ -159,7 +159,7 @@ def overrideIO(_params, inputs, outputs) {
 
 process cc_cons_process {
   label 'highmem'
-  label 'lowtime'
+  label 'midtime'
   label 'midcpu'
   tag "${id}"
   echo { (params.debug == true) ? true : false }

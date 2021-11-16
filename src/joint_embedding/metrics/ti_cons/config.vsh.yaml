@@ -15,6 +15,7 @@ functionality:
       direction: output
       description: Metric scores by comparing the prediction to the gold standard solution.
       required: true
+      example: output.h5ad
     - name: --input_prediction
       type: file
       description: Prediction by a method
