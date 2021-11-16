@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 1.3.1
+
+## MINOR CHANGES
+
+* Joint Embedding Scores: Also return mean of ADT and mean of ATAC datasets.
+
 # neurips2021_multimodal_viash 1.3.0
 
 ## NEW FEATURES
