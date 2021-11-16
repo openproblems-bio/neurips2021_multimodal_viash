@@ -418,8 +418,7 @@ metric_defaults <-
   transmute(
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
-  ) %>%
-  filter(metric_id %in% json_metrics)
+  )
 
 cat("Reading input h5ad files\\n")
 scores <- map_df(par\$input, function(inp) {
@@ -502,7 +501,6 @@ final_scores <- bind_rows(scores1 %>% filter(metric_id != "arithmetic_mean"), ar
 
 summary <-
   final_scores %>%
-  # bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
   group_by(method_id, metric_id, dataset_subtask) %>%
   summarise(
     mean = mean(value_after_default),
