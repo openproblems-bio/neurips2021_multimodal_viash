@@ -6,7 +6,7 @@ library(testthat, warn.conflicts = FALSE, quietly = TRUE)
 ## VIASH START
 out_path <- "output/pilot_inhouse/joint_embedding/output.final_scores.output_"
 par <- list(
-  input = list.files("/home/rcannood/Downloads/starter_kits/starter_kit-joint_embedding-python/work/31/e5678828970c94068f5f00ae88319a/", pattern = "\\.output\\.", full.names = TRUE),
+  input = list.files("/home/rcannood/Downloads/starter_kits_new/starter_kit-joint_embedding-python/work/e4/364665b8bd3ceb839a13a5a698a033/", pattern = "\\.output\\.", full.names = TRUE),
   method_meta = NULL,
   metric_meta = list.files("src/joint_embedding/metrics", recursive = TRUE, pattern = "*.tsv$", full.names = TRUE),
   dataset_meta = "output/datasets_2021-11-08/phase1v2/meta.tsv",
@@ -46,8 +46,7 @@ metric_defaults <-
   transmute(
     metric_id = metric_id, 
     missing_value = ifelse(metric_higherisbetter, metric_min, metric_max)
-  ) %>%
-  filter(metric_id %in% json_metrics)
+  )
 
 cat("Reading input h5ad files\n")
 scores <- map_df(par$input, function(inp) {
@@ -130,7 +129,6 @@ final_scores <- bind_rows(scores1 %>% filter(metric_id != "arithmetic_mean"), ar
 
 summary <-
   final_scores %>%
-  # bind_rows(final_scores, final_scores %>% mutate(dataset_subtask = "Overall")) %>%
   group_by(method_id, metric_id, dataset_subtask) %>%
   summarise(
     mean = mean(value_after_default),
