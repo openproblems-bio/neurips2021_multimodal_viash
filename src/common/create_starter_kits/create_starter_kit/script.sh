@@ -33,7 +33,7 @@ echo "  Copy template files"
 cp $resources_dir/template_files/README.md $output_dir/
 cp $resources_dir/template_files/0_sys_checks.sh $output_dir/scripts/
 cp $resources_dir/template_files/1_unit_test.sh $output_dir/scripts/
-cp $resources_dir/template_files/2_generate_phase1v2_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/2_generate_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/3_evaluate_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/4_generate_phase2_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/nextflow.config $output_dir/scripts/
