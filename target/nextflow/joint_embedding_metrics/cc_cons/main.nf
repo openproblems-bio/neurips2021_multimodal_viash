@@ -158,7 +158,7 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process cc_cons_process {
-  label 'highmem'
+  label 'vhighmem'
   label 'midtime'
   label 'midcpu'
   tag "${id}"
