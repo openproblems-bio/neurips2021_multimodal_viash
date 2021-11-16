@@ -82,8 +82,10 @@ echo "  Copy sample resources"
 rsync -avzr $resources_dir/resources_test/$par_task/ $output_dir/sample_data/ \
   --include="*/" --include="*mod[12].h5ad" --include="*solution.h5ad" --include="*sol.h5ad" --exclude="*" # --dry-run
 
-echo "  Zipping starter kit"
 [ -f ${output_dir}.zip ] && rm ${output_dir}.zip
-cd  ${output_dir} && zip -9 -q -r ../$(basename $output_dir).zip *
+if [ $par_pipeline_version != "main_build" ]; then
+  echo "  Zipping starter kit"
+  cd  ${output_dir} && zip -9 -q -r ../$(basename $output_dir).zip *
+fi
 
 echo "  Starter kit is done!"
