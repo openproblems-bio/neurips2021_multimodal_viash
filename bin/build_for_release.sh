@@ -15,6 +15,8 @@ bin/viash_build --max_threads 4 --config_mod '.platforms[.type == "nextflow"].se
 # src/common/create_starter_kits/create_all.sh $TAG
 # aws s3 sync --delete --profile op2 output/datasets/ s3://openproblems-bio/public/phase1-data --dryrun
 # aws s3 sync --delete --profile op2 output/datasets_2021-11-08/ s3://openproblems-bio/private/phase2-data/ --dryrun
+# aws s3 sync --delete --profile op2 s3://openproblems-bio/private/phase2-data/phase2 s3://openproblems-bio/public/phase2-data --dryrun
+# aws s3 sync --delete --profile op2 s3://openproblems-bio/private/phase2-data/phase1v2 s3://openproblems-bio/public/phase1v2-data --dryrun
 
 
 

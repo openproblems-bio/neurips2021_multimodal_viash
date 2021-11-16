@@ -33,7 +33,7 @@ echo "  Copy template files"
 cp $resources_dir/template_files/README.md $output_dir/
 cp $resources_dir/template_files/0_sys_checks.sh $output_dir/scripts/
 cp $resources_dir/template_files/1_unit_test.sh $output_dir/scripts/
-cp $resources_dir/template_files/2_generate_phase1v2_submission.sh $output_dir/scripts/
+cp $resources_dir/template_files/2_generate_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/3_evaluate_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/4_generate_phase2_submission.sh $output_dir/scripts/
 cp $resources_dir/template_files/nextflow.config $output_dir/scripts/
@@ -82,8 +82,10 @@ echo "  Copy sample resources"
 rsync -avzr $resources_dir/resources_test/$par_task/ $output_dir/sample_data/ \
   --include="*/" --include="*mod[12].h5ad" --include="*solution.h5ad" --include="*sol.h5ad" --exclude="*" # --dry-run
 
-echo "  Zipping starter kit"
 [ -f ${output_dir}.zip ] && rm ${output_dir}.zip
-cd  ${output_dir} && zip -9 -q -r ../$(basename $output_dir).zip *
+if [ $par_pipeline_version != "main_build" ]; then
+  echo "  Zipping starter kit"
+  cd  ${output_dir} && zip -9 -q -r ../$(basename $output_dir).zip *
+fi
 
 echo "  Starter kit is done!"

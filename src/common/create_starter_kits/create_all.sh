@@ -23,7 +23,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2276 \
-  --evalai_phase2 2276 \
+  --evalai_phase2 2279 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -34,7 +34,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2276 \
-  --evalai_phase2 2276 \
+  --evalai_phase2 2279 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -45,7 +45,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2277 \
-  --evalai_phase2 2277 \
+  --evalai_phase2 2280 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -56,7 +56,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2277 \
-  --evalai_phase2 2277 \
+  --evalai_phase2 2280 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -67,7 +67,7 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext py \
   --block_starter 'par = dict(' \
   --evalai_phase 2278 \
-  --evalai_phase2 2278 \
+  --evalai_phase2 2281 \
   --pipeline_version $pipeline_version
 
 bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml -- \
@@ -78,22 +78,22 @@ bin/viash run src/common/create_starter_kits/create_starter_kit/config.vsh.yaml 
   --language_ext R \
   --block_starter 'par <- list(' \
   --evalai_phase 2278 \
-  --evalai_phase2 2278 \
+  --evalai_phase2 2281 \
   --pipeline_version $pipeline_version
 
-if [ $USER == "rcannood" ]; then
-  echo "Moving starter kits to Downloads dir"
-  COPY_DIR="$HOME/Downloads/starter_kits"
-  [ -d $COPY_DIR ] && rm -rf $COPY_DIR
-  cp -r output/starter_kits `dirname $COPY_DIR`
+# if [ $USER == "rcannood" ]; then
+#   echo "Moving starter kits to Downloads dir"
+#   COPY_DIR="$HOME/Downloads/starter_kits"
+#   [ -d $COPY_DIR ] && rm -rf $COPY_DIR
+#   cp -r output/starter_kits `dirname $COPY_DIR`
 
-  for name in $COPY_DIR/*; do
-    if [ -d $name ]; then
-      out_dir="$name/output"
-      echo copying to $out_dir
-      mkdir -p $out_dir
-      cp -r output/datasets_2021-11-08/phase1v2 $out_dir/datasets_phase1v2
-      cp -r output/datasets_2021-11-08/phase2 $out_dir/datasets_phase2
-    fi
-  done
-fi
+#   for name in $COPY_DIR/*; do
+#     if [ -d $name ]; then
+#       out_dir="$name/output"
+#       echo copying to $out_dir
+#       mkdir -p $out_dir
+#       cp -r output/datasets_2021-11-08/phase1v2 $out_dir/datasets_phase1v2
+#       cp -r output/datasets_2021-11-08/phase2 $out_dir/datasets_phase2
+#     fi
+#   done
+# fi

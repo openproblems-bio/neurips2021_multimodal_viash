@@ -1,3 +1,17 @@
+# neurips2021_multimodal_viash 1.3.1
+
+## MINOR CHANGES
+
+* Joint Embedding Scores: Also return mean of ADT and mean of ATAC datasets.
+
+* Starter Kits: Added `vhightime: 60m` to the list of possible resource limits.
+
+## BUG FIXES
+
+* Starter Kits: Also download the meta.tsv folder in `2_generate_submission.sh` needed to run `3_evaluate_submission.sh`.
+
+* Joint Embedding Metrics: `cc_cons` memory limits raised to 'vhighmem' (110GB).
+
 # neurips2021_multimodal_viash 1.3.0
 
 ## NEW FEATURES
