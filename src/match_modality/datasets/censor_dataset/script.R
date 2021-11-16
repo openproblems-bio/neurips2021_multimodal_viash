@@ -9,8 +9,8 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 # input_path <- "resources_test/common/openproblems_bmmc_multiome_starter/openproblems_bmmc_multiome_starter."
 # input_path <- "output/datasets/common/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.manual_formatting."
 # input_path <- "output/datasets/common/openproblems_bmmc_cite_phase1/openproblems_bmmc_cite_phase1.manual_formatting."
-input_path <- "output/datasets_2021-11-08/common/openproblems_bmmc_cite_phase1v2/openproblems_bmmc_cite_phase1v2.manual_formatting."
-input_path <- "output/datasets_2021-11-08/common/openproblems_bmmc_multiome_phase1v2/openproblems_bmmc_multiome_phase1v2.manual_formatting."
+input_path <- "output/datasets_2021-11-08/phase1v2/common/openproblems_bmmc_cite_phase1v2/openproblems_bmmc_cite_phase1v2.manual_formatting."
+input_path <- "output/datasets_2021-11-08/phase1v2/common/openproblems_bmmc_multiome_phase1v2/openproblems_bmmc_multiome_phase1v2.manual_formatting."
 output_path <- ""
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_phase1/openproblems_bmmc_multiome_phase1.censor_dataset."
 # output_path <- "output/datasets/match_modality/openproblems_bmmc_multiome_iid/openproblems_bmmc_multiome_iid.censor_dataset."
@@ -83,12 +83,13 @@ mod2_var <- input_mod2$var %>% select(one_of("gene_ids", "feature_types"))
 train_obs1 <- input_mod1$obs[train_ix, , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
-train_obs2 <- input_mod2$obs[train_ix, , drop = FALSE] %>%
+train_obs2 <- input_mod2$obs[train_ix[train_mod2_ix], , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(train_obs2) <- NULL
 if (ncol(train_obs2) == 0) train_obs2 <- NULL
 assert_that("size_factors" %in% colnames(train_obs1) != "size_factors" %in% colnames(train_obs2))
+assert_that(all(train_obs1$batch == train_obs2$batch[order(train_mod2_ix)]))
 
 output_train_mod1 <- anndata::AnnData(
   X = input_mod1$X[train_ix, , drop = FALSE],
@@ -107,17 +108,19 @@ output_train_mod2 <- anndata::AnnData(
   var = mod2_var,
   uns = ad2_uns
 )
+assert_that(all(output_train_mod1$obs$batch == output_train_mod2$obs$batch[order(train_mod2_ix)]))
 
 cat("Create test objects\n")
 test_obs1 <- input_mod1$obs[test_ix, , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
-test_obs2 <- input_mod2$obs[test_ix, , drop = FALSE] %>%
+test_obs2 <- input_mod2$obs[test_ix[test_mod2_ix], , drop = FALSE] %>%
   select(one_of("batch", "size_factors")) %>%
   mutate_if(is_categorical, relevel)
 rownames(test_obs2) <- NULL
 if (ncol(test_obs2) == 0) test_obs2 <- NULL
 assert_that("size_factors" %in% colnames(train_obs1) != "size_factors" %in% colnames(train_obs2))
+assert_that(all(test_obs1$batch == test_obs2$batch[order(test_mod2_ix)]))
 
 output_test_mod1 <- anndata::AnnData(
   X = input_mod1$X[test_ix, , drop = FALSE],
@@ -136,6 +139,7 @@ output_test_mod2 <- anndata::AnnData(
   var = mod2_var,
   uns = ad2_uns
 )
+assert_that(all(output_test_mod1$obs$batch == output_test_mod2$obs$batch[order(test_mod2_ix)]))
 
 cat("Create solution objects\n")
 

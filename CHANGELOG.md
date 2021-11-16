@@ -1,3 +1,13 @@
+# neurips2021_multimodal_viash 1.3.3
+
+## MINOR CHANGES
+
+* Starter Kits: Added `vvhightime` resource option.
+
+## BUG FIXES
+
+* Match Modality Censor: Fix ordering of the .obs data frame.
+
 # neurips2021_multimodal_viash 1.3.2
 
 ## BUG FIXES
