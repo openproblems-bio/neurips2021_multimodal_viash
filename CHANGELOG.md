@@ -2,6 +2,12 @@
 
 ## BUG FIXES
 
+* Match Modality Censor: Fix ordering of the .obs data frame.
+
+# neurips2021_multimodal_viash 1.3.2
+
+## BUG FIXES
+
 * Joint Embedding Results: Fix PEBKAC bug in results aggregation component.
 
 # neurips2021_multimodal_viash 1.3.1
