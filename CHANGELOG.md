@@ -4,9 +4,11 @@
 
 * Joint Embedding Scores: Also return mean of ADT and mean of ATAC datasets.
 
+* Starter Kits: Added `vhightime: 60m` to the list of possible resource limits.
+
 ## BUG FIXES
 
-* Starter Kit: Also download the meta.tsv folder in `2_generate_submission.sh` needed to run `3_evaluate_submission.sh`.
+* Starter Kits: Also download the meta.tsv folder in `2_generate_submission.sh` needed to run `3_evaluate_submission.sh`.
 
 # neurips2021_multimodal_viash 1.3.0
 
