@@ -43,4 +43,4 @@ platforms:
     image: mumichae/scib-base:1.0.0
   - type: native
   - type: nextflow
-    labels: [ highmem, midtime, midcpu ]
+    labels: [ vhighmem, midtime, midcpu ]
