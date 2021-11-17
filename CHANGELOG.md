@@ -1,3 +1,9 @@
+# neurips2021_multimodal_viash 1.3.4
+
+## BUG FIXES
+
+* Starter Kits: Fix 'Permission denied' error when syncing with S3 using the Amazon AWS CLI docker container.
+
 # neurips2021_multimodal_viash 1.3.3
 
 ## MINOR CHANGES
