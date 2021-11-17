@@ -30,6 +30,7 @@ function aws_sync {
       --user $(id -u):$(id -g) \
       --rm -it \
       -v $(pwd)/output:/output \
+      -w / \
       amazon/aws-cli \
       s3 "$CMD" --no-sign-request "$SOURCE" "$DEST"
   fi
