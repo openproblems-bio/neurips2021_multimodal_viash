@@ -52,7 +52,7 @@ zzz <- pbapply::pblapply(seq_len(nrow(df)), function(i) {
         dir_path <- tempfile("process_submission")
         on.exit(unlink(dir_path, recursive = TRUE, force = TRUE))
         dir.create(dir_path)
-        
+
         unzip(dest_zip, exdir = dir_path)
 
         config_path <- paste0(dir_path, "/config.vsh.yaml")
@@ -113,11 +113,14 @@ zzz <- pbapply::pblapply(seq_len(nrow(df)), function(i) {
         if (!file.exists(summary_tsv)) {
           stop("No output was found")
         }
-        
+
         summary <- read_tsv(summary_tsv)
 
+        any_dup <- summary %>% select(metric_id, dataset_subtask) %>% { any(duplicated(paste0(.$metric_id, "_", .$dataset_subtask)))}
+        if (any_dup) stop("More than 1 method detected")
+
         summary %>% mutate(id = id) %>% select(-method_id, -var) %>% select(id, everything())
-        
+
       }
     }, error = function(e) {
       tibble(id, run_error = e$message)
@@ -135,12 +138,29 @@ out <- bind_rows(pbapply::pblapply(seq_len(nrow(df)), function(i) {
   dest_scores <- df$dest_scores[[i]]
 
   if (file.exists(dest_scores)) {
-    tryCatch({ read_rds(dest_scores) }, error = function(e) NULL)
+    tryCatch(
+      {
+        df <- read_rds(dest_scores)
+
+        any_dup <- df %>% select(metric_id, dataset_subtask) %>% { any(duplicated(paste0(.$metric_id, "_", .$dataset_subtask)))}
+
+        if (any_dup) stop("More than 1 method detected")
+
+        df
+      }, error = function(e) {
+        NULL
+      })
   } else {
     NULL
   }
 }))
 
+ids <- df %>% filter(task_id == "predict_modality") %>% pull(id)
+yy <- out %>% filter(id %in% ids) %>% spread(metric_id, mean) %>% filter(correct_format == 1) %>% mutate(rmse = ifelse(rmse > 1000, Inf, rmse))
+ggplot(yy) + geom_point(aes(rmse, mean_pearson_per_cell)) + facet_wrap(~dataset_subtask) + scale_x_log10()
+ggplot(yy) + geom_point(aes(rmse, mean_spearman_per_cell)) + facet_wrap(~dataset_subtask) + scale_x_log10() +
+ggplot(yy) + geom_point(aes(rmse, mean_pearson_per_gene)) + facet_wrap(~dataset_subtask) + scale_x_log10()
+ggplot(yy) + geom_point(aes(rmse, mean_spearman_per_gene)) + facet_wrap(~dataset_subtask) + scale_x_log10()
 
 orig_score <- df %>%
   filter(zip_valid, Status != "failed") %>%
@@ -182,8 +202,8 @@ scores <- full_join(orig_score, new_score, by = c("id", "metric")) %>%
 nr <- c(predict_modality = 1, joint_embedding = 3, match_modality = 2)
 patchwork::wrap_plots(
   list = map(unique(scores$task_id), function(tid) {
-    ggplot(scores %>% filter(task_id == tid)) + 
-      geom_point(aes(orig_score, new_score, colour = status)) + 
+    ggplot(scores %>% filter(task_id == tid)) +
+      geom_point(aes(orig_score, new_score, colour = status)) +
       facet_wrap(~metric, scales = "free", nrow = nr[[tid]]) +
       theme_bw() +
       labs(title = tid)
@@ -191,8 +211,8 @@ patchwork::wrap_plots(
   ncol = 1,
   heights = nr
 )
-ggplot(scores) + 
-  geom_point(aes(orig_score, new_score, colour = status)) + 
+ggplot(scores) +
+  geom_point(aes(orig_score, new_score, colour = status)) +
   facet_wrap(task_id~metric, scales = "free") +
   theme_bw()
 
