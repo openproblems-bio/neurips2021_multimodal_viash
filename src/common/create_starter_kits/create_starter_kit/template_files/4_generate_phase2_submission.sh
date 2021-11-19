@@ -62,6 +62,7 @@ zip -9 -r -q submission_phase2.zip . \
   --exclude=*.DS_Store* \
   --exclude=nextflow.config \
   --exclude=output/* \
+  --exclude=submission*zip \
   --exclude=bin/*
 
 # print message

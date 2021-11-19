@@ -1,3 +1,14 @@
+# neurips2021_multimodal_viash 1.4.0
+
+## BUG FIXES
+
+* Dataset Loader: Missing sample s3d1 was added back to Cite-seq data.
+
+## MINOR CHANGES
+
+* Starter Kit: Do not include other submission zip files inside a new zip file.
+
+
 # neurips2021_multimodal_viash 1.3.4
 
 ## BUG FIXES
