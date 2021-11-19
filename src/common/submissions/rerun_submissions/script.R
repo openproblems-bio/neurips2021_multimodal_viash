@@ -156,11 +156,73 @@ out <- bind_rows(pbapply::pblapply(seq_len(nrow(df)), function(i) {
 }))
 
 ids <- df %>% filter(task_id == "predict_modality") %>% pull(id)
-yy <- out %>% filter(id %in% ids) %>% spread(metric_id, mean) %>% filter(correct_format == 1) %>% mutate(rmse = ifelse(rmse > 1000, Inf, rmse))
+yyy <- out %>% filter(id %in% ids)
+yy <- yyy %>% spread(metric_id, mean) %>% filter(correct_format == 1) %>% mutate(rmse = ifelse(rmse > 1000, Inf, rmse))
 ggplot(yy) + geom_point(aes(rmse, mean_pearson_per_cell)) + facet_wrap(~dataset_subtask) + scale_x_log10()
-ggplot(yy) + geom_point(aes(rmse, mean_spearman_per_cell)) + facet_wrap(~dataset_subtask) + scale_x_log10() +
+ggplot(yy) + geom_point(aes(rmse, mean_spearman_per_cell)) + facet_wrap(~dataset_subtask) + scale_x_log10()
 ggplot(yy) + geom_point(aes(rmse, mean_pearson_per_gene)) + facet_wrap(~dataset_subtask) + scale_x_log10()
 ggplot(yy) + geom_point(aes(rmse, mean_spearman_per_gene)) + facet_wrap(~dataset_subtask) + scale_x_log10()
+
+
+pm_baseline <- read_tsv("results/inhouse_predict_modality_scores.tsv")
+
+
+pm_comb <- bind_rows(
+  pm_baseline %>% transmute(dataset_subtask, method_id, method_type, metric_id, value),
+  yyy %>% filter(dataset_subtask != "Overall") %>% transmute(dataset_subtask, method_id = paste0("submission_", id), method_type = "submission", metric_id, value = mean)
+) %>%
+  mutate(
+    value = ifelse(is.na(value), 99999, value)
+  )
+pm_comb_spr <- pm_comb %>% spread(metric_id, value)
+ggplot(pm_comb_spr) +
+  geom_point(aes(rmse, mean_spearman_per_cell), function(df) df %>% filter(method_type == "submission")) +
+  geom_point(aes(rmse, mean_spearman_per_cell, colour = method_type), function(df) df %>% filter(method_type != "submission"), size = 3) +
+  facet_wrap(~dataset_subtask) +
+  theme_bw() + xlim(0, 1) + ylim(-.2, 1)
+
+ggplot(pm_comb_spr %>% filter(rmse < 2), aes(x = rmse, y = method_type)) +
+  ggridges::geom_density_ridges(
+    jittered_points = TRUE,
+    position = ggridges::position_points_jitter(width = 0.05, height = 0),
+    point_shape = '|', point_size = 3, point_alpha = 1, alpha = 0.7,
+  )
+
+pm_comb_spr_fil <- pm_comb_spr %>% filter(rmse > 0, rmse < c(ADT2GEX = .5, ATAC2GEX=.4, GEX2ADT=1, GEX2ATAC=0.18)[dataset_subtask])
+ggplot(pm_comb_spr_fil, aes(y = 1, x = rmse)) +
+  ggridges::geom_density_ridges(jittered_points = TRUE, data = function(df) df %>% filter(method_type == "submission"), point_size = .5) +
+  geom_vline(aes(xintercept = rmse, colour = method_type), function(df) df %>% filter(method_type != "submission"), linetype = "dashed", size = 1) +
+  theme_bw() +
+  facet_wrap(~dataset_subtask, scales = "free", ncol = 1) +
+  expand_limits(x = .15) +
+  labs(y = "Density")
+
+geom_density_ridges(jittered_points = TRUE)
+
+ggplot(pm_comb_spr %>% filter(mean_spearman_per_cell > 0)) +
+  geom_density(aes(mean_spearman_per_cell), function(df) df %>% filter(method_type == "submission")) +
+  geom_vline(aes(xintercept = mean_spearman_per_cell, colour = method_type), function(df) df %>% filter(method_type != "submission"), linetype = "dashed") +
+  theme_bw() +
+  facet_wrap(~dataset_subtask, scales = "free", ncol = 1)
+
+
+ggplot(pm_comb_spr) +
+  gg(aes(rmse, mean_spearman_per_cell), function(df) df %>% filter(method_type == "submission")) +
+  geom_point(aes(rmse, mean_spearman_per_cell, colour = method_type), function(df) df %>% filter(method_type != "submission"), size = 3) +
+  facet_wrap(~dataset_subtask) +
+  theme_bw() + xlim(0, 1) + ylim(-.2, 1)
+
+pm_comb_spr_fil <- pm_comb_spr %>% filter(rmse < 1, rmse > 0, mean_spearman_per_cell > -.2) %>% group_by(dataset_subtask) %>% filter(rmse <= max(rmse[method_type == "negative_control"])) %>% ungroup()
+ggplot(pm_comb_spr_fil, aes(rmse, mean_spearman_per_cell)) +
+  geom_point(data = function(df) df %>% filter(method_type == "submission")) +
+  geom_point(aes(colour = method_type), function(df) df %>% filter(method_type != "submission"), size = 3) +
+  facet_wrap(~dataset_subtask, scales = "free") +
+  theme_bw()
+ggplot(pm_comb_spr_fil, aes(rmse, mean_spearman_per_gene)) +
+  geom_point(data = function(df) df %>% filter(method_type == "submission")) +
+  geom_point(aes(colour = method_type), function(df) df %>% filter(method_type != "submission"), size = 3) +
+  facet_wrap(~dataset_subtask, scales = "free") +
+  theme_bw()
 
 orig_score <- df %>%
   filter(zip_valid, Status != "failed") %>%

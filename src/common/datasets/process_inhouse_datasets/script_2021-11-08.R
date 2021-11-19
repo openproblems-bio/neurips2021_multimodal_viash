@@ -13,7 +13,7 @@ starter_dev <- c("s1d1", "s1d2")
 train <- c(
   "s1d1", "s1d3",
   "s2d1", "s2d4", "s2d5",
-  "s3d3", "s3d6", "s3d10"
+  "s3d1", "s3d3", "s3d6", "s3d10"
 )
 valid <- c("s1d2", "s3d7")
 test <- c("s4d1", "s4d8", "s4d9")
@@ -271,12 +271,22 @@ bd1_starter$write_h5ad(paste0(resources_test, bdid_starter, "/", bdid_starter, "
 bd2_starter$write_h5ad(paste0(resources_test, bdid_starter, "/", bdid_starter, ".output_mod2.h5ad"), compression = "gzip")
 rm(bd1_starter, bd2_starter)
 
-# compare sizes
 
+
+
+
+#############
+# compare outputs
+
+phase1 <- list.files("output/datasets/common", recursive = TRUE, full.names = TRUE)
+phase1v2 <- list.files("output/datasets_2021-11-08/phase1v2/common", recursive = TRUE, full.names = TRUE)
+phase2 <- list.files("output/datasets_2021-11-08/phase2_private/common", recursive = TRUE, full.names = TRUE)
+iid <- list.files("output/manual_formatting_2021-11-08", recursive = TRUE, full.names = TRUE, pattern = "iid") %>% {.[!grepl("fullfeat", .)]}
 orig <- c(
-  list.files("output/datasets/common", recursive = TRUE, full.names = TRUE),
-  list.files("output/datasets_2021-11-08/phase1v2/common", recursive = TRUE, full.names = TRUE),
-  list.files("output/datasets_2021-11-08/phase2_private/common", recursive = TRUE, full.names = TRUE)
+  phase1,
+  phase1v2,
+  phase2,
+  iid
 )
 
 df <- map_df(
@@ -289,15 +299,42 @@ df <- map_df(
       n_obs = nrow(ad),
       n_vars = ncol(ad),
       modality = unique(ad$var$feature_types),
-      organism = ad$uns[["organism"]]
+      organism = ad$uns[["organism"]],
+      barcodes = list(rownames(ad)),
+      features = list(colnames(ad))
     )
   }
-)
-
-df %>%
+) %>%
   mutate(
-    phase = gsub(".*phase([^_]*)", "\\1", dataset_id),
-    platform = gsub(".*bmmc_([^_]*)_.*", "\\1", dataset_id)
+    iid = grepl("iid", path),
+    phase = ifelse(iid, "iid", gsub(".*phase([^_]*)", "\\1", dataset_id)),
+    platform = gsub(".*bmmc_([^_]*).*", "\\1", dataset_id)
   ) %>%
   arrange(platform, modality, phase) %>%
   select(-path)
+
+adt <- df %>% 
+  filter(modality == "ADT") %>%
+  select(phase, barcodes)
+crossing(l = adt$phase, r = adt$phase) %>%
+  left_join(adt %>% select(l = phase, lbarcodes = barcodes), by = "l") %>%
+  left_join(adt %>% select(r = phase, rbarcodes = barcodes), by = "r") %>%
+  mutate(
+    uniquel = map2_int(lbarcodes, rbarcodes, function(lb, rb) length(setdiff(lb, rb))),
+    uniquer = map2_int(lbarcodes, rbarcodes, function(lb, rb) length(setdiff(rb, lb)))
+  ) %>% 
+  filter(l < r)
+
+
+
+mult <- df %>% 
+  filter(modality == "ATAC") %>%
+  select(phase, barcodes)
+crossing(l = mult$phase, r = mult$phase) %>%
+  left_join(mult %>% select(l = phase, lbarcodes = barcodes), by = "l") %>%
+  left_join(mult %>% select(r = phase, rbarcodes = barcodes), by = "r") %>%
+  mutate(
+    uniquel = map2_int(lbarcodes, rbarcodes, function(lb, rb) length(setdiff(lb, rb))),
+    uniquer = map2_int(lbarcodes, rbarcodes, function(lb, rb) length(setdiff(rb, lb)))
+  ) %>%
+  filter(l < r)
