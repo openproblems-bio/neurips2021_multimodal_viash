@@ -330,6 +330,7 @@ combined <-
 
 cat("Writing output file\\n")
 write_tsv(combined, par\$output)
+write_tsv(combined, paste0(com_loc, "/meta.tsv"))
 VIASHMAIN
 PATH="$VIASH_RESOURCES_DIR:\$PATH"
 

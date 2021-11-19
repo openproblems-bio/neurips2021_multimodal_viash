@@ -3,19 +3,22 @@ options(tidyverse.quiet = TRUE)
 library(tidyverse)
 
 ## VIASH START
+# com_loc <- "output/datasets"
+# par <- list(
+#   input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
+#   input_h5ads = list.files(paste0(com_loc, "/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+#   output = "results/meta_phase1_datasets.tsv"
+# )
+# com_loc <- "output/datasets_2021-11-08/phase1v2"
+# par <- list(
+#   input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
+#   input_h5ads = list.files(paste0(com_loc, "/common/"), recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+#   output = "results/meta_phase1v2_datasets.tsv"
+# )
+com_loc <- "output/datasets_2021-11-08/phase2_private"
 par <- list(
   input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
-  input_h5ads = list.files("output/datasets/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
-  output = "results/meta_phase1_datasets.tsv"
-)
-par <- list(
-  input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
-  input_h5ads = list.files("output/datasets_2021-11-08/phase1v2/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
-  output = "results/meta_phase1v2_datasets.tsv"
-)
-par <- list(
-  input_tsvs = list.files("src/common/datasets/", recursive = TRUE, full.names = TRUE, pattern = "*.tsv"),
-  input_h5ads = list.files("output/datasets_2021-11-08/phase2_private/common/", recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
+  input_h5ads = list.files(paste0(com_loc, "/common/"), recursive = TRUE, full.names = TRUE, pattern = "*.h5ad"),
   output = "results/meta_phase2_datasets.tsv"
 )
 ## VIASH END
@@ -51,3 +54,4 @@ combined <-
 
 cat("Writing output file\n")
 write_tsv(combined, par$output)
+write_tsv(combined, paste0(com_loc, "/meta.tsv"))

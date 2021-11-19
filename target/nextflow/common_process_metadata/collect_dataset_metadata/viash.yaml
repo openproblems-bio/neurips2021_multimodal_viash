@@ -376,6 +376,7 @@ functionality:
       
       cat("Writing output file\\n")
       write_tsv(combined, par\$output)
+      write_tsv(combined, paste0(com_loc, "/meta.tsv"))
       VIASHMAIN
       PATH="$VIASH_RESOURCES_DIR:\$PATH"
       
@@ -801,5 +802,5 @@ info:
   output: "target/nextflow/common_process_metadata/collect_dataset_metadata"
   executable: "target/nextflow/common_process_metadata/collect_dataset_metadata/collect_dataset_metadata"
   viash_version: "0.5.3"
-  git_commit: "257fabda51c9e699f6de11f369f18b12368f9c64"
+  git_commit: "b98f95bafe0ce2cd7369b331bb01c7213b6ac939"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
