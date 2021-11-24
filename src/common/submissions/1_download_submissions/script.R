@@ -41,20 +41,20 @@ table(all_submissions$json_valid)
 
 options(timeout = max(100000, getOption("timeout")))
 
-dl_zip <-
-  all_submissions %>%
-  filter(!zip_valid)
-zzz <- pbapply::pbmapply(
-  cl = 10,
-  FUN = download.file,
-  url = dl_zip$url_zip,
-  destfile = dl_zip$dest_zip,
-  quiet = TRUE
-)
+# dl_zip <-
+#   all_submissions %>%
+#   filter(!zip_valid)
+# zzz <- pbapply::pbmapply(
+#   cl = 10,
+#   FUN = download.file,
+#   url = dl_zip$url_zip,
+#   destfile = dl_zip$dest_zip,
+#   quiet = TRUE
+# )
 
 dl_json <-
   all_submissions %>%
-  filter(!json_valid & !is.na(url_json))
+  filter(Status == "finished", !json_valid, !is.na(url_json))
 zzz <- pbapply::pbmapply(
   cl = 10,
   FUN = download.file,

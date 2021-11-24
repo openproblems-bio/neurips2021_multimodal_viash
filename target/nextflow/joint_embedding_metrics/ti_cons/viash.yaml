@@ -880,5 +880,5 @@ info:
   output: "target/nextflow/joint_embedding_metrics/ti_cons"
   executable: "target/nextflow/joint_embedding_metrics/ti_cons/ti_cons"
   viash_version: "0.5.3"
-  git_commit: "b98f95bafe0ce2cd7369b331bb01c7213b6ac939"
+  git_commit: "223e22b5e048854b9b2bfc218a5e13825952ec07"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"
