@@ -209,4 +209,4 @@ g <-
   je_title + jes[[1]] + jes[[2]] + jes[[3]] +
   date +
   patchwork::plot_layout(design = layout, heights = c(.1, .1, 1, .1, 1, .1, 1))
-ggsave("output/leaderboard_2021-11-24.pdf", g, width = 20, height = 10)
+ggsave("output/leaderboard_2021-11-25.pdf", g, width = 20, height = 10)
