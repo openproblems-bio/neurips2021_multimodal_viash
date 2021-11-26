@@ -30,6 +30,6 @@ g <- patchwork::wrap_plots(
   widths = c(2,1)
 )
 
-
-ggsave("output/queue_2021-11-25_09:19.png", g, width = 12, height = 5)
+filename <- format(Sys.time(), "output/queue_%Y-%m-%d_%H:%M.png")
+ggsave(filename, g, width = 12, height = 5)
 

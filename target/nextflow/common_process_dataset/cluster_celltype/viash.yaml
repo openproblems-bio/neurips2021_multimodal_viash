@@ -847,5 +847,5 @@ info:
   output: "target/nextflow/common_process_dataset/cluster_celltype"
   executable: "target/nextflow/common_process_dataset/cluster_celltype/cluster_celltype"
   viash_version: "0.5.3"
-  git_commit: "b19e7cbb3d8e85d9cbbfeec2b5bd5727f942e690"
+  git_commit: "538ec99243821dde059f3cb733eab61ca8422cd0"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

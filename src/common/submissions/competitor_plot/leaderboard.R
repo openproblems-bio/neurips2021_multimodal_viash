@@ -1,7 +1,8 @@
 library(tidyverse)
 
 dir <- "output/submissions"
-df <- read_rds(paste0(dir, "/all_submissions_read.rds"))
+df <- read_rds(paste0(dir, "/all_submissions_read.rds")) %>%
+  mutate(submission_time = `Submitted At`, team_name = `Team Name`)
 
 
 
@@ -43,12 +44,12 @@ pm_met_lab <- c(
 )
 
 pms <- map(names(pm_met_lab), function(met) {
-  pmzz_ <- pmzz %>% filter(metric == met) %>% mutate(str = forcats::fct_inorder(str))
+  pmzz_ <- pmzz %>% filter(metric == met) %>% mutate(str = forcats::fct_rev(forcats::fct_inorder(str)))
   min <- min(pmzz_$value)
   max <- max(pmzz_$value)
   ori <- max(min-(max-min)*2, 0)
   nud <- (max - ori) * .5
-  ggplot(pmzz %>% filter(metric == met) %>% mutate(str = forcats::fct_rev(forcats::fct_inorder(str)))) +
+  ggplot(pmzz_) +
     geom_segment(aes(x = str, xend = str, y = ori, yend = value), colour = pal[[1]]) +
     geom_point(aes(str, value), stat = "identity", colour = pal[[1]]) +
     geom_text(aes(str, value, label = sprintf("%.4f", value)), hjust = 1, nudge_y = nud, size = 3) +
@@ -175,7 +176,7 @@ jes <- map(names(je_met_lab), function(met) {
 pm_title <- ggplot(tibble(a = 1)) + geom_text(aes(a, a, label = "Predict Modality"), fontface = "bold") + ggplot2::theme_void()
 mm_title <- ggplot(tibble(a = 1)) + geom_text(aes(a, a, label = "Match Modality"), fontface = "bold") + ggplot2::theme_void()
 je_title <- ggplot(tibble(a = 1)) + geom_text(aes(a, a, label = "Joint Embedding"), fontface = "bold") + ggplot2::theme_void()
-date <- ggplot(tibble(a = 1)) + geom_text(aes(a, a, label = "OpenProblems-NeurIPS2021 Leaderboard on 22 Nov 2021"), fontface = "bold") + ggplot2::theme_void()
+date <- ggplot(tibble(a = 1)) + geom_text(aes(a, a, label = "OpenProblems-NeurIPS2021 Leaderboard on 25 Nov 2021"), fontface = "bold") + ggplot2::theme_void()
 em <- patchwork::plot_spacer()
 
 g <- patchwork::wrap_plots(
@@ -209,4 +210,65 @@ g <-
   je_title + jes[[1]] + jes[[2]] + jes[[3]] +
   date +
   patchwork::plot_layout(design = layout, heights = c(.1, .1, 1, .1, 1, .1, 1))
-ggsave("output/leaderboard_2021-11-25.pdf", g, width = 20, height = 10)
+
+filename <- format(Sys.Date(), "output/leaderboard_%Y-%m-%d.pdf")
+ggsave(filename, g, width = 20, height = 10)
+
+
+
+#
+# library(lubridate)
+#
+# met <- "Overall"
+# start <- lubridate::floor_date(min(pm_scores_g$submission_time), "hour")
+# end <- lubridate::ceiling_date(max(pm_scores_g$submission_time), "hour")
+#
+# timeseq <- seq(start, end, by = "1 hour")
+# timeline <- map_df(seq_along(timeseq), function(i) {
+#   time <- timeseq[[i]]
+#   pm_scores_g %>%
+#     filter(submission_time <= time, value < 1000) %>%
+#     group_by(team_name, metric) %>%
+#     arrange(value) %>%
+#     slice(1) %>%
+#     ungroup() %>%
+#     group_by(metric) %>%
+#     arrange(value) %>%
+#     mutate(rank = row_number(), time = time, ti = i) %>%
+#     ungroup()
+# }) %>%
+#   arrange(metric, time, rank) %>%
+#   filter(rank <= 10)
+#
+#
+# timeline %>% select(time, rank, team_name, metric)
+#
+# min <- min(timeline$value)
+# max <- max(timeline$value)
+# ori <- max(min-(max-min)*2, 0)
+# nud <- (max - ori) * .02
+# g <- ggplot(timeline, aes(rank, group = team_name, fill = team_name, colour = team_name)) +
+#   geom_bar(aes(y = value), colour = NA, stat = "identity") +
+#   # geom_segment(aes(x = str, xend = str, y = ori, yend = value), colour = pal[[1]]) +
+#   # geom_point(aes(str, value), stat = "identity", colour = pal[[1]]) +
+#   geom_text(aes(y = value, label = team_name), hjust = 0, nudge_y = nud, size = 3) +
+#   geom_text(aes(y = value, label = sprintf("%.4f", value)), hjust = 1, nudge_y = -nud, size = 3, colour = "white") +
+#   facet_wrap(~metric) +
+#   coord_flip() +
+#   theme_minimal() +
+#   theme(panel.grid = element_blank(), legend.position = "none") +
+#   labs(y = pm_met_lab[[met]], x = NULL) +
+#   scale_x_reverse()
+# g
+#
+# library(gganimate)
+# anim <- g + transition_states(ti, transition_length = 4, state_length = 1) +
+#   view_follow(fixed_x = TRUE)# +
+#   # labs(title = 'GDP per Year : {time}',
+#   #      subtitle  =  "Top 10 Countries",
+#   #      caption  = "GDP in Billions USD | Data Source: World Bank Data")
+# animate(anim, 200, fps = 20,  width = 1200, height = 1000,
+#         renderer = gifski_renderer("gganim.gif"))
+#
+# animate(anim, 200, fps = 20,  width = 1200, height = 1000,
+#         renderer = ffmpeg_renderer()) -> for_mp4anim_save("animation.mp4", animation = for_mp4 )
