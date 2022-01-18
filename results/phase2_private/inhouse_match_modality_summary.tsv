@@ -1,0 +1,49 @@
+method_id	metric_id	mean	var	method_task	method_label	method_description	method_maintainer	method_num_authors	method_language	method_type	method_doi
+baseline_dr_knnr_cbf	correct_format	0.75	0.25	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	finished	0.75	0.25	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	format_check	0.75	0.25	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	match_probability	4.193293620009951e-4	1.075403073985303e-7	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	pairing_aupr	5.3566766403334576e-5	1.4582560389111373e-9	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_cbf	pairing_auroc	0.37896917411018194	0.06383728232457953	match_modality	LMDS+KNNR+CBF	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	correct_format	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	finished	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	format_check	1	0	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	match_probability	5.9850222762282475e-5	9.838531733476625e-11	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	pairing_aupr	5.847881627873974e-5	9.25230843080656e-11	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_dr_knnr_knn	pairing_auroc	0.5008463203162137	4.386455604010683e-7	match_modality	LMDS+KNNR+KNN	Perform LMDS+Pearson DR, predict embedding with KNN regression, and match cells with KNN.	Robrecht Cannoodt	1	r	baseline	NA
+baseline_linear_knn	correct_format	1	0	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_linear_knn	finished	1	0	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_linear_knn	format_check	1	0	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_linear_knn	match_probability	6.194044764992884e-5	3.246526552993252e-10	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_linear_knn	pairing_aupr	5.8198594959431305e-5	9.037742499452074e-11	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_linear_knn	pairing_auroc	0.5000186464666854	2.413683466727262e-9	match_modality	LinearRegression+KNN	Perform DR with Linear Regression, and match cells with kNN	Daniel Burkhardt	1	python	baseline	NA
+baseline_procrustes_knn	correct_format	1	0	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+baseline_procrustes_knn	finished	1	0	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+baseline_procrustes_knn	format_check	1	0	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+baseline_procrustes_knn	match_probability	5.7411485525638476e-5	6.602597384689102e-11	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+baseline_procrustes_knn	pairing_aupr	5.816386886497993e-5	8.830375973546572e-11	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+baseline_procrustes_knn	pairing_auroc	0.5000379779514788	5.174228087689748e-8	match_modality	Procrustes+KNN	Perform DR with Procrustes, and match cells with a GA to minimise pairwise distances.	Alex Tong	2	python	baseline	NA
+dummy_constant	correct_format	1	0	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_constant	finished	1	0	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_constant	format_check	1	0	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_constant	match_probability	5.817606423319516e-5	8.962171938623917e-11	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_constant	pairing_aupr	5.823632507784282e-5	9.163285611465428e-11	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_constant	pairing_auroc	0.5000072140005614	1.2258748306464895e-9	match_modality	Constant	Returns constant weights between all mod1 profiles and the first 1000 mod2 profiles.	Robrecht Cannoodt	1	r	negative_control	NA
+dummy_random	correct_format	1	0	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_random	finished	1	0	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_random	format_check	1	0	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_random	match_probability	5.886275746299001e-5	1.0567262048074274e-10	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_random	pairing_aupr	5.826171688916304e-5	9.158624858646521e-11	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_random	pairing_auroc	0.5002537901023061	6.420728683571634e-8	match_modality	Random Pairing	Generates random pairings weights drawn from a uniform distribution.	Alex Tong	1	python	negative_control	NA
+dummy_semisolution	correct_format	1	0	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_semisolution	finished	1	0	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_semisolution	format_check	1	0	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_semisolution	match_probability	0.09995638496250565	3.2518113050833997e-7	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_semisolution	pairing_aupr	0.10853068573669589	2.70463047248535e-6	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_semisolution	pairing_auroc	0.9997301804197605	1.8487394838568828e-9	match_modality	Semi-solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	correct_format	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	finished	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	format_check	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	match_probability	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	pairing_aupr	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA
+dummy_solution	pairing_auroc	1	0	match_modality	Solution	Returns the ground-truth pairing.	Robrecht Cannoodt	1	r	positive_control	NA

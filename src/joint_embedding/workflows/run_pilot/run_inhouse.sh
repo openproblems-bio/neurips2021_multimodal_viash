@@ -16,33 +16,37 @@ bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/joint_embedding/ \
+  --publishDir output/pilot_phase2/joint_embedding/ \
   -resume \
-  --datasets 'output/datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets_2021-11-08/phase2_private/joint_embedding/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'
 
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/joint_embedding/ \
+  --publishDir output/pilot_phase2/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_highmem.config \
-  --datasets 'output/datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets_2021-11-08/phase2_private/joint_embedding/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'
 
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/joint_embedding/ \
+  --publishDir output/pilot_phase2/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vhighmem.config \
-  --datasets 'output/datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets_2021-11-08/phase2_private/joint_embedding/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'
 
 bin/nextflow \
   run . \
   -main-script src/joint_embedding/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/joint_embedding/ \
+  --publishDir output/pilot_phase2/joint_embedding/ \
   -resume \
   -c src/common/workflows/resource_labels_vvhighmem.config \
-  --datasets 'output/datasets/joint_embedding/**.h5ad'
+  --datasets 'output/datasets_2021-11-08/phase2_private/joint_embedding/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'

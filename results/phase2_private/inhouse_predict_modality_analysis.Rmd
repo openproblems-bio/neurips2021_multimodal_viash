@@ -1,0 +1,155 @@
+---
+title: "Predict Modality - Pilot Analysis"
+output: pdf_document
+fontsize: 10pt
+geometry: margin=1cm
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=10, fig.height=12, warning = FALSE)
+knitr::opts_knit$set(root.dir = '../..')
+
+library(tidyverse)
+library(patchwork)
+library(kableExtra)
+task <- "predict_modality"
+```
+
+
+```{r tsv, include=FALSE}
+meta_ds <- read_tsv("results/phase2_private/meta_datasets.tsv")
+colnames(meta_ds) <- ifelse(!grepl("dataset_", colnames(meta_ds)), paste0("dataset_", colnames(meta_ds)), colnames(meta_ds))
+meta_ms <- read_tsv("results/meta_methods.tsv") %>% filter(task == !!task)
+colnames(meta_ms) <- ifelse(!grepl("method_", colnames(meta_ms)), paste0("method_", colnames(meta_ms)), colnames(meta_ms))
+# meta_metrics <- read_tsv("results/meta_metrics.tsv") %>% filter(task == !!task)
+# colnames(meta_metrics) <- ifelse(!grepl("metric_", colnames(meta_metrics)), paste0("metric_", colnames(meta_metrics)), colnames(meta_metrics))
+
+df <- 
+  # read in all columns as strings because of infinite values in table
+  readr::read_tsv(
+    "output/pilot_phase2/predict_modality/output.final_scores.output_scores.tsv",
+    col_types = c(dataset_id = "c", method_id = "c", metric_id = "c", dataset_subtask = "c", value = "d", value_after_default = "d")
+  ) %>%
+  mutate(
+    dataset_orig_id = gsub("_PM_[^_]*$", "", dataset_id),
+    dataset_phase = gsub(".*_", "", dataset_orig_id)
+  ) %>% 
+  left_join(meta_ds, by = c("dataset_orig_id" = "dataset_id")) %>%
+  left_join(meta_ms, by = "method_id") %>%
+  # left_join(meta_metrics, by = "metric_id") %>%
+  select(-value) %>%
+  spread(metric_id, value_after_default) %>% 
+  mutate(
+    format_check = (correct_format + finished) / 2
+  )
+write_tsv(df %>% gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_"), -starts_with("metric_")), "results/phase2_private/inhouse_predict_modality_scores.tsv")
+```
+
+```{r summtsv, include=FALSE}
+summ <- df %>% 
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method_")) %>% 
+  group_by(method_id, metric_id) %>%
+  summarise(
+    mean = mean(value),
+    var = var(value),
+    .groups = "drop"
+  ) %>% 
+  left_join(meta_ms, by = "method_id")
+write_tsv(summ, "results/phase2_private/inhouse_predict_modality_summary.tsv")
+```
+
+\newpage
+## Visualise results
+```{r gather, echo=FALSE}
+# gather columns from wide to long format
+dfg <- df %>%
+  mutate(filter = finished > 0) %>%
+  select(-correct_format, -finished) %>%
+  # filter(!grepl("solution", method_id)) %>%
+  gather(metric_id, value, -starts_with("dataset_"), -starts_with("method"), -filter) %>%
+  filter(filter | metric_id %in% c("finished", "correct_format", "format_check"))
+```
+
+Colour by method.
+
+```{r swarm1, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = method_id), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = NULL, y = "Metric Value", colour = "Method"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = method_id)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set1") +
+    labs(x = NULL, y = "Metric Value", colour = "Method"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+\newpage
+Colour by modality group.
+
+```{r swarm3, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_subtask), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set2") +
+    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = dataset_subtask)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Set2") +
+    labs(x = NULL, y = "Metric Value", colour = "Modality\ngroup"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+
+\newpage
+Colour by phase
+
+```{r dataset_phase, echo=FALSE}
+patchwork::wrap_plots(
+  ggplot(dfg) +
+    ggbeeswarm::geom_quasirandom(aes(method_id, value, colour = dataset_phase), groupOnX = TRUE, size = 1) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Dark2") +
+    labs(x = NULL, y = "Metric Value", colour = "Phase"),
+  ggplot(dfg) +
+    geom_boxplot(aes(method_id, value, colour = dataset_phase)) +
+    facet_wrap(~metric_id, scales = "free_y") +
+    scale_colour_brewer(palette = "Dark2") +
+    labs(x = NULL, y = "Metric Value", colour = "Phase"),
+  ncol = 1
+  # guides = "collect"
+) &
+  theme_bw() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+\newpage
+Comparing most interesting metrics.
+
+```{r scatter2, fig.width=10, fig.height=10}
+selected_metrics <- c("rmse", "mae", "mean_spearman_per_cell", "mean_spearman_per_gene", "overall_spearman")
+
+GGally::ggpairs(
+  df, 
+  mapping = aes(colour = method_type, fill = method_type), 
+  columns = selected_metrics,
+  diag = list(continuous = "barDiag", discrete = "barDiag", na = "naDiag")
+) & theme_bw() & 
+  scale_colour_brewer(palette = "Set2") &
+  scale_fill_brewer(palette = "Set2")
+```

@@ -16,16 +16,18 @@ bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/match_modality/ \
+  --publishDir output/pilot_phase2/match_modality/ \
   -resume \
   -c src/common/workflows/resource_labels.config \
-  --datasets 'output/datasets/match_modality/**.h5ad'
+  --datasets 'output/datasets_2021-11-08/phase2_private/match_modality/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'
 
 bin/nextflow \
   run . \
   -main-script src/match_modality/workflows/run_pilot/main.nf \
   -entry pilot_wf \
-  --publishDir output/pilot/match_modality/ \
+  --publishDir output/pilot_phase2/match_modality/ \
   -resume \
-  -c src/common/workflows/resource_labels_highmem.config \
-  --datasets 'output/datasets/match_modality/**.h5ad'
+  -c src/common/workflows/resource_labels_vhighmem.config \
+  --datasets 'output/datasets_2021-11-08/phase2_private/match_modality/**.h5ad' \
+  --meta_datasets 'output/datasets_2021-11-08/phase2_private/meta.tsv'
