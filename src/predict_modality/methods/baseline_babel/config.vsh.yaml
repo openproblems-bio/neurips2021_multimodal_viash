@@ -63,4 +63,5 @@ platforms:
         env: 
           - PATH=/opt/conda/bin/:$PATH
   - type: nextflow
+    publish: true
     labels: [ midmem, lowtime, lowcpu ]

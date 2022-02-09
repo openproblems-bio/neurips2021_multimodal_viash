@@ -59,4 +59,5 @@ platforms:
       - type: r
         packages: [ ranger, lmds ]
   - type: nextflow
+    publish: true
     labels: [ highmem, lowtime, highcpu ]

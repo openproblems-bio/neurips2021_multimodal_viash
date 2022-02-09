@@ -71,4 +71,5 @@ platforms:
       - type: python
         packages: [ tensorflow ]
   - type: nextflow
+    publish: true
     labels: [ highmem, midtime, highcpu ]

@@ -684,7 +684,7 @@ functionality:
         cache 'deep'
         stageInMode "symlink"
         container "${container}"
-      
+        publishDir "${params.publishDir}/${id}/", mode: 'copy', overwrite: true, enabled: !params.test
         input:
           tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
         output:
@@ -864,6 +864,7 @@ platform:
   id: "nextflow"
   registry: "openproblems"
   namespace_separator: "_"
+  publish: true
   separate_multiple_outputs: true
   labels:
   - "lowmem"
@@ -876,5 +877,5 @@ info:
   output: "target/nextflow/joint_embedding_methods/baseline_lmds"
   executable: "target/nextflow/joint_embedding_methods/baseline_lmds/baseline_lmds"
   viash_version: "0.5.3"
-  git_commit: "8d89dc7bd7f560dd8fcf9ae340111baa5d284c2d"
+  git_commit: "75281c039ab98b459edbf52058a18597e710ed4d"
   git_remote: "https://github.com/openproblems-bio/neurips2021_multimodal_viash"

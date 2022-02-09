@@ -89,4 +89,5 @@ platforms:
   # which uses the docker container built above to also be able to 
   # run your method as part of a nextflow pipeline.
   - type: nextflow
+    publish: true
     labels: [ lowmem, lowtime, lowcpu ]

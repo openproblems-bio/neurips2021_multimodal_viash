@@ -65,4 +65,5 @@ platforms:
       - type: python
         pip: [ anndata, scipy, sklearn ]
   - type: nextflow
+    publish: true
     labels: [ lowmem, lowtime, lowcpu ]
