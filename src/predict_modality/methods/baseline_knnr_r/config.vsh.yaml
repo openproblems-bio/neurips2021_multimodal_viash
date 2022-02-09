@@ -59,4 +59,5 @@ platforms:
       - type: r
         packages: [ lmds, FNN ]
   - type: nextflow
+    publish: true
     labels: [ lowmem, lowtime, lowcpu ]

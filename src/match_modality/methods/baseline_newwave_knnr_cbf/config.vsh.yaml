@@ -76,4 +76,5 @@ platforms:
       - type: r
         packages: [ proxy, proxyC ]
   - type: nextflow
+    publish: true
     labels: [ highmem, midtime, highcpu ]

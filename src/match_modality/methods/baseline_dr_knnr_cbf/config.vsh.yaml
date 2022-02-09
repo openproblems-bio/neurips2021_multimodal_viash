@@ -61,4 +61,5 @@ platforms:
       - type: r
         packages: [ lmds, dynutils, proxy, FNN ]
   - type: nextflow
+    publish: true
     labels: [ midmem, midtime, midcpu ]

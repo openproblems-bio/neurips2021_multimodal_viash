@@ -51,4 +51,5 @@ platforms:
       - type: python
         pip: [ anndata, scipy ]
   - type: nextflow
+    publish: true
     labels: [ lowmem, lowtime, lowcpu ]
